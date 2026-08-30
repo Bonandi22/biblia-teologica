@@ -22,15 +22,23 @@ Este é um projeto pessoal / peça de portfólio, sem dados reais de utilizadore
 Ainda assim, interessam relatos sobre:
 
 - Exposição de dados ou de configuração sensível
-- Falhas de autorização (quando o M2 introduzir a área `/admin`)
+- Falhas de autenticação ou de autorização (`/api/auth/*`, `/api/conta`; a área
+  `/admin` e o upload de capa chegam no M2b)
 - Injeção (SQL, comando, template), SSRF, path traversal
 - XSS no frontend (conteúdo não sanitizado, `bypassSecurityTrust*`)
 - Configuração insegura de CORS, cabeçalhos ou Docker
 
 ## Boas práticas já aplicadas
 
-- Segredos só em env vars ou `appsettings.Development.json` (git-ignored) — nunca versionados
-- API pública é read-only no M1; endpoints de escrita chegam no M2 com `[Authorize(Roles=...)]`
+- Autenticação por JWT em cookies HttpOnly + Secure + SameSite=Strict; access curto
+  (15 min) e refresh token rotativo (14 dias) com hash SHA-256 na BD e deteção de reutilização
+- 2FA obrigatório por código de email em cada login (token do ASP.NET Core Identity)
+- Lockout após 5 tentativas falhadas (15 min); rate limit de 10 req/min/IP em `/api/auth/*`
+- CSRF: double-submit (cookie `bt_csrf` não-HttpOnly + header `X-CSRF-Token`) em toda a escrita
+- Autorização: `/api/conta` opera sempre sobre o utilizador do token, nunca sobre um id
+  do cliente; `[Authorize(Roles="Admin")]` em `/api/admin/**` chega no M2b
+- Segredos (`Jwt:SigningKey`, `AdminSeed`, SMTP) só em env / `appsettings.Development.json`
+  (git-ignored) / `.env` (git-ignored) — nunca versionados
 - CORS com origens explícitas de configuração (nunca `AllowAnyOrigin`)
 - Cabeçalhos de segurança e rate limiting na API
-- DTOs como contrato — entidades e campos sensíveis nunca saem numa resposta
+- DTOs como contrato — entidades e campos sensíveis (hash, refresh token) nunca saem numa resposta
