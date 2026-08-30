@@ -1641,7 +1641,10 @@ public sealed class RefreshTokenStoreTests : IDisposable
 
     public RefreshTokenStoreTests()
     {
-        _conexao = new SqliteConnection("Filename=:memory:");
+        // Foreign Keys=False: os testes usam UsuarioId aleatórios sem linha em AspNetUsers;
+        // a FK (RefreshTokenConfiguration) daria "FOREIGN KEY constraint failed". O store é a
+        // unidade sob teste; o comportamento da FK é verificado no AppDbContextTests da Task 4.
+        _conexao = new SqliteConnection("Filename=:memory:;Foreign Keys=False");
         _conexao.Open();
         using var ctx = Novo();
         ctx.Database.EnsureCreated();
