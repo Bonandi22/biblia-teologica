@@ -7,35 +7,39 @@
 
     <h2 class="ficha__titulo">{{ l.nome }}</h2>
 
-    <div class="ficha__grade">
-      <bt-campo-ficha rotulo="Quem escreveu">{{ l.quem }}</bt-campo-ficha>
-      <bt-campo-ficha rotulo="Estrutura">{{ l.estrutura }}</bt-campo-ficha>
-      <bt-campo-ficha rotulo="Porque escreveu">{{ l.porque }}</bt-campo-ficha>
-      <bt-campo-ficha rotulo="Pra quem escreveu">{{ l.paraQuem }}</bt-campo-ficha>
-    </div>
+    <div class="ficha__corpo">
+      <div class="ficha__grade">
+        <bt-campo-ficha rotulo="Quem escreveu">{{ l.quem }}</bt-campo-ficha>
+        <bt-campo-ficha rotulo="Estrutura">{{ l.estrutura }}</bt-campo-ficha>
+        <bt-campo-ficha rotulo="Porque escreveu">{{ l.porque }}</bt-campo-ficha>
+        <bt-campo-ficha rotulo="Pra quem escreveu">{{ l.paraQuem }}</bt-campo-ficha>
+      </div>
 
-    <bt-campo-ficha rotulo="Tema central">{{ l.tema }}</bt-campo-ficha>
+      <bt-campo-ficha rotulo="Tema central">{{ l.tema }}</bt-campo-ficha>
 
-    <bt-campo-ficha rotulo="Ideias-chave">
-      <ul class="ideias">
-        @for (ideia of l.ideias; track ideia) {
-          <li>{{ ideia }}</li>
+      <bt-campo-ficha rotulo="Ideias-chave">
+        <ul class="ideias">
+          @for (ideia of l.ideias; track ideia) {
+            <li>{{ ideia }}</li>
+          }
+        </ul>
+      </bt-campo-ficha>
+
+      <bt-campo-ficha rotulo="Versículo de referência">
+        <p class="versiculo">{{ l.versiculo }}</p>
+      </bt-campo-ficha>
+
+      <nav class="ficha__nav">
+        @if (vizinhos().anterior; as ant) {
+          <a class="ficha__nav-link" [routerLink]="['/biblia', ant.slug]">‹ {{ ant.nome }}</a>
         }
-      </ul>
-    </bt-campo-ficha>
-
-    <bt-campo-ficha rotulo="Versículo de referência">
-      <p class="versiculo">{{ l.versiculo }}</p>
-    </bt-campo-ficha>
-
-    <nav class="ficha__nav">
-      @if (vizinhos().anterior; as ant) {
-        <a [routerLink]="['/biblia', ant.slug]">‹ {{ ant.nome }}</a>
-      }
-      @if (vizinhos().proximo; as prox) {
-        <a [routerLink]="['/biblia', prox.slug]">{{ prox.nome }} ›</a>
-      }
-    </nav>
+        @if (vizinhos().proximo; as prox) {
+          <a class="ficha__nav-link ficha__nav-link--proximo" [routerLink]="['/biblia', prox.slug]"
+            >{{ prox.nome }} ›</a
+          >
+        }
+      </nav>
+    </div>
   </article>
 } @else {
   <p class="ficha__estado">Carregando ficha…</p>
