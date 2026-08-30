@@ -1,5 +1,6 @@
 using BibliaTeologica.Application.Common.Interfaces;
 using BibliaTeologica.Infrastructure.Persistence;
+using BibliaTeologica.Infrastructure.Persistence.Seed;
 using BibliaTeologica.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

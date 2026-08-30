@@ -3,6 +3,7 @@ using BibliaTeologica.Api.Middleware;
 using BibliaTeologica.Application;
 using BibliaTeologica.Infrastructure;
 using BibliaTeologica.Infrastructure.Persistence;
+using BibliaTeologica.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 

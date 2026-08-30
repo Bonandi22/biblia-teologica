@@ -1,5 +1,6 @@
 using AwesomeAssertions;
 using BibliaTeologica.Infrastructure.Persistence;
+using BibliaTeologica.Infrastructure.Persistence.Seed;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;

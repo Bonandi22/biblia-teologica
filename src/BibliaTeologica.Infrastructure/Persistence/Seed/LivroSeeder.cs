@@ -5,7 +5,7 @@ using BibliaTeologica.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace BibliaTeologica.Infrastructure.Persistence;
+namespace BibliaTeologica.Infrastructure.Persistence.Seed;
 
 public class LivroSeeder
 {
