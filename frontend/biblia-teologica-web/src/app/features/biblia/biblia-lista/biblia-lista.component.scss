@@ -1,0 +1,145 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.fichario {
+  display: flex;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  border-right: 1px solid $line;
+  padding: 28px 18px 60px 24px;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  max-height: 100vh;
+  overflow-y: auto;
+
+  @include mobile {
+    width: 100%;
+    position: relative;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid $line;
+    padding: 20px 18px;
+  }
+}
+
+.sidebar__brand {
+  h1 {
+    font-family: $fonte-display;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    color: $ink;
+    margin: 0 0 2px;
+  }
+
+  p {
+    font-family: $fonte-mono;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $brass;
+    margin: 0 0 20px;
+  }
+}
+
+.sidebar__busca {
+  width: 100%;
+  padding: 9px 12px;
+  margin-bottom: 22px;
+  border: 1px solid $line;
+  border-radius: 2px;
+  background: $card;
+  font-family: $fonte-serif;
+  font-size: 0.92rem;
+  color: $near-black;
+  outline: none;
+
+  &:focus {
+    border-color: $brass;
+  }
+}
+
+.sidebar__estado {
+  font-family: $fonte-mono;
+  font-size: 0.72rem;
+  color: $sage;
+}
+
+.grupo {
+  margin-bottom: 4px;
+}
+
+.grupo__titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  padding: 14px 4px 6px;
+  border-top: 1px solid $line;
+  font-family: $fonte-mono;
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $sage;
+}
+
+.grupo__contagem {
+  color: $brass;
+  font-weight: 500;
+}
+
+.grupo__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  padding: 6px 8px 6px 14px;
+  border-left: 2px solid transparent;
+  font-size: 0.88rem;
+  color: $near-black;
+  text-decoration: none;
+
+  &:hover {
+    background: rgba(166, 118, 63, 0.08);
+  }
+}
+
+.item--ativo {
+  border-left-color: $brass;
+  background: rgba(166, 118, 63, 0.12);
+  font-weight: 600;
+}
+
+.item__num {
+  min-width: 20px;
+  font-family: $fonte-mono;
+  font-size: 0.68rem;
+  color: $brass;
+}
+
+.conteudo {
+  flex: 1;
+  min-width: 0;
+  padding: 36px 40px 80px;
+
+  @include mobile {
+    padding: 26px 18px 60px;
+  }
+}

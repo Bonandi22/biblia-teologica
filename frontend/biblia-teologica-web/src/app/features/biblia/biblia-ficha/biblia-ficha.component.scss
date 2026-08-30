@@ -1,0 +1,128 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.ficha {
+  background: $card;
+  border: 1px solid $line;
+  border-radius: 3px;
+  box-shadow: 3px 4px 0 rgba(28, 37, 65, 0.05);
+  padding-bottom: 8px;
+}
+
+.ficha__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  border-bottom: 1px solid $line;
+  background: linear-gradient(180deg, rgba(166, 118, 63, 0.05), transparent);
+
+  @include mobile {
+    padding: 14px 20px;
+  }
+}
+
+.ficha__num {
+  font-family: $fonte-mono;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: $brass;
+}
+
+.ficha__titulo {
+  margin: 0;
+  padding: 22px 28px 4px;
+  font-family: $fonte-display;
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  line-height: 1.05;
+  color: $ink;
+
+  @include mobile {
+    padding: 18px 20px 4px;
+  }
+}
+
+.ficha__corpo {
+  padding: 8px 28px 20px;
+
+  @include mobile {
+    padding: 8px 20px 16px;
+  }
+}
+
+.ficha__grade {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ideias {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    position: relative;
+    padding: 5px 0 5px 18px;
+    font-size: 1rem;
+    line-height: 1.55;
+
+    &::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: $brass;
+    }
+  }
+}
+
+.versiculo {
+  margin: 0;
+  padding: 4px 0 4px 18px;
+  border-left: 3px solid $sage;
+  font-family: $fonte-display;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: $ink;
+}
+
+.ficha__nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px solid $line;
+}
+
+.ficha__nav-link {
+  padding: 6px 12px;
+  border: 1px solid $line;
+  border-radius: 2px;
+  font-family: $fonte-mono;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: $ink;
+  text-decoration: none;
+
+  &:hover {
+    border-color: $brass;
+    color: $brass;
+  }
+}
+
+.ficha__nav-link--proximo {
+  margin-left: auto;
+}
+
+.ficha__estado {
+  padding: 20px;
+  font-family: $fonte-mono;
+  font-size: 0.72rem;
+  color: $sage;
+}
