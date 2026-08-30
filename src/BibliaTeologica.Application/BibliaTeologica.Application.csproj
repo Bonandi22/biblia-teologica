@@ -1,7 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <!-- NU1903: AutoMapper 13.0.1 flagged by CVE-2026-32933 (DoS via uncontrolled recursion).
+         Patched only in AutoMapper 15.1.1+/16.1.1, which require a commercial license key and
+         break the MapperConfiguration/AddAutoMapper API used across M1. Suppressed pending a
+         dedicated AutoMapper upgrade task. -->
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\BibliaTeologica.Domain\BibliaTeologica.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
 
 </Project>
