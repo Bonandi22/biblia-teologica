@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LivroStore } from '../../../core/services/livro.store';
+import { AuthStore } from '../../../core/auth/auth.store';
 import type { LivroListItem } from '../../../core/models/livro.model';
 
 const ORDEM_SECOES = [
@@ -23,6 +24,7 @@ export class BibliaListaComponent {
   private readonly store = inject(LivroStore);
   private readonly router = inject(Router);
 
+  readonly auth = inject(AuthStore);
   readonly busca = signal('');
   readonly carregando = this.store.carregando;
 
