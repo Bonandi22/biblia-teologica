@@ -36,3 +36,6 @@ desktop.ini
 
 # ---- Superpowers SDD scratch ----
 .superpowers/
+
+# ---- One-off scripts (não versionar) ----
+scripts/
