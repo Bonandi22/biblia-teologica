@@ -76,25 +76,44 @@ public class AutenticacaoWebFactory : AppFactory
                 await roles.CreateAsync(new IdentityRole<Guid>(r));
 
         var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        await CriarSeAsync(users, AdminEmail, "Admin");
-        await CriarSeAsync(users, MembroEmail, "Membro");
+        await GarantirUsuarioAsync(users, AdminEmail, "Admin");
+        await GarantirUsuarioAsync(users, MembroEmail, "Membro");
     }
 
-    private static async Task CriarSeAsync(UserManager<ApplicationUser> users, string email, string role)
+    /// <summary>
+    /// Cria o utilizador se não existir; se já existir, repõe a baseline conhecida
+    /// (senha, nome, e-mail confirmado, <c>DeveTrocarSenha=false</c>). Assim
+    /// <see cref="SemearUsuariosAsync"/> deixa a fixture partilhada num estado
+    /// determinístico mesmo que um teste anterior tenha trocado a senha/nome.
+    /// </summary>
+    private static async Task GarantirUsuarioAsync(UserManager<ApplicationUser> users, string email, string role)
     {
-        if (await users.FindByEmailAsync(email) is not null) return;
-
-        var u = new ApplicationUser
+        var user = await users.FindByEmailAsync(email);
+        if (user is null)
         {
-            Id = Guid.NewGuid(),
-            UserName = email,
-            Email = email,
-            EmailConfirmed = true,
-            NomeExibicao = role,
-            DeveTrocarSenha = false
-        };
-        await users.CreateAsync(u, Senha);
-        await users.AddToRoleAsync(u, role);
+            user = new ApplicationUser
+            {
+                Id = Guid.NewGuid(),
+                UserName = email,
+                Email = email,
+                EmailConfirmed = true,
+                NomeExibicao = role,
+                DeveTrocarSenha = false
+            };
+            await users.CreateAsync(user, Senha);
+            await users.AddToRoleAsync(user, role);
+            return;
+        }
+
+        await users.RemovePasswordAsync(user);
+        await users.AddPasswordAsync(user, Senha);
+        user.NomeExibicao = role;
+        user.EmailConfirmed = true;
+        user.DeveTrocarSenha = false;
+        await users.UpdateAsync(user);
+
+        if (!await users.IsInRoleAsync(user, role))
+            await users.AddToRoleAsync(user, role);
     }
 
     /// <summary>
