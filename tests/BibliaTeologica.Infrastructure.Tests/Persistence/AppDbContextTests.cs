@@ -59,5 +59,31 @@ public sealed class AppDbContextTests : IDisposable
         await acao.Should().ThrowAsync<DbUpdateException>();
     }
 
+    [Fact]
+    public async Task PersisteERecupera_RefreshToken()
+    {
+        var userId = Guid.NewGuid();
+        await using (var ctx = CriarContexto())
+        {
+            ctx.Users.Add(new BibliaTeologica.Infrastructure.Identity.ApplicationUser
+            {
+                Id = userId, UserName = "a@b.c", Email = "a@b.c", NomeExibicao = "A"
+            });
+            ctx.RefreshTokens.Add(new BibliaTeologica.Infrastructure.Identity.RefreshToken
+            {
+                Id = Guid.NewGuid(), UsuarioId = userId, TokenHash = "hash-1",
+                ExpiraEm = DateTime.UtcNow.AddDays(1)
+            });
+            await ctx.SaveChangesAsync();
+        }
+
+        await using (var ctx = CriarContexto())
+        {
+            var token = await ctx.RefreshTokens.SingleAsync();
+            token.UsuarioId.Should().Be(userId);
+            token.RevogadoEm.Should().BeNull();
+        }
+    }
+
     public void Dispose() => _conexao.Dispose();
 }
