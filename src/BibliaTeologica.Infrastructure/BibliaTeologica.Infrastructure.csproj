@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\BibliaTeologica.Application\BibliaTeologica.Application.csproj" />
+  </ItemGroup>
+
+</Project>
