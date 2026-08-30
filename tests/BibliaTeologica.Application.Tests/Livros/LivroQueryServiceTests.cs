@@ -1,7 +1,5 @@
 using AwesomeAssertions;
-using AutoMapper;
 using BibliaTeologica.Application.Common.Interfaces;
-using BibliaTeologica.Application.Common.Mapping;
 using BibliaTeologica.Application.Livros;
 using BibliaTeologica.Domain.Entities;
 using BibliaTeologica.Domain.Enums;
@@ -13,9 +11,8 @@ namespace BibliaTeologica.Application.Tests.Livros;
 public class LivroQueryServiceTests
 {
     private readonly Mock<ILivroRepository> _repo = new();
-    private readonly IMapper _mapper = new MapperConfiguration(c => c.AddProfile<LivroMappingProfile>()).CreateMapper();
 
-    private LivroQueryService CriarServico() => new(_repo.Object, _mapper);
+    private LivroQueryService CriarServico() => new(_repo.Object);
 
     private static Livro Livro(string nome, int ordem, SecaoCanonica secao = SecaoCanonica.Pentateuco)
         => BibliaTeologica.Domain.Entities.Livro.Create(nome, secao, ordem,
