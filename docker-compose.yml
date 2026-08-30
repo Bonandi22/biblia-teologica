@@ -1,0 +1,23 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/BibliaTeologica.Api/Dockerfile
+    environment:
+      ConnectionStrings__Default: "Data Source=/data/biblia.db"
+      Cors__AllowedOrigins__0: "http://localhost:4200"
+    volumes:
+      - biblia-data:/data
+    ports:
+      - "5080:8080"
+
+  web:
+    build:
+      context: ./frontend/biblia-teologica-web
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+
+volumes:
+  biblia-data:

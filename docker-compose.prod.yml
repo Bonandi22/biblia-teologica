@@ -1,0 +1,17 @@
+# Exemplo de referência para deploy futuro. NÃO usado no M1.
+# Uso: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+services:
+  api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Default: "Data Source=/data/biblia.db"
+      Cors__AllowedOrigins__0: "https://SEU-DOMINIO"
+    restart: unless-stopped
+    ports: !reset []
+    expose:
+      - "8080"
+
+  web:
+    restart: unless-stopped
+    ports:
+      - "80:80"
