@@ -1,6 +1,8 @@
 # M2 — Autenticação + Admin de Livros — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+>
+> **Este plano entrega-se em DUAS PARTES / dois PRs.** Ver "Estrutura em duas partes" abaixo antes de arrancar. Executar a ordem do M2a → parar → PR/merge/sync → executar a ordem do M2b.
 
 **Goal:** Adicionar autenticação (ASP.NET Core Identity + JWT em cookies HttpOnly com refresh rotativo e 2FA por email), uma área `/admin` (role `Admin`) com CRUD completo de Livros e upload de imagem de capa, e uma área `/conta` de perfil, sobre o site público do M1.
 
@@ -29,12 +31,55 @@
 - **Subscrições RxJS** em código novo: `takeUntilDestroyed(this.destroyRef)`.
 - **Nenhum `innerHTML` de dado bruto**; nunca `bypassSecurityTrust*`.
 - **Commits** — mensagem em português, Conventional Commits, terminando com as duas linhas de trailer do `CLAUDE.md` (`Co-Authored-By:` e `Claude-Session:`).
-- **Git** — branch `feature/BT-2-m2-auth-admin-livros` (já criado, a spec está lá). Não fazer push nem abrir PR sem pedido explícito.
+- **Git** — **M2a** na branch `feature/BT-2-m2a-auth-conta`; **M2b** na branch `feature/BT-<n>-m2b-admin-upload` criada de `main` **depois** do M2a mergeado. A spec (e este plano) já estão em `feature/BT-2-m2-auth-admin-livros`; fazer `git checkout -b feature/BT-2-m2a-auth-conta` a partir daí. Não fazer push nem abrir PR sem pedido explícito.
 - **`Livro.Id` é `int`** (do M1). Só o Identity (`ApplicationUser`, roles, `RefreshToken`) usa `Guid`.
 - **Comandos**:
   - `dotnet build BibliaTeologica.sln` · `dotnet test BibliaTeologica.sln`
   - `dotnet ef migrations add <Nome> --project src/BibliaTeologica.Infrastructure --startup-project src/BibliaTeologica.Api`
   - Frontend em `frontend/biblia-teologica-web/`: `npm ci` · `npm start` (`:4300`) · `npm run build` · `npm test` · `npx tsc --noEmit -p tsconfig.app.json`
+
+---
+
+## Estrutura em duas partes (M2a → PR → M2b)
+
+O M2 vai a `main` em **dois PRs sequenciais**. O M2b assume o M2a já mergeado.
+Ver `spec §3.1`. Executar por esta ordem:
+
+### Parte M2a — Autenticação + Conta
+
+Branch `feature/BT-2-m2a-auth-conta`. Ordem das tasks:
+
+**2** (só contratos de auth/conta) → **3** (só Identity: pacotes Identity/JwtBearer, `ApplicationUser`, `RefreshToken`, options `Jwt`/`Email`/`AdminSeed`) → **4** (só `IdentityDbContext` + `RefreshTokenConfiguration` + migração **`M2a_Identity`**, sem `CapaImagemPath`) → **5** → **6** → **7** → **8** → **9** → **12** (só Identity/JwtBearer/DI dos serviços de auth) → **14** → **15** → **17** → **18** → **19** → **22** (só `.env` + `Jwt__SigningKey` + `AdminSeed`) → **23** → **24** → **25** → **26** → **27** → **30** (só `SECURITY.md`, `README` secção auth, `CLAUDE.md`, `ROADMAP` M2a).
+
+**⇒ FIM DO M2a.** Verificação: `dotnet test BibliaTeologica.sln` + `npm test` + `npx tsc --noEmit` + `npm run build` verdes; `docker compose up` (com `.env`) e exercitar login → 2FA → `/conta`. Abrir PR de `feature/BT-2-m2a-auth-conta` → `main`, checks verdes, **merge squash**, `git checkout main && git pull`, `git checkout -b feature/BT-<n>-m2b-admin-upload`.
+
+### Parte M2b — Admin + Upload
+
+Branch `feature/BT-<n>-m2b-admin-upload` (de `main`, pós-merge do M2a). Ordem:
+
+**1** (Domain: `Livro` mutação + `ConflitoException`) → **2** (só contratos de imagem/livro-escrita: `IProcessadorImagem`, `IArmazenamentoImagens`, `IUploadPolitica`, `ILivroRepository` estendido, DTOs de admin, `CapaUrl` nos DTOs públicos, `ILivroCommandService`) → **3** (só: pacote `SixLabors.ImageSharp`, options `Upload`/`Armazenamento`) → **4** (só: `LivroConfiguration` + `CapaImagemPath` + migração **`M2b_LivroCapa`**) → **10** → **11** → **12** (só: DI de `IProcessadorImagem`/`IArmazenamentoImagens`/`IUploadPolitica`) → **13** → **16** → **18** (só o Step do `ExceptionHandlingMiddleware`: `ConflitoException`→409, `KeyNotFoundException`→404, `UnauthorizedAccessException`→401 — se já não foi feito no M2a, fazer aqui) → **20** → **21** → **22** (só: volume `biblia-media`, `chown` no Dockerfile, `docker-compose.prod.yml` SMTP) → **28** → **29** → **30** (só: `README` secção admin, `ROADMAP` M2b).
+
+**⇒ FIM DO M2b.** Verificação completa + `docker compose up` e exercitar login → `/admin/livros` → editar → upload de capa → ver no site público. PR → `main`.
+
+### Tasks que atravessam as duas partes
+
+| Task | M2a faz | M2b faz |
+|---|---|---|
+| **2** (contratos) | interfaces/DTOs de auth+conta, tipos de resultado, `IIdentityService`, `ITokenService`, `IRefreshTokenStore`, `IEmailSender`, `IUsuarioAtual` | `IProcessadorImagem`, `IArmazenamentoImagens`, `IUploadPolitica`, `ILivroRepository` estendido, DTOs de admin, `CapaUrl` nos DTOs públicos, `ILivroCommandService` (interface) |
+| **3** (pacotes+entidades) | `Microsoft.AspNetCore.Identity.EntityFrameworkCore`, `...JwtBearer`, `System.IdentityModel.Tokens.Jwt`; `ApplicationUser`, `RefreshToken`; options `Jwt`/`Email`/`AdminSeed` | `SixLabors.ImageSharp`; options `Upload`/`Armazenamento` |
+| **4** (DbContext+migração) | `AppDbContext : IdentityDbContext`, `RefreshTokenConfiguration`, migração `M2a_Identity`, testes de `RefreshToken` | `LivroConfiguration` + `CapaImagemPath`, migração `M2b_LivroCapa`, teste de `CapaImagemPath` |
+| **12** (`AddInfrastructure`) | `Configure` de `Jwt`/`Email`; `AddDataProtection`; `AddIdentityCore`/`AddJwtBearer`; DI de `IIdentityService`/`ITokenService`/`IRefreshTokenStore`/`IEmailSender`/`IdentitySeeder` | DI de `IProcessadorImagem`/`IArmazenamentoImagens`/`IUploadPolitica`; `Configure` de `Upload`/`Armazenamento` |
+| **18** (`Program.cs`+middleware) | `AuthController`, cookies, rate limit `auth`, `UseAuthentication/Authorization`, seed do `IdentitySeeder`, `WebFactoryBase`+`AutenticacaoWebFactory`; **e** já adicionar os `catch` de `ConflitoException`/`KeyNotFoundException`/`UnauthorizedAccessException` ao middleware (inócuos sem os endpoints) | nada novo (o middleware já cobre) — a não ser que o M2a não os tenha feito |
+| **22** (Docker) | `.gitignore` (`.env`), `.env.example` (`BT_JWT_KEY`, `BT_ADMIN_*`), `docker-compose.yml` env de auth | `.gitignore` (`.media/`), volume `biblia-media`, `chown` no Dockerfile, `docker-compose.prod.yml` SMTP, exercício manual do upload |
+| **30** (Docs) | `SECURITY.md`, `README` (quick start auth, `.env`, `appsettings.Development.json`), `CLAUDE.md` (auth), `ROADMAP` (M2a entregue) | `README` (secção `/admin`, upload), `ROADMAP` (M2b entregue) |
+
+> **Nota sobre a Task 2 no M2b:** os DTOs públicos `LivroListItemDto`/`LivroDetailDto`
+> ganham `CapaUrl` só no M2b. No M2a **não se toca** nesses records nem no `LivroMapper` —
+> ficam como o M1. Os Steps 12, 14, 15 da Task 2 (que adicionam `CapaUrl` e ajustam o mapper)
+> pertencem ao M2b.
+
+> **Nota sobre a Task 30 no M2a:** o `SECURITY.md` do M2a descreve a autenticação como
+> **existente** mas menciona que o CRUD de admin e o upload chegam no M2b.
 
 ---
 
@@ -100,6 +145,8 @@
 ---
 
 ## Task 1: Domain — comportamento de `Livro` + `ConflitoException`
+
+> **Parte: M2b.** (A mutação de `Livro` só é usada pelo `LivroCommandService`, que é M2b.)
 
 **Files:**
 - Modify: `src/BibliaTeologica.Domain/Entities/Livro.cs`
@@ -344,6 +391,8 @@ git commit -m "feat(domain): mutação de Livro (Atualizar/Publicar/Capa) e Conf
 ---
 
 ## Task 2: Application — contratos (interfaces, DTOs, tipos auxiliares)
+
+> **Parte: M2a + M2b (dividida).** M2a: Steps 1–10 + 13 (auth/conta + tipos de resultado + `.csproj`). M2b: Steps 6 (`IProcessadorImagem`), o `IArmazenamentoImagens`, `IUploadPolitica` (definido na Task 16), `ILivroRepository` estendido (Step 8), DTOs de admin (Step 11), e `CapaUrl` nos DTOs públicos + ajuste do `LivroMapper` (Steps 12, 14, 15). **No M2a NÃO tocar em `LivroListItemDto`/`LivroDetailDto` nem no `LivroMapper`.**
 
 **Files:**
 - Create: `src/BibliaTeologica.Application/Common/Resultados/ResultadoSenha.cs`
@@ -812,6 +861,8 @@ git commit -m "feat(application): contratos do M2 (interfaces, DTOs, tipos de re
 
 ## Task 3: Infrastructure — pacotes, options e entidades de Identity
 
+> **Parte: M2a + M2b (dividida).** M2a: pacotes Identity/JwtBearer/`System.IdentityModel.Tokens.Jwt`, `ApplicationUser`, `RefreshToken`, options `JwtOptions`/`EmailOptions`/`AdminSeedOptions`. M2b: pacote `SixLabors.ImageSharp`, options `UploadOptions`/`ArmazenamentoOptions`.
+
 **Files:**
 - Modify: `Directory.Packages.props`
 - Modify: `src/BibliaTeologica.Infrastructure/BibliaTeologica.Infrastructure.csproj`
@@ -993,6 +1044,10 @@ git commit -m "chore(infra): pacotes Identity/JwtBearer/ImageSharp, ApplicationU
 ---
 
 ## Task 4: Infrastructure — `AppDbContext` como `IdentityDbContext` + migração
+
+> **Parte: M2a + M2b (dividida).**
+> **M2a:** `AppDbContext : IdentityDbContext`, `RefreshTokenConfiguration`, teste `PersisteERecupera_RefreshToken`, e migração **`M2a_Identity`** (Step 7 com este nome; NÃO incluir a coluna da capa — o `LivroConfiguration` ainda não mudou). Steps 3 e o teste `PersisteCapaImagemPath_NoLivro` **saltam** no M2a.
+> **M2b:** Step 3 (`LivroConfiguration` + `HasMaxLength(60)` no `CapaImagemPath`), teste `PersisteCapaImagemPath_NoLivro`, e migração **`M2b_LivroCapa`** (só `AddColumn CapaImagemPath`).
 
 **Files:**
 - Modify: `src/BibliaTeologica.Infrastructure/Persistence/AppDbContext.cs`
@@ -2414,6 +2469,10 @@ git commit -m "feat(infra): ArmazenamentoImagensLocal (nome {guid}.webp, anti pa
 ---
 
 ## Task 12: Infrastructure — `AddInfrastructure` (Identity, JwtBearer, DI dos serviços)
+
+> **Parte: M2a + M2b (dividida).**
+> **M2a:** `FrameworkReference Microsoft.AspNetCore.App`; `Configure<JwtOptions>`/`<EmailOptions>`; `AddDataProtection`; `AddIdentityCore`/`AddJwtBearer` (cookie `bt_access`); `AddAuthorization`; DI de `IIdentityService`, `ITokenService`, `IRefreshTokenStore`, `IEmailSender` (por sink), `IdentitySeeder`. O teste de composição só verifica esses.
+> **M2b:** adicionar `Configure<UploadOptions>`/`<ArmazenamentoOptions>` e DI de `IProcessadorImagem` (singleton), `IArmazenamentoImagens` (singleton), `IUploadPolitica` (singleton). Estender o `DependencyInjectionTests` com essas 3 linhas do `[Theory]`.
 
 **Files:**
 - Modify: `src/BibliaTeologica.Infrastructure/DependencyInjection.cs`
@@ -3972,6 +4031,8 @@ git commit -m "feat(api): UsuarioAtual, CookieWriter (3 cookies), CsrfActionFilt
 
 ## Task 18: Api — `AuthController`, `Program.cs` (auth), middleware, factory de teste
 
+> **Parte: M2a** (inteira). O Step 2 (mapa do `ExceptionHandlingMiddleware` com `ConflitoException`/`KeyNotFoundException`/`UnauthorizedAccessException`) fica no M2a — os `catch` são inócuos sem os endpoints do M2b e evitam retrabalho. Se por algum motivo ficarem por fazer, a Parte M2b apanha-os.
+
 **Files:**
 - Create: `src/BibliaTeologica.Api/Controllers/AuthController.cs`
 - Modify: `src/BibliaTeologica.Api/Program.cs`
@@ -4984,6 +5045,10 @@ git commit -m "feat(api): MediaController (serve capas WebP) + CapaUrl nos DTOs 
 ---
 
 ## Task 22: Docker — volume de media, `.env`, `chown`, exercício manual
+
+> **Parte: M2a + M2b (dividida).**
+> **M2a:** Step 1 `.gitignore` só `.env`; Step 2 `.env.example` (`BT_JWT_KEY`, `BT_ADMIN_EMAIL`, `BT_ADMIN_SENHA`); Step 4 `docker-compose.yml` só as linhas `Jwt__SigningKey`/`AdminSeed__0__*`/`Email__Sink`. Exercício manual: login → 2FA → `/conta`.
+> **M2b:** `.gitignore` `.media/`; Step 3 `chown` no Dockerfile; Step 4 volume `biblia-media` + `Armazenamento__CaminhoImagens`; Step 5 `docker-compose.prod.yml` SMTP; exercício manual do upload de capa.
 
 **Files:**
 - Modify: `src/BibliaTeologica.Api/Dockerfile`
@@ -6620,6 +6685,10 @@ git commit -m "feat(web): form de livro (criar/editar, FormArray de ideias, uplo
 
 ## Task 30: Docs — `SECURITY.md`, `README.md`, `CLAUDE.md`, `ROADMAP.md`
 
+> **Parte: M2a + M2b (dividida).**
+> **M2a:** `SECURITY.md` (auth existe; nota que admin/upload chegam no M2b), `README` (quick start com `.env` + `appsettings.Development.json`, sem a secção `/admin`), `CLAUDE.md` (linhas de auth/cookies/CSRF), `ROADMAP` (M2a entregue).
+> **M2b:** `README` (secção `/admin` + upload + `docker compose logs api | grep EMAIL`), `SECURITY.md` (linha do upload), `ROADMAP` (M2b entregue; nota do que foi antecipado do M4).
+
 **Files:**
 - Modify: `SECURITY.md`, `README.md`, `CLAUDE.md`, `docs/ROADMAP.md`
 
@@ -6749,7 +6818,9 @@ Expected: tudo verde.
 | §10 Docker Compose (`biblia-media`, `.env`, `chown`) | 22 |
 | §11 CI + `SECURITY.md` | 30 (CI não muda estruturalmente) |
 | §12 Segurança — 12 pontos | 1 (validação), 17 (CSRF), 18 (rate limit, cookies, seed), 12 (JwtBearer via cookie), 16 (upload), 20 (Authorize Admin), 21 (media anti-traversal) |
-| §13 Sequência de implementação | ordem das tasks 1–30 |
+| §13 Sequência de implementação | ordem das tasks por parte (ver "Estrutura em duas partes") |
+| §3.1 Entrega em dois PRs | "Estrutura em duas partes" + notas de parte em cada task straddler |
+| §3.2 Checklist das 10 regras de ouro | Task 12 (§12) — M2a cobre 1–5,7–10; M2b cobre 1,2,6,7,10 |
 
 ---
 

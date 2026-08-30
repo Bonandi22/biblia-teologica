@@ -60,8 +60,42 @@ no registo, e captura/envio de newsletter.
   re-verificação), trocar password.
 - Angular Material só em `/admin` e nas páginas de auth; `AuthStore` (signals),
   interceptors (withCredentials, CSRF, refresh), guards (`authGuard`, `adminGuard`).
-- Migração única `M2_IdentityELivroCapa`; `IdentitySeeder` no arranque.
-- `docker-compose` ganha volume `biblia-media`.
+- Migrações `M2a_Identity` e `M2b_LivroCapa`; `IdentitySeeder` no arranque.
+- `docker-compose` ganha volume `biblia-media` (M2b).
+
+### 3.1 Entrega em dois PRs
+
+Esta spec descreve o M2 inteiro, mas a implementação é entregue em **dois PRs
+sequenciais** — o M2b assenta no M2a já em `main`. O plano
+(`docs/superpowers/plans/2026-08-30-m2-auth-admin-livros.md`) está dividido em
+duas partes com um marco de PR entre elas:
+
+| Parte | Âmbito | Shippable por si | Migração |
+|---|---|---|---|
+| **M2a — Autenticação + Conta** | Identity + JWT/cookies + refresh rotativo + 2FA email + `/api/auth/*` + `/api/conta/*` + páginas `/entrar`, `/registar`, `/conta`. Angular Material + interceptors + guards (`authGuard`). Sem `adminGuard` ainda (nenhuma rota o usa). | Sim — dá para registar, autenticar (2FA) e gerir o perfil. Zero endpoints de escrita de conteúdo. | `M2a_Identity` (tabelas `AspNet*` + `RefreshTokens`) |
+| **M2b — Admin + Upload** | `Livro` ganha mutação + `CapaImagemPath`; `LivroCommandService` (CRUD completo); upload de capa (ImageSharp); `/api/admin/livros/*`, `/api/media/*`; `CapaUrl` nos DTOs públicos; área `/admin` (MatTable, form, capa); `adminGuard`. Volume `biblia-media`. | Sim — assumindo o M2a em `main`. | `M2b_LivroCapa` (coluna `Livros.CapaImagemPath`) |
+
+Entre as duas partes: abrir PR do M2a, checks verdes, merge squash, sincronizar
+`main`, criar branch `feature/BT-<n>-m2b-…`. As secções abaixo que misturam os
+dois âmbitos (§5 Domain, §7 migração, §8 API, §9 Frontend, §10 Docker, §12
+Segurança) são separadas explicitamente no plano.
+
+### 3.2 Checklist de segurança (as 10 regras de ouro)
+
+Ambas as partes carregam a checklist de §12. Mapeamento resumido:
+
+| # | Regra | M2a | M2b |
+|---|---|---|---|
+| 1 | Validação no servidor | DataAnnotations nos DTOs de auth/conta | + invariantes de `Livro` + conflitos de slug/ordem |
+| 2 | Rotas protegidas só no front | `[Authorize]` em `/api/conta/*` | `[Authorize(Roles="Admin")]` em **todo** `/api/admin/**` |
+| 3 | Segredos no código | `Jwt__SigningKey`, `AdminSeed__*` só em env/`.env`/`appsettings.Development.json` | idem + SMTP |
+| 4 | Autorização por utilizador | `/api/conta/*` opera sobre `IUsuarioAtual.Id`, nunca id do cliente | — |
+| 5 | Endpoints sem rate limit | política `auth` 10/min/IP em `/api/auth/*` + global do M1 | — |
+| 6 | Upload sem validação | — | content-type + magic bytes + tamanho + re-encode WebP + nome `{guid}.webp` + fora do webroot + anti path-traversal |
+| 7 | Dados sensíveis na resposta | `UsuarioDto`/`PerfilDto` curados; nunca hash/refresh/`ApplicationUser` | `CapaUrl` montado, nunca a chave crua noutro contexto |
+| 8 | XSS | Angular escapa; Material sem `innerHTML`; sem `bypassSecurityTrust*` | idem no `/admin` |
+| 9 | CORS aberto demais | política nomeada `spa`, origens explícitas; cookies `SameSite=Strict` | inalterado |
+| 10 | Erros a revelar interno | `DomainException` → 400; 500 genérico em Production; stack só em Dev | + `ConflitoException` → 409, `KeyNotFoundException` → 404 |
 
 ### Fora (registado no ROADMAP)
 
