@@ -1,0 +1,35 @@
+# ---- .NET ----
+bin/
+obj/
+*.user
+*.suo
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+.vs/
+*.db
+*.db-shm
+*.db-wal
+
+# ---- Config / secrets ----
+appsettings.Development.json
+appsettings.*.local.json
+.env
+.env.*
+!.env.example
+
+# ---- Angular / Node ----
+node_modules/
+frontend/**/dist/
+frontend/**/.angular/
+frontend/**/coverage/
+npm-debug.log*
+
+# ---- IDE ----
+.idea/
+*.DotSettings.user
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
