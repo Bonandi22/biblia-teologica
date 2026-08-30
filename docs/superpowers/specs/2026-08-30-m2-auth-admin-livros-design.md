@@ -1,7 +1,7 @@
 # M2 — Autenticação + Admin de Livros (design)
 
 **Data:** 2026-08-30
-**Estado:** aguardando revisão do utilizador
+**Estado:** revista — pronta para o plano de implementação
 **Marco:** M2 de 5 (ver `docs/ROADMAP.md`)
 **Depende de:** M1 (site público de Livros) — já em `main`.
 
@@ -181,6 +181,8 @@ RemoverCapa()                -> CapaImagemPath = null;    AtualizadoEm = UtcNow
 
 - Campo novo: `string? CapaImagemPath` (get privado) — **chave de armazenamento relativa**
   (`{guid}.webp`), nunca URL.
+- `Livro.Id` continua **`int`** (identity, do M1). Os endpoints de admin usam `{id:int}`.
+  Só o Identity (`ApplicationUser`, roles, `RefreshToken`) usa `Guid`.
 - Invariante `Ordem` 1..66 **mantém-se**. "Criar livro" no /admin serve para repor um
   livro apagado ou preencher uma lacuna, não para estender o cânon.
 - `Livro.Create` (M1) inalterado; capa é sempre passo separado (nunca no `Create`).
@@ -220,14 +222,19 @@ AtualizarPerfilDto  { NomeExibicao }
 TrocarEmailDto      { NovoEmail, Senha }
 TrocarSenhaDto      { SenhaAtual, NovaSenha }
 
-// Livros (escrita)
+// Livros (escrita) — Id é int
 CriarLivroDto       { Nome, Secao, Ordem, Quem, Porque, ParaQuem, Estrutura, Tema,
                       Ideias[], Versiculo }
 AtualizarLivroDto   { …iguais… }
-LivroAdminListItemDto  { Id, Slug, Nome, Ordem, Secao, Publicado, TemCapa, AtualizadoEm }
-LivroAdminDetailDto    { Id, Slug, Nome, Ordem, Secao, SecaoRotulo, Quem, Porque,
+LivroAdminListItemDto  { Id: int, Slug, Nome, Ordem, Secao, Publicado, TemCapa, AtualizadoEm }
+LivroAdminDetailDto    { Id: int, Slug, Nome, Ordem, Secao, SecaoRotulo, Quem, Porque,
                          ParaQuem, Estrutura, Tema, Ideias[], Versiculo, Publicado,
                          CapaUrl?, CriadoEm, AtualizadoEm }
+
+// Tipos auxiliares de resultado (records pequenos, Application)
+ResultadoSenha     { Sucesso: bool, Bloqueado: bool, UserId: Guid? }
+IdentityResultDto  { Sucesso: bool, Erros: string[] }
+RefreshTokenInfo   { UserId: Guid, Hash, ExpiraEm, RevogadoEm: DateTime? }
 ```
 
 Todos os DTOs de escrita são mapeados **campo a campo** para `Livro.Create`/`Atualizar` —
@@ -269,12 +276,12 @@ Task<ResultadoLoginDto> TrocarSenhaAsync(Guid userId, TrocarSenhaDto, Cancellati
 ### `ILivroCommandService` / `LivroCommandService`
 
 ```
-Task<Guid> CriarAsync(CriarLivroDto, CancellationToken)
-Task AtualizarAsync(Guid id, AtualizarLivroDto, CancellationToken)
-Task ApagarAsync(Guid id, CancellationToken)                 // apaga ficheiro de capa
-Task DefinirPublicacaoAsync(Guid id, bool publicado, CancellationToken)
-Task<string> DefinirCapaAsync(Guid id, Stream imagem, string contentType, CancellationToken)
-Task RemoverCapaAsync(Guid id, CancellationToken)
+Task<int> CriarAsync(CriarLivroDto, CancellationToken)
+Task AtualizarAsync(int id, AtualizarLivroDto, CancellationToken)
+Task ApagarAsync(int id, CancellationToken)                  // apaga ficheiro de capa
+Task DefinirPublicacaoAsync(int id, bool publicado, CancellationToken)
+Task<string> DefinirCapaAsync(int id, Stream imagem, string contentType, CancellationToken)
+Task RemoverCapaAsync(int id, CancellationToken)
 ```
 
 - `CriarAsync` / `AtualizarAsync`: `SlugExisteAsync` / `OrdemExisteAsync` (excluindo o
@@ -294,7 +301,6 @@ Task RegistarFalhaAsync(Guid userId)  /  Task ResetarFalhasAsync(Guid userId)
 Task<IReadOnlyList<string>> RolesAsync(Guid userId)
 Task<UsuarioDto> ObterUsuarioAsync(Guid userId)
 Task<IdentityResultDto> CriarMembroAsync(string email, string senha, string nome)
-Task<IdentityResultDto> CriarAdminAsync(string email, string senha)   // usado pelo seeder
 Task<IdentityResultDto> TrocarSenhaAsync(Guid userId, string atual, string nova)
 Task<IdentityResultDto> TrocarEmailAsync(Guid userId, string novo, string senha)
 Task AtualizarNomeAsync(Guid userId, string nome)
@@ -399,9 +405,10 @@ CriadoPorIp (string?)
 
 ### `IdentitySeeder` — `Persistence/Seed/`
 
-`SeedAsync`: cria roles `Admin`/`Membro` se não existirem; para cada entrada de
-`AdminSeed:*`, se o email não existir, `CriarAdminAsync(email, senhaInicial)` com
-`DeveTrocarSenha = true`. Idempotente. Corre depois do `LivroSeeder`.
+`SeedAsync`: usa `RoleManager`/`UserManager` **diretamente** (é infra — não passa pelo
+`IIdentityService`). Cria roles `Admin`/`Membro` se não existirem; para cada entrada de
+`AdminSeed:*`, se o email não existir, cria o utilizador na role `Admin` com
+`DeveTrocarSenha = true` e `EmailConfirmed = true`. Idempotente. Corre depois do `LivroSeeder`.
 
 ### `DependencyInjection.AddInfrastructure(config)`
 
@@ -676,21 +683,27 @@ lockout, CSRF).
 
 ## 13. Sequência de implementação (para o plano)
 
-1. **Domain** — `Livro` (Atualizar/Publicar/Despublicar/DefinirCapa/RemoverCapa + `CapaImagemPath`),
-   `ConflitoException` + testes de Domain.
-2. **Infra — Identity base** — pacotes; `ApplicationUser`, `RefreshToken`, `AppDbContext`
-   passa a `IdentityDbContext`; `LivroConfiguration` + `CapaImagemPath`; migração
-   `M2_IdentityELivroCapa`; `IdentitySeeder`.
-3. **Infra — serviços** — `IdentityService`, `TokenService`, `RefreshTokenStore`,
-   `LogEmailSender`/`SmtpEmailSender`, `ProcessadorImagemSharp`, `ArmazenamentoImagensLocal`
-   + testes de Infra.
-4. **Application — Auth/Conta** — DTOs, `IAuthService`/`AuthService`, `IContaService`/`ContaService`,
-   interfaces novas, DI + testes com mocks.
-5. **Application — Livros escrita** — `ILivroCommandService`/`LivroCommandService`,
-   `ILivroRepository` estendido, DTOs de admin + testes.
+Ordem: **contratos antes de implementações** (as interfaces vivem na Application, as
+implementações na Infra — a Infra não compila sem os contratos).
+
+1. **Domain** — `Livro` (Atualizar/Publicar/Despublicar/DefinirCapa/RemoverCapa +
+   `CapaImagemPath`), `ConflitoException` + testes de Domain.
+2. **Application — contratos** — todas as interfaces novas (`IIdentityService`,
+   `ITokenService`, `IRefreshTokenStore`, `IEmailSender`, `IProcessadorImagem`,
+   `IArmazenamentoImagens`, `IUsuarioAtual`), `ILivroRepository` estendido, todos os DTOs
+   e tipos auxiliares. Sem implementações — a solução compila.
+3. **Infra — Identity persistência** — pacotes (Identity, ImageSharp); `ApplicationUser`,
+   `RefreshToken` + config; `AppDbContext` passa a `IdentityDbContext`; `LivroConfiguration`
+   + `CapaImagemPath`; migração `M2_IdentityELivroCapa`; `IdentitySeeder` (via
+   `UserManager`/`RoleManager`) + testes de Infra do seeder.
+4. **Infra — implementações de serviço** — `IdentityService`, `TokenService`,
+   `RefreshTokenStore`, `LogEmailSender`/`SmtpEmailSender`, `ProcessadorImagemSharp`,
+   `ArmazenamentoImagensLocal`; `AddInfrastructure` (Identity, JwtBearer, sink) + testes de Infra.
+5. **Application — implementações + repositório** — `LivroRepository` estendido;
+   `AuthService`, `ContaService`, `LivroCommandService`; `AddApplication` + testes com mocks.
 6. **API — auth** — `AuthController`, `ContaController`, `CookieWriter`, `CsrfActionFilter`,
-   `UsuarioAtual`, `Program.cs` (auth + rate limit `auth`), middleware atualizado + testes
-   de integração de auth.
+   `UsuarioAtual`, `Program.cs` (auth + rate limit `auth`), `ExceptionHandlingMiddleware`
+   atualizado + testes de integração de auth.
 7. **API — admin/media** — `LivrosAdminController`, `MediaController`, `LivrosController`
    (capaUrl) + testes de integração de admin/upload.
 8. **Docker** — `biblia-media` volume, `.env.example`, `chown` no Dockerfile; subir a stack
@@ -700,7 +713,7 @@ lockout, CSRF).
 10. **Frontend — páginas** — `entrar`, `registar`, `conta` (perfil + trocar-senha),
     shell `/admin`, `admin/livros` lista (MatTable), `admin/livros` form + capa + testes.
 11. **Docs** — `SECURITY.md`, `README.md` (secção auth + `appsettings.Development.json`
-    exemplo), `CLAUDE.md` (regra de ouro #11/#12 se fizer sentido consolidar), `ROADMAP.md`
+    exemplo), `CLAUDE.md` (regra de ouro sobre auth se fizer sentido consolidar), `ROADMAP.md`
     (marcar M2, notar o que foi antecipado do M4).
 
 ---
