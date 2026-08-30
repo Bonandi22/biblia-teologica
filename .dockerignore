@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.idea/
+**/node_modules/
+frontend/**/dist/
+frontend/**/.angular/
+**/*.db
+**/*.db-shm
+**/*.db-wal
+.git/
+docs/
+tests/
+scripts/
+**/appsettings.Development.json
+**/.env
+**/.env.*
