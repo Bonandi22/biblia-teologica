@@ -47,6 +47,8 @@ Frontend: Angular 22 standalone + signals, CSR (sem SSR). Features lazy-loaded e
 - Testes: Metodo_ResultadoEsperado_QuandoCondicao. Backend: xUnit + Moq + AwesomeAssertions + EF Core Sqlite. Frontend: Vitest (`@angular/build:unit-test`, jsdom) — não Karma.
 - Subscrições RxJS em código novo: takeUntilDestroyed(this.destroyRef).
 - Nenhum innerHTML de dado bruto; nunca bypassSecurityTrust* em conteúdo de utilizador.
+- Auth: cookies HttpOnly (bt_access/bt_refresh) + double-submit CSRF (bt_csrf + header X-CSRF-Token). Nunca token em localStorage. Nunca ApplicationUser/hash/refresh no corpo de uma resposta.
+- Identity vive na Infrastructure; a Application fala com ele só por IIdentityService/ITokenService/etc.
 
 ## Comandos essenciais
 
@@ -68,8 +70,10 @@ Frontend:
 
 Docker:
 
-    docker compose up --build      # api :5080 + web :4300
+    docker compose up --build      # api :5080 + web :4300 — precisa de .env (copiar de .env.example: BT_JWT_KEY, BT_ADMIN_*)
     docker compose down -v         # zera o volume do SQLite
+
+Código 2FA em dev nos logs: docker compose logs api | grep EMAIL
 
 Swagger em dev: http://localhost:5080/swagger
 

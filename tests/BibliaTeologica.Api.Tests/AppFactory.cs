@@ -21,6 +21,9 @@ public class AppFactory : WebApplicationFactory<Program>, IAsyncLifetime
         // No modelo de hosting mínimo, fontes adicionadas via ConfigureAppConfiguration
         // do WebApplicationFactory ficam ABAIXO do appsettings.json; UseSetting sobrepõe.
         builder.UseSetting("ConnectionStrings:Default", $"Data Source={_arquivoDb}");
+        // Chave de assinatura só-de-teste: o guard de AddInfrastructure (Task 12) exige >= 32 chars.
+        // Definida ANTES do loop para que um teste a possa sobrepor via ConfiguracaoExtra.
+        builder.UseSetting("Jwt:SigningKey", "chave-de-teste-com-mais-de-32-caracteres-para-hs256!!");
         foreach (var (chave, valor) in ConfiguracaoExtra)
             builder.UseSetting(chave, valor);
     }

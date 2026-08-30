@@ -16,12 +16,19 @@ controller (Api) -> feature lazy-loaded (Angular).
 
 ## Marcos
 
-- M1 — Site público de Livros. Camadas .NET, EF Core/SQLite, Angular 22, Docker, CI.
+- M1 — Site público de Livros. Camadas .NET, EF Core/SQLite, Angular 22, Docker, CI. ✅ entregue.
   Spec: docs/superpowers/specs/2026-08-30-m1-site-publico-livros-design.md
-- M2 — ASP.NET Core Identity + JWT + área /admin (role Admin) + CRUD de Livros + upload.
+- M2 — ASP.NET Core Identity + JWT (cookies HttpOnly, refresh rotativo, 2FA email) + área /admin
+  (role Admin) + CRUD de Livros + upload de capa + área /conta.
+  Spec: docs/superpowers/specs/2026-08-30-m2-auth-admin-livros-design.md
+  Plano: docs/superpowers/plans/2026-08-30-m2-auth-admin-livros.md — entregue em 2 PRs:
+  - M2a — autenticação + /conta (login 2FA, refresh, registo de Membro, perfil). ✅ entregue 2026-08-30.
+  - M2b — admin de Livros (CRUD, publicar, upload de capa) + área /admin. Planeado.
+  M2 antecipa do M4 o conceito de Membro (role + perfil) e a infra de email transacional.
+  O M4 acrescenta: confirmação de email no registo, recuperação de password, captura/envio de newsletter.
 - M3 — Estudos (público + admin), corpo em Markdown, sanitização (DOMPurify).
 - M3.5 — Vídeos.
-- M4 — Cadastro público + confirmação de e-mail + captura de newsletter.
+- M4 — Confirmação de e-mail no registo + recuperação de password ("esqueci-me") + captura de newsletter.
 - M5+ — Doutrinas, Glossário, Cronologia, Teologia Sistemática, e-mail marketing, SSR/prerender, deploy real.
 
 ## Regra de três

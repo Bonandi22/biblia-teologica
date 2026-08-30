@@ -1,0 +1,44 @@
+<mat-card class="cartao">
+  <h1>A minha conta</h1>
+
+  @if (perfil(); as p) {
+    <dl class="dados">
+      <div><dt>Email</dt><dd>{{ p.email }}</dd></div>
+      <div><dt>Perfis</dt><dd>{{ p.roles.join(', ') || '—' }}</dd></div>
+    </dl>
+
+    <form [formGroup]="formNome" (ngSubmit)="guardarNome()">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome a exibir</mat-label>
+        <input matInput formControlName="nomeExibicao" autocomplete="name" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">Guardar nome</button>
+      @if (msgNome(); as m) {
+        <p class="msg" role="status">{{ m }}</p>
+      }
+    </form>
+
+    <form [formGroup]="formEmail" (ngSubmit)="guardarEmail()">
+      <h2>Trocar email</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Novo email</mat-label>
+        <input matInput type="email" formControlName="novoEmail" autocomplete="email" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Senha atual</mat-label>
+        <input matInput type="password" formControlName="senha" autocomplete="current-password" />
+      </mat-form-field>
+      <button mat-stroked-button type="submit">Trocar email</button>
+      @if (msgEmail(); as m) {
+        <p class="msg" role="status">{{ m }}</p>
+      }
+    </form>
+
+    <div class="acoes">
+      <a routerLink="trocar-senha" mat-button>Trocar senha</a>
+      <button mat-button type="button" (click)="sair()">Sair</button>
+    </div>
+  } @else {
+    <p>A carregar…</p>
+  }
+</mat-card>

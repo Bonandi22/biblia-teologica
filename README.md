@@ -21,7 +21,8 @@ ideias-chave, versículo de referência), navegável e agrupada por seção can�
 | Marco | Âmbito | Estado |
 |---|---|---|
 | **M1** | Site público de Livros — camadas .NET, EF Core/SQLite, Angular 22, Docker, CI | ✅ entregue |
-| M2 | ASP.NET Core Identity + JWT + área `/admin` + CRUD de Livros + upload | planeado |
+| **M2a** | Autenticação (Identity + JWT em cookies, refresh rotativo, 2FA email) + `/conta` + registo de Membro | ✅ entregue |
+| M2b | Área `/admin` (role Admin) + CRUD de Livros + upload de capa | planeado |
 | M3 | Estudos (Markdown, sanitização) · M3.5 Vídeos | planeado |
 | M4+ | Cadastro público, newsletter, Doutrinas, Glossário, Cronologia, deploy real | planeado |
 
@@ -87,6 +88,24 @@ docker compose down             # para, preserva o volume
 docker compose down -v          # zera o volume do SQLite
 ```
 
+### Autenticação (M2a)
+
+O `docker compose up` precisa de um `.env` na raiz (copiar de `.env.example`):
+
+- `BT_JWT_KEY` — chave de assinatura do JWT (ex.: `openssl rand -base64 48`)
+- `BT_ADMIN_EMAIL` / `BT_ADMIN_SENHA` — o admin criado no arranque (troca de senha
+  forçada no 1.º login)
+
+Login em <http://localhost:4300/entrar>. Em ambiente Dev o código 2FA aparece nos
+logs da API:
+
+```bash
+docker compose logs api | grep EMAIL
+```
+
+`/conta` — perfil (nome, email) e troca de senha, para qualquer utilizador
+autenticado. `/registar` — criar conta de Membro. A área `/admin` chega no M2b.
+
 ## Desenvolvimento local (sem Docker)
 
 <details>
@@ -103,7 +122,15 @@ dotnet run --project src/BibliaTeologica.Api      # https://localhost:5080/swagg
 ```
 
 `appsettings.Development.json` (git-ignored) para overrides locais — connection
-string, origens de CORS, etc.
+string, origens de CORS, e os segredos de auth:
+
+```json
+{
+  "ConnectionStrings": { "Default": "Data Source=./biblia.dev.db" },
+  "Jwt": { "SigningKey": "GERE-UMA-CHAVE-ALEATORIA-COM-64-CHARS-openssl-rand-base64-48" },
+  "AdminSeed": [ { "Email": "admin@local", "SenhaInicial": "Admin!Local1" } ]
+}
+```
 
 **Frontend**
 
@@ -134,12 +161,15 @@ npx tsc --noEmit -p tsconfig.app.json
 BibliaTeologica/
   src/
     BibliaTeologica.Domain/          ← entidades, enums, exceções de domínio
-    BibliaTeologica.Application/     ← Application Services, DTOs, mapeamento
+    BibliaTeologica.Application/     ← Application Services, DTOs, mapeamento (Auth, Conta)
     BibliaTeologica.Infrastructure/  ← DbContext, repositórios, migrações, seed
+                                       Identity/ (JWT, refresh, 2FA), Email/
     BibliaTeologica.Api/             ← controllers, Program.cs, middleware, Dockerfile
+                                       Auth/ (cookies, CSRF, utilizador atual)
   tests/
     BibliaTeologica.{Domain,Application,Infrastructure,Api}.Tests/
-  frontend/biblia-teologica-web/     ← Angular 22 (feature `biblia` lazy, nginx Dockerfile)
+  frontend/biblia-teologica-web/     ← Angular 22 (features `biblia`/`auth`/`conta` lazy,
+                                       interceptors + guards em core/, nginx Dockerfile)
   docs/
     ROADMAP.md                       ← verticais e marcos
     superpowers/                     ← specs e planos de implementação

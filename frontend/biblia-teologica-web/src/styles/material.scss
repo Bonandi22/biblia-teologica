@@ -1,0 +1,22 @@
+// Tema do Angular Material (Material 3), isolado do design system "pergaminho".
+// Carregado no angular.json DEPOIS de src/styles.scss. Só define as CSS vars
+// `--mat-sys-*` usadas pelos componentes `.mat-*`; NÃO toca no `body`, no
+// background nem na tipografia do fichário público (essas ficam em styles.scss).
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+
+  // Componentes Material assumem uma stack neutra; o `color-scheme` claro evita
+  // que overlays/inputs herdem o esquema escuro do sistema.
+  color-scheme: light;
+}
