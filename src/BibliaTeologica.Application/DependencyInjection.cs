@@ -10,6 +10,7 @@ public static class DependencyInjection
         services.AddScoped<ILivroQueryService, LivroQueryService>();
         services.AddScoped<Auth.IEmissorTokens, Auth.EmissorTokens>();
         services.AddScoped<Auth.IAuthService, Auth.AuthService>();
+        services.AddScoped<Conta.IContaService, Conta.ContaService>();
         return services;
     }
 }
