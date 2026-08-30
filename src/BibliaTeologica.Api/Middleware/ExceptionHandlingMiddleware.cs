@@ -26,6 +26,15 @@ public class ExceptionHandlingMiddleware
         {
             await EscreverProblema(context, StatusCodes.Status400BadRequest, "Requisição inválida", ex.Message);
         }
+        // ConflitoException (409) é adicionada no M2b (Task 1) — os endpoints que a lançam ainda não existem.
+        catch (KeyNotFoundException ex)
+        {
+            await EscreverProblema(context, StatusCodes.Status404NotFound, "Não encontrado", ex.Message);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            await EscreverProblema(context, StatusCodes.Status401Unauthorized, "Não autorizado", "Autenticação necessária.");
+        }
         catch (Exception ex)
         {
             _log.LogError(ex, "Erro não tratado em {Metodo} {Caminho}", context.Request.Method, context.Request.Path);
