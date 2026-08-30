@@ -68,7 +68,7 @@ Frontend:
 
 Docker:
 
-    docker compose up --build      # api :5080 + web :4200
+    docker compose up --build      # api :5080 + web :4300
     docker compose down -v         # zera o volume do SQLite
 
 Swagger em dev: http://localhost:5080/swagger
