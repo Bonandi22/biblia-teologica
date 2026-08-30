@@ -44,7 +44,7 @@ Frontend: Angular 22 standalone + signals, CSR (sem SSR). Features lazy-loaded e
 - EF Core: só-leitura usa AsNoTracking(); evitar N+1 e Include desnecessário.
 - DTO de escrita nunca é mapeado direto para a entidade quando há campos de auditoria/propriedade.
 - Central Package Management — versões só em Directory.Packages.props; .csproj sem Version.
-- Testes: Metodo_ResultadoEsperado_QuandoCondicao. xUnit + Moq + AwesomeAssertions + EF Core Sqlite.
+- Testes: Metodo_ResultadoEsperado_QuandoCondicao. Backend: xUnit + Moq + AwesomeAssertions + EF Core Sqlite. Frontend: Vitest (`@angular/build:unit-test`, jsdom) — não Karma.
 - Subscrições RxJS em código novo: takeUntilDestroyed(this.destroyRef).
 - Nenhum innerHTML de dado bruto; nunca bypassSecurityTrust* em conteúdo de utilizador.
 
@@ -63,7 +63,7 @@ Frontend:
     npm ci
     npm start
     npm run build
-    npm test -- --watch=false --browsers=ChromeHeadless
+    npm test                       # Vitest, uma passagem (CI=true força one-shot)
     npx tsc --noEmit -p tsconfig.app.json
 
 Docker:
@@ -75,7 +75,7 @@ Swagger em dev: http://localhost:5080/swagger
 
 ## Git
 
-main corre CI (ci.yml) e code review automático (claude-code-review.yml) em cada PR. Sem branch protection — Issue -> branch feature/BT-<n>-nome -> PR -> checks -> merge squash é convenção. Só push direto para main com pedido explícito; nunca merge com checks vermelhos.
+main corre CI (ci-cd.yml: build+test em PR, push de imagens para GHCR em main) e code review automático (claude-code-review.yml) em cada PR. claude.yml responde a menções @claude em issues/PRs. Sem branch protection — Issue -> branch feature/BT-<n>-nome -> PR -> checks -> merge squash é convenção. Só push direto para main com pedido explícito; nunca merge com checks vermelhos.
 
 Toda mensagem de commit termina com:
 
