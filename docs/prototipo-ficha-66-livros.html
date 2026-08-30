@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichário — Os 66 Livros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1C2541;
+  --parchment:#EFE6D5;
+  --parchment-2:#E5DAC3;
+  --brass:#A6763F;
+  --sage:#5C6B4F;
+  --near-black:#211D16;
+  --card:#F7F2E7;
+  --line: rgba(33,29,22,0.16);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--parchment);
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(92,107,79,0.05), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(166,118,63,0.06), transparent 45%);
+  color:var(--near-black);
+  font-family:"Source Serif 4", Georgia, serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.app{
+  display:flex;
+  min-height:100vh;
+  max-width:1200px;
+  margin:0 auto;
+}
+/* SIDEBAR */
+.sidebar{
+  width:300px;
+  flex-shrink:0;
+  border-right:1px solid var(--line);
+  padding:28px 18px 60px 24px;
+  position:sticky;
+  top:0;
+  align-self:flex-start;
+  max-height:100vh;
+  overflow-y:auto;
+}
+.brand{
+  font-family:"Fraunces", serif;
+  font-weight:700;
+  font-size:1.5rem;
+  letter-spacing:0.01em;
+  color:var(--ink);
+  margin:0 0 2px 0;
+}
+.brand-sub{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:0.68rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin-bottom:20px;
+}
+.search-wrap{
+  margin-bottom:22px;
+}
+.search-input{
+  width:100%;
+  padding:9px 12px;
+  border:1px solid var(--line);
+  background:var(--card);
+  font-family:"Source Serif 4", serif;
+  font-size:0.92rem;
+  color:var(--near-black);
+  border-radius:2px;
+  outline:none;
+}
+.search-input:focus{border-color:var(--brass);}
+.section-group{margin-bottom:4px;}
+.section-title{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:0.66rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--sage);
+  padding:14px 4px 6px 4px;
+  cursor:pointer;
+  user-select:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-top:1px solid var(--line);
+}
+.section-title .count{color:var(--brass); font-weight:500;}
+.book-list{list-style:none; margin:0; padding:0;}
+.book-list.collapsed{display:none;}
+.book-item{
+  padding:6px 8px 6px 14px;
+  font-size:0.88rem;
+  cursor:pointer;
+  border-left:2px solid transparent;
+  color:var(--near-black);
+  display:flex;
+  gap:8px;
+  align-items:baseline;
+}
+.book-item:hover{background:rgba(166,118,63,0.08);}
+.book-item.active{
+  border-left:2px solid var(--brass);
+  background:rgba(166,118,63,0.12);
+  font-weight:600;
+}
+.book-item .num{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:0.68rem;
+  color:var(--brass);
+  min-width:20px;
+}
+/* MAIN */
+main{
+  flex:1;
+  padding:36px 40px 80px 40px;
+  min-width:0;
+}
+.top-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin-bottom:26px;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.progress-label{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:0.72rem;
+  color:var(--sage);
+  letter-spacing:0.06em;
+}
+.nav-arrows{display:flex; gap:8px;}
+.nav-btn{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:0.72rem;
+  background:none;
+  border:1px solid var(--line);
+  padding:6px 12px;
+  cursor:pointer;
+  color:var(--ink);
+  border-radius:2px;
+  letter-spacing:0.04em;
+}
+.nav-btn:hover{border-color:var(--brass); color:var(--brass);}
+.nav-btn:disabled{opacity:0.3; cursor:default;}
+
+/* CARD */
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:3px;
+  position:relative;
+  padding:0 0 8px 0;
+  box-shadow: 3px 4px 0 rgba(28,37,65,0.05);
+}
+.card-tab{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 28px;
+  border-bottom:1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(166,118,63,0.05), transparent);
+}
+.card-catno{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:0.72rem;
+  color:var(--brass);
+  letter-spacing:0.08em;
+}
+.card-section{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:0.66rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--sage);
+}
+.card-title{
+  font-family:"Fraunces", serif;
+  font-weight:700;
+  font-size:clamp(2rem, 4vw, 2.9rem);
+  color:var(--ink);
+  padding:22px 28px 4px 28px;
+  line-height:1.05;
+}
+.card-body{
+  padding:8px 28px 20px 28px;
+}
+.field{
+  padding:16px 0;
+  border-top:1px solid var(--line);
+}
+.field:first-child{border-top:none;}
+.field-label{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:0.68rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--brass);
+  margin-bottom:6px;
+}
+.field-value{
+  font-size:1.02rem;
+  line-height:1.6;
+  color:var(--near-black);
+}
+.ideias-list{
+  margin:0;
+  padding-left:0;
+  list-style:none;
+}
+.ideias-list li{
+  font-size:1.0rem;
+  line-height:1.55;
+  padding:5px 0 5px 18px;
+  position:relative;
+}
+.ideias-list li::before{
+  content:"—";
+  position:absolute;
+  left:0;
+  color:var(--brass);
+}
+.versiculo-block{
+  font-family:"Fraunces", serif;
+  font-style:italic;
+  font-size:1.15rem;
+  line-height:1.6;
+  color:var(--ink);
+  border-left:3px solid var(--sage);
+  padding:4px 0 4px 18px;
+}
+.two-col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0 32px;
+}
+@media (max-width: 900px){
+  .app{flex-direction:column;}
+  .sidebar{
+    width:100%;
+    position:relative;
+    max-height:none;
+    border-right:none;
+    border-bottom:1px solid var(--line);
+    padding:20px 18px;
+  }
+  main{padding:26px 18px 60px 18px;}
+  .two-col{grid-template-columns:1fr;}
+  .card-title{padding:18px 20px 4px 20px;}
+  .card-tab{padding:14px 20px;}
+  .card-body{padding:8px 20px 16px 20px;}
+}
+:focus-visible{outline:2px solid var(--brass); outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="sidebar" id="sidebar">
+    <div class="brand">Fichário</div>
+    <div class="brand-sub">os 66 livros · cânon protestante</div>
+    <div class="search-wrap">
+      <input class="search-input" id="search" type="text" placeholder="Buscar livro…" autocomplete="off">
+    </div>
+    <div id="sections"></div>
+  </nav>
+  <main>
+    <div class="top-row">
+      <span class="progress-label" id="progress"></span>
+      <div class="nav-arrows">
+        <button class="nav-btn" id="prevBtn">‹ anterior</button>
+        <button class="nav-btn" id="nextBtn">próximo ›</button>
+      </div>
+    </div>
+    <div class="card" id="card"></div>
+  </main>
+</div>
+
+<script>
+const BOOKS = [{"section": "PENTATEUCO", "nome": "GÊNESIS", "quem": "Atribuído a Moisés (tradição mosaica), datação tradicional entre os séculos XV–XIII a.C. A crítica histórica (hipótese documentária) propõe compilação de múltiplas fontes ao longo de séculos, sem consenso acadêmico até hoje.", "porque": "Para dar a Israel uma origem própria e uma cosmovisão teológica — um Deus único e criador — em contraste com as cosmogonias politeístas egípcias e cananeias, e para fundamentar legal e teologicamente a promessa da terra que o povo estava prestes a ocupar.", "praquem": "O povo de Israel recém-saído da escravidão no Egito, no deserto, entre o Êxodo e a entrada em Canaã — sem identidade nacional consolidada, cercado de influências religiosas estrangeiras.", "estrutura": "Duas grandes partes: história primitiva (caps. 1–11: criação, queda, dilúvio, Babel) e história patriarcal (caps. 12–50: Abraão, Isaque, Jacó, José).", "tema": "Deus como Criador soberano que, apesar da queda e do pecado humano recorrente, inicia um plano de aliança e redenção através de uma família escolhida.", "ideias": ["Criação do mundo e da humanidade à imagem de Deus (cap. 1–2)", "Queda e entrada do pecado e da morte (cap. 3)", "Dilúvio e aliança com Noé (cap. 6–9)", "Chamado de Abraão e promessa de aliança (cap. 12, 15, 17)", "Ciclo dos patriarcas: Isaque, Jacó, José — culminando na descida da família ao Egito"], "versiculo": "Gênesis 1:1 — \"No princípio, Deus criou os céus e a terra.\""}, {"section": "PENTATEUCO", "nome": "ÊXODO", "quem": "Atribuído a Moisés (tradição mosaica), mesma datação tradicional (séc. XV–XIII a.C.). Narra eventos que o autor tradicionalmente teria vivido diretamente.", "porque": "Para registrar e dar sentido teológico à libertação do Egito como ato fundador da identidade de Israel como nação, e para estabelecer a aliança formal no Sinai — a Lei — como base da relação entre o povo e Deus.", "praquem": "O povo de Israel recém-liberto da escravidão, ainda no deserto, precisando de identidade coletiva, normas de convivência e culto, e reafirmação de que a promessa aos patriarcas estava sendo cumprida.", "estrutura": "Três blocos: libertação do Egito e as pragas (caps. 1–15); jornada no deserto até o Sinai (caps. 16–18); entrega da Lei e instruções para o Tabernáculo (caps. 19–40).", "tema": "Deus liberta seu povo da escravidão e estabelece com ele uma aliança formal baseada na Lei, prometendo habitar no meio dele.", "ideias": ["Nascimento e chamado de Moisés (cap. 2–4)", "As dez pragas e a Páscoa (cap. 7–12)", "Travessia do Mar Vermelho (cap. 14)", "Os Dez Mandamentos e a aliança do Sinai (cap. 19–24)", "Pecado do bezerro de ouro (cap. 32)", "Construção do Tabernáculo (cap. 25–31, 35–40)"], "versiculo": "Êxodo 3:14 — \"Disse Deus a Moisés: Eu sou o que sou.\""}, {"section": "PENTATEUCO", "nome": "LEVÍTICO", "quem": "Atribuído a Moisés, no mesmo período do Sinai, imediatamente após a construção do Tabernáculo. A hipótese documentária associa boa parte à \"fonte sacerdotal\" (P), de datação mais tardia.", "porque": "Para regulamentar como um povo pecador pode se aproximar de um Deus santo — sistema sacrificial, funções sacerdotais e normas de pureza — logo após Deus declarar que habitaria no meio de Israel.", "praquem": "Israel recém-saído do Egito, ainda acampado ao pé do Sinai, precisando de instruções práticas de culto e conduta — um povo sem tradição sacerdotal própria, vindo de séculos de escravidão pagã.", "estrutura": "Leis sacrificiais (cap. 1–7); consagração dos sacerdotes (cap. 8–10); leis de pureza (cap. 11–15); Dia da Expiação (cap. 16); Código de Santidade (cap. 17–27).", "tema": "A santidade de Deus exige um povo santo, vivida através de sacrifício, separação do impuro e obediência prática no cotidiano.", "ideias": ["Os cinco tipos de sacrifício (cap. 1–7)", "Consagração de Arão e filhos; morte de Nadabe e Abiú (cap. 8–10)", "Leis de alimentos, doenças de pele, impurezas corporais (cap. 11–15)", "Yom Kippur — Dia da Expiação (cap. 16)", "\"Amarás o teu próximo como a ti mesmo\" (cap. 19)", "Festas do calendário religioso (cap. 23)", "Ano sabático e Jubileu (cap. 25)", "Bênçãos e maldições da aliança (cap. 26)"], "versiculo": "Levítico 19:2 — \"Sede santos, porque eu, o Senhor, vosso Deus, sou santo.\""}, {"section": "PENTATEUCO", "nome": "NÚMEROS", "quem": "Atribuído a Moisés. Nome hebraico \"Bemidbar\" (No Deserto) é mais fiel ao conteúdo que o título \"Números\", vindo dos dois recenseamentos (cap. 1 e 26).", "porque": "Para registrar a organização de Israel antes da marcha, e explicar teologicamente por que uma geração inteira morreu no deserto sem entrar na terra prometida — consequência da descrença em Cades-Barneia.", "praquem": "A nova geração de israelitas, nascida ou crescida no deserto, prestes a entrar em Canaã — precisando entender por que seus pais falharam.", "estrutura": "Preparativos e partida do Sinai (cap. 1–10); rebeliões, descrença dos espias e 38 anos de peregrinação (cap. 11–25); nova geração e preparação final (cap. 26–36).", "tema": "A fidelidade de Deus persiste apesar da descrença humana, mas a incredulidade tem consequências reais e duradouras.", "ideias": ["Recenseamento e organização das tribos (cap. 1–4)", "Os doze espias e a rebelião de Cades-Barneia (cap. 13–14)", "Sentença dos 40 anos (cap. 14)", "Rebelião de Corá (cap. 16)", "Moisés fere a rocha e perde o direito de entrar na terra (cap. 20)", "Balaão e sua jumenta (cap. 22–24)", "Segundo recenseamento (cap. 26)"], "versiculo": "Números 14:18 — \"O Senhor é tardio em irar-se e grande em benignidade...\""}, {"section": "PENTATEUCO", "nome": "DEUTERONÔMIO", "quem": "Atribuído a Moisés, discurso final antes de sua morte. Nome significa \"segunda lei\" — reafirmação da aliança do Sinai. A crítica histórica associa parte à reforma de Josias (séc. VII a.C.).", "porque": "Para renovar formalmente a aliança do Sinai com a geração que entraria na terra, reforçando obediência à Lei como condição para prosperar nela.", "praquem": "A nova geração de Israel, às margens do Jordão, sem memória pessoal do Egito ou do Sinai — precisando reafirmar por si mesma a aliança de seus pais.", "estrutura": "Recapitulação histórica (cap. 1–4); repetição e exposição da Lei (cap. 5–26); bênçãos, maldições, renovação da aliança e morte de Moisés (cap. 27–34).", "tema": "A obediência à aliança é condição para a bênção e permanência na terra prometida.", "ideias": ["Recapitulação da jornada (cap. 1–3)", "Repetição dos Dez Mandamentos (cap. 5)", "O Shemá (cap. 6)", "Leis diversas: culto, justiça, pureza, vida social (cap. 12–26)", "Bênçãos e maldições (cap. 27–28)", "Renovação da aliança em Moabe (cap. 29–30)", "Morte de Moisés no Monte Nebo (cap. 31–34)"], "versiculo": "Deuteronômio 6:4-5 — \"Ouve, Israel, o Senhor nosso Deus é o único Senhor.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "JOSUÉ", "quem": "Tradicionalmente atribuído a Josué (com adições póstumas). A crítica associa o livro à \"história deuteronomista\".", "porque": "Para registrar o cumprimento da promessa da terra, mostrando que a fidelidade de Deus se concretiza quando o povo obedece.", "praquem": "Israel já estabelecido em Canaã, precisando legitimar a posse da terra e reforçar a obediência à Lei.", "estrutura": "Conquista da terra (cap. 1–12); divisão entre as tribos (cap. 13–21); despedida e renovação da aliança (cap. 22–24).", "tema": "Deus cumpre sua promessa da terra através da obediência e liderança fiel.", "ideias": ["Travessia do Jordão (cap. 3–4)", "Queda de Jericó (cap. 6)", "Pecado de Acã (cap. 7)", "Conquista do sul e norte de Canaã (cap. 9–11)", "Divisão da terra (cap. 13–21)", "\"Eu e a minha casa serviremos ao Senhor\" (cap. 24)"], "versiculo": "Josué 1:9 — \"Sê forte e corajoso... porque o Senhor teu Deus é contigo.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "JUÍZES", "quem": "Autor tradicionalmente associado a Samuel, anônimo no texto. Redação após o início da monarquia.", "porque": "Para documentar o ciclo de infidelidade, opressão, clamor e libertação entre Josué e a monarquia.", "praquem": "Audiência já vivendo sob monarquia, como contraste ao caos moral de \"cada um fazia o que era reto aos seus próprios olhos\".", "estrutura": "Padrão de declínio (cap. 1–2); ciclo de doze juízes (cap. 3–16); apêndices de corrupção moral (cap. 17–21).", "tema": "Sem liderança fiel, o povo cai repetidamente em idolatria; Deus levanta libertadores, mas o ciclo se repete e piora.", "ideias": ["Ciclo: pecado → opressão → clamor → libertador → recaída (cap. 2)", "Débora e a vitória sobre Sísera (cap. 4–5)", "Gideão e os 300 homens (cap. 6–8)", "Jefté (cap. 11)", "Sansão e os filisteus (cap. 13–16)", "\"Não havia rei em Israel\" (cap. 17, 21)"], "versiculo": "Juízes 21:25 — \"Naqueles dias não havia rei em Israel; cada um fazia o que parecia bem aos seus próprios olhos.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "RUTE", "quem": "Autor anônimo, associado a Samuel. Narra o período dos juízes; composição possivelmente posterior, ligada à legitimação davídica.", "porque": "Para contar uma história de fidelidade (hesed) dentro do caos moral dos juízes, e estabelecer a genealogia que leva a Davi.", "praquem": "Israel sob (ou legitimando) a monarquia davídica, interessado nas raízes familiares de Davi.", "estrutura": "Rute decide seguir Noemi (cap. 1); Rute e Boaz (cap. 2); pedido de resgate (cap. 3); casamento e genealogia até Davi (cap. 4).", "tema": "A fidelidade leal transforma tragédia em restauração; a providência divina opera através de escolhas humanas.", "ideias": ["\"Aonde quer que fores, irei\" (cap. 1)", "Rute no campo de Boaz (cap. 2)", "Pedido de resgate na eira (cap. 3)", "Nascimento de Obede, avô de Davi (cap. 4)"], "versiculo": "Rute 1:16 — \"O teu povo é o meu povo, o teu Deus é o meu Deus.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "1 SAMUEL", "quem": "Autor anônimo, associado em parte a Samuel, completado por profetas posteriores.", "porque": "Para narrar a transição de Israel dos juízes para a monarquia, mostrando o risco de um rei escolhido por critérios humanos (Saul) versus um escolhido por Deus (Davi).", "praquem": "Israel já sob monarquia, precisando entender as origens contestadas da realeza.", "estrutura": "Samuel, último juiz (cap. 1–7); reinado fracassado de Saul (cap. 8–15); ascensão de Davi (cap. 16–31).", "tema": "Deus rejeita a liderança centrada na aparência e escolhe conforme o coração.", "ideias": ["Chamado de Samuel menino (cap. 1–3)", "Israel pede um rei; unção de Saul (cap. 8–10)", "Rejeição de Saul (cap. 13, 15)", "Unção secreta de Davi (cap. 16)", "Davi e Golias (cap. 17)", "Perseguição de Saul a Davi (cap. 18–26)", "Morte de Saul em Gilboa (cap. 31)"], "versiculo": "1 Samuel 16:7 — \"O Senhor olha para o coração.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "2 SAMUEL", "quem": "Autor anônimo, continuação de 1 Samuel.", "porque": "Para narrar o reinado de Davi como modelo da monarquia ideal, estabelecendo a aliança davídica.", "praquem": "Israel sob a dinastia davídica, precisando entender a grandeza da promessa e as consequências do pecado real.", "estrutura": "Ascensão de Davi (cap. 1–5); auge do reinado e aliança davídica (cap. 6–10); Bate-Seba e consequências (cap. 11–20); apêndices (cap. 21–24).", "tema": "Deus estabelece aliança incondicional com a casa de Davi, mas o pecado do rei gera consequências devastadoras.", "ideias": ["Davi rei sobre todo Israel; conquista de Jerusalém (cap. 2–5)", "Aliança davídica (cap. 6–7)", "Davi e Bate-Seba (cap. 11)", "Confronto de Natã (cap. 12)", "Absalão (cap. 13–18)", "Censo e peste (cap. 24)"], "versiculo": "2 Samuel 7:16 — \"O teu trono será estabelecido para sempre.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "1 REIS", "quem": "Autor anônimo, tradição profética, \"história deuteronomista\".", "porque": "Para registrar o auge sob Salomão e o início do declínio com a divisão do reino, avaliando cada rei por fidelidade à aliança.", "praquem": "Audiência exilada ou próxima do exílio, precisando entender a fragmentação do reino.", "estrutura": "Reinado de Salomão (cap. 1–11); divisão do reino e reinados alternados, ciclo de Elias (cap. 12–22).", "tema": "A prosperidade do reino depende da fidelidade do rei à aliança; a idolatria corrói o que Deus estabeleceu.", "ideias": ["Salomão pede sabedoria; construção do Templo (cap. 3, 6–8)", "Apostasia de Salomão (cap. 11)", "Divisão do reino (cap. 12)", "Elias no Monte Carmelo (cap. 18)", "Teofania no Horebe (cap. 19)"], "versiculo": "1 Reis 18:21 — \"Se o Senhor é Deus, segui-o.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "2 REIS", "quem": "Mesma autoria/tradição de 1 Reis.", "porque": "Para narrar a queda de Israel (722 a.C.) e Judá (586 a.C.), como cumprimento das advertências da aliança.", "praquem": "Judeus exilados na Babilônia, precisando de explicação teológica para a catástrofe.", "estrutura": "Eliseu e reis de Israel/Judá até a queda de Samaria (cap. 1–17); reis de Judá até a queda de Jerusalém (cap. 18–25).", "tema": "O juízo anunciado pela aliança se cumpre integralmente, mas termina com um sinal de esperança.", "ideias": ["Eliseu e milagres (cap. 2–8)", "Queda de Samaria (cap. 17)", "Reforma de Ezequias (cap. 18–19)", "Reforma de Josias (cap. 22–23)", "Queda de Jerusalém e exílio (cap. 24–25)"], "versiculo": "2 Reis 17:13 — \"Convertei-vos dos vossos maus caminhos.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "1 CRÔNICAS", "quem": "Tradição atribui a Esdras, período pós-exílico.", "porque": "Para reconstruir a identidade da comunidade pós-exílica, enfatizando continuidade davídica e o culto no Templo.", "praquem": "Judeus retornados do exílio, reconstruindo Jerusalém, precisando reconectar-se com sua identidade davídica.", "estrutura": "Genealogias de Adão ao retorno (cap. 1–9); reinado de Davi, foco nos preparativos do Templo (cap. 10–29).", "tema": "A legitimidade de Judá e do culto remonta a Davi.", "ideias": ["Genealogias (cap. 1–9)", "Arca trazida a Jerusalém (cap. 13–16)", "Aliança davídica reafirmada (cap. 17)", "Preparativos para o Templo (cap. 22, 28–29)"], "versiculo": "1 Crônicas 29:11 — \"Tua é, Senhor, a grandeza, e o poder, e a glória.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "2 CRÔNICAS", "quem": "Mesma autoria/tradição de 1 Crônicas.", "porque": "Para reafirmar que reforma religiosa e fidelidade ao culto trazem bênção, enquanto o abandono do Templo traz juízo.", "praquem": "Comunidade pós-exílica, precisando de motivação para investir na reconstrução do Templo.", "estrutura": "Salomão e construção do Templo (cap. 1–9); reis de Judá (cap. 10–36); decreto de Ciro (cap. 36).", "tema": "A sorte de Judá está ligada à fidelidade de seus reis ao Templo e à Lei.", "ideias": ["Construção e dedicação do Templo (cap. 2–7)", "Reformas de Asa e Josafá (cap. 14–20)", "Reforma de Ezequias (cap. 29–31)", "Reforma de Josias (cap. 34–35)", "Decreto de Ciro (cap. 36)"], "versiculo": "2 Crônicas 7:14 — \"Se o meu povo... se humilhar, e orar, e buscar a minha face.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "ESDRAS", "quem": "Tradicionalmente o próprio Esdras, escriba e sacerdote, período pós-exílico.", "porque": "Para registrar o retorno do exílio e a reconstrução do Templo, legitimando o novo início.", "praquem": "Comunidade judaica recém-retornada, enfrentando oposição externa.", "estrutura": "Retorno sob Zorobabel e reconstrução (cap. 1–6); retorno de Esdras e crise dos casamentos mistos (cap. 7–10).", "tema": "Deus cumpre a promessa de restauração, mas ela exige separação da idolatria.", "ideias": ["Decreto de Ciro (cap. 1)", "Reconstrução do altar e oposição (cap. 3–4)", "Dedicação do segundo Templo (cap. 6)", "Chegada de Esdras (cap. 7)", "Crise dos casamentos mistos (cap. 9–10)"], "versiculo": "Esdras 7:10 — \"Esdras tinha preparado o seu coração para buscar a lei do Senhor.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "NEEMIAS", "quem": "Tradicionalmente o próprio Neemias, copeiro do rei persa, memórias em primeira pessoa.", "porque": "Para registrar a reconstrução dos muros de Jerusalém e reformas sociais/religiosas subsequentes.", "praquem": "Comunidade pós-exílica precisando de proteção física e correção de abusos internos.", "estrutura": "Reconstrução dos muros (cap. 1–7); renovação da aliança (cap. 8–10); reformas finais (cap. 11–13).", "tema": "A restauração exige proteção física e renovação espiritual e ética.", "ideias": ["Neemias pede autorização ao rei (cap. 1–2)", "Reconstrução apesar da oposição (cap. 4, 6)", "Leitura pública da Lei (cap. 8–9)", "Reformas contra usura e negligência (cap. 5, 13)"], "versiculo": "Neemias 8:10 — \"A alegria do Senhor é a vossa força.\""}, {"section": "LIVROS HISTÓRICOS", "nome": "ESTER", "quem": "Autor anônimo, judeu na Pérsia, período pós-exílico, ambientado no reinado de Xerxes I.", "porque": "Para registrar a preservação providencial dos judeus na diáspora diante de ameaça de extermínio, e explicar a origem da festa de Purim.", "praquem": "Judeus da diáspora, precisando de garantia de proteção divina mesmo sem intervenção sobrenatural visível.", "estrutura": "Ester torna-se rainha e Hamã trama o extermínio (cap. 1–4); reviravolta (cap. 5–7); defesa e Purim (cap. 8–10).", "tema": "A providência divina opera de forma oculta através de circunstâncias humanas.", "ideias": ["Ester escolhida rainha (cap. 1–2)", "Trama de Hamã (cap. 3)", "\"Para um tempo como este\" (cap. 4)", "Hamã exposto e enforcado (cap. 5, 7)", "Festa de Purim (cap. 9)"], "versiculo": "Ester 4:14 — \"Quem sabe se não foi para um tempo como este que chegaste a esse reino?\""}, {"section": "LIVROS POÉTICOS", "nome": "JÓ", "quem": "Autor anônimo. Datação incerta; narrativa em período patriarcal.", "porque": "Para confrontar a teologia simplista de retribuição, através de um homem justo que sofre sem causa aparente.", "praquem": "Audiência israelita que operava com lógica de retribuição, precisando de correção teológica sobre sofrimento inocente.", "estrutura": "Prólogo — Jó perde tudo (cap. 1–2); diálogos com os amigos (cap. 3–31); discurso de Eliú (cap. 32–37); Deus responde (cap. 38–41); epílogo (cap. 42).", "tema": "A justiça de Deus não se reduz a uma fórmula de causa e efeito compreensível pelo ser humano.", "ideias": ["Aposta celestial (cap. 1–2)", "Argumento dos amigos (cap. 4–27)", "Protesto de Jó (cap. 29–31)", "Deus responde do turbilhão (cap. 38–41)", "Restauração final (cap. 42)"], "versiculo": "Jó 42:5 — \"Eu te conhecia só de ouvir, mas agora meus olhos te veem.\""}, {"section": "LIVROS POÉTICOS", "nome": "SALMOS", "quem": "Coletânea de múltiplos autores — Davi (73 salmos), Asafe, filhos de Coré, Salomão, Moisés, entre outros anônimos. Compilação finalizada possivelmente no período pós-exílico.", "porque": "Para servir de livro de oração, louvor e lamento — expressa toda a gama da experiência humana diante de Deus.", "praquem": "Israel em culto individual e coletivo, ao longo de gerações, atravessando monarquia, exílio e retorno.", "estrutura": "Cinco \"livros\" (Sl 1-41, 42-72, 73-89, 90-106, 107-150), cada um terminando em doxologia.", "tema": "A relação com Deus expressa através de todos os registros emocionais — louvor, lamento, confiança, súplica.", "ideias": ["Louvor e ação de graças (Sl 8, 100, 136)", "Lamento individual e coletivo (Sl 22, 44, 88)", "Messiânicos (Sl 2, 22, 110)", "Sabedoria (Sl 1, 73)", "Reais (Sl 2, 72, 89)", "Confiança (Sl 23, 91)", "Penitenciais (Sl 51, 130)", "Peregrinação/subida (Sl 120-134)"], "versiculo": "Salmos 23:1 — \"O Senhor é o meu pastor; nada me faltará.\""}, {"section": "LIVROS POÉTICOS", "nome": "PROVÉRBIOS", "quem": "Atribuído majoritariamente a Salomão (cap. 1-29), com seções de Agur e Rei Lemuel (cap. 30-31).", "porque": "Para transmitir sabedoria prática ancorada no \"temor do Senhor\".", "praquem": "Jovens da corte e sociedade israelita, precisando de educação prática de caráter.", "estrutura": "Discursos de sabedoria (cap. 1-9); provérbios curtos (cap. 10-29); Agur e Lemuel, mulher virtuosa (cap. 30-31).", "tema": "\"O temor do Senhor é o princípio da sabedoria.\"", "ideias": ["\"O temor do Senhor é o princípio do conhecimento\" (cap. 1:7)", "Personificação da Sabedoria (cap. 8-9)", "Provérbios sobre trabalho, dinheiro, língua, amizade (cap. 10-29)", "Mulher virtuosa (cap. 31)"], "versiculo": "Provérbios 9:10 — \"O temor do Senhor é o princípio da sabedoria.\""}, {"section": "LIVROS POÉTICOS", "nome": "ECLESIASTES", "quem": "Atribuído tradicionalmente a Salomão (\"Coélet\"); parte da crítica associa a linguagem a período mais tardio.", "porque": "Para explorar o vazio (\"vaidade\"/hevel) de buscar sentido apenas em riquezas, prazer, trabalho ou sabedoria \"debaixo do sol\".", "praquem": "Audiência com acesso a riqueza e prazer, ainda enfrentando a pergunta sobre o sentido da vida.", "estrutura": "Experimentos existenciais, todos \"vaidade\" (cap. 1-6); reflexões práticas (cap. 7-10); conclusão (cap. 11-12).", "tema": "Sem perspectiva eterna, tudo é passageiro; a resposta é temer a Deus e gozar a vida como dádiva.", "ideias": ["\"Vaidade de vaidades\" (cap. 1:2)", "Experimentos com prazer, obras, riqueza, sabedoria (cap. 2)", "\"Tempo para tudo\" (cap. 3)", "Conclusão: temer a Deus (cap. 12:13)"], "versiculo": "Eclesiastes 12:13 — \"Teme a Deus e guarda os seus mandamentos.\""}, {"section": "LIVROS POÉTICOS", "nome": "CANTARES DE SALOMÃO", "quem": "Atribuído a Salomão. Datação incerta.", "porque": "Para celebrar, através de poesia amorosa, a beleza do amor humano e da sexualidade dentro do casamento.", "praquem": "Israel, como celebração poética do amor conjugal.", "estrutura": "Poemas de amor e desejo entre o Amado e a Amada, sem narrativa linear.", "tema": "O amor humano, físico e emocional, é dádiva boa de Deus.", "ideias": ["Descrições poéticas mútuas (cap. 1-2, 4-5)", "Busca da Amada (cap. 3, 5)", "\"O amor é forte como a morte\" (cap. 8)"], "versiculo": "Cantares 8:6-7 — \"O amor é forte como a morte.\""}, {"section": "PROFETAS MAIORES", "nome": "ISAÍAS", "quem": "Tradicionalmente atribuído inteiramente a Isaías (séc. VIII a.C.). A crítica divide o livro em pelo menos duas ou três seções de autores/períodos distintos.", "porque": "Para advertir Judá sobre o juízo iminente por idolatria e injustiça, e anunciar consolação e um Servo sofredor que traria redenção.", "praquem": "Judá, ameaçada pela Assíria e depois Babilônia; nas seções finais, uma comunidade exilada ou retornando.", "estrutura": "Julgamento sobre Judá e as nações (cap. 1-39); consolação e libertação, \"cânticos do Servo\" (cap. 40-55); restauração final (cap. 56-66).", "tema": "Deus julga a infidelidade, mas sua fidelidade última se expressa em redenção através de um Servo sofredor.", "ideias": ["Chamado de Isaías (cap. 6)", "Emanuel e \"Príncipe da Paz\" (cap. 7, 9)", "Julgamento sobre nações (cap. 13-23)", "\"Consolai, consolai o meu povo\" (cap. 40)", "Cânticos do Servo Sofredor (cap. 42, 49, 50, 53)", "Novos céus e nova terra (cap. 65-66)"], "versiculo": "Isaías 53:5 — \"Mas ele foi ferido pelas nossas transgressões.\""}, {"section": "PROFETAS MAIORES", "nome": "JEREMIAS", "quem": "Atribuído ao próprio profeta, com auxílio do escriba Baruque, fim do séc. VII/início do VI a.C.", "porque": "Para advertir Judá sobre o juízo iminente antes da queda de Jerusalém, e anunciar uma \"nova aliança\" futura.", "praquem": "Judá nas décadas finais antes de 586 a.C., e posteriormente os exilados.", "estrutura": "Chamado e oráculos de julgamento (cap. 1-25); confrontos e perseguição (cap. 26-45); oráculos contra nações (cap. 46-51); queda de Jerusalém (cap. 52).", "tema": "O juízo sobre a infidelidade é inevitável, mas Deus promete uma nova aliança escrita no coração.", "ideias": ["Chamado de Jeremias jovem (cap. 1)", "Oleiro e barro (cap. 18)", "Perseguição pessoal (cap. 20, 26, 37-38)", "Promessa da Nova Aliança (cap. 31)", "Compra do campo em Anatote (cap. 32)", "Queda de Jerusalém (cap. 39, 52)"], "versiculo": "Jeremias 31:33 — \"Porei a minha lei no seu interior, e a escreverei no seu coração.\""}, {"section": "PROFETAS MAIORES", "nome": "LAMENTAÇÕES", "quem": "Tradicionalmente atribuído a Jeremias, anônimo no texto original.", "porque": "Para dar voz litúrgica ao luto coletivo pela destruição de Jerusalém em 586 a.C.", "praquem": "Sobreviventes da queda de Jerusalém, em Judá ou no exílio.", "estrutura": "Cinco poemas de lamento, os quatro primeiros em acróstico hebraico (cap. 1-5).", "tema": "É legítimo lamentar diante de Deus a devastação, mesmo reconhecendo-a como juízo justo.", "ideias": ["Desolação de Jerusalém (cap. 1-2)", "\"Novas são as suas misericórdias cada manhã\" (cap. 3)", "Fome extrema durante o cerco (cap. 4)", "Oração final por restauração (cap. 5)"], "versiculo": "Lamentações 3:22-23 — \"Novas são cada manhã; grande é a tua fidelidade.\""}, {"section": "PROFETAS MAIORES", "nome": "EZEQUIEL", "quem": "Atribuído ao próprio profeta, sacerdote levado ao exílio babilônico em 597 a.C.", "porque": "Para confrontar os exilados que ainda esperavam que Jerusalém não caísse, e depois consolar com visões de restauração.", "praquem": "Comunidade judaica já exilada na Babilônia.", "estrutura": "Chamado e oráculos de juízo, partida da glória de Deus (cap. 1-24); oráculos contra nações (cap. 25-32); restauração — coração novo, ossos secos, novo Templo (cap. 33-48).", "tema": "Deus julga a idolatria com justiça, mas promete restauração radical por iniciativa própria.", "ideias": ["Visão inaugural da glória de Deus (cap. 1)", "Sinais proféticos dramáticos (cap. 4-5)", "Partida da glória do Templo (cap. 10-11)", "Responsabilidade individual (cap. 18)", "Vale dos Ossos Secos (cap. 37)", "Novo Templo (cap. 40-48)"], "versiculo": "Ezequiel 36:26 — \"Dar-vos-ei um coração novo.\""}, {"section": "PROFETAS MAIORES", "nome": "DANIEL", "quem": "Tradicionalmente atribuído a Daniel, exilado jovem para a Babilônia (605 a.C.). A crítica propõe datação mais tardia (séc. II a.C.).", "porque": "Para encorajar fidelidade sob impérios pagãos hostis e revelar, por visões apocalípticas, o desenrolar dos impérios até o reino eterno de Deus.", "praquem": "Judeus exilados na Babilônia e sob domínio persa.", "estrutura": "Narrativas de fidelidade na corte (cap. 1-6); visões apocalípticas (cap. 7-12).", "tema": "Deus é soberano sobre reis e impérios, e recompensa a fidelidade sob pressão extrema.", "ideias": ["Daniel e os amigos recusam a comida real (cap. 1)", "Estátua de Nabucodonosor (cap. 2)", "Fornalha ardente (cap. 3)", "Escrita na parede (cap. 5)", "Cova dos leões (cap. 6)", "Visões dos quatro animais e setenta semanas (cap. 7, 9)"], "versiculo": "Daniel 2:21 — \"Ele muda os tempos e as estações.\""}, {"section": "PROFETAS MENORES", "nome": "OSÉIAS", "quem": "Atribuído ao próprio profeta, ativo no reino do Norte no séc. VIII a.C.", "porque": "Para denunciar a idolatria de Israel como \"adultério\" espiritual, usando o casamento do profeta como ilustração viva.", "praquem": "Reino do Norte nas décadas finais antes de 722 a.C.", "estrutura": "Casamento simbólico com Gômer (cap. 1-3); oráculos de acusação (cap. 4-13); apelo final ao arrependimento (cap. 14).", "tema": "O amor de Deus não desiste apesar da infidelidade persistente de Israel.", "ideias": ["Casamento com Gômer (cap. 1-3)", "Falta de conhecimento de Deus (cap. 4)", "\"Misericórdia quero, e não sacrifícios\" (cap. 6)", "Apelo final (cap. 14)"], "versiculo": "Oséias 6:6 — \"Misericórdia quero, e não sacrifícios.\""}, {"section": "PROFETAS MENORES", "nome": "JOEL", "quem": "Atribuído ao profeta Joel; datação incerta.", "porque": "Para interpretar uma praga de gafanhotos como sinal do \"Dia do Senhor\", chamando ao arrependimento.", "praquem": "Judá, num momento de crise agrícola.", "estrutura": "Praga e chamado ao arrependimento (cap. 1-2); derramamento do Espírito e julgamento das nações (cap. 2-3).", "tema": "Crises presentes podem sinalizar julgamento maior; o arrependimento abre caminho à restauração.", "ideias": ["Praga de gafanhotos (cap. 1)", "\"Rasgai o coração, e não as vestes\" (cap. 2)", "Derramamento do Espírito sobre \"toda a carne\" (cap. 2:28-32)", "Vale de Josafá (cap. 3)"], "versiculo": "Joel 2:28 — \"Derramarei o meu Espírito sobre toda a carne.\""}, {"section": "PROFETAS MENORES", "nome": "AMÓS", "quem": "Atribuído ao próprio Amós, pastor de Tecoa, enviado ao reino do Norte, séc. VIII a.C.", "porque": "Para denunciar a injustiça social escondida atrás de prosperidade e religiosidade formal.", "praquem": "Elite do reino do Norte em época de prosperidade e complacência religiosa.", "estrutura": "Oráculos contra nações e Israel (cap. 1-2); acusações de injustiça (cap. 3-6); cinco visões de juízo (cap. 7-9); restauração final (cap. 9).", "tema": "Deus exige justiça social real, não apenas ritual religioso correto.", "ideias": ["Oráculos contra nações (cap. 1-2)", "\"Odeio, desprezo as vossas festas\" (cap. 5)", "\"Corra a justiça como as águas\" (cap. 5:24)", "Visões do prumo e cesto de fruta (cap. 7-8)", "Restauração da \"tenda caída de Davi\" (cap. 9)"], "versiculo": "Amós 5:24 — \"Corra a justiça como as águas.\""}, {"section": "PROFETAS MENORES", "nome": "OBADIAS", "quem": "Atribuído ao profeta Obadias; possivelmente logo após 586 a.C.", "porque": "Para denunciar Edom por cumplicidade e regozijo diante da queda de Jerusalém.", "praquem": "Judá, no rescaldo da destruição de Jerusalém.", "estrutura": "Livro de um capítulo: julgamento contra Edom (v. 1-16); restauração para Judá (v. 17-21).", "tema": "Deus julga a arrogância e a traição, mesmo entre povos \"irmãos\".", "ideias": ["Acusação a Edom (v. 10-14)", "\"Dia do Senhor\" sobre as nações (v. 15)", "Restauração de Judá (v. 17-21)"], "versiculo": "Obadias 1:15 — \"Como fizeste, se te fará.\""}, {"section": "PROFETAS MENORES", "nome": "JONAS", "quem": "Narrativa sobre o profeta Jonas (séc. VIII a.C., cf. 2 Reis 14:25), livro anônimo em terceira pessoa.", "porque": "Para confrontar o etnocentrismo religioso israelita, mostrando a misericórdia de Deus além de Israel.", "praquem": "Israel, numa mentalidade nacionalista sobre a exclusividade da misericórdia divina.", "estrutura": "Fuga e o grande peixe (cap. 1-2); pregação e arrependimento de Nínive (cap. 3); ira de Jonas e a lição da planta (cap. 4).", "tema": "A misericórdia de Deus se estende a todas as nações.", "ideias": ["Fuga de Jonas (cap. 1)", "Três dias no peixe (cap. 2)", "Arrependimento de Nínive (cap. 3)", "\"Não me hei de compadecer eu de Nínive?\" (cap. 4)"], "versiculo": "Jonas 4:11 — \"E não pouparia eu a Nínive, aquela grande cidade?\""}, {"section": "PROFETAS MENORES", "nome": "MIQUÉIAS", "quem": "Atribuído ao próprio profeta, contemporâneo de Isaías, séc. VIII a.C.", "porque": "Para denunciar a corrupção das lideranças de Judá e Israel e anunciar restauração futura e a origem do Messias em Belém.", "praquem": "Judá e Israel sob lideranças corruptas que exploravam o povo comum.", "estrutura": "Julgamento sobre Samaria e Jerusalém (cap. 1-3); promessas de restauração, nascimento em Belém (cap. 4-5); disputa judicial e apelo à justiça (cap. 6-7).", "tema": "Deus julga a corrupção, mas promete restauração através de um governante nascido em Belém.", "ideias": ["Julgamento sobre Samaria e Jerusalém (cap. 1-3)", "Profecia de Belém (cap. 5:2)", "\"Praticar a justiça, amar a misericórdia, andar humildemente\" (cap. 6:8)"], "versiculo": "Miquéias 6:8 — \"Praticar a justiça, e amar a misericórdia, e andar humildemente com o teu Deus.\""}, {"section": "PROFETAS MENORES", "nome": "NAUM", "quem": "Atribuído ao profeta Naum; entre 663 e 612 a.C.", "porque": "Para anunciar a destruição iminente de Nínive, de volta à crueldade décadas após Jonas.", "praquem": "Judá, ainda sob a sombra da ameaça assíria.", "estrutura": "Caráter de Deus como justo juiz (cap. 1); anúncio da queda de Nínive (cap. 2-3).", "tema": "Deus é paciente, mas não permite que a crueldade continue indefinidamente.", "ideias": ["\"Tardio em irar-se... mas não inocentará o culpado\" (cap. 1)", "Queda de Nínive (cap. 2-3)"], "versiculo": "Naum 1:7 — \"Bom é o Senhor, fortaleza no dia da angústia.\""}, {"section": "PROFETAS MENORES", "nome": "HABACUQUE", "quem": "Atribuído ao profeta Habacuque; fim do séc. VII a.C.", "porque": "Para processar honestamente por que Deus usaria a Babilônia, mais ímpia, para julgar Judá.", "praquem": "Judá às vésperas da invasão babilônica.", "estrutura": "Diálogo com Deus (cap. 1-2); oração final de confiança (cap. 3).", "tema": "É legítimo questionar a Deus honestamente; \"o justo viverá pela sua fé\".", "ideias": ["Questionamento sobre a injustiça (cap. 1)", "\"O justo viverá pela sua fé\" (cap. 2:4)", "\"Ainda que a figueira não floresça...\" (cap. 3)"], "versiculo": "Habacuque 2:4 — \"O justo viverá pela sua fé.\""}, {"section": "PROFETAS MENORES", "nome": "SOFONIAS", "quem": "Atribuído ao profeta Sofonias, reinado de Josias (séc. VII a.C.).", "porque": "Para anunciar o \"Dia do Senhor\" sobre Judá e as nações, culminando em restauração de um remanescente.", "praquem": "Judá antes da reforma de Josias, marcada por idolatria.", "estrutura": "\"Dia do Senhor\" sobre Judá (cap. 1); julgamento sobre nações (cap. 2-3); restauração final (cap. 3).", "tema": "O \"Dia do Senhor\" traz julgamento universal, mas termina em restauração para um remanescente.", "ideias": ["Anúncio do \"Dia do Senhor\" (cap. 1)", "Julgamento sobre nações (cap. 2-3)", "Remanescente fiel (cap. 3:12-13)"], "versiculo": "Sofonias 3:17 — \"O Senhor teu Deus está no meio de ti.\""}, {"section": "PROFETAS MENORES", "nome": "AGEU", "quem": "Atribuído ao profeta Ageu, 520 a.C.", "porque": "Para confrontar o adiamento da reconstrução do Templo pelos judeus retornados.", "praquem": "Comunidade recém-retornada, desanimada e instável economicamente.", "estrutura": "Quatro oráculos datados sobre o Templo e a bênção condicionada (cap. 1-2).", "tema": "Priorizar interesses próprios trava a bênção; retomar a prioridade espiritual a reabre.", "ideias": ["\"Considerai os vossos caminhos\" (cap. 1)", "Retomada da construção (cap. 1)", "Glória futura do Templo (cap. 2)"], "versiculo": "Ageu 1:7 — \"Considerai os vossos caminhos.\""}, {"section": "PROFETAS MENORES", "nome": "ZACARIAS", "quem": "Atribuído ao profeta Zacarias, contemporâneo de Ageu.", "porque": "Para encorajar a conclusão do Templo através de visões simbólicas, e anunciar um futuro messiânico.", "praquem": "Comunidade pós-exílica, precisando de motivação e visão teológica ampliada.", "estrutura": "Oito visões noturnas (cap. 1-6); jejum e justiça (cap. 7-8); oráculos messiânicos finais (cap. 9-14).", "tema": "Deus restaura Jerusalém, apontando para um rei messiânico rejeitado que finalmente reinará.", "ideias": ["Oito visões simbólicas (cap. 1-6)", "\"Não por força nem por violência, mas pelo meu Espírito\" (cap. 4:6)", "Rei humilde em jumento (cap. 9:9)", "Trinta moedas de prata (cap. 11)", "Reinado final (cap. 14)"], "versiculo": "Zacarias 9:9 — \"Eis que o teu rei virá a ti, justo e Salvador.\""}, {"section": "PROFETAS MENORES", "nome": "MALAQUIAS", "quem": "Atribuído ao profeta Malaquias, período pós-exílico tardio (séc. V a.C.).", "porque": "Para confrontar a apatia religiosa da comunidade pós-exílica e anunciar um mensageiro precursor.", "praquem": "Comunidade judaica estabelecida havia gerações, em rotina religiosa formal.", "estrutura": "Disputas pergunta-e-resposta sobre sacerdócio, fidelidade conjugal, dízimos (cap. 1-3); anúncio do mensageiro precursor (cap. 4).", "tema": "O amor de Deus é constante apesar da apatia religiosa; o livro fecha o AT com expectativa messiânica.", "ideias": ["\"Eu vos tenho amado\" (cap. 1)", "Sacrifícios defeituosos (cap. 1-2)", "Negligência dos dízimos (cap. 3)", "Promessa de Elias (cap. 4)"], "versiculo": "Malaquias 4:5-6 — \"Eis que eu vos envio o profeta Elias.\""}, {"section": "EVANGELHOS", "nome": "MATEUS", "quem": "Tradicionalmente atribuído ao apóstolo Mateus (Levi). Datação entre 60-90 d.C.", "porque": "Para apresentar Jesus como o Messias prometido, cumprimento das Escrituras judaicas.", "praquem": "Comunidade judaico-cristã, precisando de argumentação ligando Jesus às profecias.", "estrutura": "Genealogia e nascimento (cap. 1-2); ministério na Galileia, cinco blocos de ensino, Sermão do Monte (cap. 3-25); paixão e ressurreição (cap. 26-28).", "tema": "Jesus é o Messias, Rei davídico, que cumpre a Lei e estabelece a igreja.", "ideias": ["Genealogia (cap. 1)", "Sermão do Monte (cap. 5-7)", "Parábolas do Reino (cap. 13)", "Confissão de Pedro (cap. 16)", "Paixão e ressurreição (cap. 26-28)", "Grande Comissão (cap. 28:19-20)"], "versiculo": "Mateus 28:19-20 — \"Ide, fazei discípulos de todas as nações.\""}, {"section": "EVANGELHOS", "nome": "MARCOS", "quem": "Tradicionalmente atribuído a João Marcos, associado a Pedro. Provavelmente o evangelho mais antigo (c. 55-70 d.C.).", "porque": "Para apresentar Jesus como Filho de Deus em ação, possivelmente para cristãos romanos sob perseguição.", "praquem": "Comunidade gentia, talvez em Roma, precisando de coragem para seguir um Messias que sofreu.", "estrutura": "Ministério na Galileia (cap. 1-8); revelação messiânica e caminho a Jerusalém (cap. 8-10); paixão e ressurreição (cap. 11-16).", "tema": "Jesus é o Filho de Deus que vem para servir e sofrer.", "ideias": ["Ritmo narrativo rápido", "Milagres e exorcismos (cap. 1-5)", "Confissão de Pedro (cap. 8)", "\"Não veio para ser servido, mas para servir\" (cap. 10:45)", "Paixão e ressurreição (cap. 14-16)"], "versiculo": "Marcos 10:45 — \"Veio para servir, e para dar a sua vida em resgate de muitos.\""}, {"section": "EVANGELHOS", "nome": "LUCAS", "quem": "Atribuído a Lucas, médico, companheiro de Paulo. Datação entre 60-80 d.C. Endereçado a Teófilo.", "porque": "Para oferecer um relato ordenado, com ênfase na compaixão de Jesus pelos marginalizados.", "praquem": "Teófilo e audiência gentia culta.", "estrutura": "Nascimento e infância (cap. 1-2); ministério na Galileia (cap. 3-9); jornada a Jerusalém, parábolas exclusivas (cap. 9-19); paixão e ressurreição (cap. 19-24).", "tema": "Jesus é o Salvador universal, cuja compaixão alcança os excluídos.", "ideias": ["Cânticos de Maria e Zacarias (cap. 1)", "Bom Samaritano, Filho Pródigo (cap. 10, 15)", "Atenção a mulheres e marginalizados", "\"Veio buscar e salvar o que se havia perdido\" (cap. 19:10)", "Emaús (cap. 24)"], "versiculo": "Lucas 19:10 — \"O Filho do Homem veio buscar e salvar o que se havia perdido.\""}, {"section": "EVANGELHOS", "nome": "JOÃO", "quem": "Tradicionalmente atribuído ao apóstolo João, \"o discípulo amado\". Datação mais tardia (85-95 d.C.).", "porque": "Para que os leitores creiam que Jesus é o Cristo, Filho de Deus, e tenham vida em seu nome.", "praquem": "Comunidade cristã estabelecida, enfrentando questionamentos sobre a divindade de Jesus.", "estrutura": "Prólogo teológico (cap. 1); sete sinais e discursos (cap. 2-12); discurso do Cenáculo (cap. 13-17); paixão e ressurreição (cap. 18-21).", "tema": "Jesus é o Verbo eterno feito carne; a fé nele é o caminho para a vida eterna.", "ideias": ["\"No princípio era o Verbo\" (cap. 1)", "Sete sinais, incluindo Lázaro (cap. 2, 11)", "Declarações \"Eu sou\"", "Oração sacerdotal (cap. 14-17)", "Aparições a Tomé (cap. 18-21)"], "versiculo": "João 3:16 — \"Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito.\""}, {"section": "ATOS", "nome": "ATOS DOS APÓSTOLOS", "quem": "Atribuído a Lucas, segunda parte de sua obra (Lucas-Atos).", "porque": "Para narrar a expansão do evangelho de Jerusalém até Roma, através da ação do Espírito Santo.", "praquem": "Teófilo e a comunidade cristã em expansão.", "estrutura": "Igreja em Jerusalém e Pentecostes (cap. 1-7); expansão e conversão de Paulo (cap. 8-12); viagens missionárias (cap. 13-28).", "tema": "O Espírito Santo impulsiona a expansão do evangelho através de fronteiras étnicas e geográficas.", "ideias": ["Pentecostes (cap. 2)", "Martírio de Estêvão (cap. 7-8)", "Conversão de Paulo (cap. 9)", "Concílio de Jerusalém (cap. 15)", "Viagens missionárias (cap. 13-20)", "Viagem final a Roma (cap. 21-28)"], "versiculo": "Atos 1:8 — \"Ser-me-eis testemunhas... até aos confins da terra.\""}, {"section": "CARTAS PAULINAS", "nome": "ROMANOS", "quem": "Apóstolo Paulo, c. 57 d.C., de Corinto.", "porque": "Para apresentar sistematicamente o evangelho, preparando terreno para uma visita futura.", "praquem": "Igreja em Roma, judeus e gentios, com tensões sobre Lei e fé.", "estrutura": "Pecado universal (cap. 1-3); justificação pela fé (cap. 4-5); vida no Espírito (cap. 6-8); Israel (cap. 9-11); aplicação prática (cap. 12-16).", "tema": "A justiça de Deus é revelada e concedida pela fé, a todos igualmente.", "ideias": ["\"O justo viverá pela fé\" (cap. 1:17)", "Todos pecaram (cap. 3)", "Abraão e a fé (cap. 4)", "\"Nenhuma condenação\" (cap. 8)", "Israel no plano de Deus (cap. 9-11)"], "versiculo": "Romanos 1:17 — \"O justo viverá pela fé.\""}, {"section": "CARTAS PAULINAS", "nome": "1 CORÍNTIOS", "quem": "Apóstolo Paulo, c. 55 d.C., de Éfeso.", "porque": "Para corrigir divisões, imoralidade e confusão sobre dons espirituais.", "praquem": "Igreja de Corinto, cidade cosmopolita e permissiva.", "estrutura": "Divisões (cap. 1-4); imoralidade e disputas (cap. 5-6); questões práticas (cap. 7-14); ressurreição (cap. 15).", "tema": "O evangelho da cruz deve moldar toda a vida prática da igreja.", "ideias": ["\"A loucura da cruz\" (cap. 1-3)", "Imoralidade tolerada (cap. 5)", "Hino ao amor (cap. 13)", "Dons espirituais (cap. 12, 14)", "Ressurreição corporal (cap. 15)"], "versiculo": "1 Coríntios 13:13 — \"O maior destes é o amor.\""}, {"section": "CARTAS PAULINAS", "nome": "2 CORÍNTIOS", "quem": "Apóstolo Paulo, c. 55-56 d.C., da Macedônia.", "porque": "Para reconciliar-se com a igreja e defender sua autoridade apostólica.", "praquem": "Igreja de Corinto, sob influência de opositores de Paulo.", "estrutura": "Reconciliação e ministério apostólico (cap. 1-7); coleta para Jerusalém (cap. 8-9); defesa da autoridade (cap. 10-13).", "tema": "A autoridade apostólica se revela através da fraqueza, não da autopromoção.", "ideias": ["Nova aliança (cap. 3)", "\"Tesouro em vasos de barro\" (cap. 4)", "Reconciliação (cap. 5)", "Generosidade (cap. 8-9)", "\"Quando estou fraco, então sou forte\" (cap. 12)"], "versiculo": "2 Coríntios 12:9 — \"A minha graça te basta.\""}, {"section": "CARTAS PAULINAS", "nome": "GÁLATAS", "quem": "Apóstolo Paulo, c. 48-55 d.C.", "porque": "Para combater a doutrina de \"judaizantes\" que exigiam a Lei mosaica para salvação.", "praquem": "Igrejas da Galácia, infiltradas por pregadores legalistas.", "estrutura": "Defesa da autoridade apostólica (cap. 1-2); justificação pela fé (cap. 3-4); liberdade cristã (cap. 5-6).", "tema": "A justificação é somente pela fé, não por obras da Lei.", "ideias": ["\"Se alguém vos pregar outro evangelho, seja anátema\" (cap. 1)", "\"Já não sou eu quem vive, mas Cristo vive em mim\" (cap. 2:20)", "Justificação pela fé (cap. 3)", "Liberdade cristã (cap. 5)", "Fruto do Espírito (cap. 5)"], "versiculo": "Gálatas 2:20 — \"Já não sou eu quem vive, mas Cristo vive em mim.\""}, {"section": "CARTAS PAULINAS", "nome": "EFÉSIOS", "quem": "Tradicionalmente Paulo, durante prisão (c. 60-62 d.C.).", "porque": "Para expor a unidade de judeus e gentios numa só igreja em Cristo.", "praquem": "Cristãos de Éfeso/Ásia Menor, majoritariamente gentios.", "estrutura": "Bênçãos espirituais e unidade (cap. 1-3); implicações práticas (cap. 4-6).", "tema": "Deus uniu judeus e gentios num único corpo, a igreja.", "ideias": ["Eleição em Cristo (cap. 1)", "\"Pela graça sois salvos\" (cap. 2:8-9)", "O \"mistério\" revelado (cap. 3)", "Unidade da igreja (cap. 4)", "Armadura espiritual (cap. 6)"], "versiculo": "Efésios 2:8-9 — \"Pela graça sois salvos, mediante a fé.\""}, {"section": "CARTAS PAULINAS", "nome": "FILIPENSES", "quem": "Apóstolo Paulo, durante prisão (c. 60-62 d.C.).", "porque": "Para agradecer apoio financeiro e exortar à alegria e unidade.", "praquem": "Igreja de Filipos, com quem Paulo mantinha relação próxima.", "estrutura": "Atualização pessoal (cap. 1); humildade seguindo Cristo (cap. 2); advertência contra legalismo (cap. 3); exortações finais (cap. 4).", "tema": "A alegria genuína em Cristo é possível independentemente das circunstâncias.", "ideias": ["\"Para mim o viver é Cristo\" (cap. 1:21)", "Hino cristológico (cap. 2:5-11)", "Tudo é \"perda\" comparado a Cristo (cap. 3)", "\"Aprendi a contentar-me\" (cap. 4:11)", "\"Tudo posso naquele que me fortalece\" (cap. 4:13)"], "versiculo": "Filipenses 4:13 — \"Tudo posso naquele que me fortalece.\""}, {"section": "CARTAS PAULINAS", "nome": "COLOSSENSES", "quem": "Tradicionalmente Paulo, durante prisão (c. 60-62 d.C.).", "porque": "Para combater sincretismo filosófico-religioso, afirmando a supremacia de Cristo.", "praquem": "Igreja de Colossos, ameaçada por ensinos que diminuíam Cristo.", "estrutura": "Supremacia cósmica de Cristo (cap. 1); advertência contra falsas filosofias (cap. 2); vida nova (cap. 3-4).", "tema": "Cristo é supremo e suficiente por si só.", "ideias": ["Hino cristológico (cap. 1:15-20)", "\"Toda a plenitude da divindade\" (cap. 2:9)", "Filosofias vãs (cap. 2)", "\"Buscai as coisas do alto\" (cap. 3)"], "versiculo": "Colossenses 1:17 — \"Ele é antes de todas as coisas.\""}, {"section": "CARTAS PAULINAS", "nome": "1 TESSALONICENSES", "quem": "Apóstolo Paulo, c. 50-51 d.C. — possivelmente a carta paulina mais antiga.", "porque": "Para encorajar uma igreja jovem sob perseguição e esclarecer dúvidas sobre a segunda vinda.", "praquem": "Igreja de Tessalônica, insegura sobre a volta de Cristo e o destino dos mortos.", "estrutura": "Lembrança do ministério fundador (cap. 1-3); santidade e amor fraternal (cap. 4); volta de Cristo (cap. 4-5).", "tema": "A esperança da volta de Cristo deve consolar, não angustiar.", "ideias": ["Ministério fundador de Paulo (cap. 1-2)", "Santidade sexual e trabalho (cap. 4)", "Os mortos em Cristo na sua vinda (cap. 4:13-18)", "\"Vigiai e sede sóbrios\" (cap. 5)"], "versiculo": "1 Tessalonicenses 4:16-17 — arrebatamento dos crentes na vinda do Senhor."}, {"section": "CARTAS PAULINAS", "nome": "2 TESSALONICENSES", "quem": "Tradicionalmente Paulo, pouco depois da primeira carta (c. 51-52 d.C.).", "porque": "Para corrigir a crença equivocada de que o Dia do Senhor já havia chegado.", "praquem": "Mesma igreja de Tessalônica, confusa por ensinos falsos.", "estrutura": "Encorajamento e julgamento final (cap. 1); eventos antes do Dia do Senhor (cap. 2); exortação contra ociosidade (cap. 3).", "tema": "A volta de Cristo aguarda eventos específicos; a resposta correta é perseverança, não pânico.", "ideias": ["Julgamento sobre perseguidores (cap. 1)", "\"Homem da iniquidade\" (cap. 2)", "\"Se alguém não quer trabalhar, também não coma\" (cap. 3:10)"], "versiculo": "2 Tessalonicenses 3:10 — \"Se alguém não quer trabalhar, também não coma.\""}, {"section": "CARTAS PAULINAS", "nome": "1 TIMÓTEO", "quem": "Tradicionalmente Paulo, carta pastoral a Timóteo, líder em Éfeso.", "porque": "Para instruir sobre organização e liderança da igreja de Éfeso.", "praquem": "Timóteo, enfrentando falsos mestres.", "estrutura": "Falsas doutrinas e oração (cap. 1-2); qualificações de líderes (cap. 3); instruções pastorais (cap. 4-6).", "tema": "A saúde da igreja depende de liderança qualificada e sã doutrina.", "ideias": ["Falsos mestres (cap. 1)", "Qualificações de bispos e diáconos (cap. 3)", "\"Exercita-te para a piedade\" (cap. 4)", "\"O amor ao dinheiro é raiz de todos os males\" (cap. 6:10)"], "versiculo": "1 Timóteo 4:12 — \"Sê exemplo dos fiéis.\""}, {"section": "CARTAS PAULINAS", "nome": "2 TIMÓTEO", "quem": "Tradicionalmente Paulo, segunda prisão em Roma (c. 64-67 d.C.), pouco antes da morte.", "porque": "Para encorajar Timóteo a permanecer firme, num tom de despedida.", "praquem": "Timóteo, ainda liderando em Éfeso.", "estrutura": "Reavivar o dom recebido (cap. 1); perseverança como soldado (cap. 2); apostasia dos últimos dias (cap. 3); despedida (cap. 4).", "tema": "Diante do sofrimento e da morte próxima, a fidelidade deve permanecer inabalável.", "ideias": ["\"Não me envergonho do evangelho\" (cap. 1)", "\"Bom soldado de Cristo Jesus\" (cap. 2)", "\"Toda a Escritura é divinamente inspirada\" (cap. 3:16)", "\"Combati o bom combate\" (cap. 4:7)"], "versiculo": "2 Timóteo 4:7 — \"Combati o bom combate, acabei a carreira, guardei a fé.\""}, {"section": "CARTAS PAULINAS", "nome": "TITO", "quem": "Tradicionalmente Paulo, a Tito, líder em Creta.", "porque": "Para orientar a organização das igrejas em Creta.", "praquem": "Tito, liderando igrejas jovens numa cultura difícil.", "estrutura": "Qualificações de presbíteros (cap. 1); conduta prática (cap. 2); boas obras (cap. 3).", "tema": "A graça que salva também ensina e capacita para boas obras.", "ideias": ["Qualificações de presbíteros (cap. 1)", "Conduta para diferentes grupos (cap. 2)", "\"A graça de Deus... nos ensina\" (cap. 2:11-12)", "Boas obras como fruto da salvação (cap. 3)"], "versiculo": "Tito 3:5 — \"Não pelas obras de justiça... mas segundo a sua misericórdia, nos salvou.\""}, {"section": "CARTAS PAULINAS", "nome": "FILEMOM", "quem": "Apóstolo Paulo, durante prisão (c. 60-62 d.C.). A mais curta das cartas paulinas.", "porque": "Para interceder por Onésimo, escravo fugitivo convertido, pedindo que fosse recebido como irmão.", "praquem": "Filemom, dono de escravos em Colossos.", "estrutura": "Saudação (v. 1-7); apelo por Onésimo (v. 8-21); despedida (v. 22-25).", "tema": "O evangelho transforma relações humanas concretas.", "ideias": ["Intercessão por Onésimo (v. 8-14)", "\"Não já como servo, mas... como irmão amado\" (v. 16)", "Paulo se oferece para pagar a dívida (v. 18-19)"], "versiculo": "Filemom 1:16 — \"Não já como servo, mas... como irmão amado.\""}, {"section": "CARTAS GERAIS", "nome": "HEBREUS", "quem": "Autoria anônima. Datação provável antes de 70 d.C.", "porque": "Para demonstrar a superioridade de Cristo sobre o sistema sacrificial do AT, encorajando cristãos judeus tentados a retroceder.", "praquem": "Cristãos de origem judaica, sob perseguição, considerando voltar ao judaísmo.", "estrutura": "Superioridade de Cristo sobre anjos, Moisés e sacerdócio (cap. 1-7); sumo sacerdote perfeito (cap. 8-10); exemplos de fé e perseverança (cap. 11-13).", "tema": "Cristo é superior a todo o sistema religioso anterior.", "ideias": ["Cristo superior aos anjos (cap. 1-3)", "Sumo sacerdote segundo Melquisedeque (cap. 5, 7)", "Nova aliança superior (cap. 8)", "Sacrifício único e definitivo (cap. 9-10)", "Galeria da fé (cap. 11)"], "versiculo": "Hebreus 12:2 — \"Olhando para Jesus, autor e consumador da fé.\""}, {"section": "CARTAS GERAIS", "nome": "TIAGO", "quem": "Tradicionalmente Tiago, irmão de Jesus, líder da igreja de Jerusalém. Possivelmente c. 45-50 d.C.", "porque": "Para dar orientação prática, enfatizando que a fé genuína produz obras visíveis.", "praquem": "Cristãos judeus da diáspora.", "estrutura": "Provações e sabedoria (cap. 1); fé e obras (cap. 2); controle da língua (cap. 3); humildade (cap. 4); paciência e oração (cap. 5).", "tema": "A fé genuína se comprova através de obras concretas.", "ideias": ["Provações como motivo de alegria (cap. 1)", "\"A fé, se não tiver as obras, é morta\" (cap. 2:17)", "Poder destrutivo da língua (cap. 3)", "Amizade com o mundo (cap. 4)", "Oração pelos enfermos (cap. 5)"], "versiculo": "Tiago 2:17 — \"A fé, se não tiver as obras, é morta em si mesma.\""}, {"section": "CARTAS GERAIS", "nome": "1 PEDRO", "quem": "Tradicionalmente o apóstolo Pedro, c. 60-64 d.C.", "porque": "Para encorajar cristãos sob perseguição a perseverarem, seguindo o exemplo do sofrimento de Cristo.", "praquem": "Cristãos dispersos na Ásia Menor, enfrentando hostilidade social.", "estrutura": "Identidade e esperança dos crentes (cap. 1-2); conduta e sofrimento (cap. 2-4); instruções finais (cap. 5).", "tema": "O sofrimento injusto, suportado com integridade, é parte do chamado cristão.", "ideias": ["\"Geração eleita, sacerdócio real\" (cap. 2:9)", "Submissão em sofrimento (cap. 2-3)", "\"Não estranheis a ardente prova\" (cap. 4)", "Instruções aos presbíteros (cap. 5)"], "versiculo": "1 Pedro 4:12-13 — \"Alegrai-vos por serdes participantes das aflições de Cristo.\""}, {"section": "CARTAS GERAIS", "nome": "2 PEDRO", "quem": "Tradicionalmente Pedro; autoria uma das mais debatidas academicamente. Possivelmente c. 65-68 d.C.", "porque": "Para advertir contra falsos mestres que negavam a volta de Cristo e promoviam licenciosidade.", "praquem": "Comunidades infiltradas por falsos mestres.", "estrutura": "Crescimento em virtude (cap. 1); denúncia de falsos mestres (cap. 2); certeza da volta de Cristo (cap. 3).", "tema": "A volta de Cristo é certa; a resposta correta é crescimento em caráter, não ceticismo.", "ideias": ["Acrescentar virtudes à fé (cap. 1)", "Falsos mestres (cap. 2)", "\"Um dia para o Senhor é como mil anos\" (cap. 3)"], "versiculo": "2 Pedro 3:9 — \"O Senhor não retarda a sua promessa.\""}, {"section": "CARTAS GERAIS", "nome": "1 JOÃO", "quem": "Tradicionalmente o apóstolo João, mesmo autor do quarto evangelho. Datação c. 85-95 d.C.", "porque": "Para combater ensino que negava a plena humanidade de Cristo, e dar certeza da vida eterna.", "praquem": "Comunidade abalada pela saída de um grupo que negava a encarnação de Cristo.", "estrutura": "Deus é luz (cap. 1-2); Deus é amor (cap. 3-4); certeza da vida eterna (cap. 5).", "tema": "A fé genuína se comprova por crença correta, obediência e amor fraternal.", "ideias": ["\"Deus é luz\" (cap. 1)", "Testes de fé genuína (cap. 2-4)", "\"Deus é amor\" (cap. 4)", "\"Para que saibais que tendes a vida eterna\" (cap. 5:13)"], "versiculo": "1 João 4:8 — \"Deus é amor.\""}, {"section": "CARTAS GERAIS", "nome": "2 JOÃO", "quem": "Tradicionalmente o apóstolo João (\"o Ancião\").", "porque": "Para reforçar o mandamento do amor e advertir contra mestres itinerantes que negavam a encarnação.", "praquem": "Uma igreja local, sob risco de ser enganada.", "estrutura": "Exortação ao amor e à verdade (v. 1-6); advertência contra enganadores (v. 7-11); despedida (v. 12-13).", "tema": "Amor e verdade doutrinária andam juntos.", "ideias": ["Mandamento do amor mútuo (v. 5-6)", "\"Enganadores\" que negam a encarnação (v. 7)", "Não receber tais mestres (v. 10-11)"], "versiculo": "2 João 1:6 — \"O amor é este: que andemos segundo os seus mandamentos.\""}, {"section": "CARTAS GERAIS", "nome": "3 JOÃO", "quem": "Tradicionalmente o apóstolo João (\"o Ancião\"), a Gaio.", "porque": "Para elogiar a hospitalidade de Gaio e denunciar Diótrefes.", "praquem": "Gaio, em conflito com Diótrefes.", "estrutura": "Elogio a Gaio (v. 1-8); denúncia de Diótrefes (v. 9-11); recomendação de Demétrio (v. 12-14).", "tema": "A hospitalidade para com obreiros fiéis é sinal de cooperação com a verdade.", "ideias": ["Hospitalidade de Gaio (v. 5-8)", "Diótrefes rejeita autoridade apostólica (v. 9-10)", "Demétrio (v. 12)"], "versiculo": "3 João 1:11 — \"Não sigas o que é mau, mas o que é bom.\""}, {"section": "CARTAS GERAIS", "nome": "JUDAS", "quem": "Tradicionalmente Judas, irmão de Tiago, meio-irmão de Jesus. Datação incerta (c. 65-80 d.C.).", "porque": "Para advertir urgentemente contra falsos mestres que distorciam a graça em licença para imoralidade.", "praquem": "Comunidade sob infiltração de falsos mestres libertinos.", "estrutura": "Chamado a contender pela fé (v. 1-4); exemplos históricos de juízo (v. 5-16); exortação e doxologia (v. 17-25).", "tema": "A fé deve ser defendida ativamente contra distorções morais.", "ideias": ["\"Batalhar pela fé\" (v. 3)", "Exemplos de juízo (v. 5-11)", "Falsos mestres (v. 12-13)", "Doxologia final (v. 24-25)"], "versiculo": "Judas 1:24-25 — doxologia final sobre o poder de Deus de guardar os crentes."}, {"section": "APOCALIPSE", "nome": "APOCALIPSE", "quem": "Atribuído ao apóstolo João, exilado em Patmos. Datação mais aceita c. 95 d.C., reinado de Domiciano.", "porque": "Para revelar a vitória final de Cristo sobre o mal, encorajando igrejas sob perseguição.", "praquem": "Sete igrejas da Ásia Menor, enfrentando perseguição romana.", "estrutura": "Cristo glorificado e as sete igrejas (cap. 1-3); trono e o Cordeiro (cap. 4-5); selos, trombetas e taças (cap. 6-16); queda da Babilônia e vitória final (cap. 17-20); nova criação (cap. 21-22).", "tema": "Cristo já venceu; a história caminha para o julgamento final da opressão e restauração plena da criação.", "ideias": ["Cartas às sete igrejas (cap. 2-3)", "Trono e o Cordeiro (cap. 4-5)", "Selos, trombetas, taças (cap. 6-16)", "Queda da Babilônia (cap. 17-18)", "Vitória final e milênio (cap. 19-20)", "Nova Jerusalém (cap. 21-22)"], "versiculo": "Apocalipse 21:5 — \"Eis que faço novas todas as coisas.\""}];
+</script>
+<script>
+let current = 0;
+let filtered = BOOKS.map((b,i)=>i);
+
+function renderSidebar(){
+  const container = document.getElementById('sections');
+  container.innerHTML = '';
+  const bySection = {};
+  const order = [];
+  BOOKS.forEach((b,i)=>{
+    if(!bySection[b.section]){bySection[b.section]=[]; order.push(b.section);}
+    bySection[b.section].push(i);
+  });
+  order.forEach(sec=>{
+    const group = document.createElement('div');
+    group.className = 'section-group';
+    const title = document.createElement('div');
+    title.className = 'section-title';
+    title.innerHTML = `<span>${sec}</span><span class="count">${bySection[sec].length}</span>`;
+    const list = document.createElement('ul');
+    list.className = 'book-list';
+    bySection[sec].forEach(i=>{
+      const li = document.createElement('li');
+      li.className = 'book-item' + (i===current?' active':'');
+      li.dataset.idx = i;
+      li.innerHTML = `<span class="num">${String(i+1).padStart(2,'0')}</span><span>${BOOKS[i].nome}</span>`;
+      li.addEventListener('click', ()=>selectBook(i));
+      list.appendChild(li);
+    });
+    title.addEventListener('click', ()=>list.classList.toggle('collapsed'));
+    group.appendChild(title);
+    group.appendChild(list);
+    container.appendChild(group);
+  });
+}
+
+function renderCard(){
+  const b = BOOKS[current];
+  const c = document.getElementById('card');
+  c.innerHTML = `
+    <div class="card-tab">
+      <span class="card-catno">Nº ${String(current+1).padStart(2,'0')} / 66</span>
+      <span class="card-section">${b.section}</span>
+    </div>
+    <div class="card-title">${b.nome}</div>
+    <div class="card-body">
+      <div class="two-col">
+        <div class="field">
+          <div class="field-label">Quem escreveu</div>
+          <div class="field-value">${b.quem}</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Estrutura</div>
+          <div class="field-value">${b.estrutura}</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Porque escreveu</div>
+          <div class="field-value">${b.porque}</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Pra quem escreveu</div>
+          <div class="field-value">${b.praquem}</div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Tema central</div>
+        <div class="field-value">${b.tema}</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Ideias-chave</div>
+        <ul class="ideias-list">${b.ideias.map(x=>`<li>${x}</li>`).join('')}</ul>
+      </div>
+      <div class="field">
+        <div class="field-label">Versículo de referência</div>
+        <div class="versiculo-block">${b.versiculo}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('progress').textContent = `Livro ${current+1} de 66`;
+  document.getElementById('prevBtn').disabled = current<=0;
+  document.getElementById('nextBtn').disabled = current>=65;
+  document.querySelectorAll('.book-item').forEach(el=>{
+    el.classList.toggle('active', parseInt(el.dataset.idx)===current);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function selectBook(i){
+  current = i;
+  renderCard();
+}
+
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  if(current>0){current--; renderCard();}
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  if(current<65){current++; renderCard();}
+});
+document.getElementById('search').addEventListener('input', (e)=>{
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.book-item').forEach(el=>{
+    const i = parseInt(el.dataset.idx);
+    const match = BOOKS[i].nome.toLowerCase().includes(q);
+    el.style.display = match ? 'flex' : 'none';
+  });
+  if(q){
+    document.querySelectorAll('.book-list').forEach(l=>l.classList.remove('collapsed'));
+  }
+});
+
+renderSidebar();
+renderCard();
+</script>
+</body>
+</html>
