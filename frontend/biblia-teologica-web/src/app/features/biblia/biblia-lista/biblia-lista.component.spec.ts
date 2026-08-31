@@ -3,11 +3,14 @@ import { provideRouter } from '@angular/router';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { BibliaListaComponent } from './biblia-lista.component';
-import { AuthStore } from '../../../core/auth/auth.store';
 import type { LivroListItem } from '../../../core/models/livro.model';
 
-const item = (slug: string, ordem: number, secao = 'Pentateuco', rotulo = 'PENTATEUCO'): LivroListItem =>
-  ({ slug, nome: slug, ordem, secao, secaoRotulo: rotulo });
+const item = (
+  slug: string,
+  ordem: number,
+  secao = 'Pentateuco',
+  rotulo = 'PENTATEUCO',
+): LivroListItem => ({ slug, nome: slug, ordem, secao, secaoRotulo: rotulo });
 
 describe('BibliaListaComponent', () => {
   let http: HttpTestingController;
@@ -44,29 +47,12 @@ describe('BibliaListaComponent', () => {
     expect(texto).not.toContain('ÊXODO');
   });
 
-  it('mostra "Entrar" no cabeçalho quando anónimo', () => {
+  it('não repete a marca do site na sidebar (vem do header global)', () => {
     const fixture = TestBed.createComponent(BibliaListaComponent);
     fixture.detectChanges();
     http.expectOne('/api/livros').flush([item('genesis', 1)]);
     fixture.detectChanges();
-    const link = fixture.nativeElement.querySelector('.sidebar__conta a');
-    expect(link.textContent.trim()).toBe('Entrar');
-    expect(link.getAttribute('href')).toBe('/entrar');
-  });
-
-  it('mostra "A minha conta" no cabeçalho quando autenticado', () => {
-    TestBed.inject(AuthStore).definir({
-      email: 'a@b.c',
-      nomeExibicao: 'Ana',
-      roles: ['Membro'],
-      deveTrocarSenha: false,
-    });
-    const fixture = TestBed.createComponent(BibliaListaComponent);
-    fixture.detectChanges();
-    http.expectOne('/api/livros').flush([item('genesis', 1)]);
-    fixture.detectChanges();
-    const link = fixture.nativeElement.querySelector('.sidebar__conta a');
-    expect(link.textContent.trim()).toBe('A minha conta');
-    expect(link.getAttribute('href')).toBe('/conta');
+    expect(fixture.nativeElement.querySelector('.sidebar__brand')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.sidebar__conta')).toBeNull();
   });
 });
