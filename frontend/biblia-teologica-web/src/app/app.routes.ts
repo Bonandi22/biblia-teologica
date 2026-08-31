@@ -2,7 +2,11 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'biblia' },
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
+  },
   {
     path: 'biblia',
     loadChildren: () => import('./features/biblia/biblia.routes').then((m) => m.bibliaRoutes),
@@ -23,5 +27,5 @@ export const routes: Routes = [
     loadChildren: () => import('./features/conta/conta.routes').then((m) => m.contaRoutes),
   },
   // `admin` entra no M2b (features/admin ainda não existe).
-  { path: '**', redirectTo: 'biblia' },
+  { path: '**', redirectTo: '' },
 ];
