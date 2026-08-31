@@ -1,17 +1,5 @@
 <div class="fichario">
   <aside class="sidebar">
-    <header class="sidebar__brand">
-      <h1>Fichário</h1>
-      <p>os 66 livros · cânon protestante</p>
-      <nav class="sidebar__conta">
-        @if (auth.estaAutenticado()) {
-          <a routerLink="/conta">A minha conta</a>
-        } @else {
-          <a routerLink="/entrar">Entrar</a>
-        }
-      </nav>
-    </header>
-
     <input
       class="sidebar__busca"
       type="search"
@@ -33,11 +21,7 @@
         <ul class="grupo__lista">
           @for (livro of secao.livros; track livro.slug) {
             <li>
-              <a
-                class="item"
-                [routerLink]="['/biblia', livro.slug]"
-                routerLinkActive="item--ativo"
-              >
+              <a class="item" [routerLink]="['/biblia', livro.slug]" routerLinkActive="item--ativo">
                 <span class="item__num">{{ livro.ordem.toString().padStart(2, '0') }}</span>
                 <span class="item__nome">{{ livro.nome }}</span>
               </a>

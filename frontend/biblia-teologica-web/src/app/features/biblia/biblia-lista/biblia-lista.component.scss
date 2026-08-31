@@ -3,7 +3,7 @@
 
 .fichario {
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - #{$altura-header});
   max-width: 1200px;
   margin: 0 auto;
 
@@ -18,9 +18,9 @@
   border-right: 1px solid $line;
   padding: 28px 18px 60px 24px;
   position: sticky;
-  top: 0;
+  top: $altura-header;
   align-self: flex-start;
-  max-height: 100vh;
+  max-height: calc(100vh - #{$altura-header});
   overflow-y: auto;
 
   @include mobile {
@@ -30,45 +30,6 @@
     border-right: none;
     border-bottom: 1px solid $line;
     padding: 20px 18px;
-  }
-}
-
-.sidebar__brand {
-  h1 {
-    font-family: $fonte-display;
-    font-weight: 700;
-    font-size: 1.5rem;
-    letter-spacing: 0.01em;
-    color: $ink;
-    margin: 0 0 2px;
-  }
-
-  p {
-    font-family: $fonte-mono;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: $brass;
-    margin: 0 0 12px;
-  }
-}
-
-.sidebar__conta {
-  margin-bottom: 20px;
-
-  a {
-    font-family: $fonte-mono;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $sage;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-
-    &:hover {
-      color: $brass;
-      border-bottom-color: $brass;
-    }
   }
 }
 
@@ -136,13 +97,13 @@
   text-decoration: none;
 
   &:hover {
-    background: rgba(166, 118, 63, 0.08);
+    background: rgba($brass, 0.08);
   }
 }
 
 .item--ativo {
   border-left-color: $brass;
-  background: rgba(166, 118, 63, 0.12);
+  background: rgba($brass, 0.12);
   font-weight: 600;
 }
 

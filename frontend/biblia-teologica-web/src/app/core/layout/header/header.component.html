@@ -1,0 +1,41 @@
+<header class="header">
+  <div class="header__inner">
+    <a class="header__marca" routerLink="/" (click)="fecharMenu()">Bíblia Teológica</a>
+
+    <button
+      class="header__toggle"
+      type="button"
+      [attr.aria-expanded]="menuAberto()"
+      [attr.aria-label]="menuAberto() ? 'Fechar menu' : 'Abrir menu'"
+      aria-controls="nav-principal"
+      (click)="alternarMenu()"
+    >
+      <span class="header__toggle-barra"></span>
+    </button>
+
+    <nav id="nav-principal" class="header__nav" [class.header__nav--aberto]="menuAberto()">
+      <ul class="header__lista">
+        @for (item of itens(); track item.rota) {
+          <li>
+            <a
+              [routerLink]="item.rota"
+              routerLinkActive="ativo"
+              [routerLinkActiveOptions]="{ exact: item.rota === '/' }"
+              (click)="fecharMenu()"
+              >{{ item.rotulo }}</a
+            >
+          </li>
+        }
+      </ul>
+
+      <div class="header__acoes">
+        @if (autenticado()) {
+          <a routerLink="/conta" (click)="fecharMenu()">A minha conta</a>
+        } @else {
+          <a routerLink="/entrar" (click)="fecharMenu()">Entrar</a>
+          <a class="header__cta" routerLink="/registar" (click)="fecharMenu()">Criar conta</a>
+        }
+      </div>
+    </nav>
+  </div>
+</header>

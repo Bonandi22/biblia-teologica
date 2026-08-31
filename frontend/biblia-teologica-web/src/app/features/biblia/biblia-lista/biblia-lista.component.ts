@@ -1,16 +1,29 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LivroStore } from '../../../core/services/livro.store';
-import { AuthStore } from '../../../core/auth/auth.store';
 import type { LivroListItem } from '../../../core/models/livro.model';
 
 const ORDEM_SECOES = [
-  'Pentateuco', 'LivrosHistoricos', 'LivrosPoeticos', 'ProfetasMaiores', 'ProfetasMenores',
-  'Evangelhos', 'Atos', 'CartasPaulinas', 'CartasGerais', 'Apocalipse',
+  'Pentateuco',
+  'LivrosHistoricos',
+  'LivrosPoeticos',
+  'ProfetasMaiores',
+  'ProfetasMenores',
+  'Evangelhos',
+  'Atos',
+  'CartasPaulinas',
+  'CartasGerais',
+  'Apocalipse',
 ];
 
-const semAcento = (s: string) =>
-  s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 @Component({
   selector: 'bt-biblia-lista',
@@ -24,7 +37,6 @@ export class BibliaListaComponent {
   private readonly store = inject(LivroStore);
   private readonly router = inject(Router);
 
-  readonly auth = inject(AuthStore);
   readonly busca = signal('');
   readonly carregando = this.store.carregando;
 
@@ -41,9 +53,7 @@ export class BibliaListaComponent {
       grupo.livros.push(livro);
       grupos.set(livro.secao, grupo);
     }
-    return ORDEM_SECOES
-      .filter((s) => grupos.has(s))
-      .map((s) => ({ chave: s, ...grupos.get(s)! }));
+    return ORDEM_SECOES.filter((s) => grupos.has(s)).map((s) => ({ chave: s, ...grupos.get(s)! }));
   });
 
   constructor() {

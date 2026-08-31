@@ -1,0 +1,59 @@
+<section class="hero">
+  <div class="hero__inner">
+    <h1 class="hero__titulo">Conhecer a Deus pela Sua Palavra</h1>
+    <p class="hero__lead">
+      Um portal de conhecimento teológico: as fichas dos 66 livros da Bíblia, estudos aprofundados e
+      reflexões — tudo ancorado nas Escrituras.
+    </p>
+    <div class="hero__acoes">
+      <a class="btn btn--primario" routerLink="/biblia">Explorar o fichário</a>
+      <a class="btn btn--fantasma" routerLink="/registar">Criar conta</a>
+    </div>
+  </div>
+</section>
+
+<section class="secao destaque">
+  <div class="secao__inner">
+    <span class="destaque__selo">Disponível agora</span>
+    <h2 class="destaque__titulo">O fichário dos 66 livros</h2>
+    <p class="destaque__texto">
+      Cada livro do cânon protestante numa ficha estruturada — autor, data, contexto, esboço e como
+      Cristo aparece no livro.
+    </p>
+    <ul class="destaque__chips">
+      @for (livro of livrosDestaque; track livro) {
+        <li>{{ livro }}</li>
+      }
+    </ul>
+    <a class="destaque__link" routerLink="/biblia">Ver o fichário →</a>
+  </div>
+</section>
+
+<section class="secao">
+  <div class="secao__inner">
+    <h2 class="secao__titulo">A crescer</h2>
+    <div class="grelha">
+      @for (secao of secoes; track secao.rota) {
+        <bt-secao-card
+          [titulo]="secao.titulo"
+          [descricao]="secao.descricao"
+          [rota]="secao.rota"
+          [disponivel]="false"
+        />
+      }
+    </div>
+  </div>
+</section>
+
+@if (!autenticado()) {
+  <section class="secao membros">
+    <div class="secao__inner">
+      <h2 class="secao__titulo">Alguns conteúdos serão só para membros</h2>
+      <p>
+        Cria uma conta gratuita para acompanhares estudos e notícias reservadas quando começarem a
+        sair.
+      </p>
+      <a class="btn btn--primario" routerLink="/registar">Criar conta</a>
+    </div>
+  </section>
+}

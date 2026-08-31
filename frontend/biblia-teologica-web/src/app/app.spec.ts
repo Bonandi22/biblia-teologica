@@ -14,4 +14,12 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     expect(fixture.componentInstance).toBeTruthy();
   });
+
+  it('rende o cabeçalho e o rodapé globais', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('bt-header')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('bt-footer')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('router-outlet')).toBeTruthy();
+  });
 });
