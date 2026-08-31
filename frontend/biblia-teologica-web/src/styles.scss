@@ -12,9 +12,6 @@ body {
 
 body {
   background: $parchment;
-  background-image:
-    radial-gradient(circle at 20% 10%, rgba(92, 107, 79, 0.05), transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(166, 118, 63, 0.06), transparent 45%);
   color: $near-black;
   font-family: $fonte-serif;
   min-height: 100vh;

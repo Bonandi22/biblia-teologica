@@ -5,7 +5,7 @@
   background: $card;
   border: 1px solid $line;
   border-radius: 3px;
-  box-shadow: 3px 4px 0 rgba(28, 37, 65, 0.05);
+  box-shadow: 3px 4px 0 rgba($ink, 0.06);
   padding-bottom: 8px;
 }
 
@@ -15,7 +15,7 @@
   justify-content: space-between;
   padding: 16px 28px;
   border-bottom: 1px solid $line;
-  background: linear-gradient(180deg, rgba(166, 118, 63, 0.05), transparent);
+  background: linear-gradient(180deg, rgba($brass, 0.05), transparent);
 
   @include mobile {
     padding: 14px 20px;

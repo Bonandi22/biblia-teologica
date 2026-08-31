@@ -136,13 +136,13 @@
   text-decoration: none;
 
   &:hover {
-    background: rgba(166, 118, 63, 0.08);
+    background: rgba($brass, 0.08);
   }
 }
 
 .item--ativo {
   border-left-color: $brass;
-  background: rgba(166, 118, 63, 0.12);
+  background: rgba($brass, 0.12);
   font-weight: 600;
 }
 
