@@ -29,7 +29,7 @@ controller (Api) -> feature lazy-loaded (Angular).
 - M2c — Casca do portal. Header/footer globais, homepage (hero + destaque do fichário +
   secções futuras + teaser de membros), páginas "Em breve" (Estudos/Notícias/Curiosidades),
   nova identidade visual "editorial" (tokens globais). Só frontend. Deixa o gancho de
-  navegação/rotas para conteúdo reservado a membros, sem o implementar. Planeado.
+  navegação/rotas para conteúdo reservado a membros, sem o implementar. ✅ entregue 2026-08-31.
   Spec: docs/superpowers/specs/2026-08-31-m2c-casca-portal-design.md
   Plano: docs/superpowers/plans/2026-08-31-m2c-casca-portal.md
 - M3 — Estudos (público + admin), corpo em Markdown, sanitização (DOMPurify).
