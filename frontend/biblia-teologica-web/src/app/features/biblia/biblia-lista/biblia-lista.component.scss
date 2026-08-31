@@ -26,7 +26,6 @@
   @include mobile {
     width: 100%;
     position: relative;
-    top: $altura-header-mobile;
     max-height: none;
     border-right: none;
     border-bottom: 1px solid $line;

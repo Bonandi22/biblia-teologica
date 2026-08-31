@@ -4,15 +4,10 @@
       <p class="rodape__marca">Bíblia Teológica</p>
       <p class="rodape__tagline">Portal de conhecimento teológico.</p>
       <ul class="rodape__redes">
+        <!-- href placeholders: quando houver URLs reais, repor target="_blank" + rel="noopener noreferrer" -->
         @for (rede of redes; track rede.nome) {
           <li>
-            <a
-              [href]="rede.url"
-              [attr.aria-label]="rede.nome"
-              target="_blank"
-              rel="noopener noreferrer"
-              >{{ rede.nome }}</a
-            >
+            <a [href]="rede.url" [attr.aria-label]="rede.nome">{{ rede.nome }}</a>
           </li>
         }
       </ul>
@@ -31,7 +26,13 @@
     <div class="rodape__coluna">
       <h2 class="rodape__titulo">Novidades por email</h2>
       <form class="rodape__newsletter" (submit)="submeterNewsletter($event)">
-        <input type="email" name="email" placeholder="o teu email" autocomplete="email" />
+        <input
+          type="email"
+          name="email"
+          placeholder="o teu email"
+          aria-label="O teu email"
+          autocomplete="email"
+        />
         <button type="submit">Subscrever</button>
       </form>
       @if (mensagem()) {

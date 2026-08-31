@@ -7,12 +7,13 @@
       type="button"
       [attr.aria-expanded]="menuAberto()"
       [attr.aria-label]="menuAberto() ? 'Fechar menu' : 'Abrir menu'"
+      aria-controls="nav-principal"
       (click)="alternarMenu()"
     >
       <span class="header__toggle-barra"></span>
     </button>
 
-    <nav class="header__nav" [class.header__nav--aberto]="menuAberto()">
+    <nav id="nav-principal" class="header__nav" [class.header__nav--aberto]="menuAberto()">
       <ul class="header__lista">
         @for (item of itens(); track item.rota) {
           <li>

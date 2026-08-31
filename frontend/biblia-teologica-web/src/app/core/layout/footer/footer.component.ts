@@ -23,6 +23,6 @@ export class FooterComponent {
 
   submeterNewsletter(evento: Event): void {
     evento.preventDefault();
-    this._mensagem.set('A newsletter ainda não está disponível — em breve.');
+    this._mensagem.set('Obrigado — a newsletter ainda não está disponível. Volta em breve.');
   }
 }

@@ -24,12 +24,12 @@ describe('FooterComponent', () => {
     expect(el.querySelector('a[href="/curiosidades"]')).toBeTruthy();
   });
 
-  it('mostra as redes sociais com aria-label e rel seguro', () => {
+  it('mostra as redes sociais com aria-label pelo nome', () => {
     const el = criar().nativeElement as HTMLElement;
     for (const rede of ['Facebook', 'Instagram', 'YouTube']) {
       const link = el.querySelector(`a[aria-label="${rede}"]`) as HTMLAnchorElement;
       expect(link).toBeTruthy();
-      expect(link.getAttribute('rel')).toContain('noopener');
+      expect(link.getAttribute('aria-label')).toBe(rede);
     }
   });
 
@@ -40,8 +40,11 @@ describe('FooterComponent', () => {
   it('submeter a newsletter não navega e mostra aviso de indisponível', () => {
     const fixture = criar();
     const form = fixture.nativeElement.querySelector('form') as HTMLFormElement;
-    form.dispatchEvent(new Event('submit'));
+    const evento = new Event('submit', { cancelable: true });
+    form.dispatchEvent(evento);
     fixture.detectChanges();
+    expect(evento.defaultPrevented).toBe(true);
+    expect(fixture.componentInstance.mensagem()).toContain('Obrigado');
     expect(fixture.componentInstance.mensagem()).toContain('ainda não está disponível');
     expect(fixture.nativeElement.textContent).toContain('ainda não está disponível');
   });

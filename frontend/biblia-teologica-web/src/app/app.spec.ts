@@ -20,5 +20,6 @@ describe('App', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('bt-header')).toBeTruthy();
     expect(fixture.nativeElement.querySelector('bt-footer')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('router-outlet')).toBeTruthy();
   });
 });
