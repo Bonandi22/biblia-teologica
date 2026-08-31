@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import { HeaderComponent } from './header.component';
 import { AuthStore } from '../../auth/auth.store';
 
@@ -62,5 +62,27 @@ describe('HeaderComponent', () => {
     expect(cmp.menuAberto()).toBe(true);
     cmp.fecharMenu();
     expect(cmp.menuAberto()).toBe(false);
+  });
+
+  it('fecha o menu com Escape', () => {
+    const fixture = criar();
+    fixture.componentInstance.alternarMenu();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.menuAberto()).toBe(false);
+  });
+
+  it('fecha o menu ao navegar', async () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      imports: [HeaderComponent],
+      providers: [provideRouter([{ path: 'x', children: [] }])],
+    });
+    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture.detectChanges();
+    fixture.componentInstance.alternarMenu();
+    await TestBed.inject(Router).navigateByUrl('/x');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.menuAberto()).toBe(false);
   });
 });
