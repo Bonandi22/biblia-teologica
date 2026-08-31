@@ -1,0 +1,6 @@
+@use '../styles/variables' as *;
+
+.app-main {
+  display: block;
+  min-height: calc(100vh - #{$altura-header});
+}
