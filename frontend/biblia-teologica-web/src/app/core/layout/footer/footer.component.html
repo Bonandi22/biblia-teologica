@@ -1,0 +1,46 @@
+<footer class="rodape">
+  <div class="rodape__inner">
+    <div class="rodape__coluna rodape__coluna--marca">
+      <p class="rodape__marca">Bíblia Teológica</p>
+      <p class="rodape__tagline">Portal de conhecimento teológico.</p>
+      <ul class="rodape__redes">
+        @for (rede of redes; track rede.nome) {
+          <li>
+            <a
+              [href]="rede.url"
+              [attr.aria-label]="rede.nome"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ rede.nome }}</a
+            >
+          </li>
+        }
+      </ul>
+    </div>
+
+    <nav class="rodape__coluna">
+      <h2 class="rodape__titulo">Navegar</h2>
+      <ul>
+        <li><a routerLink="/biblia">Fichário</a></li>
+        <li><a routerLink="/estudos">Estudos</a></li>
+        <li><a routerLink="/noticias">Notícias</a></li>
+        <li><a routerLink="/curiosidades">Curiosidades</a></li>
+      </ul>
+    </nav>
+
+    <div class="rodape__coluna">
+      <h2 class="rodape__titulo">Novidades por email</h2>
+      <form class="rodape__newsletter" (submit)="submeterNewsletter($event)">
+        <input type="email" name="email" placeholder="o teu email" autocomplete="email" />
+        <button type="submit">Subscrever</button>
+      </form>
+      @if (mensagem()) {
+        <p class="rodape__aviso" role="status">{{ mensagem() }}</p>
+      } @else {
+        <p class="rodape__aviso">A newsletter ainda não está disponível — em breve.</p>
+      }
+    </div>
+  </div>
+
+  <p class="rodape__copy">© {{ ano }} Bíblia Teológica</p>
+</footer>
