@@ -21,6 +21,12 @@ Segurança — nunca escrever segredos em código, commits, migrações, logs ou
 
 Custo — no fim de tarefas com loops/subagents/múltiplas iterações, estimar o esforço gasto e sugerir onde reduzir.
 
+Revisão — no máximo 3 rondas de revisão por task. Se não convergir, ou se o achado for decisão de produto ou segurança, levar ao utilizador.
+
+Worktree — ao trabalhar em worktree, indicar o caminho logo no início para o utilizador testar por partes.
+
+Staged — verificar o que está staged, inclusive arquivos de nome inocente, antes de cada commit.
+
 ## Arquitetura
 
 1 monólito .NET 8 em Clean Architecture de 4 camadas: Domain (entidades, enums, exceções de domínio) -> Application (Application Services, DTOs, perfis AutoMapper) -> Infrastructure (DbContext EF Core, repositórios, migrações, seed) -> Api (controllers, Program.cs, middleware). Sem microserviços, sem mensageria.
@@ -98,3 +104,6 @@ Toda mensagem de commit termina com:
 - Nunca escrever endpoint/service novo sem teste cobrindo caminho feliz + rejeição.
 - Nunca git push direto para main sem pedido explícito.
 - Nunca declarar tarefa concluída sem testes a passar e sem o utilizador ter revisto o diff.
+- Nunca alterar o contrato de um endpoint existente sem plano de versionamento (`/api/livros` e `/api/livros/{slug}` não mudam).
+- Nunca endpoint novo só de leitura sem comentário justificando por que é público.
+- Nunca página de topo sem fundo e altura mínima próprios, nem sem conferência visual.

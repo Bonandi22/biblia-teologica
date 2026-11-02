@@ -17,6 +17,46 @@ namespace BibliaTeologica.Infrastructure.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.30");
 
+            modelBuilder.Entity("BibliaTeologica.Domain.Entities.DocumentoConteudo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ImportadoEm")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Json")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Resumo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Tipo", "Slug")
+                        .IsUnique();
+
+                    b.ToTable("DocumentosConteudo", (string)null);
+                });
+
             modelBuilder.Entity("BibliaTeologica.Domain.Entities.Livro", b =>
                 {
                     b.Property<int>("Id")

@@ -12,6 +12,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid
 
     public DbSet<Livro> Livros => Set<Livro>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<DocumentoConteudo> DocumentosConteudo => Set<DocumentoConteudo>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
