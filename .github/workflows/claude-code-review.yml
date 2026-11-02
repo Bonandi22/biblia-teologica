@@ -61,6 +61,12 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           MARCADOR: 'claude-review:${{ github.event.pull_request.head.sha }}'
         run: |
+          # A action salta a revisão de propósito quando o PR altera este workflow.
+          if gh pr diff "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --name-only \
+            | grep -qxF '.github/workflows/claude-code-review.yml'; then
+            echo "::notice::PR altera o workflow de revisão; a action não revisa este PR."
+            exit 0
+          fi
           gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json comments --jq '.comments[].body' \
             | grep -qF "$MARCADOR" \
             || { echo "::error::A revisão não publicou o comentário esperado."; exit 1; }
