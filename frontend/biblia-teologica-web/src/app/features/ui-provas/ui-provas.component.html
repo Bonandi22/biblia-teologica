@@ -1,0 +1,44 @@
+<div class="provas">
+  <h1>Primitivos do design system</h1>
+
+  <section>
+    <h2>bt-botao</h2>
+    <bt-botao variante="primario">Primário</bt-botao>
+    <bt-botao variante="fantasma">Fantasma</bt-botao>
+    <bt-botao variante="texto">Texto</bt-botao>
+    <bt-botao variante="primario" [carregando]="true">A carregar</bt-botao>
+    <bt-botao variante="primario" [disabled]="true">Desativado</bt-botao>
+  </section>
+
+  <section>
+    <h2>bt-campo</h2>
+    <bt-campo label="Email" hint="Usamos para te identificar">
+      <input btInput type="email" />
+    </bt-campo>
+    <bt-campo label="Email" erro="Email inválido">
+      <input btInput type="email" value="xxx" />
+    </bt-campo>
+    <bt-campo label="Nome" [obrigatorio]="true">
+      <input btInput type="text" />
+    </bt-campo>
+  </section>
+
+  <section>
+    <h2>bt-campo-senha</h2>
+    <bt-campo-senha label="Senha" hint="Mínimo 8 caracteres" [formControl]="senha" />
+  </section>
+
+  <section>
+    <h2>bt-alerta</h2>
+    <bt-alerta tipo="erro">Não foi possível criar a conta.</bt-alerta>
+    <bt-alerta tipo="sucesso">Senha alterada.</bt-alerta>
+  </section>
+
+  <section>
+    <h2>bt-cartao</h2>
+    <bt-cartao titulo="Entrar">
+      <p>Conteúdo do cartão.</p>
+      <bt-botao variante="primario" type="button">Ação</bt-botao>
+    </bt-cartao>
+  </section>
+</div>

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { environment } from '../environments/environment';
 import { authGuard } from './core/auth/guards/auth.guard';
 import { EmBreveComponent } from './features/institucional/em-breve.component';
 
@@ -55,5 +56,14 @@ export const routes: Routes = [
     loadChildren: () => import('./features/conta/conta.routes').then((m) => m.contaRoutes),
   },
   // `admin` entra no M2b (features/admin ainda não existe).
+  ...(environment.production
+    ? []
+    : [
+        {
+          path: 'ui',
+          loadComponent: () =>
+            import('./features/ui-provas/ui-provas.component').then((m) => m.UiProvasComponent),
+        },
+      ]),
   { path: '**', redirectTo: '' },
 ];

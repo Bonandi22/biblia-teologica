@@ -1,0 +1,31 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.provas {
+  max-width: $largura-conteudo;
+  margin: 0 auto;
+  padding: $sp-12 $sp-6;
+}
+
+h1 {
+  font-family: $fonte-display;
+  font-weight: 700;
+  font-size: $t-h2;
+  letter-spacing: $tracking-tight;
+}
+
+section {
+  margin: $sp-8 0;
+  padding-top: $sp-6;
+  border-top: 1px solid $hair;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-4;
+  align-items: flex-start;
+}
+
+section h2 {
+  @include eyebrow;
+  flex-basis: 100%;
+  margin: 0 0 $sp-2;
+}
