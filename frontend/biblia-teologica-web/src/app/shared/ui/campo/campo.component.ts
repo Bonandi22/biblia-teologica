@@ -43,6 +43,7 @@ export class CampoComponent {
       if (!c) return;
       c.id.set(this.campoId);
       c.invalido.set(!!this.erro());
+      c.obrigatorio.set(this.obrigatorio());
       c.describedBy.set(this.erro() ? this.erroId : this.hint() ? this.hintId : null);
     });
   }

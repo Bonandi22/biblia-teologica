@@ -347,7 +347,7 @@ Vitest (`@angular/build:unit-test`, jsdom). Convenção `Metodo_ResultadoEsperad
   avisos de Sass; `npx tsc --noEmit -p tsconfig.app.json` limpo.
 - **Manual (utilizador)** — `docker compose up --build`: shell + fichário na paleta/
   fonte novas; `/entrar`, `/registar`, `/conta` ainda funcionam (Material re-tematizado);
-  `/ui` mostra os primitivos em dev.
+  `/ui` mostra os primitivos em dev, com `npm start` (a imagem Docker usa o build de produção).
 
 ## 7. Segurança
 

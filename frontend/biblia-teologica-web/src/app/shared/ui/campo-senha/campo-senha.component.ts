@@ -9,10 +9,12 @@ import { CampoComponent } from '../campo/campo.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CampoComponent, BtInputDirective],
   template: `
-    <bt-campo [label]="label()" [erro]="erro()" [hint]="hint()">
+    <bt-campo [label]="label()" [erro]="erro()" [hint]="hint()" [obrigatorio]="obrigatorio()">
       <span class="senha__wrap">
         <input
           btInput
+          spellcheck="false"
+          autocapitalize="off"
           [type]="visivel() ? 'text' : 'password'"
           [value]="valor()"
           [disabled]="desativado()"
@@ -46,6 +48,7 @@ export class CampoSenhaComponent implements ControlValueAccessor {
   readonly hint = input<string>('');
   readonly erro = input<string | null>(null);
   readonly autocomplete = input<string>('current-password');
+  readonly obrigatorio = input(false);
 
   readonly valor = signal('');
   readonly visivel = signal(false);

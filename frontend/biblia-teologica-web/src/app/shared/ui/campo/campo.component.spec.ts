@@ -7,7 +7,7 @@ import { CampoComponent } from './campo.component';
   standalone: true,
   imports: [CampoComponent, BtInputDirective],
   template: `
-    <bt-campo [label]="label()" [erro]="erro()" [hint]="hint()">
+    <bt-campo [label]="label()" [erro]="erro()" [hint]="hint()" [obrigatorio]="obrigatorio()">
       <input btInput />
     </bt-campo>
   `,
@@ -16,6 +16,7 @@ class HostComponent {
   readonly label = signal('Email');
   readonly erro = signal<string | null>(null);
   readonly hint = signal('');
+  readonly obrigatorio = signal(false);
 }
 
 describe('CampoComponent', () => {
@@ -52,5 +53,17 @@ describe('CampoComponent', () => {
     expect(input.getAttribute('aria-invalid')).toBe('true');
     expect(input.getAttribute('aria-describedby')).toBe(erro.id);
     expect(el.textContent).not.toContain('ignorado quando há erro');
+  });
+
+  it('obrigatório: expõe aria-required no input e remove quando deixa de ser', () => {
+    const fixture = criar();
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.getAttribute('aria-required')).toBeNull();
+    fixture.componentInstance.obrigatorio.set(true);
+    fixture.detectChanges();
+    expect(input.getAttribute('aria-required')).toBe('true');
+    fixture.componentInstance.obrigatorio.set(false);
+    fixture.detectChanges();
+    expect(input.getAttribute('aria-required')).toBeNull();
   });
 });

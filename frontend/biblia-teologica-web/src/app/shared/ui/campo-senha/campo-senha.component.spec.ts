@@ -12,6 +12,15 @@ class HostComponent {
   ctrl = new FormControl('');
 }
 
+@Component({
+  standalone: true,
+  imports: [CampoSenhaComponent, ReactiveFormsModule],
+  template: `<bt-campo-senha label="Senha" [obrigatorio]="true" [formControl]="ctrl" />`,
+})
+class HostObrigatorioComponent {
+  ctrl = new FormControl('');
+}
+
 describe('CampoSenhaComponent', () => {
   const criar = () => {
     const fixture = TestBed.createComponent(HostComponent);
@@ -47,5 +56,18 @@ describe('CampoSenhaComponent', () => {
     fixture.componentInstance.ctrl.setValue('abc');
     fixture.detectChanges();
     expect((fixture.nativeElement.querySelector('input') as HTMLInputElement).value).toBe('abc');
+  });
+
+  it('não envia a senha revelada para corretores nem capitaliza no celular', () => {
+    const input = criar().nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.getAttribute('spellcheck')).toBe('false');
+    expect(input.getAttribute('autocapitalize')).toBe('off');
+  });
+
+  it('obrigatório: expõe aria-required no input', () => {
+    const fixture = TestBed.createComponent(HostObrigatorioComponent);
+    fixture.detectChanges();
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.getAttribute('aria-required')).toBe('true');
   });
 });

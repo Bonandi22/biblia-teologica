@@ -1532,7 +1532,7 @@ EOF
 O utilizador corre `docker compose up --build` e verifica, com o diff já revisto:
 1. **Shell + fichário** — o header, a homepage e as fichas dos livros aparecem na paleta nova (terracota/near-black/off-white) e com Space Grotesk nos títulos. Layout inalterado.
 2. **`/entrar`, `/registar`, `/conta`** — continuam a funcionar; o Material aparece agora quente + Space Grotesk (ainda com forma Material — o re-skin é o M2d-b).
-3. **`/ui`** (só em dev) — mostra os 5 primitivos em todos os estados; o toggle de senha alterna; o botão "a carregar" mostra o spinner.
+3. **`/ui`** (só em dev; abrir com `npm start` em `http://localhost:4200/ui`, porque a imagem Docker usa o build de produção e não tem esta rota) — mostra os 5 primitivos em todos os estados; o toggle de senha alterna; o botão "a carregar" mostra o spinner.
 4. Sem erros na consola; sem 404 de fontes (Space Grotesk carrega).
 
 ---
