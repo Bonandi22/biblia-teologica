@@ -30,8 +30,6 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          # Diagnóstico temporário (#23): sai logo após uma execução.
-          show_full_output: true
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
@@ -48,6 +46,9 @@ jobs:
 
             Aponte só problemas reais, com arquivo e linha, explicando o efeito e a correção.
             Não comente estilo que o Prettier ou o compilador já cobrem.
+
+            Execute um comando por vez, sem `cd`, `;`, `&&`, pipes ou redirecionamentos, porque
+            comandos compostos são negados. Não use títulos com `#` no comentário.
 
             Use comentários inline nos problemas específicos. Ao terminar, publique SEMPRE um
             comentário geral com `gh pr comment`, mesmo sem problemas, com o resumo do que foi
