@@ -11,20 +11,36 @@ body {
 }
 
 body {
-  background: $parchment;
-  color: $near-black;
-  font-family: $fonte-serif;
+  background: $paper;
+  color: $ink;
+  font-family: $fonte-display;
+  font-size: $t-body;
+  line-height: 1.55;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
+a {
+  color: $acc;
+  text-decoration: none;
+
+  &:hover {
+    color: $acc-dk;
+  }
+}
+
 :focus-visible {
-  outline: 2px solid $brass;
+  outline: 2px solid $acc;
   outline-offset: 2px;
+}
+
+::selection {
+  background: $acc-tint;
 }
 
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+    animation: none !important;
   }
 }

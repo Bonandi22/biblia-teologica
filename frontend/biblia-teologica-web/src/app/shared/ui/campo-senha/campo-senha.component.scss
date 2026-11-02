@@ -1,0 +1,30 @@
+@use '../../../../styles/variables' as *;
+
+.senha__wrap {
+  position: relative;
+  display: block;
+}
+
+.senha__toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  padding: 4px 6px;
+  font-family: $fonte-mono;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $acc;
+  cursor: pointer;
+
+  &:hover {
+    color: $acc-dk;
+  }
+}
+
+::ng-deep .senha__wrap .bt-input {
+  padding-right: 84px;
+}

@@ -1,0 +1,20 @@
+@use '../../../../styles/variables' as *;
+
+.cartao {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: $sp-8;
+  background: $superficie;
+  border: 1px solid $hair;
+  border-radius: $raio;
+}
+
+.cartao__titulo {
+  margin: 0 0 $sp-6;
+  font-family: $fonte-display;
+  font-weight: 700;
+  font-size: $t-h3;
+  letter-spacing: $tracking-tight;
+  color: $ink;
+}
