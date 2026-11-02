@@ -6,9 +6,23 @@
   }
 }
 
+@mixin tablet {
+  @media (max-width: $bp-tablet) {
+    @content;
+  }
+}
+
 @mixin rotulo-mono {
   font-family: $fonte-mono;
   font-size: 0.68rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+@mixin eyebrow {
+  font-family: $fonte-mono;
+  font-size: $t-eyebrow;
+  letter-spacing: $tracking-eyebrow;
+  text-transform: uppercase;
+  color: $ink-mut;
 }

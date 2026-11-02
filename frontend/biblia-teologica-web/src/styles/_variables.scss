@@ -1,18 +1,55 @@
-// Paleta e tipografia — identidade "editorial teológico" (M2c)
-$ink: #20242e;
-$parchment: #faf8f4;
-$parchment-2: #f2ede3;
-$brass: #8c2f2f;
-$sage: #5c6b4f;
-$near-black: #20242e;
-$card: #ffffff;
-$line: rgba(32, 36, 46, 0.14);
+// Design system — M2d ("editorial moderno"). Valores mudam; nomes antigos ficam
+// como alias durante a transição M2d-b/-c.
 
+// ── Cor ──────────────────────────────
+$ink: #141416;
+$ink-mut: #6a6a70;
+$paper: #fdfdfc;
+$superficie: #ffffff;
+$hair: #e9e9e6;
+$acc: #a6371c;
+$acc-dk: #8a2e17;
+$acc-tint: rgba(166, 55, 28, 0.08);
+
+// Alias de transição — remover no fim do M2d.
+$parchment: $paper;
+$parchment-2: #f4f3ef;
+$card: $superficie;
+$line: $hair;
+$brass: $acc;
+$near-black: $ink;
+$sage: $ink-mut;
+
+// ── Tipografia ───────────────────────
+$fonte-display: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
 $fonte-serif: 'Source Serif 4', Georgia, serif;
-$fonte-display: 'Fraunces', Georgia, serif;
 $fonte-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-$bp-mobile: 900px;
+// ── Escala tipográfica ───────────────
+$t-eyebrow: 0.6875rem;
+$t-body: 1rem;
+$t-lead: 1.125rem;
+$t-h3: 1.375rem;
+$t-h2: clamp(1.6rem, 3vw, 2.2rem);
+$t-h1: clamp(2.2rem, 5vw, 3.4rem);
+$tracking-tight: -0.03em;
+$tracking-eyebrow: 0.14em;
 
+// ── Espaço / layout ──────────────────
+$sp-1: 4px;
+$sp-2: 8px;
+$sp-3: 12px;
+$sp-4: 16px;
+$sp-6: 24px;
+$sp-8: 32px;
+$sp-12: 48px;
+$sp-16: 64px;
+$largura-conteudo: 1080px;
+$largura-leitura: 42rem;
+$raio: 6px;
 $altura-header: 64px;
 $altura-header-mobile: 56px;
+
+// ── Breakpoints ──────────────────────
+$bp-mobile: 900px;
+$bp-tablet: 640px;
