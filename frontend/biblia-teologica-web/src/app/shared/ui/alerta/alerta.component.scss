@@ -1,0 +1,21 @@
+@use '../../../../styles/variables' as *;
+
+.alerta {
+  padding: $sp-3 $sp-4;
+  border-radius: $raio;
+  border: 1px solid;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.alerta--erro {
+  background: $acc-tint;
+  border-color: rgba(166, 55, 28, 0.28);
+  color: $acc-dk;
+}
+
+.alerta--sucesso {
+  background: #eef3ee;
+  border-color: #cddccd;
+  color: #37503a;
+}
