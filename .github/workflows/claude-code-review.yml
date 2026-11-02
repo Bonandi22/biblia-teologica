@@ -49,6 +49,9 @@ jobs:
             Aponte só problemas reais, com arquivo e linha, explicando o efeito e a correção.
             Não comente estilo que o Prettier ou o compilador já cobrem.
 
+            Execute um comando por vez, sem `cd`, `;`, `&&`, pipes ou redirecionamentos, porque
+            comandos compostos são negados. Não use títulos com `#` no comentário.
+
             Use comentários inline nos problemas específicos. Ao terminar, publique SEMPRE um
             comentário geral com `gh pr comment`, mesmo sem problemas, com o resumo do que foi
             analisado e o veredito. A primeira linha desse comentário tem de ser exatamente:
