@@ -38,6 +38,9 @@ public static partial class ReferenciaBiblica
         if (!m.Success)
             return false;
 
+        if (!IntervaloCoerente(m))
+            return false;
+
         var slug = Slug.From(m.Groups["livro"].Value);
         if (Apelidos.TryGetValue(slug, out var canonico))
             slug = canonico;
@@ -49,7 +52,24 @@ public static partial class ReferenciaBiblica
         return true;
     }
 
-    // Livro (pode começar com número) + capítulo, opcionalmente ":versículo", opcionalmente "–fim".
-    [GeneratedRegex(@"^(?<livro>.+?)\s+\d+(?::\d+)?(?:\s?[–-]\s?\d+)?$")]
+    // Rejeita intervalo invertido e capítulo final com ":" sem versículo inicial.
+    private static bool IntervaloCoerente(Match m)
+    {
+        if (!int.TryParse(m.Groups["c1"].Value, out var c1)) return false;
+        var temV1 = m.Groups["v1"].Success;
+        var temC2 = m.Groups["c2"].Success;
+        if (!m.Groups["f"].Success) return true;
+        if (!int.TryParse(m.Groups["f"].Value, out var f)) return false;
+
+        if (!temV1) return !temC2 && f > c1;                       // "36–37"
+        if (!int.TryParse(m.Groups["v1"].Value, out var v1)) return false;
+        if (!temC2) return f >= v1;                                // "2:22–25"
+        if (!int.TryParse(m.Groups["c2"].Value, out var c2)) return false;
+        return c2 > c1 || (c2 == c1 && f >= v1);                   // "52:13–53:12"
+    }
+
+    // Livro (pode começar com número) + cap[:vers] + "–fim" opcional (versículo, capítulo ou cap:vers).
+    // Só dígitos ASCII, sem zero à esquerda: capítulo e versículo 0 não existem.
+    [GeneratedRegex(@"^(?<livro>.+?)\s+(?<c1>[1-9][0-9]*)(?::(?<v1>[1-9][0-9]*))?(?:\s?[–-]\s?(?:(?<c2>[1-9][0-9]*):)?(?<f>[1-9][0-9]*))?$")]
     private static partial Regex Formato();
 }

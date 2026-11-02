@@ -17,6 +17,12 @@ public static partial class ValidadorConteudo
     public static IReadOnlyList<string> Validar(ConjuntoRegistros c, IReadOnlyList<LivroCanonico> livros)
     {
         var erros = new List<string>();
+        c = c with
+        {
+            Obras = c.Obras ?? Array.Empty<RegistroObra>(),
+            Livros = c.Livros ?? Array.Empty<RegistroLivro>(),
+            Estudos = c.Estudos ?? Array.Empty<RegistroEstudo>(),
+        };
         var ordemPorSlug = livros.ToDictionary(l => l.Slug, l => l.Ordem, StringComparer.Ordinal);
         var obraIds = c.Obras.Where(o => !string.IsNullOrWhiteSpace(o.Id)).Select(o => o.Id!).ToHashSet(StringComparer.Ordinal);
         var estudoSlugs = c.Estudos.Select(e => SlugDoArquivo(e.Arquivo)).ToHashSet(StringComparer.Ordinal);
@@ -54,6 +60,7 @@ public static partial class ValidadorConteudo
             Obrigatorio(ctx, ArquivoBibliografia, $"{p}.id", o.Id);
             Obrigatorio(ctx, ArquivoBibliografia, $"{p}.autor", o.Autor);
             Obrigatorio(ctx, ArquivoBibliografia, $"{p}.titulo", o.Titulo);
+            Obrigatorio(ctx, ArquivoBibliografia, $"{p}.detalhes", o.Detalhes);
 
             if (!string.IsNullOrWhiteSpace(o.Id) && !vistos.Add(o.Id))
                 ctx.Erro(ArquivoBibliografia, $"{p}.id", $"id de obra duplicado '{o.Id}'.");
@@ -73,6 +80,12 @@ public static partial class ValidadorConteudo
         Obrigatorio(ctx, a, "quem", l.Quem);
         Obrigatorio(ctx, a, "paraQuem", l.ParaQuem);
         Obrigatorio(ctx, a, "porque", l.Porque);
+        // Estes campos não têm lista de notas: aspas só passam com marcador [^n], que então fica sem nota (rejeitado).
+        foreach (var (campo, valor) in new[] { ("resumo", l.Resumo), ("quem", l.Quem), ("paraQuem", l.ParaQuem), ("porque", l.Porque) })
+        {
+            ExigeOrigem(ctx, a, campo, valor, false);
+            ValidarMarcadoresSemNota(valor, campo, a, ctx);
+        }
 
         if (!string.IsNullOrWhiteSpace(l.Livro))
         {
@@ -107,16 +120,15 @@ public static partial class ValidadorConteudo
             ctx.Erro(a, $"{caminho}.notas", "o bloco precisa de ao menos uma nota.");
 
         var textos = new List<string?> { b.Explicacao };
-        ValidarItens(b.Personagens, $"{caminho}.personagens", false, a, ctx, textos);
-        ValidarItens(b.Acontecimentos, $"{caminho}.acontecimentos", exigeAno, a, ctx, textos);
+        ValidarItens(b.Personagens, $"{caminho}.personagens", true, false, a, ctx, textos);
+        ValidarItens(b.Acontecimentos, $"{caminho}.acontecimentos", false, exigeAno, a, ctx, textos);
 
-        if (ComAspas(b.Explicacao) && !MarcadorRegex().IsMatch(b.Explicacao!))
-            ctx.Erro(a, $"{caminho}.explicacao", "texto com aspas precisa de nota [^n] no mesmo trecho.");
+        ExigeOrigem(ctx, a, $"{caminho}.explicacao", b.Explicacao, false);
 
         ValidarNotasEMarcadores(b.Notas, textos, $"{caminho}.notas", a, ctx);
     }
 
-    private static void ValidarItens(IReadOnlyList<RegistroItem> itens, string caminho, bool exigeAno, string a, Contexto ctx, List<string?> textos)
+    private static void ValidarItens(IReadOnlyList<RegistroItem> itens, string caminho, bool personagens, bool exigeAno, string a, Contexto ctx, List<string?> textos)
     {
         for (var i = 0; i < itens.Count; i++)
         {
@@ -124,6 +136,9 @@ public static partial class ValidadorConteudo
             var p = $"{caminho}[{i}]";
             textos.Add(it.Texto);
             textos.Add(it.SaberMais);
+
+            Obrigatorio(ctx, a, personagens ? $"{p}.nome" : $"{p}.quando", personagens ? it.Nome : it.Quando);
+            Obrigatorio(ctx, a, $"{p}.texto", it.Texto);
 
             if (exigeAno && it.Ano is null)
                 ctx.Erro(a, $"{p}.ano", "acontecimentos de contexto e mundo precisam de ano.");
@@ -147,7 +162,10 @@ public static partial class ValidadorConteudo
         Obrigatorio(ctx, a, $"{p}.anuncia", pf.Anuncia);
         ValidarReferenciaUnica(pf.Referencia, $"{p}.referencia", a, ctx);
         ValidarReferencias(pf.Cumprimento, $"{p}.cumprimento", a, ctx);
-        ValidarNotasEMarcadores(pf.Notas, null, $"{p}.notas", a, ctx);
+        var origemPf = !string.IsNullOrWhiteSpace(pf.Referencia) || pf.Cumprimento.Count > 0;
+        ExigeOrigem(ctx, a, $"{p}.anuncia", pf.Anuncia, origemPf);
+        ExigeOrigem(ctx, a, $"{p}.fatoHistorico", pf.FatoHistorico, origemPf);
+        ValidarNotasEMarcadores(pf.Notas, new List<string?> { pf.Anuncia, pf.FatoHistorico }, $"{p}.notas", a, ctx, exigeUso: false);
 
         if (string.IsNullOrWhiteSpace(pf.Categoria) || !Categorias.Contains(pf.Categoria))
         {
@@ -175,7 +193,8 @@ public static partial class ValidadorConteudo
 
         if (c.Notas.Count == 0)
             ctx.Erro(a, $"{p}.notas", "a citação precisa de ao menos uma nota, com a obra usada na conferência.");
-        ValidarNotasEMarcadores(c.Notas, null, $"{p}.notas", a, ctx);
+        ExigeOrigem(ctx, a, $"{p}.comentario", c.Comentario, !string.IsNullOrWhiteSpace(c.Trecho) || c.CitadoEm.Count > 0);
+        ValidarNotasEMarcadores(c.Notas, new List<string?> { c.Comentario }, $"{p}.notas", a, ctx, exigeUso: false);
     }
 
     // ---------- Estudos ----------
@@ -203,17 +222,37 @@ public static partial class ValidadorConteudo
         if (e.CorpoMarkdown is not null && HtmlBrutoRegex().IsMatch(e.CorpoMarkdown))
             ctx.Erro(a, "corpo", "o corpo não pode conter tag HTML bruta.");
 
+        var paragrafos = ParagrafosRegex().Split(e.CorpoMarkdown ?? string.Empty);
+        for (var i = 0; i < paragrafos.Length; i++)
+            ExigeOrigem(ctx, a, $"corpo (parágrafo {i + 1})", paragrafos[i], false);
+
         ValidarNotasEMarcadores(e.Notas, new List<string?> { e.CorpoMarkdown }, "notas", a, ctx);
     }
 
     // ---------- Comuns ----------
 
-    private static void ValidarNotasEMarcadores(IReadOnlyList<RegistroNota> notas, List<string?>? textos, string caminho, string a, Contexto ctx)
+    /// <summary>Regra 6: texto com aspas precisa de origem (marcador [^n] no próprio texto ou referência do item).</summary>
+    private static void ExigeOrigem(Contexto ctx, string a, string caminho, string? texto, bool temOrigemDoItem)
+    {
+        if (ComAspas(texto) && !temOrigemDoItem && !MarcadorRegex().IsMatch(texto!))
+            ctx.Erro(a, caminho, "texto com aspas precisa de origem: nota [^n] no mesmo trecho ou referência do item.");
+    }
+
+    private static void ValidarMarcadoresSemNota(string? texto, string caminho, string a, Contexto ctx)
+    {
+        if (texto is not null && MarcadorRegex().IsMatch(texto))
+            ctx.Erro(a, caminho, "este campo não tem lista de notas; remova o marcador [^n].");
+    }
+
+    private static void ValidarNotasEMarcadores(IReadOnlyList<RegistroNota> notas, List<string?>? textos, string caminho, string a, Contexto ctx, bool exigeUso = true)
     {
         var numeros = new HashSet<int>();
         for (var i = 0; i < notas.Count; i++)
         {
             var n = notas[i];
+            if (n.Numero < 1)
+                ctx.Erro(a, $"{caminho}[{i}].numero", "o número da nota deve ser >= 1.");
+            Obrigatorio(ctx, a, $"{caminho}[{i}].local", n.Local);
             if (!numeros.Add(n.Numero))
                 ctx.Erro(a, $"{caminho}[{i}].numero", $"número de nota duplicado: {n.Numero}.");
             if (string.IsNullOrWhiteSpace(n.Obra) || !ctx.ObraIds.Contains(n.Obra))
@@ -231,6 +270,8 @@ public static partial class ValidadorConteudo
 
         foreach (var num in usados.Where(u => !numeros.Contains(u)).OrderBy(u => u))
             ctx.Erro(a, caminho, $"o marcador [^{num}] não tem nota correspondente.");
+        if (!exigeUso)
+            return;
         foreach (var num in numeros.Where(n => !usados.Contains(n)).OrderBy(n => n))
             ctx.Erro(a, caminho, $"a nota {num} não é usada em nenhum marcador [^{num}].");
     }
@@ -279,7 +320,10 @@ public static partial class ValidadorConteudo
     private static bool ComAspas(string? texto) =>
         texto is not null && texto.AsSpan().IndexOfAny('"', '“', '«') >= 0;
 
-    [GeneratedRegex(@"\[\^(\d+)\]")]
+    [GeneratedRegex(@"\r?\n[ \t]*\r?\n")]
+    private static partial Regex ParagrafosRegex();
+
+    [GeneratedRegex(@"\[\^([0-9]+)\]")]
     private static partial Regex MarcadorRegex();
 
     // "<" imediatamente seguido de letra, "/" ou "!" (comentário); "a < b" não casa.

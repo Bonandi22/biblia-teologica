@@ -39,6 +39,31 @@ public class ReferenciaBiblicaTests
         slug.Should().BeEmpty();
     }
 
+    [Theory]
+    [InlineData("Isaías 52:13–53:12")]
+    [InlineData("Isaías 52:13-53:12")]
+    public void TentarLer_Aceita_QuandoIntervaloEntreCapitulos(string texto)
+    {
+        ReferenciaBiblica.TentarLer(texto, out var slug).Should().BeTrue();
+        slug.Should().Be("isaias");
+    }
+
+    [Theory]
+    [InlineData("Isaías 0:1")]
+    [InlineData("Isaías 1:0")]
+    [InlineData("Isaías 0")]
+    [InlineData("Isaías 37–36")]
+    [InlineData("Isaías 7:14–10")]
+    [InlineData("Isaías 53:12–52:13")]
+    [InlineData("Isaías 52–53:12")]
+    [InlineData("Isaías ٧:١٤")]
+    [InlineData("Isaías ７:１４")]
+    public void TentarLer_RetornaFalso_QuandoCapituloZeroIntervaloInvertidoOuDigitoNaoAscii(string texto)
+    {
+        ReferenciaBiblica.TentarLer(texto, out var slug).Should().BeFalse();
+        slug.Should().BeEmpty();
+    }
+
     [Fact]
     public void TentarLer_RetornaFalso_QuandoTextoNulo()
     {

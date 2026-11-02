@@ -26,15 +26,19 @@ public sealed class RegistroItem
     public string? Texto { get; set; }
     public string? SaberMais { get; set; }
     public string? Estudo { get; set; }
-    public List<string> Referencias { get; set; } = new();
+    private List<string> _Referencias = new();
+    public List<string> Referencias { get => _Referencias; set => _Referencias = value ?? new(); }
 }
 
 public sealed class RegistroBloco
 {
     public string? Explicacao { get; set; }
-    public List<RegistroItem> Personagens { get; set; } = new();
-    public List<RegistroItem> Acontecimentos { get; set; } = new();
-    public List<RegistroNota> Notas { get; set; } = new();
+    private List<RegistroItem> _Personagens = new();
+    public List<RegistroItem> Personagens { get => _Personagens; set => _Personagens = value ?? new(); }
+    private List<RegistroItem> _Acontecimentos = new();
+    public List<RegistroItem> Acontecimentos { get => _Acontecimentos; set => _Acontecimentos = value ?? new(); }
+    private List<RegistroNota> _Notas = new();
+    public List<RegistroNota> Notas { get => _Notas; set => _Notas = value ?? new(); }
 }
 
 public sealed class RegistroProfecia
@@ -43,17 +47,21 @@ public sealed class RegistroProfecia
     public string? Anuncia { get; set; }
     /// <summary>cumpridaEmCristo | cumpridaNaHistoria | promessaAguardada</summary>
     public string? Categoria { get; set; }
-    public List<string> Cumprimento { get; set; } = new();
+    private List<string> _Cumprimento = new();
+    public List<string> Cumprimento { get => _Cumprimento; set => _Cumprimento = value ?? new(); }
     public string? FatoHistorico { get; set; }
-    public List<RegistroNota> Notas { get; set; } = new();
+    private List<RegistroNota> _Notas = new();
+    public List<RegistroNota> Notas { get => _Notas; set => _Notas = value ?? new(); }
 }
 
 public sealed class RegistroCitacao
 {
     public string? Trecho { get; set; }
-    public List<string> CitadoEm { get; set; } = new();
+    private List<string> _CitadoEm = new();
+    public List<string> CitadoEm { get => _CitadoEm; set => _CitadoEm = value ?? new(); }
     public string? Comentario { get; set; }
-    public List<RegistroNota> Notas { get; set; } = new();
+    private List<RegistroNota> _Notas = new();
+    public List<RegistroNota> Notas { get => _Notas; set => _Notas = value ?? new(); }
 }
 
 public sealed class RegistroLivro
@@ -70,8 +78,10 @@ public sealed class RegistroLivro
     public RegistroBloco? Panorama { get; set; }
     public RegistroBloco? Contexto { get; set; }
     public RegistroBloco? Mundo { get; set; }
-    public List<RegistroProfecia> Profecias { get; set; } = new();
-    public List<RegistroCitacao> Citacoes { get; set; } = new();
+    private List<RegistroProfecia> _Profecias = new();
+    public List<RegistroProfecia> Profecias { get => _Profecias; set => _Profecias = value ?? new(); }
+    private List<RegistroCitacao> _Citacoes = new();
+    public List<RegistroCitacao> Citacoes { get => _Citacoes; set => _Citacoes = value ?? new(); }
 }
 
 public sealed class RegistroEstudo
@@ -81,9 +91,12 @@ public sealed class RegistroEstudo
     public string Estado { get; set; } = string.Empty;
     public string? Titulo { get; set; }
     public string? Resumo { get; set; }
-    public List<string> Livros { get; set; } = new();
-    public List<string> Relacionados { get; set; } = new();
-    public List<RegistroNota> Notas { get; set; } = new();
+    private List<string> _Livros = new();
+    public List<string> Livros { get => _Livros; set => _Livros = value ?? new(); }
+    private List<string> _Relacionados = new();
+    public List<string> Relacionados { get => _Relacionados; set => _Relacionados = value ?? new(); }
+    private List<RegistroNota> _Notas = new();
+    public List<RegistroNota> Notas { get => _Notas; set => _Notas = value ?? new(); }
     public string? CorpoMarkdown { get; set; }
 }
 

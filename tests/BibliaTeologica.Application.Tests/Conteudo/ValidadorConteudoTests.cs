@@ -17,7 +17,7 @@ public class ValidadorConteudoTests
     private const string ArqEstudo = "content/estudos/senaqueribe.md";
 
     private static RegistroObra Obra(string id = "arc") =>
-        new() { Id = id, Autor = "SBB", Titulo = "Bíblia ARC", Url = null };
+        new() { Id = id, Autor = "SBB", Titulo = "Bíblia ARC", Detalhes = "d", Url = null };
 
     private static RegistroNota Nota(int n = 1, string obra = "arc") =>
         new() { Numero = n, Obra = obra, Local = "Isaías 36:1" };
@@ -112,7 +112,7 @@ public class ValidadorConteudoTests
     {
         var l = LivroValido();
         l.Contexto!.Acontecimentos.Add(new RegistroItem
-            { Ano = -701, Texto = "x.[^1]", Referencias = { "Isaías" } });
+            { Quando = "q", Ano = -701, Texto = "x.[^1]", Referencias = { "Isaías" } });
 
         Validar(Conjunto(l)).Should().Contain(e => e.Contains(ArqLivro) && e.Contains("referencias"));
     }
@@ -122,7 +122,7 @@ public class ValidadorConteudoTests
     {
         var l = LivroValido();
         l.Contexto!.Acontecimentos.Add(new RegistroItem
-            { Ano = -701, Texto = "x.[^1]", Referencias = { "Isaías 36-37", "1 Pedro 2:22–25" } });
+            { Quando = "q", Ano = -701, Texto = "x.[^1]", Referencias = { "Isaías 36-37", "1 Pedro 2:22–25" } });
 
         Validar(Conjunto(l)).Should().BeEmpty();
     }
@@ -132,7 +132,7 @@ public class ValidadorConteudoTests
     {
         var l = LivroValido();
         l.Contexto!.Acontecimentos.Add(new RegistroItem
-            { Ano = -701, Texto = "x.[^1]", Referencias = { "Obadias 1:1" } });
+            { Quando = "q", Ano = -701, Texto = "x.[^1]", Referencias = { "Obadias 1:1" } });
 
         Validar(Conjunto(l)).Should().Contain(e => e.Contains("Obadias 1:1"));
     }
@@ -310,7 +310,7 @@ public class ValidadorConteudoTests
     public void Validar_RetornaErroComArquivo_QuandoItemApontaParaEstudoNaoPublicado()
     {
         var l = LivroValido();
-        l.Contexto!.Acontecimentos.Add(new RegistroItem { Ano = -701, Texto = "x.[^1]", Estudo = "nao-existe" });
+        l.Contexto!.Acontecimentos.Add(new RegistroItem { Quando = "q", Ano = -701, Texto = "x.[^1]", Estudo = "nao-existe" });
 
         Validar(Conjunto(l, EstudoValido())).Should().Contain(e => e.Contains(ArqLivro) && e.Contains("nao-existe"));
     }
@@ -319,7 +319,7 @@ public class ValidadorConteudoTests
     public void Validar_Aceita_QuandoItemApontaParaEstudoPublicado()
     {
         var l = LivroValido();
-        l.Contexto!.Acontecimentos.Add(new RegistroItem { Ano = -701, Texto = "x.[^1]", Estudo = "senaqueribe" });
+        l.Contexto!.Acontecimentos.Add(new RegistroItem { Quando = "q", Ano = -701, Texto = "x.[^1]", Estudo = "senaqueribe" });
 
         Validar(Conjunto(l, EstudoValido())).Should().BeEmpty();
     }
@@ -412,6 +412,183 @@ public class ValidadorConteudoTests
             { Trecho = "Isaías 40:3", CitadoEm = { "Mateus 3:3" }, Notas = { Nota() } });
 
         Validar(Conjunto(l)).Should().BeEmpty();
+    }
+
+    // Regra 6 ampliada
+    [Theory]
+    [InlineData("resumo")]
+    [InlineData("quem")]
+    [InlineData("paraQuem")]
+    [InlineData("porque")]
+    public void Validar_RetornaErro_QuandoCamposDoLivroTemAspas(string campo)
+    {
+        var l = LivroValido();
+        const string comAspas = "Diz \"fala\" aqui.";
+        switch (campo)
+        {
+            case "resumo": l.Resumo = comAspas; break;
+            case "quem": l.Quem = comAspas; break;
+            case "paraQuem": l.ParaQuem = comAspas; break;
+            default: l.Porque = comAspas; break;
+        }
+
+        Validar(Conjunto(l)).Should().Contain(e => e.Contains(ArqLivro) && e.Contains(campo) && e.Contains("aspas"));
+    }
+
+    [Fact]
+    public void Validar_RetornaErro_QuandoAnunciaOuFatoHistoricoTemAspasSemOrigem()
+    {
+        var l = LivroValido();
+        l.Profecias.Add(new RegistroProfecia
+        {
+            Referencia = null, Anuncia = "Diz \"fala\".", Categoria = "cumpridaNaHistoria",
+            FatoHistorico = "Foi \"assim\".",
+        });
+
+        var erros = Validar(Conjunto(l));
+
+        erros.Should().Contain(e => e.Contains("profecias[0].anuncia") && e.Contains("aspas"));
+        erros.Should().Contain(e => e.Contains("profecias[0].fatoHistorico") && e.Contains("aspas"));
+    }
+
+    [Fact]
+    public void Validar_Aceita_QuandoAspasEmAnunciaComReferenciaDaProfecia()
+    {
+        var l = LivroValido();
+        l.Profecias.Add(new RegistroProfecia
+        {
+            Referencia = "Isaías 7:14", Anuncia = "Diz \"virgem\".", Categoria = "cumpridaNaHistoria",
+            FatoHistorico = "Foi \"assim\".",
+        });
+
+        Validar(Conjunto(l)).Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Validar_RetornaErro_QuandoComentarioDaCitacaoTemAspasSemOrigem()
+    {
+        var l = LivroValido();
+        l.Citacoes.Add(new RegistroCitacao { Trecho = null, Comentario = "Diz \"x\".", Notas = { Nota() } });
+
+        Validar(Conjunto(l)).Should().Contain(e => e.Contains("citacoes[0].comentario") && e.Contains("aspas"));
+    }
+
+    [Fact]
+    public void Validar_Aceita_QuandoComentarioDaCitacaoTemAspasComMarcadorENota()
+    {
+        var l = LivroValido();
+        l.Citacoes.Add(new RegistroCitacao
+        {
+            Trecho = "Isaías 40:3", CitadoEm = { "Mateus 3:3" }, Comentario = "Diz \"x\".[^1]", Notas = { Nota() },
+        });
+
+        Validar(Conjunto(l)).Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Validar_RetornaErro_QuandoParagrafoDoEstudoTemAspasSemMarcador()
+    {
+        var s = EstudoValido();
+        s.CorpoMarkdown = "Primeiro com fonte.[^1]\n\nSegundo diz \"algo\" sem fonte.";
+
+        Validar(Conjunto(estudo: s)).Should().Contain(e => e.Contains(ArqEstudo) && e.Contains("parágrafo 2") && e.Contains("aspas"));
+    }
+
+    [Fact]
+    public void Validar_Aceita_QuandoParagrafoDoEstudoTemAspasComMarcador()
+    {
+        var s = EstudoValido();
+        s.CorpoMarkdown = "Primeiro diz \"algo\".[^1]\n\nSegundo sem aspas.";
+
+        Validar(Conjunto(estudo: s)).Should().BeEmpty();
+    }
+
+    // Regra 1 ampliada
+    [Fact]
+    public void Validar_RetornaErroComArquivo_QuandoPersonagemSemNomeOuTexto()
+    {
+        var l = LivroValido();
+        l.Panorama!.Personagens.Add(new RegistroItem());
+
+        var erros = Validar(Conjunto(l));
+
+        erros.Should().Contain(e => e.Contains(ArqLivro) && e.Contains("panorama.personagens[0].nome"));
+        erros.Should().Contain(e => e.Contains("panorama.personagens[0].texto"));
+    }
+
+    [Fact]
+    public void Validar_RetornaErroComArquivo_QuandoAcontecimentoSemQuando()
+    {
+        var l = LivroValido();
+        l.Panorama!.Acontecimentos.Add(new RegistroItem { Texto = "x." });
+
+        Validar(Conjunto(l)).Should().Contain(e => e.Contains(ArqLivro) && e.Contains("panorama.acontecimentos[0].quando"));
+    }
+
+    [Fact]
+    public void Validar_RetornaErroComArquivo_QuandoNotaSemLocalOuNumeroInvalido()
+    {
+        var l = LivroValido();
+        l.Contexto!.Notas[0].Local = null;
+        l.Contexto.Notas[0].Numero = 0;
+
+        var erros = Validar(Conjunto(l));
+
+        erros.Should().Contain(e => e.Contains(ArqLivro) && e.Contains("contexto.notas[0].local"));
+        erros.Should().Contain(e => e.Contains(ArqLivro) && e.Contains("contexto.notas[0].numero"));
+    }
+
+    [Fact]
+    public void Validar_RetornaErroComArquivo_QuandoObraSemDetalhes()
+    {
+        var o = Obra();
+        o.Detalhes = null;
+
+        Validar(Conjunto(obras: o)).Should().Contain(e => e.Contains("bibliografia.yaml") && e.Contains("detalhes"));
+    }
+
+    // Regra 4 em profecias e citações
+    [Fact]
+    public void Validar_RetornaErroComArquivo_QuandoMarcadorEmProfeciaOuCitacaoSemNota()
+    {
+        var l = LivroValido();
+        l.Profecias.Add(new RegistroProfecia
+        {
+            Referencia = "Isaías 7:14", Anuncia = "a.[^3]", Categoria = "cumpridaNaHistoria", FatoHistorico = "f.[^4]",
+        });
+        l.Citacoes.Add(new RegistroCitacao
+            { Trecho = "Isaías 40:3", CitadoEm = { "Mateus 3:3" }, Comentario = "c.[^5]", Notas = { Nota() } });
+
+        var erros = Validar(Conjunto(l));
+
+        erros.Should().Contain(e => e.Contains("profecias[0].notas") && e.Contains("[^3]"));
+        erros.Should().Contain(e => e.Contains("profecias[0].notas") && e.Contains("[^4]"));
+        erros.Should().Contain(e => e.Contains("citacoes[0].notas") && e.Contains("[^5]"));
+    }
+
+    // Coleções nulas vindas do YAML
+    [Fact]
+    public void Validar_NaoLanca_QuandoColecoesNulas()
+    {
+        var l = LivroValido();
+        l.Panorama!.Personagens = null!;
+        l.Panorama.Acontecimentos = null!;
+        l.Panorama.Notas = null!;
+        l.Profecias = null!;
+        l.Citacoes = null!;
+        var s = EstudoValido();
+        s.Livros = null!;
+        s.Relacionados = null!;
+        s.Notas = null!;
+        var item = new RegistroItem { Nome = "n", Texto = "t", Referencias = null! };
+        l.Contexto!.Personagens.Add(item);
+        l.Profecias = new List<RegistroProfecia>
+            { new() { Referencia = "Isaías 7:14", Anuncia = "a", Categoria = "cumpridaEmCristo", Cumprimento = null!, Notas = null! } };
+
+        var act = () => Validar(Conjunto(l, s));
+
+        act.Should().NotThrow();
+        act().Should().Contain(e => e.Contains(ArqEstudo) && e.Contains("livros"));
     }
 
     [Fact]
