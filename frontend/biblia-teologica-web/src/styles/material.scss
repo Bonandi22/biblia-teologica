@@ -1,22 +1,23 @@
-// Tema do Angular Material (Material 3), isolado do design system "pergaminho".
+// Tema do Angular Material (M3), isolado do design system.
 // Carregado no angular.json DEPOIS de src/styles.scss. Só define as CSS vars
-// `--mat-sys-*` usadas pelos componentes `.mat-*`; NÃO toca no `body`, no
-// background nem na tipografia do fichário público (essas ficam em styles.scss).
+// `--mat-sys-*` usadas pelos componentes `.mat-*`; NÃO toca no body nem na
+// tipografia do site público.
+//
+// O Material fica só no /admin (M2b). Primário quente para não destoar do
+// sotaque terracota; o match fino fica para quando o M2b construir o /admin.
 @use '@angular/material' as mat;
 
 html {
   @include mat.theme(
     (
       color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
+        primary: mat.$orange-palette,
+        tertiary: mat.$red-palette,
       ),
-      typography: Roboto,
+      typography: 'Space Grotesk',
       density: 0,
     )
   );
 
-  // Componentes Material assumem uma stack neutra; o `color-scheme` claro evita
-  // que overlays/inputs herdem o esquema escuro do sistema.
   color-scheme: light;
 }
