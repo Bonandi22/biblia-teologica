@@ -32,6 +32,15 @@ controller (Api) -> feature lazy-loaded (Angular).
   navegação/rotas para conteúdo reservado a membros, sem o implementar. ✅ entregue 2026-08-31.
   Spec: docs/superpowers/specs/2026-08-31-m2c-casca-portal-design.md
   Plano: docs/superpowers/plans/2026-08-31-m2c-casca-portal.md
+- M2d — Repaginação visual (design pass). Direção "editorial moderno": organização
+  "portal", Space Grotesk + Source Serif 4 + IBM Plex Mono, sotaque terracota #A6371C,
+  off-white quase-monocromático. Angular Material sai das páginas públicas (primitivos
+  à mão em src/app/shared/ui/) e fica só no /admin. Só frontend. Entregue em 3 PRs:
+  - M2d-a — fundações + design system (tokens, tipografia, primitivos, re-tema do
+    Material, .gitattributes). Spec: docs/superpowers/specs/2026-08-31-m2d-a-fundacoes-design.md
+    Plano: docs/superpowers/plans/2026-08-31-m2d-a-fundacoes.md
+  - M2d-b — páginas públicas re-skin (auth, conta, header/footer, em-breve, 404, titles).
+  - M2d-c — homepage "portal" + re-skin do fichário.
 - M3 — Estudos (público + admin), corpo em Markdown, sanitização (DOMPurify).
 - M3.5 — Vídeos.
 - M4 — Confirmação de e-mail no registo + recuperação de password ("esqueci-me") + captura de newsletter.
