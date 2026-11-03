@@ -17,12 +17,16 @@ export function segmentarNotas(texto: string): SegmentoTexto[] {
   return segmentos;
 }
 
+export function idNota(numero: number, prefixo = ''): string {
+  return prefixo ? `nota-${prefixo}-${numero}` : `nota-${numero}`;
+}
+
 @Component({
   selector: 'bt-texto-notas',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `@for (s of segmentos(); track $index) {@if ('nota' in s) {<sup class="nota"><a
-            [href]="'#nota-' + s.nota"
+            [href]="'#' + id(s.nota)"
             [attr.aria-label]="'Nota ' + s.nota"
             (click)="ir($event, s.nota)"
             >{{ s.nota }}</a></sup>} @else {{{ s.texto }}}}`,
@@ -30,10 +34,16 @@ export function segmentarNotas(texto: string): SegmentoTexto[] {
 })
 export class TextoNotasComponent {
   readonly texto = input.required<string>();
+  /** Distingue a numeração de blocos diferentes na mesma página: id `nota-<prefixo>-<n>`. */
+  readonly prefixo = input<string>('');
   protected readonly segmentos = computed(() => segmentarNotas(this.texto()));
+
+  protected id(numero: number): string {
+    return idNota(numero, this.prefixo());
+  }
 
   protected ir(evento: Event, numero: number): void {
     evento.preventDefault();
-    document.getElementById(`nota-${numero}`)?.scrollIntoView({ block: 'center' });
+    document.getElementById(this.id(numero))?.scrollIntoView({ block: 'center' });
   }
 }

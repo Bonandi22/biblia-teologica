@@ -11,12 +11,12 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="bloco">
-      <p class="bloco__explicacao"><bt-texto-notas [texto]="bloco().explicacao" /></p>
+      <p class="bloco__explicacao"><bt-texto-notas [texto]="bloco().explicacao" [prefixo]="prefixo()" /></p>
       @if (bloco().personagens.length > 0) {
         <section class="bloco__secao">
           <h3 class="bloco__titulo">{{ rotuloPersonagens() }}</h3>
           @for (p of bloco().personagens; track $index) {
-            <bt-item-estudo [item]="p" />
+            <bt-item-estudo [item]="p" [prefixo]="prefixo()" />
           }
         </section>
       }
@@ -24,17 +24,18 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
         <section class="bloco__secao">
           <h3 class="bloco__titulo">{{ rotuloAcontecimentos() }}</h3>
           @for (a of bloco().acontecimentos; track $index) {
-            <bt-item-estudo [item]="a.item" [quando]="a.quando" />
+            <bt-item-estudo [item]="a.item" [quando]="a.quando" [prefixo]="prefixo()" />
           }
         </section>
       }
-      <bt-bibliografia [notas]="bloco().notas" />
+      <bt-bibliografia [notas]="bloco().notas" [prefixo]="prefixo()" />
     </div>
   `,
   styleUrl: './bloco-conteudo.component.scss',
 })
 export class BlocoConteudoComponent {
   readonly bloco = input.required<Bloco>();
+  readonly prefixo = input<string>('');
   readonly rotuloPersonagens = input<string>('Personagens');
   readonly rotuloAcontecimentos = input<string>('Acontecimentos');
 }

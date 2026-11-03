@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { TextoNotasComponent, segmentarNotas } from './texto-notas.component';
+import { TextoNotasComponent, idNota, segmentarNotas } from './texto-notas.component';
 
 describe('segmentarNotas', () => {
   it('reconhece marcador no início do texto', () => {
@@ -65,5 +65,37 @@ describe('TextoNotasComponent', () => {
     expect(el.querySelector('b')).toBeNull();
     expect(el.querySelector('img')).toBeNull();
     expect(el.textContent).toContain('<b>negrito</b>');
+  });
+});
+
+@Component({
+  standalone: true,
+  imports: [TextoNotasComponent],
+  template: `<bt-texto-notas texto="A[^1]" prefixo="a" /><bt-texto-notas texto="B[^1]" prefixo="b" />`,
+})
+class DoisPrefixosComponent {}
+
+describe('TextoNotasComponent com prefixo', () => {
+  it('gera hrefs distintos e rola para a nota da própria instância', () => {
+    const alvos = ['a', 'b'].map((p) => {
+      const li = document.createElement('li');
+      li.id = `nota-${p}-1`;
+      li.scrollIntoView = vi.fn();
+      document.body.appendChild(li);
+      return li;
+    });
+    const fixture = TestBed.createComponent(DoisPrefixosComponent);
+    fixture.detectChanges();
+    const links = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('sup a')) as HTMLElement[];
+    expect(links.map((l) => l.getAttribute('href'))).toEqual(['#nota-a-1', '#nota-b-1']);
+    links[1].click();
+    expect(alvos[1].scrollIntoView).toHaveBeenCalled();
+    expect(alvos[0].scrollIntoView).not.toHaveBeenCalled();
+    alvos.forEach((a) => a.remove());
+  });
+
+  it('mantém nota-n quando não há prefixo', () => {
+    expect(idNota(4)).toBe('nota-4');
+    expect(idNota(4, 'x')).toBe('nota-x-4');
   });
 });

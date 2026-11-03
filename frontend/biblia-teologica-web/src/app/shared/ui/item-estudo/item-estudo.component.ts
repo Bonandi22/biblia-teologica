@@ -16,14 +16,14 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
       @if (item().nome) {
         <h4 class="item__nome">{{ item().nome }}</h4>
       }
-      <p class="item__texto"><bt-texto-notas [texto]="item().texto" /></p>
+      <p class="item__texto"><bt-texto-notas [texto]="item().texto" [prefixo]="prefixo()" /></p>
       @if (item().referencias.length > 0) {
         <p class="item__refs">{{ item().referencias.join('; ') }}</p>
       }
       @if (item().saberMais; as mais) {
         <details class="item__mais">
           <summary>Saber mais</summary>
-          <p><bt-texto-notas [texto]="mais" /></p>
+          <p><bt-texto-notas [texto]="mais" [prefixo]="prefixo()" /></p>
         </details>
       }
       @if (item().estudoSlug; as slug) {
@@ -36,4 +36,5 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
 export class ItemEstudoComponent {
   readonly item = input.required<Item>();
   readonly quando = input<string>('');
+  readonly prefixo = input<string>('');
 }

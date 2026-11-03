@@ -43,3 +43,29 @@ describe('BlocoConteudoComponent', () => {
     expect(el.textContent).toContain('701 a.C.');
   });
 });
+
+@Component({
+  standalone: true,
+  imports: [BlocoConteudoComponent],
+  template: `<bt-bloco-conteudo [bloco]="bloco" prefixo="pro-1" />`,
+})
+class BlocoPrefixadoComponent {
+  readonly bloco: Bloco = {
+    explicacao: 'Intro[^1]',
+    personagens: [{ ...item, texto: 'Texto[^1]', saberMais: 'Mais[^1]' }],
+    acontecimentos: [],
+    notas: [{ numero: 1, citacao: 'Obra', url: null }],
+  };
+}
+
+describe('BlocoConteudoComponent com prefixo', () => {
+  it('repassa o prefixo ao texto, aos itens e à bibliografia', () => {
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+    const fixture = TestBed.createComponent(BlocoPrefixadoComponent);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    const hrefs = Array.from(el.querySelectorAll('sup a')).map((a) => a.getAttribute('href'));
+    expect(hrefs).toEqual(['#nota-pro-1-1', '#nota-pro-1-1', '#nota-pro-1-1']);
+    expect(el.querySelector('li#nota-pro-1-1')).not.toBeNull();
+  });
+});

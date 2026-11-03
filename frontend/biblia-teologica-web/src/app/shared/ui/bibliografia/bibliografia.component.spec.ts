@@ -47,3 +47,23 @@ describe('BibliografiaComponent', () => {
     expect(links[0].getAttribute('href')).toBe('https://exemplo.org/x');
   });
 });
+
+@Component({
+  standalone: true,
+  imports: [BibliografiaComponent],
+  template: `<bt-bibliografia [notas]="notas" prefixo="p1" /><bt-bibliografia [notas]="notas" prefixo="p2" />`,
+})
+class DoisBlocosComponent {
+  readonly notas: Nota[] = [{ numero: 1, citacao: 'Obra', url: null }];
+}
+
+describe('BibliografiaComponent com prefixo', () => {
+  it('gera ids distintos para a mesma nota em blocos diferentes', () => {
+    const fixture = TestBed.createComponent(DoisBlocosComponent);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('#nota-p1-1')).not.toBeNull();
+    expect(el.querySelector('#nota-p2-1')).not.toBeNull();
+    expect(el.querySelector('#nota-1')).toBeNull();
+  });
+});
