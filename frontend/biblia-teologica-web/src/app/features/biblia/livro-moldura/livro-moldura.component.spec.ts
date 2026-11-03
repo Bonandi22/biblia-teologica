@@ -65,6 +65,13 @@ describe('LivroMolduraComponent', () => {
     expect(e.querySelector('.moldura__divisao')?.textContent).toContain('Profetas maiores');
   });
 
+  it('no celular, o controle da divisão diz o que faz', async () => {
+    const e = el(await montar());
+    expect(e.querySelector('.moldura__secao-botao')?.textContent?.trim()).toBe(
+      'Outros livros de Profetas maiores',
+    );
+  });
+
   it('liga cada capítulo à ARC em nova aba', async () => {
     const e = el(await montar());
     const capitulos = Array.from(e.querySelectorAll<HTMLAnchorElement>('.moldura__capitulos a'));

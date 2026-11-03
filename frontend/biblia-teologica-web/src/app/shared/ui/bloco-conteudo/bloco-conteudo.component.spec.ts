@@ -71,6 +71,20 @@ describe('BlocoConteudoComponent', () => {
     expect(colunaDe(el.querySelector('.bloco__restantes')!)).toContain('Obra A');
   });
 
+  it('mostra o título da coluna só na primeira linha que tem coluna', () => {
+    const el = criar({
+      explicacao: 'Texto sem nota.',
+      personagens: [
+        { ...item, texto: 'Primeiro.', referencias: ['Isaías 1:1'] },
+        { ...item, texto: 'Segundo.[^1]' },
+      ],
+      notas: [notaA],
+    });
+    const titulos = Array.from(el.querySelectorAll('.linha__titulo')).map((t) => t.textContent!.trim());
+    expect(titulos).toEqual(['Referências']);
+    expect(el.querySelector('bt-item-estudo .linha__titulo')).not.toBeNull();
+  });
+
   it('mostra uma só vez a nota chamada em duas linhas', () => {
     const el = criar({
       explicacao: 'Texto.[^1]',

@@ -19,12 +19,15 @@ $fonte-corrente: 'Alegreya Sans SC', 'Gill Sans', 'Trebuchet MS', sans-serif;
 // ── Escala tipográfica ───────────────
 $t-corrente: 1.0625rem;
 $t-nota: 0.9375rem;
-$t-body: 1.0625rem;
+$t-body: 1.1875rem;
 $t-lead: 1.25rem;
 $t-h3: 1.375rem;
 $t-h2: clamp(1.6rem, 3vw, 2.1rem);
-$t-h1: clamp(3.25rem, 8vw, 7rem);
-$entrelinha-texto: 1.65;
+$t-h1: clamp(3.25rem, 8vw, 7rem); // só o nome do livro
+$t-h1-pagina: clamp(2.75rem, 6vw, 6rem);
+$t-h1-apoio: clamp(2.25rem, 4vw, 4rem);
+$recuo-otico: -0.03em; // as hastes do título grande alinham com o texto abaixo
+$entrelinha-texto: 1.6;
 
 // ── Espaço / layout ──────────────────
 $sp-1: 4px;
@@ -36,7 +39,7 @@ $sp-8: 32px;
 $sp-12: 48px;
 $sp-16: 64px;
 $coluna-divisao: 12.5rem;
-$coluna-leitura: 42rem;
+$coluna-leitura: 40rem;
 $coluna-referencias-min: 14rem;
 $vao-colunas: clamp(#{$sp-8}, 4vw, #{$sp-16});
 $largura-folha: 90rem;

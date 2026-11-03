@@ -16,7 +16,7 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
         class="bloco__explicacao"
         [notas]="distribuicao().explicacao"
         [prefixo]="prefixo()"
-        [titulo]="distribuicao().explicacao.length > 0 ? 'Referências' : null"
+        [titulo]="distribuicao().tituloEm === 'explicacao' ? 'Referências' : null"
       >
         <p class="bloco__texto"><bt-texto-notas [texto]="bloco().explicacao" [prefixo]="prefixo()" /></p>
       </bt-linha-estudo>
@@ -24,7 +24,12 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
         <section class="bloco__secao">
           <h3 class="bloco__titulo">{{ rotuloPersonagens() }}</h3>
           @for (p of bloco().personagens; track $index) {
-            <bt-item-estudo [item]="p" [prefixo]="prefixo()" [notas]="distribuicao().personagens[$index]" />
+            <bt-item-estudo
+              [item]="p"
+              [prefixo]="prefixo()"
+              [notas]="distribuicao().personagens[$index]"
+              [tituloColuna]="distribuicao().tituloEm === p ? 'Referências' : null"
+            />
           }
         </section>
       }
@@ -37,6 +42,7 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
               [quando]="a.quando"
               [prefixo]="prefixo()"
               [notas]="distribuicao().acontecimentos[$index]"
+              [tituloColuna]="distribuicao().tituloEm === a.item ? 'Referências' : null"
             />
           }
         </section>
@@ -51,6 +57,8 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
 export class BlocoConteudoComponent {
   readonly bloco = input.required<Bloco>();
   readonly prefixo = input<string>('');
+  /** Falso quando a aba já mostrou o título da coluna antes do bloco. */
+  readonly comTituloColuna = input<boolean>(true);
   readonly rotuloPersonagens = input<string>('Personagens');
   readonly rotuloAcontecimentos = input<string>('Acontecimentos');
 
@@ -68,6 +76,17 @@ export class BlocoConteudoComponent {
     const personagens = b.personagens.map(doItem);
     const acontecimentos = b.acontecimentos.map((a) => doItem(a.item));
     const restantes = b.notas.filter((n) => !usadas.has(n.numero));
-    return { explicacao, personagens, acontecimentos, restantes };
+    // O título da coluna aparece uma vez: na primeira linha que tem coluna.
+    const itens = [
+      ...b.personagens.map((i, n) => ({ i, notas: personagens[n] })),
+      ...b.acontecimentos.map((a, n) => ({ i: a.item, notas: acontecimentos[n] })),
+    ];
+    const primeiroItem = itens.find((x) => x.notas.length > 0 || x.i.referencias.length > 0)?.i ?? null;
+    const tituloEm: Item | 'explicacao' | null = !this.comTituloColuna()
+      ? null
+      : explicacao.length > 0
+        ? 'explicacao'
+        : primeiroItem;
+    return { explicacao, personagens, acontecimentos, restantes, tituloEm };
   });
 }

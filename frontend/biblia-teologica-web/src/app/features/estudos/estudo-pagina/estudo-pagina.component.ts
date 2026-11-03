@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  computed,
   effect,
   inject,
   signal,
@@ -17,7 +18,9 @@ import type { Estudo } from '../../../core/models/conteudo.model';
 import { ConteudoService } from '../../../core/services/conteudo.service';
 import { LivroStore } from '../../../core/services/livro.store';
 import { LinhaEstudoComponent } from '../../../shared/ui/linha-estudo/linha-estudo.component';
+import { blocosMarkdown } from '../../../shared/ui/markdown/markdown';
 import { MarkdownComponent } from '../../../shared/ui/markdown/markdown.component';
+import { notasDoTexto } from '../../../shared/ui/texto-notas/notas-do-texto';
 
 type Estado = 'carregando' | 'pronto' | 'naoEncontrado' | 'erro';
 
@@ -43,6 +46,22 @@ export class EstudoPaginaComponent {
   protected readonly estado = signal<Estado>('carregando');
   protected readonly estudo = signal<Estudo | null>(null);
   private readonly tentativa = signal(0);
+
+  /** Cada bloco do texto com as notas que chama; cada nota só aparece uma vez, porque o id é único. */
+  protected readonly linhas = computed(() => {
+    const e = this.estudo();
+    const usadas = new Set<number>();
+    let comTitulo = true;
+    const blocos = blocosMarkdown(e?.corpoMarkdown ?? '').map((md) => {
+      const notas = notasDoTexto(md, e?.notas ?? []).filter((n) => !usadas.has(n.numero));
+      notas.forEach((n) => usadas.add(n.numero));
+      const titulo = comTitulo && notas.length > 0;
+      if (titulo) comTitulo = false;
+      return { md, notas, comTitulo: titulo };
+    });
+    return { blocos, restantes: (e?.notas ?? []).filter((n) => !usadas.has(n.numero)) };
+  });
+
   private requisicao: Subscription | null = null;
 
   constructor() {

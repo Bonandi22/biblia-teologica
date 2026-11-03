@@ -3,7 +3,7 @@
 
   @if (perfil(); as p) {
     <dl class="dados">
-      <div><dt>Email</dt><dd>{{ p.email }}</dd></div>
+      <div><dt>E-mail</dt><dd>{{ p.email }}</dd></div>
       <div><dt>Perfis</dt><dd>{{ p.roles.join(', ') || 'Nenhum' }}</dd></div>
     </dl>
 
@@ -18,8 +18,8 @@
     </form>
 
     <form class="secao" [formGroup]="formEmail" (ngSubmit)="guardarEmail()" novalidate>
-      <h2>Trocar email</h2>
-      <bt-campo label="Novo email" [erro]="erroDe(formEmail.controls.novoEmail)">
+      <h2>Trocar e-mail</h2>
+      <bt-campo label="Novo e-mail" [erro]="erroDe(formEmail.controls.novoEmail)">
         <input btInput type="email" formControlName="novoEmail" autocomplete="email" />
       </bt-campo>
       <bt-campo-senha
@@ -28,7 +28,7 @@
         autocomplete="current-password"
         [erro]="erroDe(formEmail.controls.senha)"
       />
-      <bt-botao type="submit" variante="fantasma">Trocar email</bt-botao>
+      <bt-botao type="submit" variante="fantasma">Trocar e-mail</bt-botao>
       @if (msgEmail(); as m) {
         <p class="msg" role="status">{{ m }}</p>
       }

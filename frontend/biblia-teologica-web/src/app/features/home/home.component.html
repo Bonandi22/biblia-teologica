@@ -2,8 +2,7 @@
   <header class="home__abertura">
     <h1 class="home__nome">Bíblia Teológica</h1>
     <p class="home__frase">
-      Cada livro da Bíblia situado: quem escreveu, para quem e o que acontecia ao redor, com
-      referência para conferir.
+      Os 66 livros da Bíblia, cada um situado: quem escreveu, para quem e por quê.
     </p>
   </header>
 
@@ -24,15 +23,15 @@
   }
 </div>
 
-<section class="home__guarda">
-  <div class="home__guarda-inner">
-    <h2>Tudo o que se afirma aqui pode ser conferido</h2>
-    <p>
-      O que vem da Bíblia traz a referência ao lado do texto. O que vem de fora traz a obra
-      consultada.
-    </p>
-    @if (primeiroPanorama(); as l) {
+@if (primeiroPanorama(); as l) {
+  <section class="home__guarda">
+    <div class="home__guarda-inner">
+      <h2>Nos panoramas, cada afirmação pode ser conferida</h2>
+      <p>
+        O que vem da Bíblia traz a referência ao lado do texto. O que vem de fora traz a obra
+        consultada.
+      </p>
       <a [routerLink]="['/biblia', l.slug]">Ler o panorama de {{ l.nome }}</a>
-    }
-  </div>
-</section>
+    </div>
+  </section>
+}

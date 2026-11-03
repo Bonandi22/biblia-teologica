@@ -32,7 +32,7 @@ describe('HomeComponent', () => {
     const el = await montar();
     expect(el.querySelector('h1')?.textContent?.trim()).toBe('Bíblia Teológica');
     expect(el.textContent).toContain(
-      'Cada livro da Bíblia situado: quem escreveu, para quem e o que acontecia ao redor, com referência para conferir.',
+      'Os 66 livros da Bíblia, cada um situado: quem escreveu, para quem e por quê.',
     );
     expect(el.querySelector('bt-indice-canon a[href="/biblia/isaias"]')).not.toBeNull();
     expect(TestBed.inject(Title).getTitle()).toBe('Bíblia Teológica');
@@ -66,14 +66,15 @@ describe('HomeComponent', () => {
     expect(el.querySelector('bt-indice-canon a')).not.toBeNull();
   });
 
-  it('a guarda leva ao primeiro livro com panorama', async () => {
+  it('a guarda fala só dos panoramas e leva ao primeiro deles', async () => {
     const el = await montar();
-    expect(el.querySelector('.home__guarda a[href="/biblia/isaias"]')).not.toBeNull();
+    const guarda = el.querySelector('.home__guarda') as HTMLElement;
+    expect(guarda.textContent).toContain('Nos panoramas, cada afirmação pode ser conferida');
+    expect(guarda.querySelector('a[href="/biblia/isaias"]')).not.toBeNull();
   });
 
-  it('a guarda não oferece link quando ainda não há panorama', async () => {
+  it('a guarda some quando ainda não há panorama', async () => {
     const el = await montar({ panoramas: [] });
-    expect(el.querySelector('.home__guarda')).not.toBeNull();
-    expect(el.querySelector('.home__guarda a')).toBeNull();
+    expect(el.querySelector('.home__guarda')).toBeNull();
   });
 });

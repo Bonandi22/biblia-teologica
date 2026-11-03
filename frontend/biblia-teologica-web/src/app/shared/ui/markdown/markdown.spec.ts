@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { renderizarMarkdown } from './markdown';
+import { blocosMarkdown, renderizarMarkdown } from './markdown';
 import { MarkdownComponent } from './markdown.component';
 
 const html = (md: string): HTMLElement => {
@@ -105,5 +105,24 @@ describe('MarkdownComponent', () => {
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('sup a')?.getAttribute('href')).toBe('#nota-3');
     expect(el.querySelector('a[href^="https:"]')?.getAttribute('rel')).toBe('noopener noreferrer');
+  });
+});
+
+describe('blocosMarkdown', () => {
+  it('separa os blocos de topo sem quebrar lista nem citação', () => {
+    const blocos = blocosMarkdown('## Título\n\nUm parágrafo.[^1]\n\n- a\n\n- b\n\n> Citação\n> longa');
+    expect(blocos).toHaveLength(4);
+    expect(blocos[1]).toContain('[^1]');
+    expect(blocos[2]).toContain('- a');
+    expect(blocos[2]).toContain('- b');
+  });
+
+  it('remontar os blocos preserva o conteúdo', () => {
+    const md = 'Um.\n\nDois.';
+    expect(renderizarMarkdown(blocosMarkdown(md).join('\n\n'))).toBe(renderizarMarkdown(md));
+  });
+
+  it('devolve vazio para texto vazio', () => {
+    expect(blocosMarkdown('  \n ')).toEqual([]);
   });
 });

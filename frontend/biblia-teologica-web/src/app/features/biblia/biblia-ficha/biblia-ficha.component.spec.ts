@@ -60,6 +60,15 @@ describe('BibliaFichaComponent', () => {
     }
   });
 
+  it('usa o tema como frase de abertura, sem repeti-lo', () => {
+    const fixture = montar();
+    http.expectOne('/api/livros/genesis').flush(ficha);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.moldura__resumo')?.textContent).toContain('Criação e aliança');
+    expect(el.textContent).not.toContain('Tema central');
+  });
+
   it('usa os rótulos em português correto', () => {
     const fixture = montar();
     http.expectOne('/api/livros/genesis').flush(ficha);

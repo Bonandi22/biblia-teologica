@@ -76,8 +76,8 @@ export class PerfilComponent {
       .trocarEmail(this.formEmail.getRawValue())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => this.msgEmail.set('Email alterado. Use-o no próximo login.'),
-        error: (e) => this.msgEmail.set(e.error?.detail ?? 'Não foi possível alterar o email.'),
+        next: () => this.msgEmail.set('E-mail alterado. Use-o no próximo login.'),
+        error: (e) => this.msgEmail.set(e.error?.detail ?? 'Não foi possível alterar o e-mail.'),
       });
   }
 

@@ -34,9 +34,32 @@
           }
         </header>
 
-        <bt-linha-estudo class="corpo" titulo="Bibliografia" [notas]="e.notas" [fixa]="true">
-          <bt-markdown [conteudo]="e.corpoMarkdown" />
-        </bt-linha-estudo>
+        <div class="corpo">
+          @for (l of linhas().blocos; track $index) {
+            <bt-linha-estudo [notas]="l.notas" [titulo]="l.comTitulo ? 'Referências' : null">
+              <bt-markdown [conteudo]="l.md" />
+            </bt-linha-estudo>
+          }
+          @if (linhas().restantes.length > 0) {
+            <bt-linha-estudo [notas]="linhas().restantes" />
+          }
+        </div>
+
+        @if (e.notas.length > 0) {
+          <section class="bibliografia">
+            <h2>Bibliografia</h2>
+            <ol>
+              @for (n of e.notas; track n.numero) {
+                <li [attr.value]="n.numero">
+                  {{ n.citacao }}
+                  @if (n.url) {
+                    <a [href]="n.url" target="_blank" rel="noopener noreferrer">Abrir fonte</a>
+                  }
+                </li>
+              }
+            </ol>
+          </section>
+        }
 
         @if (e.relacionados.length > 0) {
           <nav class="continue" aria-labelledby="continue-titulo">

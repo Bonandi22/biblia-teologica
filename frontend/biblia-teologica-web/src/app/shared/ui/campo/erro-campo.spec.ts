@@ -18,7 +18,7 @@ describe('erroCampo', () => {
   it('nomeia o problema e a correção', () => {
     expect(erroCampo(tocado(new FormControl('', Validators.required)))).toBe('Preencha este campo.');
     expect(erroCampo(tocado(new FormControl('x', Validators.email)))).toBe(
-      'Digite um email válido, como nome@exemplo.com.',
+      'Digite um e-mail válido, como nome@exemplo.com.',
     );
     expect(erroCampo(tocado(new FormControl('abc', Validators.minLength(8))))).toBe(
       'Use pelo menos 8 caracteres.',

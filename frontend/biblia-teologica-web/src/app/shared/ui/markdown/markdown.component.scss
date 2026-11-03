@@ -10,14 +10,10 @@
 
 :host ::ng-deep .markdown {
   font-family: $fonte-texto;
-  font-size: 1.125rem;
-  line-height: 1.7;
+  font-size: $t-body;
+  line-height: $entrelinha-texto;
   color: $tinta;
   overflow-wrap: break-word;
-
-  > :first-child {
-    margin-top: 0;
-  }
 
   p {
     margin: 0 0 1.25em;
@@ -96,6 +92,12 @@
     &:focus-visible {
       outline: 2px solid $rubrica;
       outline-offset: 2px;
+    }
+
+    // Link sem destino, removido pelo sanitizador: não leva a uma fonte, então não leva rubrica.
+    &:not([href]) {
+      color: $tinta;
+      text-decoration: none;
     }
   }
 

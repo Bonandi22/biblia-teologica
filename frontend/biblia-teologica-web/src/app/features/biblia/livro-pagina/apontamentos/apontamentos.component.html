@@ -1,5 +1,10 @@
 @for (a of itens(); track $index) {
-  <bt-linha-estudo class="apontamento" [notas]="a.notas" [prefixo]="prefixo() + '-' + $index">
+  <bt-linha-estudo
+    class="apontamento"
+    [notas]="a.notas"
+    [prefixo]="prefixo() + '-' + $index"
+    [titulo]="$index === primeiroComNotas() ? 'Referências' : null"
+  >
     <article>
       <h3 class="apontamento__ref"><bt-referencia [texto]="a.referencia" /></h3>
       <p class="apontamento__anuncia">

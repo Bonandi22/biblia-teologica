@@ -90,6 +90,10 @@ export class LivroPaginaComponent {
     ];
   });
 
+  protected readonly primeiroPerfilComReferencia = computed(
+    () => this.livro()?.perfil.findIndex((p) => p.referencias.length > 0) ?? -1,
+  );
+
   /** Aba mostrada: sem segmento de aba na URL vale o panorama. */
   protected readonly ativa = computed<ChaveAba>(() => (this.abaDaRota() ?? 'panorama') as ChaveAba);
 

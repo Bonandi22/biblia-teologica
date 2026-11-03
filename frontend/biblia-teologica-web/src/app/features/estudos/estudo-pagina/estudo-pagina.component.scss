@@ -53,6 +53,47 @@
   }
 }
 
+// O primeiro bloco encosta no cabeçalho; os títulos seguintes mantêm o respiro acima.
+.corpo bt-linha-estudo:first-child ::ng-deep .markdown > :first-child {
+  margin-top: 0;
+}
+
+.bibliografia {
+  max-width: $coluna-leitura;
+  margin-top: $sp-12;
+  padding-top: $sp-6;
+  border-top: 1px solid $tinta;
+
+  h2 {
+    margin: 0 0 $sp-4;
+    font-size: $t-h3;
+    font-weight: 700;
+  }
+
+  ol {
+    margin: 0;
+    padding-left: $sp-6;
+    font-size: $t-nota;
+    line-height: 1.5;
+    color: $tinta-mut;
+  }
+
+  li {
+    margin-bottom: $sp-2;
+    padding-left: $sp-1;
+
+    &::marker {
+      color: $tinta-mut;
+      font-weight: 700;
+    }
+  }
+
+  a {
+    color: $rubrica;
+    white-space: nowrap;
+  }
+}
+
 .continue {
   max-width: $coluna-leitura;
   margin-top: $sp-12;

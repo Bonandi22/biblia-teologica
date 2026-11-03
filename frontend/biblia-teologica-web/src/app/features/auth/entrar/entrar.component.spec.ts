@@ -127,6 +127,6 @@ describe('EntrarComponent na tela', () => {
       .expectOne('/api/auth/login')
       .flush({ desafio2fa: true, tokenDesafio: 'T' });
     fixture.detectChanges();
-    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Enviamos um código para o seu email.');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Enviamos um código para o seu e-mail.');
   });
 });

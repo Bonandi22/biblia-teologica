@@ -36,14 +36,18 @@
                   <bt-linha-estudo
                     class="perfil__item"
                     [referencias]="item.referencias"
-                    [titulo]="$first && item.referencias.length > 0 ? 'Referências' : null"
+                    [titulo]="$index === primeiroPerfilComReferencia() ? 'Referências' : null"
                   >
                     <h3 class="perfil__rotulo">{{ item.rotulo }}</h3>
                     <p class="perfil__texto">{{ item.texto }}</p>
                   </bt-linha-estudo>
                 }
               </div>
-              <bt-bloco-conteudo [bloco]="l.panorama" prefixo="panorama" />
+              <bt-bloco-conteudo
+                [bloco]="l.panorama"
+                prefixo="panorama"
+                [comTituloColuna]="primeiroPerfilComReferencia() < 0"
+              />
             }
             @case ('contexto') {
               <bt-bloco-conteudo [bloco]="l.contexto" prefixo="contexto" />

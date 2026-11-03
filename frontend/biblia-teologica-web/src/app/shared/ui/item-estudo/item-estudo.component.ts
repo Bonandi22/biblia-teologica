@@ -10,7 +10,12 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
   imports: [RouterLink, LinhaEstudoComponent, TextoNotasComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <bt-linha-estudo [referencias]="item().referencias" [notas]="notas()" [prefixo]="prefixo()">
+    <bt-linha-estudo
+      [referencias]="item().referencias"
+      [notas]="notas()"
+      [prefixo]="prefixo()"
+      [titulo]="tituloColuna()"
+    >
       <article class="item">
         @if (quando()) {
           <p class="item__quando">{{ quando() }}</p>
@@ -39,4 +44,5 @@ export class ItemEstudoComponent {
   readonly prefixo = input<string>('');
   /** Notas deste item na coluna; quem distribui é o bloco, para não repetir ids. */
   readonly notas = input<Nota[]>([]);
+  readonly tituloColuna = input<string | null>(null);
 }

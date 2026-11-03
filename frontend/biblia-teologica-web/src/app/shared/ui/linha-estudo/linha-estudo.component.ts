@@ -31,8 +31,6 @@ export class LinhaEstudoComponent {
   readonly prefixo = input<string>('');
   /** Título da coluna, mostrado só onde ajuda a ler (em geral, a primeira linha). */
   readonly titulo = input<string | null>(null);
-  /** Coluna acompanha a rolagem em textos longos, como o corpo de um estudo. */
-  readonly fixa = input<boolean>(false);
 
   protected readonly temColuna = computed(
     () => this.referencias().length > 0 || this.notas().length > 0,

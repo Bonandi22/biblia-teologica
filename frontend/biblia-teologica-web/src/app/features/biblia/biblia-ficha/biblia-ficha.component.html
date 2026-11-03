@@ -1,10 +1,6 @@
-<bt-livro-moldura [slug]="slug()">
+<bt-livro-moldura [slug]="slug()" [resumo]="livro()?.tema ?? null">
   @if (livro(); as l) {
     <article class="ficha">
-      <section>
-        <h2>Tema central</h2>
-        <p>{{ l.tema }}</p>
-      </section>
       <section>
         <h2>Quem escreveu</h2>
         <p>{{ l.quem }}</p>

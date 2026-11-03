@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import type { Apontamento } from '../../../../core/models/conteudo.model';
 import { LinhaEstudoComponent } from '../../../../shared/ui/linha-estudo/linha-estudo.component';
 import { ReferenciaComponent } from '../../../../shared/ui/referencia/referencia.component';
@@ -17,4 +17,8 @@ export class ApontamentosComponent {
   readonly itens = input.required<Apontamento[]>();
   /** Distingue a numeração das notas entre abas e itens: id `nota-<prefixo>-<i>-<n>`. */
   readonly prefixo = input.required<string>();
+
+  protected readonly primeiroComNotas = computed(() =>
+    this.itens().findIndex((a) => a.notas.length > 0),
+  );
 }

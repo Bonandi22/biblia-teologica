@@ -9,7 +9,7 @@
         aria-controls="livros-da-divisao"
         (click)="alternarDivisao()"
       >
-        {{ s }}
+        Outros livros de {{ s }}
       </button>
       <ul
         id="livros-da-divisao"
@@ -60,6 +60,6 @@
         </nav>
       }
     </header>
-    <ng-content />
+    <div class="moldura__conteudo"><ng-content /></div>
   </div>
 </div>
