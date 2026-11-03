@@ -24,12 +24,24 @@ describe('HomeComponent', () => {
     expect(el.querySelector('a[href="/registar"]')).toBeTruthy();
   });
 
-  it('mostra os três cards de secção futura', () => {
-    const texto = criar().nativeElement.textContent;
-    expect(texto).toContain('Estudos');
-    expect(texto).toContain('Notícias');
-    expect(texto).toContain('Curiosidades');
-    expect(criar().nativeElement.querySelectorAll('bt-secao-card').length).toBe(3);
+  it('liga Estudos a /estudos e mantém Notícias e Curiosidades como em breve', () => {
+    const el = criar().nativeElement as HTMLElement;
+    const link = el.querySelector('.crescer a[href="/estudos"]');
+    expect(link?.textContent).toContain('Estudos');
+    expect(link?.textContent).not.toContain('Em breve');
+    const emBreve = Array.from(el.querySelectorAll('.crescer .entrada--breve'));
+    expect(emBreve.map((e) => e.querySelector('h3')?.firstChild?.textContent?.trim())).toEqual([
+      'Notícias',
+      'Curiosidades',
+    ]);
+    for (const e of emBreve) {
+      expect(e.textContent).toContain('Em breve');
+      expect(e.querySelector('a')).toBeNull();
+    }
+  });
+
+  it('não usa cartões iguais na seção A crescer', () => {
+    expect(criar().nativeElement.querySelectorAll('.crescer bt-secao-card').length).toBe(0);
   });
 
   it('mostra o teaser de membros quando anónimo', () => {

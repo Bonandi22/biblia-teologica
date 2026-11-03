@@ -148,14 +148,69 @@
   }
 }
 
-.grelha {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+// Índice de seções: linhas separadas por fio, como em estudos-lista.
+.indice {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid $hair;
+}
 
-  @include mobile {
-    grid-template-columns: 1fr;
+.entrada {
+  border-bottom: 1px solid $hair;
+}
+
+.entrada__conteudo {
+  display: block;
+  max-width: $largura-leitura;
+  padding: $sp-6 0 $sp-8;
+  color: inherit;
+  text-decoration: none;
+}
+
+.entrada__link {
+  &:hover .entrada__titulo {
+    color: $acc;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
   }
+
+  &:focus-visible {
+    outline: 2px solid $acc;
+    outline-offset: 4px;
+  }
+}
+
+.entrada__titulo {
+  margin: 0 0 $sp-2;
+  font-family: $fonte-display;
+  font-size: $t-h3;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: $tracking-tight;
+  color: $ink;
+}
+
+.entrada__breve {
+  margin-left: $sp-2;
+  font-family: $fonte-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: $ink-mut;
+}
+
+.entrada__texto {
+  margin: 0;
+  font-family: $fonte-serif;
+  font-size: $t-lead;
+  line-height: 1.7;
+  color: $ink-mut;
+}
+
+.entrada--breve .entrada__titulo {
+  color: $ink-mut;
 }
 
 .membros {

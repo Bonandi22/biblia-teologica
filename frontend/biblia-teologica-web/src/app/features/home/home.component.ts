@@ -1,19 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthStore } from '../../core/auth/auth.store';
-import { SecaoCardComponent } from '../../shared/components/secao-card/secao-card.component';
 
 interface CardSecao {
   titulo: string;
   descricao: string;
-  rota: string;
+  rota: string | null;
 }
 
 @Component({
   selector: 'bt-home',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, SecaoCardComponent],
+  imports: [RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -35,18 +34,19 @@ export class HomeComponent {
   readonly secoes: CardSecao[] = [
     {
       titulo: 'Estudos',
-      descricao: 'Artigos longos sobre teologia, história da igreja e vida cristã.',
+      descricao:
+        'Leituras longas, feitas para ir devagar, com as fontes consultadas listadas no fim de cada uma.',
       rota: '/estudos',
     },
     {
       titulo: 'Notícias',
       descricao: 'O que se passa na igreja e no mundo, lido à luz da Bíblia.',
-      rota: '/noticias',
+      rota: null,
     },
     {
       titulo: 'Curiosidades',
       descricao: 'Descobertas sobre o texto bíblico, línguas originais e contexto.',
-      rota: '/curiosidades',
+      rota: null,
     },
   ];
 }

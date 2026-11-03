@@ -29,19 +29,28 @@
   </div>
 </section>
 
-<section class="secao">
+<section class="secao crescer">
   <div class="secao__inner">
     <h2 class="secao__titulo">A crescer</h2>
-    <div class="grelha">
-      @for (secao of secoes; track secao.rota) {
-        <bt-secao-card
-          [titulo]="secao.titulo"
-          [descricao]="secao.descricao"
-          [rota]="secao.rota"
-          [disponivel]="false"
-        />
+    <ul class="indice">
+      @for (secao of secoes; track secao.titulo) {
+        <li class="entrada" [class.entrada--breve]="!secao.rota">
+          @if (secao.rota) {
+            <a class="entrada__conteudo entrada__link" [routerLink]="secao.rota">
+              <h3 class="entrada__titulo">{{ secao.titulo }}</h3>
+              <p class="entrada__texto">{{ secao.descricao }}</p>
+            </a>
+          } @else {
+            <div class="entrada__conteudo">
+              <h3 class="entrada__titulo">
+                {{ secao.titulo }} <span class="entrada__breve">Em breve</span>
+              </h3>
+              <p class="entrada__texto">{{ secao.descricao }}</p>
+            </div>
+          }
+        </li>
       }
-    </div>
+    </ul>
   </div>
 </section>
 
