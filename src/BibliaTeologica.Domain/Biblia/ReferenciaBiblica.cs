@@ -5,7 +5,7 @@ namespace BibliaTeologica.Domain.Biblia;
 
 /// <summary>
 /// Lê referências no formato "Livro cap[:vers][–fim]" (travessão ou hífen) e devolve o slug do livro.
-/// Reconhece os 66 livros do cânon protestante pelo slug do nome, mais dois apelidos fixos.
+/// Reconhece os 66 livros do cânon protestante pelo slug do nome, mais apelidos fixos.
 /// </summary>
 public static partial class ReferenciaBiblica
 {
@@ -13,6 +13,7 @@ public static partial class ReferenciaBiblica
     {
         ["cantares"] = "cantares-de-salomao",
         ["salmo"] = "salmos",
+        ["atos"] = "atos-dos-apostolos",
     };
 
     private static readonly HashSet<string> SlugsCanonicos = new(StringComparer.Ordinal)

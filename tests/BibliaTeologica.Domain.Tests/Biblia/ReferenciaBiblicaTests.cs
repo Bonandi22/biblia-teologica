@@ -40,6 +40,15 @@ public class ReferenciaBiblicaTests
     }
 
     [Theory]
+    [InlineData("Atos 8:32")]
+    [InlineData("Atos dos Apóstolos 8:32")]
+    public void TentarLer_RetornaSlugAtosDosApostolos_QuandoNomeAtosOuCompleto(string texto)
+    {
+        ReferenciaBiblica.TentarLer(texto, out var slug).Should().BeTrue();
+        slug.Should().Be("atos-dos-apostolos");
+    }
+
+    [Theory]
     [InlineData("Isaías 52:13–53:12")]
     [InlineData("Isaías 52:13-53:12")]
     public void TentarLer_Aceita_QuandoIntervaloEntreCapitulos(string texto)
