@@ -19,7 +19,7 @@ describe('BibliaListaComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [BibliaListaComponent],
-      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideRouter([{ path: '**', children: [] }]), provideHttpClient(), provideHttpClientTesting()],
     });
     http = TestBed.inject(HttpTestingController);
   });
@@ -89,5 +89,67 @@ describe('BibliaListaComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.sidebar__brand')).toBeNull();
     expect(fixture.nativeElement.querySelector('.sidebar__conta')).toBeNull();
+  });
+
+  describe('lista recolhível (celular)', () => {
+    const montar = () => {
+      const fixture = TestBed.createComponent(BibliaListaComponent);
+      fixture.detectChanges();
+      http.expectOne('/api/livros').flush([item('genesis', 1), item('exodo', 2)]);
+      fixture.detectChanges();
+      return fixture;
+    };
+    const botao = (f: ReturnType<typeof montar>) =>
+      f.nativeElement.querySelector('.sidebar__trocar') as HTMLButtonElement;
+
+    it('começa recolhida, com aria-controls apontando para a lista', () => {
+      const f = montar();
+      expect(botao(f).getAttribute('aria-expanded')).toBe('false');
+      const alvo = botao(f).getAttribute('aria-controls')!;
+      expect(f.nativeElement.querySelector('#' + alvo)).not.toBeNull();
+    });
+
+    it('alterna aria-expanded ao clicar no botão', () => {
+      const f = montar();
+      botao(f).click();
+      f.detectChanges();
+      expect(botao(f).getAttribute('aria-expanded')).toBe('true');
+      botao(f).click();
+      f.detectChanges();
+      expect(botao(f).getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('fecha a lista ao escolher um livro', () => {
+      const f = montar();
+      botao(f).click();
+      f.detectChanges();
+      (f.nativeElement.querySelector('a.item') as HTMLAnchorElement).click();
+      f.detectChanges();
+      expect(botao(f).getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('mantém a busca e os livros no DOM com a lista recolhida (computador)', () => {
+      const f = montar();
+      expect(f.nativeElement.querySelector('.sidebar__busca')).not.toBeNull();
+      expect(f.nativeElement.querySelectorAll('a.item').length).toBe(2);
+    });
+
+    it('mostra o livro atual no botão', async () => {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [BibliaListaComponent],
+        providers: [
+          provideRouter([{ path: 'biblia', children: [{ path: '**', component: BibliaListaComponent }] }]),
+          provideHttpClient(),
+          provideHttpClientTesting(),
+        ],
+      });
+      const httpLocal = TestBed.inject(HttpTestingController);
+      const harness = await RouterTestingHarness.create();
+      await harness.navigateByUrl('/biblia/exodo');
+      httpLocal.expectOne('/api/livros').flush([item('genesis', 1), { ...item('exodo', 2), nome: 'Êxodo' }]);
+      harness.detectChanges();
+      expect(harness.routeNativeElement!.querySelector('.sidebar__trocar-atual')?.textContent).toContain('Êxodo');
+    });
   });
 });

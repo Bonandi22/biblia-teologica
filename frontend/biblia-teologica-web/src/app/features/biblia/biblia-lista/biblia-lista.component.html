@@ -1,35 +1,55 @@
 <div class="fichario">
   <aside class="sidebar">
-    <input
-      class="sidebar__busca"
-      type="search"
-      placeholder="Buscar livro…"
-      autocomplete="off"
-      [value]="busca()"
-      (input)="busca.set($any($event.target).value)"
-    />
+    <button
+      type="button"
+      class="sidebar__trocar"
+      aria-controls="lista-livros"
+      [attr.aria-expanded]="aberta()"
+      (click)="alternar()"
+    >
+      <span class="sidebar__trocar-rotulo">Trocar de livro</span>
+      @if (livroAtual(); as atual) {
+        <span class="sidebar__trocar-atual">{{ atual.nome }}</span>
+      }
+    </button>
 
-    @if (carregando()) {
-      <p class="sidebar__estado">Carregando…</p>
-    }
+    <div class="sidebar__painel" id="lista-livros" [class.sidebar__painel--aberto]="aberta()">
+      <input
+        class="sidebar__busca"
+        type="search"
+        placeholder="Buscar livro…"
+        autocomplete="off"
+        [value]="busca()"
+        (input)="busca.set($any($event.target).value)"
+      />
 
-    @for (secao of secoes(); track secao.chave) {
-      <section class="grupo">
-        <h2 class="grupo__titulo">
-          {{ secao.rotulo }} <span class="grupo__contagem">{{ secao.livros.length }}</span>
-        </h2>
-        <ul class="grupo__lista">
-          @for (livro of secao.livros; track livro.slug) {
-            <li>
-              <a class="item" [routerLink]="['/biblia', livro.slug]" routerLinkActive="item--ativo">
-                <span class="item__num">{{ livro.ordem.toString().padStart(2, '0') }}</span>
-                <span class="item__nome">{{ livro.nome }}</span>
-              </a>
-            </li>
-          }
-        </ul>
-      </section>
-    }
+      @if (carregando()) {
+        <p class="sidebar__estado">Carregando…</p>
+      }
+
+      @for (secao of secoes(); track secao.chave) {
+        <section class="grupo">
+          <h2 class="grupo__titulo">
+            {{ secao.rotulo }} <span class="grupo__contagem">{{ secao.livros.length }}</span>
+          </h2>
+          <ul class="grupo__lista">
+            @for (livro of secao.livros; track livro.slug) {
+              <li>
+                <a
+                  class="item"
+                  [routerLink]="['/biblia', livro.slug]"
+                  routerLinkActive="item--ativo"
+                  (click)="fechar()"
+                >
+                  <span class="item__num">{{ livro.ordem.toString().padStart(2, '0') }}</span>
+                  <span class="item__nome">{{ livro.nome }}</span>
+                </a>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
   </aside>
 
   <main class="conteudo">

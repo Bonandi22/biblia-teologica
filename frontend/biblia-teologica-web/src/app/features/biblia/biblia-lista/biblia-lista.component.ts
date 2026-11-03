@@ -4,9 +4,12 @@ import {
   computed,
   effect,
   inject,
+  DestroyRef,
   signal,
 } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { LivroStore } from '../../../core/services/livro.store';
 import type { LivroListItem } from '../../../core/models/livro.model';
 
@@ -36,6 +39,15 @@ const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLo
 export class BibliaListaComponent {
   private readonly store = inject(LivroStore);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Só tem efeito visual no celular; no computador a lista está sempre visível. */
+  readonly aberta = signal(false);
+  private readonly urlAtual = signal(this.router.url);
+  readonly livroAtual = computed(() => {
+    const slug = this.urlAtual().split(/[?#]/)[0].split('/')[2];
+    return this.store.livros().find((l) => l.slug === slug) ?? null;
+  });
 
   readonly busca = signal('');
   readonly carregando = this.store.carregando;
@@ -56,8 +68,23 @@ export class BibliaListaComponent {
     return ORDEM_SECOES.filter((s) => grupos.has(s)).map((s) => ({ chave: s, ...grupos.get(s)! }));
   });
 
+  alternar(): void {
+    this.aberta.update((v) => !v);
+  }
+
+  fechar(): void {
+    this.aberta.set(false);
+  }
+
   constructor() {
     this.store.carregar();
+
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((e) => this.urlAtual.set(e.urlAfterRedirects));
 
     effect(() => {
       const livros = this.store.livros();
