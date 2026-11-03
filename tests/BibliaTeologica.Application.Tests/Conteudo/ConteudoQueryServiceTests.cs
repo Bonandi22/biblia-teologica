@@ -45,6 +45,30 @@ public class ConteudoQueryServiceTests
     }
 
     [Fact]
+    public async Task ListarLivrosComPanoramaAsync_RetornaSlugs_QuandoHaDocumentos()
+    {
+        var (servico, repo) = Criar();
+        repo.Setup(r => r.ListarAsync(TipoConteudo.Livro, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<DocumentoConteudo> { Doc(TipoConteudo.Livro, "isaias", "ISAÍAS", "r", Panorama()) });
+
+        var slugs = await servico.ListarLivrosComPanoramaAsync(CancellationToken.None);
+
+        slugs.Should().Equal("isaias");
+    }
+
+    [Fact]
+    public async Task ListarLivrosComPanoramaAsync_RetornaVazio_QuandoSemConteudo()
+    {
+        var (servico, repo) = Criar();
+        repo.Setup(r => r.ListarAsync(TipoConteudo.Livro, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<DocumentoConteudo>());
+
+        var slugs = await servico.ListarLivrosComPanoramaAsync(CancellationToken.None);
+
+        slugs.Should().BeEmpty();
+    }
+
+    [Fact]
     public async Task ObterPanoramaAsync_RetornaNulo_QuandoDocumentoNaoExiste()
     {
         var (servico, _) = Criar();

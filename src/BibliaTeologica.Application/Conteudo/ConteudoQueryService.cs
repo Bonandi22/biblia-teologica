@@ -19,6 +19,12 @@ public sealed class ConteudoQueryService : IConteudoQueryService
         return doc is null ? null : JsonSerializer.Deserialize<LivroPanoramaDto>(doc.Json, OpcoesJson);
     }
 
+    public async Task<IReadOnlyList<string>> ListarLivrosComPanoramaAsync(CancellationToken ct)
+    {
+        var docs = await _documentos.ListarAsync(TipoConteudo.Livro, ct);
+        return docs.Select(d => d.Slug).ToList();
+    }
+
     public async Task<IReadOnlyList<EstudoResumoDto>> ListarEstudosAsync(CancellationToken ct)
     {
         var docs = await _documentos.ListarAsync(TipoConteudo.Estudo, ct);

@@ -1,52 +1,42 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
-import { AuthStore } from '../../core/auth/auth.store';
-
-interface CardSecao {
-  titulo: string;
-  descricao: string;
-  rota: string | null;
-}
+import type { EstudoResumo } from '../../core/models/conteudo.model';
+import { ConteudoService } from '../../core/services/conteudo.service';
+import { LivroStore } from '../../core/services/livro.store';
+import { IndiceCanonComponent } from '../../shared/ui/indice-canon/indice-canon.component';
 
 @Component({
   selector: 'bt-home',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [RouterLink, IndiceCanonComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  private readonly auth = inject(AuthStore);
-  readonly autenticado = this.auth.estaAutenticado;
+  private readonly store = inject(LivroStore);
 
-  readonly livrosDestaque = [
-    'Génesis',
-    'Salmos',
-    'Isaías',
-    'Mateus',
-    'João',
-    'Romanos',
-    'Hebreus',
-    'Apocalipse',
-  ];
+  protected readonly estudos = signal<EstudoResumo[]>([]);
 
-  readonly secoes: CardSecao[] = [
-    {
-      titulo: 'Estudos',
-      descricao:
-        'Leituras longas, feitas para ir devagar, com as fontes consultadas listadas no fim de cada uma.',
-      rota: '/estudos',
-    },
-    {
-      titulo: 'Notícias',
-      descricao: 'O que se passa na igreja e no mundo, lido à luz da Bíblia.',
-      rota: null,
-    },
-    {
-      titulo: 'Curiosidades',
-      descricao: 'Descobertas sobre o texto bíblico, línguas originais e contexto.',
-      rota: null,
-    },
-  ];
+  /** Primeiro livro do cânon com panorama; sem panorama publicado, a guarda não oferece link. */
+  protected readonly primeiroPanorama = computed(() => {
+    const comPanorama = new Set(this.store.comPanorama());
+    return this.store.livros().find((l) => comPanorama.has(l.slug)) ?? null;
+  });
+
+  constructor() {
+    inject(Title).setTitle('Bíblia Teológica');
+    this.store.carregar();
+    this.store.carregarPanoramas();
+    inject(ConteudoService)
+      .listarEstudos()
+      .pipe(takeUntilDestroyed(inject(DestroyRef)))
+      .subscribe({
+        next: (e) => this.estudos.set(e),
+        // Sem a lista, a seção some: o índice continua sendo o conteúdo principal.
+        error: () => this.estudos.set([]),
+      });
+  }
 }

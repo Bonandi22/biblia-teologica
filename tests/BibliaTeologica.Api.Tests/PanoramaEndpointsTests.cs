@@ -73,6 +73,22 @@ public class PanoramaEndpointsTests : IClassFixture<PanoramaFactory>, IAsyncLife
     }
 
     [Fact]
+    public async Task GET_PanoramasLivros_RetornaSlugsPublicados()
+    {
+        var slugs = await _factory.CreateClient().GetFromJsonAsync<List<string>>("/api/panoramas/livros");
+
+        slugs.Should().Equal("isaias");
+    }
+
+    [Fact]
+    public async Task POST_PanoramasLivros_Retorna405()
+    {
+        var resposta = await _factory.CreateClient().PostAsync("/api/panoramas/livros", null);
+
+        resposta.StatusCode.Should().Be(HttpStatusCode.MethodNotAllowed);
+    }
+
+    [Fact]
     public async Task GET_ApiPanoramasLivrosSlug_Retorna404_QuandoDocumentoNaoExiste()
     {
         var resposta = await _factory.CreateClient().GetAsync("/api/panoramas/livros/genesis");

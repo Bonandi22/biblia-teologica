@@ -85,7 +85,7 @@ describe('LivroPaginaComponent', () => {
     await abrir('/biblia/isaias');
     await responder(null, 404);
     expect(el().querySelector('bt-biblia-ficha')).not.toBeNull();
-    expect(el().querySelector('nav')).toBeNull();
+    expect(el().querySelector('nav.abas')).toBeNull();
     http.expectOne('/api/livros/isaias');
   });
 

@@ -1,0 +1,107 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+:host {
+  display: block;
+}
+
+// Antigo Testamento pesa mais que o Novo: 39 livros contra 27.
+.indice {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: $sp-8 $vao-colunas;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.indice__testamento {
+  min-width: 0;
+}
+
+.indice__titulo {
+  margin: 0 0 $sp-4;
+  padding-bottom: $sp-2;
+  border-bottom: 1px solid $tinta;
+  font-size: $t-h3;
+  font-weight: 700;
+}
+
+.indice__divisoes {
+  columns: 3 11rem;
+  column-gap: $sp-8;
+
+  .indice__testamento:last-child & {
+    columns: 2 11rem;
+  }
+
+  @include tablet {
+    columns: 2 9rem !important;
+    column-gap: $sp-4;
+  }
+}
+
+.indice__divisao {
+  break-inside: avoid;
+  padding-bottom: $sp-6;
+
+  h3 {
+    margin: 0 0 $sp-1;
+    font-family: $fonte-corrente;
+    font-size: $t-corrente;
+    font-weight: 700;
+    line-height: 1.4;
+    color: $tinta-mut;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: block;
+    padding-block: 3px;
+    line-height: 1.35;
+    color: $tinta;
+    text-decoration: none;
+
+    &:hover .indice__nome {
+      text-decoration: underline;
+    }
+  }
+}
+
+.indice__marca {
+  margin-left: $sp-1;
+  font-family: $fonte-corrente;
+  font-size: $t-nota;
+  font-weight: 500;
+  color: $rubrica;
+  white-space: nowrap;
+}
+
+.indice__estado {
+  max-width: $coluna-leitura;
+  margin: 0;
+  padding-block: $sp-6;
+
+  p {
+    margin: 0 0 $sp-4;
+  }
+
+  button {
+    min-height: 44px;
+    padding: 0 $sp-4;
+    border: 1px solid $tinta;
+    border-radius: $raio;
+    background: transparent;
+    font-family: $fonte-corrente;
+    font-size: $t-corrente;
+    font-weight: 500;
+    color: $tinta;
+    cursor: pointer;
+  }
+}
