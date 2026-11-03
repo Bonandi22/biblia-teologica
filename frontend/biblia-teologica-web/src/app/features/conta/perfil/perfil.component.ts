@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { BotaoComponent } from '../../../shared/ui/botao/botao.component';
+import { BtInputDirective } from '../../../shared/ui/bt-input.directive';
+import { CampoComponent } from '../../../shared/ui/campo/campo.component';
+import { erroCampo } from '../../../shared/ui/campo/erro-campo';
+import { CampoSenhaComponent } from '../../../shared/ui/campo-senha/campo-senha.component';
 import { ContaService } from '../../../core/services/conta.service';
 import { AuthService } from '../../../core/auth/auth.service';
 
@@ -16,10 +18,10 @@ import { AuthService } from '../../../core/auth/auth.service';
   imports: [
     ReactiveFormsModule,
     RouterLink,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+    BotaoComponent,
+    BtInputDirective,
+    CampoComponent,
+    CampoSenhaComponent,
   ],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss',
@@ -44,24 +46,31 @@ export class PerfilComponent {
   });
 
   constructor() {
+    inject(Title).setTitle('Minha conta | Bíblia Teológica');
     effect(() => {
       const p = this.perfil();
       if (p) this.formNome.patchValue({ nomeExibicao: p.nomeExibicao });
     });
   }
 
+  protected erroDe(controle: AbstractControl): string | null {
+    return erroCampo(controle);
+  }
+
   guardarNome(): void {
+    this.formNome.markAllAsTouched();
     if (this.formNome.invalid) return;
     this.conta
       .atualizarNome(this.formNome.getRawValue().nomeExibicao)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => this.msgNome.set('Nome guardado.'),
-        error: () => this.msgNome.set('Erro ao guardar.'),
+        next: () => this.msgNome.set('Nome salvo.'),
+        error: () => this.msgNome.set('Não foi possível salvar o nome. Tente de novo.'),
       });
   }
 
   guardarEmail(): void {
+    this.formEmail.markAllAsTouched();
     if (this.formEmail.invalid) return;
     this.conta
       .trocarEmail(this.formEmail.getRawValue())

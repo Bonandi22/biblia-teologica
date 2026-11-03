@@ -1,29 +1,30 @@
-<mat-card class="cartao">
+<div class="folha">
   <h1>Trocar senha</h1>
 
   @if (erro(); as e) {
-    <p class="erro" role="alert">{{ e }}</p>
+    <bt-alerta tipo="erro">{{ e }}</bt-alerta>
   }
 
-  <form [formGroup]="form" (ngSubmit)="submeter()">
-    <mat-form-field appearance="outline">
-      <mat-label>Senha atual</mat-label>
-      <input matInput type="password" formControlName="senhaAtual" autocomplete="current-password" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Nova senha</mat-label>
-      <input matInput type="password" formControlName="novaSenha" autocomplete="new-password" />
-      <mat-hint>Mínimo 8 caracteres.</mat-hint>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Confirmar nova senha</mat-label>
-      <input matInput type="password" formControlName="confirmar" autocomplete="new-password" />
-    </mat-form-field>
-    @if (form.hasError('diferentes') && form.get('confirmar')?.touched) {
-      <p class="erro" role="alert">As senhas não coincidem.</p>
-    }
-    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
-      Trocar senha
-    </button>
+  <form [formGroup]="form" (ngSubmit)="submeter()" novalidate>
+    <bt-campo-senha
+      label="Senha atual"
+      formControlName="senhaAtual"
+      autocomplete="current-password"
+      [erro]="erroDe(form.controls.senhaAtual)"
+    />
+    <bt-campo-senha
+      label="Nova senha"
+      hint="Mínimo de 8 caracteres."
+      formControlName="novaSenha"
+      autocomplete="new-password"
+      [erro]="erroDe(form.controls.novaSenha)"
+    />
+    <bt-campo-senha
+      label="Confirmar nova senha"
+      formControlName="confirmar"
+      autocomplete="new-password"
+      [erro]="erroConfirmar()"
+    />
+    <bt-botao type="submit" [carregando]="aEnviar()">Trocar senha</bt-botao>
   </form>
-</mat-card>
+</div>

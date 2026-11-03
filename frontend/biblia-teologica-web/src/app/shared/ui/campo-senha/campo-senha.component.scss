@@ -13,15 +13,15 @@
   border: 0;
   background: transparent;
   padding: 4px 6px;
-  font-family: $fonte-mono;
-  font-size: 0.7rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: $acc;
+  min-height: 28px;
+  font-family: $fonte-corrente;
+  font-size: $t-nota;
+  font-weight: 500;
+  color: $tinta;
   cursor: pointer;
 
   &:hover {
-    color: $acc-dk;
+    text-decoration: underline;
   }
 }
 

@@ -1,37 +1,32 @@
-<mat-card class="cartao">
+<div class="folha">
   <h1>Entrar</h1>
 
   @if (erro(); as e) {
-    <p class="erro" role="alert">{{ e }}</p>
+    <bt-alerta tipo="erro">{{ e }}</bt-alerta>
   }
 
   @if (fase() === 'credenciais') {
-    <form [formGroup]="formCredenciais" (ngSubmit)="submeterCredenciais()">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" autocomplete="username" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Senha</mat-label>
-        <input
-          matInput
-          type="password"
-          formControlName="senha"
-          autocomplete="current-password"
-        />
-      </mat-form-field>
-      <button mat-flat-button color="primary" type="submit" [disabled]="aEnviar()">Continuar</button>
+    <form [formGroup]="formCredenciais" (ngSubmit)="submeterCredenciais()" novalidate>
+      <bt-campo label="Email" [erro]="erroDe(formCredenciais.controls.email)">
+        <input btInput type="email" formControlName="email" autocomplete="username" />
+      </bt-campo>
+      <bt-campo-senha
+        label="Senha"
+        formControlName="senha"
+        autocomplete="current-password"
+        [erro]="erroDe(formCredenciais.controls.senha)"
+      />
+      <bt-botao type="submit" [carregando]="aEnviar()">Continuar</bt-botao>
     </form>
   } @else {
-    <p>Enviámos um código para o seu email.</p>
-    <form [formGroup]="formCodigo" (ngSubmit)="submeterCodigo()">
-      <mat-form-field appearance="outline">
-        <mat-label>Código</mat-label>
-        <input matInput inputmode="numeric" formControlName="codigo" autocomplete="one-time-code" />
-      </mat-form-field>
-      <button mat-flat-button color="primary" type="submit" [disabled]="aEnviar()">Entrar</button>
+    <p class="aviso">Enviamos um código para o seu email.</p>
+    <form [formGroup]="formCodigo" (ngSubmit)="submeterCodigo()" novalidate>
+      <bt-campo label="Código" [erro]="erroDe(formCodigo.controls.codigo)">
+        <input btInput inputmode="numeric" formControlName="codigo" autocomplete="one-time-code" />
+      </bt-campo>
+      <bt-botao type="submit" [carregando]="aEnviar()">Entrar</bt-botao>
     </form>
   }
 
   <a routerLink="/registar" class="ligacao">Criar conta</a>
-</mat-card>
+</div>

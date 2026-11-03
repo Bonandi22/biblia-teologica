@@ -15,10 +15,10 @@ describe('EmBreveComponent', () => {
   };
 
   it('mostra o título e a descrição vindos do data da rota', () => {
-    const el = montar({ titulo: 'Estudos', descricao: 'Descrição de teste.' }).nativeElement;
+    const el = montar({ titulo: 'Estudos', descricao: 'Esta seção ainda não tem conteúdo.' }).nativeElement;
     expect(el.querySelector('h1')?.textContent).toContain('Estudos');
-    expect(el.textContent).toContain('Descrição de teste.');
-    expect(el.textContent).toContain('Em breve');
+    expect(el.textContent).toContain('Esta seção ainda não tem conteúdo.');
+    expect(el.querySelector('a[href="/biblia"]')?.textContent).toContain('Ver os livros');
   });
 });
 

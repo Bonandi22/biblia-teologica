@@ -22,8 +22,7 @@ export const routes: Routes = [
     component: EmBreveComponent,
     data: {
       titulo: 'Notícias',
-      descricao:
-        'Notícias da igreja e do mundo, lidas à luz da Bíblia. Esta secção está a ser preparada.',
+      descricao: 'Esta seção ainda não tem conteúdo.',
     },
   },
   {
@@ -31,8 +30,7 @@ export const routes: Routes = [
     component: EmBreveComponent,
     data: {
       titulo: 'Curiosidades',
-      descricao:
-        'Pequenas descobertas sobre o texto bíblico e o seu contexto. Esta secção está a ser preparada.',
+      descricao: 'Esta seção ainda não tem conteúdo.',
     },
   },
   {

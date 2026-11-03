@@ -1,10 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Title } from '@angular/platform-browser';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { AlertaComponent } from '../../../shared/ui/alerta/alerta.component';
+import { BotaoComponent } from '../../../shared/ui/botao/botao.component';
+import { BtInputDirective } from '../../../shared/ui/bt-input.directive';
+import { CampoComponent } from '../../../shared/ui/campo/campo.component';
+import { erroCampo } from '../../../shared/ui/campo/erro-campo';
+import { CampoSenhaComponent } from '../../../shared/ui/campo-senha/campo-senha.component';
 import { AuthService } from '../../../core/auth/auth.service';
 import { AuthStore } from '../../../core/auth/auth.store';
 
@@ -15,10 +19,11 @@ import { AuthStore } from '../../../core/auth/auth.store';
   imports: [
     ReactiveFormsModule,
     RouterLink,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+    AlertaComponent,
+    BotaoComponent,
+    BtInputDirective,
+    CampoComponent,
+    CampoSenhaComponent,
   ],
   templateUrl: './entrar.component.html',
   styleUrl: './entrar.component.scss',
@@ -29,6 +34,7 @@ export class EntrarComponent {
   private readonly store = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly rota = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly fase = signal<'credenciais' | 'codigo'>('credenciais');
   readonly erro = signal<string | null>(null);
@@ -43,12 +49,21 @@ export class EntrarComponent {
     codigo: ['', [Validators.required, Validators.minLength(4)]],
   });
 
+  constructor() {
+    inject(Title).setTitle('Entrar | Bíblia Teológica');
+  }
+
+  protected erroDe(controle: AbstractControl): string | null {
+    return erroCampo(controle);
+  }
+
   submeterCredenciais(): void {
+    this.formCredenciais.markAllAsTouched();
     if (this.formCredenciais.invalid) return;
     this.aEnviar.set(true);
     this.erro.set(null);
     const { email, senha } = this.formCredenciais.getRawValue();
-    this.auth.login(email, senha).subscribe({
+    this.auth.login(email, senha).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (r) => {
         this.tokenDesafio = r.tokenDesafio;
         this.fase.set('codigo');
@@ -64,10 +79,14 @@ export class EntrarComponent {
   }
 
   submeterCodigo(): void {
+    this.formCodigo.markAllAsTouched();
     if (this.formCodigo.invalid) return;
     this.aEnviar.set(true);
     this.erro.set(null);
-    this.auth.verificar2fa(this.tokenDesafio, this.formCodigo.getRawValue().codigo).subscribe({
+    this.auth
+      .verificar2fa(this.tokenDesafio, this.formCodigo.getRawValue().codigo)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: () => {
         this.aEnviar.set(false);
         if (this.store.deveTrocarSenha()) {
