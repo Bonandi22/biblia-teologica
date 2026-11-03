@@ -93,6 +93,6 @@
 
 // A chamada fica no conteúdo projetado, fora do encapsulamento deste componente.
 :host ::ng-deep sup a.is-destaque {
-  background: $rubrica;
-  color: $papel;
+  background: rgba(158, 27, 27, 0.14);
+  text-decoration: underline;
 }
