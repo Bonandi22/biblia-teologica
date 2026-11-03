@@ -15,6 +15,7 @@ namespace BibliaTeologica.Infrastructure.Conteudo;
 public sealed partial class FonteConteudoArquivos : IFonteConteudo
 {
     private const long LimiteBytes = 1024 * 1024;
+    private const int CabecalhoBytes = 16 * 1024;
 
     private static readonly IDeserializer Yaml = new DeserializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -47,8 +48,8 @@ public sealed partial class FonteConteudoArquivos : IFonteConteudo
 
         foreach (var arq in Listar("livros", "*.yaml"))
         {
+            if (!Incluir(arq, incluirRascunhos)) continue;
             var texto = await LerTextoAsync(arq, ct);
-            if (!Incluir(texto, arq, incluirRascunhos)) continue;
             var livro = Desserializar<RegistroLivro>(texto, arq)
                         ?? throw new ConteudoInvalidoException($"{Path.GetFileName(arq)}: arquivo vazio.");
             VerificarNulos(livro, arq);
@@ -58,9 +59,9 @@ public sealed partial class FonteConteudoArquivos : IFonteConteudo
 
         foreach (var arq in Listar("estudos", "*.md"))
         {
+            if (!Incluir(arq, incluirRascunhos)) continue;
             var texto = await LerTextoAsync(arq, ct);
             var (front, corpo) = SepararFrontmatter(texto, arq);
-            if (!Incluir(front, arq, incluirRascunhos)) continue;
             var estudo = Desserializar<RegistroEstudo>(front, arq)
                          ?? throw new ConteudoInvalidoException($"{Path.GetFileName(arq)}: frontmatter vazio.");
             VerificarNulos(estudo, arq);
@@ -72,9 +73,33 @@ public sealed partial class FonteConteudoArquivos : IFonteConteudo
         return new ConjuntoRegistros(obras, livros, estudos);
     }
 
-    private bool Incluir(string yaml, string arquivo, bool incluirRascunhos)
+    /// <summary>
+    /// Decide se o arquivo entra, lendo só o início e sem lançar: rascunho com defeito
+    /// (grande demais, ilegível, frontmatter quebrado) é ignorado. Sem estado identificável, entra.
+    /// </summary>
+    private bool Incluir(string arquivo, bool incluirRascunhos)
     {
-        var m = EstadoRegex().Match(yaml);
+        if (incluirRascunhos) return true;
+        string inicio;
+        try
+        {
+            using var fs = new FileStream(arquivo, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var buf = new byte[CabecalhoBytes];
+            var n = fs.Read(buf, 0, buf.Length);
+            inicio = new UTF8Encoding(false).GetString(buf, 0, n).TrimStart('﻿').Replace("\r\n", "\n").Replace('\r', '\n');
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            return true;
+        }
+
+        if (arquivo.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
+        {
+            if (!inicio.StartsWith("---\n", StringComparison.Ordinal)) return true;
+            var fim = inicio.IndexOf("\n---", 4, StringComparison.Ordinal);
+            inicio = fim < 0 ? inicio[4..] : inicio[4..fim];
+        }
+        var m = EstadoRegex().Match(inicio);
         var rascunho = m.Success && m.Groups[1].Value == "rascunho";
         if (rascunho && !incluirRascunhos)
         {

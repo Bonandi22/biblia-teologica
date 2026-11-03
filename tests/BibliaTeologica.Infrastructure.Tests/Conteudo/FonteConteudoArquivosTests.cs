@@ -195,18 +195,14 @@ public sealed class FonteConteudoArquivosTests : IDisposable
             .Which.Erros.Should().Contain(e => e.Contains("isaias.yaml"));
     }
 
-    [Fact]
+    [FactSymlink]
     public async Task LerAsync_NaoSegueLink_QuandoArquivoAponteParaForaDaPasta()
     {
         var fora = Path.Combine(Path.GetTempPath(), "bt-fora-" + Guid.NewGuid().ToString("N") + ".yaml");
         File.WriteAllText(fora, Livro);
         try
         {
-            try { File.CreateSymbolicLink(Path.Combine(_pasta, "livros", "isaias.yaml"), fora); }
-            catch (Exception e) when (e is UnauthorizedAccessException or IOException or PlatformNotSupportedException)
-            {
-                return; // sem privilégio de symlink (Windows): cenário não testável aqui
-            }
+            File.CreateSymbolicLink(Path.Combine(_pasta, "livros", "isaias.yaml"), fora);
 
             var r = await Criar().LerAsync(false, default);
 
@@ -216,6 +212,48 @@ public sealed class FonteConteudoArquivosTests : IDisposable
         {
             File.Delete(fora);
         }
+    }
+
+    [Fact]
+    public async Task LerAsync_IgnoraRascunho_QuandoEstudoSemFechamentoDeFrontmatter()
+    {
+        Escrever("estudos/x.md", "---\nestado: rascunho\ntitulo: t\ncorpo sem fechamento");
+
+        var r = await Criar().LerAsync(false, default);
+
+        r.Estudos.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task LerAsync_LancaConteudoInvalido_QuandoEstudoRevisadoSemFechamentoDeFrontmatter()
+    {
+        Escrever("estudos/x.md", "---\nestado: revisado\ntitulo: t\ncorpo sem fechamento");
+
+        var acao = () => Criar().LerAsync(false, default);
+
+        (await acao.Should().ThrowAsync<ConteudoInvalidoException>())
+            .Which.Erros.Should().Contain(e => e.Contains("x.md"));
+    }
+
+    [Fact]
+    public async Task LerAsync_IgnoraRascunho_QuandoArquivoMaiorQue1Mb()
+    {
+        Escrever("livros/isaias.yaml", "estado: rascunho\nresumo: \"" + new string('a', 1024 * 1024 + 10) + "\"\n");
+
+        var r = await Criar().LerAsync(false, default);
+
+        r.Livros.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task LerAsync_LancaConteudoInvalido_QuandoBibliografiaTemElementoNulo()
+    {
+        Escrever("bibliografia.yaml", "- id: arc\n-\n");
+
+        var acao = () => Criar().LerAsync(false, default);
+
+        (await acao.Should().ThrowAsync<ConteudoInvalidoException>())
+            .Which.Erros.Should().Contain(e => e.Contains("bibliografia.yaml"));
     }
 
     [Fact]
@@ -229,5 +267,29 @@ public sealed class FonteConteudoArquivosTests : IDisposable
         r.Estudos.Should().BeEmpty();
         r.Livros.Should().BeEmpty();
         r.Obras.Should().BeEmpty();
+    }
+}
+
+/// <summary>Fact que se marca como skip quando o SO/usuário não pode criar symlinks (xUnit 2 não tem skip dinâmico).</summary>
+public sealed class FactSymlinkAttribute : FactAttribute
+{
+    public FactSymlinkAttribute()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "bt-sym-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
+        {
+            var alvo = Path.Combine(dir, "alvo");
+            File.WriteAllText(alvo, "x");
+            File.CreateSymbolicLink(Path.Combine(dir, "link"), alvo);
+        }
+        catch (Exception e) when (e is UnauthorizedAccessException or IOException or PlatformNotSupportedException)
+        {
+            Skip = "Sem privilégio para criar symlink neste ambiente.";
+        }
+        finally
+        {
+            try { Directory.Delete(dir, true); } catch (IOException) { }
+        }
     }
 }
