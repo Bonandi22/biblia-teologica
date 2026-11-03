@@ -25,12 +25,13 @@ public static class ConstrutorDocumentos
         {
             var slug = l.Livro!;
             var dto = new LivroPanoramaDto(
-                slug, l.Resumo!, l.Quem!, l.ParaQuem!, l.Porque!,
+                slug, l.Resumo!,
+                l.Perfil.Select(p => new PerfilItemDto(p.Rotulo!, p.Texto!, p.Referencias.ToList())).ToList(),
                 Bloco(l.Panorama, false, obras),
                 Bloco(l.Contexto, true, obras),
                 Bloco(l.Mundo, true, obras),
-                l.Profecias.Select(p => new ProfeciaDto(
-                    p.Referencia!, p.Anuncia!, p.Categoria!, p.Cumprimento.ToList(), p.FatoHistorico, Notas(p.Notas, obras))).ToList(),
+                Apontamentos(l.Profecias, obras),
+                Apontamentos(l.Promessas, obras),
                 l.Citacoes.Select(c => new CitacaoDto(
                     c.Trecho!, c.CitadoEm.ToList(), c.Comentario, Notas(c.Notas, obras))).ToList());
             var titulo = titulosLivros.TryGetValue(slug, out var t) ? t : slug;
@@ -52,6 +53,9 @@ public static class ConstrutorDocumentos
     }
 
     private static string SlugEstudo(RegistroEstudo e) => Path.GetFileNameWithoutExtension(e.Arquivo);
+
+    private static List<ApontamentoDto> Apontamentos(IEnumerable<RegistroApontamento> itens, IReadOnlyDictionary<string, RegistroObra> obras) =>
+        itens.Select(a => new ApontamentoDto(a.Referencia!, a.Anuncia!, Notas(a.Notas, obras))).ToList();
 
     private static BlocoDto Bloco(RegistroBloco? b, bool ordenarPorAno, IReadOnlyDictionary<string, RegistroObra> obras)
     {

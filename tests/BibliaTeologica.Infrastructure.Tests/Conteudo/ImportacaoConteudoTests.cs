@@ -46,9 +46,9 @@ public sealed class ImportacaoConteudoTests : IDisposable
         estado: revisado
         livro: isaias
         resumo: "{{resumo}}"
-        quem: "q"
-        paraQuem: "pq"
-        porque: "p"
+        perfil:
+          - rotulo: "Origem"
+            texto: "t"
         panorama:
           explicacao: "Texto."
         contexto:

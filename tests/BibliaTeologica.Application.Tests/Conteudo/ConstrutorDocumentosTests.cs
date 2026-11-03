@@ -28,8 +28,9 @@ public class ConstrutorDocumentosTests
     private static RegistroLivro Livro(RegistroBloco panorama, RegistroBloco contexto, RegistroBloco mundo) =>
         new()
         {
-            Arquivo = "isaias.yaml", Estado = "revisado", Livro = "isaias", Resumo = "r", Quem = "q",
-            ParaQuem = "pq", Porque = "p", Panorama = panorama, Contexto = contexto, Mundo = mundo,
+            Arquivo = "isaias.yaml", Estado = "revisado", Livro = "isaias", Resumo = "r",
+            Perfil = { new RegistroPerfilItem { Rotulo = "Origem", Texto = "Filho de Amoz.", Referencias = { "Isaías 1:1" } } },
+            Panorama = panorama, Contexto = contexto, Mundo = mundo,
         };
 
     private static LivroPanoramaDto Construir(RegistroLivro livro)
@@ -71,5 +72,30 @@ public class ConstrutorDocumentosTests
         var dto = Construir(Livro(Bloco(naOrdem), Bloco(), Bloco()));
 
         dto.Panorama.Acontecimentos.Select(a => a.Quando).Should().Equal("depois", "antes");
+    }
+
+    [Fact]
+    public void Construir_LevaPerfilAoDocumento_QuandoLivroTemPerfil()
+    {
+        var dto = Construir(Livro(Bloco(), Bloco(), Bloco()));
+
+        var item = dto.Perfil.Should().ContainSingle().Subject;
+        item.Rotulo.Should().Be("Origem");
+        item.Texto.Should().Be("Filho de Amoz.");
+        item.Referencias.Should().Equal("Isaías 1:1");
+    }
+
+    [Fact]
+    public void Construir_MantemOrdemDoArquivo_QuandoProfeciasEPromessas()
+    {
+        var livro = Livro(Bloco(), Bloco(), Bloco());
+        livro.Profecias.Add(new RegistroApontamento { Referencia = "Isaías 53:7", Anuncia = "b" });
+        livro.Profecias.Add(new RegistroApontamento { Referencia = "Isaías 7:14", Anuncia = "a" });
+        livro.Promessas.Add(new RegistroApontamento { Referencia = "Isaías 65:17", Anuncia = "c" });
+
+        var dto = Construir(livro);
+
+        dto.Profecias.Select(p => p.Referencia).Should().Equal("Isaías 53:7", "Isaías 7:14");
+        dto.Promessas.Select(p => p.Anuncia).Should().Equal("c");
     }
 }

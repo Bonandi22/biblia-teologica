@@ -16,7 +16,7 @@ public class ConteudoQueryServiceTests
     private static BlocoDto BlocoVazio(string texto) => new(texto, [], [], []);
 
     private static LivroPanoramaDto Panorama() =>
-        new("isaias", "r", "q", "pq", "p", BlocoVazio("a"), BlocoVazio("b"), BlocoVazio("c"), [], []);
+        new("isaias", "r", [new PerfilItemDto("Origem", "t", [])], BlocoVazio("a"), BlocoVazio("b"), BlocoVazio("c"), [], [], []);
 
     private static EstudoDto Estudo(string slug) =>
         new(slug, "Título " + slug, "Resumo " + slug, "# Corpo", ["isaias"], [], []);

@@ -40,7 +40,7 @@ public class PanoramaEndpointsTests : IClassFixture<PanoramaFactory>, IAsyncLife
         if (db.DocumentosConteudo.Any()) return;
 
         var bloco = new BlocoDto("Explicação", [], [], []);
-        var panorama = new LivroPanoramaDto("isaias", "Resumo", "Quem", "ParaQuem", "Porque", bloco, bloco, bloco, [], []);
+        var panorama = new LivroPanoramaDto("isaias", "Resumo", [new PerfilItemDto("Origem", "Filho de Amoz.", ["Isaías 1:1"])], bloco, bloco, bloco, [], [], []);
         var estudo = new EstudoDto("senaqueribe", "Senaqueribe", "Resumo do estudo", "# Corpo", ["isaias"], [], []);
         db.DocumentosConteudo.AddRange(
             DocumentoConteudo.Criar(TipoConteudo.Livro, "isaias", "ISAÍAS", "Resumo", JsonSerializer.Serialize(panorama, Web)),
@@ -58,6 +58,18 @@ public class PanoramaEndpointsTests : IClassFixture<PanoramaFactory>, IAsyncLife
         dto.Should().NotBeNull();
         dto!.LivroSlug.Should().Be("isaias");
         dto.Panorama.Explicacao.Should().Be("Explicação");
+        dto.Perfil.Should().ContainSingle().Which.Rotulo.Should().Be("Origem");
+    }
+
+    [Fact]
+    public async Task GET_ApiPanoramasLivrosSlug_NaoExpoeCategoriaNemCumprimento_QuandoExiste()
+    {
+        var json = await _factory.CreateClient().GetStringAsync("/api/panoramas/livros/isaias");
+
+        json.Should().Contain("\"promessas\"");
+        json.Should().NotContain("categoria");
+        json.Should().NotContain("cumprimento");
+        json.Should().NotContain("fatoHistorico");
     }
 
     [Fact]

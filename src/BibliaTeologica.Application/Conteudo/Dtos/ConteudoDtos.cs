@@ -18,13 +18,16 @@ public sealed record BlocoDto(
     IReadOnlyList<AcontecimentoDto> Acontecimentos,
     IReadOnlyList<NotaDto> Notas);
 
-public sealed record ProfeciaDto(
+/// <summary>Profecia ou promessa: só aponta o trecho, sem categoria nem indicação de cumprimento.</summary>
+public sealed record ApontamentoDto(
     string Referencia,
     string Anuncia,
-    string Categoria,
-    IReadOnlyList<string> Cumprimento,
-    string? FatoHistorico,
     IReadOnlyList<NotaDto> Notas);
+
+public sealed record PerfilItemDto(
+    string Rotulo,
+    string Texto,
+    IReadOnlyList<string> Referencias);
 
 public sealed record CitacaoDto(
     string Trecho,
@@ -35,13 +38,12 @@ public sealed record CitacaoDto(
 public sealed record LivroPanoramaDto(
     string LivroSlug,
     string Resumo,
-    string Quem,
-    string ParaQuem,
-    string Porque,
+    IReadOnlyList<PerfilItemDto> Perfil,
     BlocoDto Panorama,
     BlocoDto Contexto,
     BlocoDto Mundo,
-    IReadOnlyList<ProfeciaDto> Profecias,
+    IReadOnlyList<ApontamentoDto> Profecias,
+    IReadOnlyList<ApontamentoDto> Promessas,
     IReadOnlyList<CitacaoDto> Citacoes);
 
 public sealed record EstudoResumoDto(string Slug, string Titulo, string Resumo);
