@@ -10,7 +10,7 @@
 
 :host ::ng-deep .markdown {
   font-family: $fonte-texto;
-  font-size: $t-body;
+  font-size: inherit;
   line-height: $entrelinha-texto;
   color: $tinta;
   overflow-wrap: break-word;

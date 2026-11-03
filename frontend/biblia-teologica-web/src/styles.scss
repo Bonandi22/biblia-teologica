@@ -36,6 +36,13 @@ a {
   outline-offset: 2px;
 }
 
+// Em tela estreita, 19px deixaria só 30 caracteres por linha.
+@media (max-width: $bp-tablet) {
+  body {
+    font-size: 1.0625rem;
+  }
+}
+
 ::selection {
   background: $capa;
   color: $sobre-capa;
