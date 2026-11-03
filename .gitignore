@@ -18,6 +18,11 @@ appsettings.*.local.json
 .env
 .env.*
 !.env.example
+secrets.json
+*.pem
+*.key
+*.pfx
+*.p12
 
 # ---- Angular / Node ----
 node_modules/
@@ -28,7 +33,12 @@ npm-debug.log*
 
 # ---- IDE ----
 .idea/
+.vscode/
 *.DotSettings.user
+
+# ---- Ferramentas de IA (config local) ----
+.claude/
+.mcp.json
 
 # ---- OS ----
 .DS_Store
