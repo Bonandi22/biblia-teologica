@@ -1,40 +1,30 @@
-// Design system — M2d ("editorial moderno"). Valores mudam; nomes antigos ficam
-// como alias durante a transição M2d-b/-c.
+// Mundo visual: Bíblia de Estudo. Ver docs/superpowers/specs/2026-11-03-repaginacao-biblia-de-estudo-design.md
 
 // ── Cor ──────────────────────────────
-$ink: #141416;
-$ink-mut: #6a6a70;
-$paper: #fdfdfc;
-$superficie: #ffffff;
-$hair: #e9e9e6;
-$borda-controlo: #8a8a8f; // cerca de 3,4:1 sobre branco (WCAG 1.4.11); $hair é só para divisórias
-$acc: #a6371c;
-$acc-dk: #8a2e17;
-$acc-tint: rgba(166, 55, 28, 0.08);
-
-// Alias de transição — remover no fim do M2d.
-$parchment: $paper;
-$parchment-2: #f4f3ef;
-$card: $superficie;
-$line: $hair;
-$brass: $acc;
-$near-black: $ink;
-$sage: $ink-mut;
+$papel: #fbfbf8;
+$tinta: #16161a;
+$tinta-mut: #55555c; // cerca de 7:1 sobre o papel
+$rubrica: #9e1b1b; // só o que leva a uma fonte e a posição atual
+$rubrica-escura: #7c1414;
+$filete: #c9c8c0;
+$capa: #2a3550;
+$sobre-capa: #e9e7dd;
+$erro: #7a2d12; // estado de erro: não é rubrica, porque não aponta para fonte
+$borda-controlo: #6f6f76;
 
 // ── Tipografia ───────────────────────
-$fonte-display: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
-$fonte-serif: 'Source Serif 4', Georgia, serif;
-$fonte-mono: 'IBM Plex Mono', ui-monospace, monospace;
+$fonte-texto: 'Gelasio', Georgia, 'Times New Roman', serif;
+$fonte-corrente: 'Alegreya Sans SC', 'Gill Sans', 'Trebuchet MS', sans-serif;
 
 // ── Escala tipográfica ───────────────
-$t-eyebrow: 0.6875rem;
-$t-body: 1rem;
-$t-lead: 1.125rem;
+$t-corrente: 1.0625rem;
+$t-nota: 0.9375rem;
+$t-body: 1.0625rem;
+$t-lead: 1.25rem;
 $t-h3: 1.375rem;
-$t-h2: clamp(1.6rem, 3vw, 2.2rem);
-$t-h1: clamp(2.2rem, 5vw, 3.4rem);
-$tracking-tight: -0.03em;
-$tracking-eyebrow: 0.14em;
+$t-h2: clamp(1.6rem, 3vw, 2.1rem);
+$t-h1: clamp(3.25rem, 8vw, 7rem);
+$entrelinha-texto: 1.65;
 
 // ── Espaço / layout ──────────────────
 $sp-1: 4px;
@@ -45,12 +35,40 @@ $sp-6: 24px;
 $sp-8: 32px;
 $sp-12: 48px;
 $sp-16: 64px;
-$largura-conteudo: 1080px;
-$largura-leitura: 42rem;
-$raio: 6px;
+$coluna-divisao: 12.5rem;
+$coluna-leitura: 42rem;
+$coluna-referencias: 18rem;
+$largura-folha: 90rem;
+$margem-folha: clamp(#{$sp-4}, 4vw, 4.5rem);
+$raio: 2px;
 $altura-header: 64px;
 $altura-header-mobile: 56px;
 
 // ── Breakpoints ──────────────────────
 $bp-mobile: 900px;
 $bp-tablet: 640px;
+
+// Aliases de transição: removidos na Task 9, quando nenhuma tela usar mais estes nomes.
+$ink: $tinta;
+$ink-mut: $tinta-mut;
+$paper: $papel;
+$superficie: $papel;
+$hair: $filete;
+$acc: $rubrica;
+$acc-dk: $rubrica-escura;
+$acc-tint: rgba(158, 27, 27, 0.08);
+$parchment: $papel;
+$parchment-2: #f1f1ec;
+$card: $papel;
+$line: $filete;
+$brass: $rubrica;
+$near-black: $tinta;
+$sage: $tinta-mut;
+$fonte-display: $fonte-corrente;
+$fonte-serif: $fonte-texto;
+$fonte-mono: $fonte-corrente;
+$t-eyebrow: 0.875rem;
+$tracking-tight: 0;
+$tracking-eyebrow: 0.02em;
+$largura-conteudo: 1080px;
+$largura-leitura: $coluna-leitura;

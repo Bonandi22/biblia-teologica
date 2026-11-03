@@ -6,17 +6,19 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { AuthStore } from '../../auth/auth.store';
+import { LugarAtualService } from '../lugar-atual.service';
 import { NAV_PRINCIPAL } from '../nav';
 
 @Component({
   selector: 'bt-header',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [NgTemplateOutlet, RouterLink, RouterLinkActive],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   host: {
@@ -29,6 +31,7 @@ export class HeaderComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly autenticado = this.auth.estaAutenticado;
+  readonly lugar = inject(LugarAtualService).texto;
   private readonly _menuAberto = signal(false);
   readonly menuAberto = this._menuAberto.asReadonly();
 

@@ -12,9 +12,10 @@
   border: 1px solid transparent;
   border-radius: $raio;
   font-family: $fonte-display;
-  font-size: 0.8125rem;
+  font-size: $t-corrente;
   font-weight: 500;
   line-height: 1;
+  min-height: 44px;
   cursor: pointer;
   transition:
     background 0.15s ease,
@@ -38,22 +39,24 @@
 
 .botao--fantasma {
   background: transparent;
-  border-color: $acc;
-  color: $acc;
+  border-color: $tinta;
+  color: $tinta;
 
   &:not(:disabled):hover {
-    background: $acc-tint;
+    background: #f1f1ec;
   }
 }
 
 .botao--texto {
   background: transparent;
-  color: $acc;
+  color: $tinta;
   padding-left: 4px;
   padding-right: 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 
   &:not(:disabled):hover {
-    color: $acc-dk;
+    text-decoration-thickness: 2px;
   }
 }
 

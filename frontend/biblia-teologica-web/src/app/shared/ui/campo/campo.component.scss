@@ -9,13 +9,13 @@
   display: block;
   margin-bottom: $sp-2;
   font-family: $fonte-display;
-  font-size: 0.8125rem;
+  font-size: $t-corrente;
   font-weight: 500;
-  color: $ink;
+  color: $tinta;
 }
 
 .campo__obrig {
-  color: $acc;
+  color: $erro;
 }
 
 ::ng-deep .bt-input {
@@ -24,12 +24,12 @@
   border: 1px solid $borda-controlo;
   border-radius: $raio;
   background: $superficie;
-  font-family: $fonte-display;
-  font-size: 0.9375rem;
-  color: $ink;
+  font-family: $fonte-texto;
+  font-size: 1rem;
+  color: $tinta;
 
   &:focus {
-    border-color: $acc;
+    border-color: $tinta;
   }
 
   &:focus-visible {
@@ -38,18 +38,18 @@
   }
 
   &[aria-invalid='true'] {
-    border-color: $acc-dk;
+    border-color: $erro;
   }
 }
 
 .campo__hint {
   margin: $sp-2 0 0;
-  font-size: 0.75rem;
-  color: $ink-mut;
+  font-size: $t-nota;
+  color: $tinta-mut;
 }
 
 .campo__erro {
   margin: $sp-2 0 0;
-  font-size: 0.75rem;
-  color: $acc-dk;
+  font-size: $t-nota;
+  color: $erro;
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -11,18 +11,4 @@ import { RouterLink } from '@angular/router';
 })
 export class FooterComponent {
   readonly ano = new Date().getFullYear();
-
-  private readonly _mensagem = signal('');
-  readonly mensagem = this._mensagem.asReadonly();
-
-  readonly redes = [
-    { nome: 'Facebook', url: '#' },
-    { nome: 'Instagram', url: '#' },
-    { nome: 'YouTube', url: '#' },
-  ];
-
-  submeterNewsletter(evento: Event): void {
-    evento.preventDefault();
-    this._mensagem.set('Obrigado — a newsletter ainda não está disponível. Volta em breve.');
-  }
 }

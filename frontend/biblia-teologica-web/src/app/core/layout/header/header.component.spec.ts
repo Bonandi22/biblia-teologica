@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { HeaderComponent } from './header.component';
 import { AuthStore } from '../../auth/auth.store';
+import { LugarAtualService } from '../lugar-atual.service';
 
 describe('HeaderComponent', () => {
   beforeEach(() => {
@@ -17,14 +18,27 @@ describe('HeaderComponent', () => {
     return fixture;
   };
 
-  it('mostra os itens de navegação principais', () => {
-    const texto = criar().nativeElement.textContent;
-    for (const rotulo of ['Início', 'Fichário', 'Estudos', 'Notícias', 'Curiosidades']) {
-      expect(texto).toContain(rotulo);
-    }
+  it('mostra Livros e Estudos, sem Notícias nem Curiosidades', () => {
+    const el = criar().nativeElement as HTMLElement;
+    expect(el.querySelector('a[href="/biblia"]')?.textContent?.trim()).toBe('Livros');
+    expect(el.querySelector('a[href="/estudos"]')?.textContent?.trim()).toBe('Estudos');
+    expect(el.textContent).not.toContain('Notícias');
+    expect(el.textContent).not.toContain('Curiosidades');
   });
 
-  it('mostra "Entrar" e "Criar conta" quando anónimo', () => {
+  it('a marca leva à página inicial', () => {
+    const marca = (criar().nativeElement as HTMLElement).querySelector('.header__marca');
+    expect(marca?.getAttribute('href')).toBe('/');
+    expect(marca?.textContent?.trim()).toBe('Bíblia Teológica');
+  });
+
+  it('mostra o lugar atual definido no serviço', () => {
+    TestBed.inject(LugarAtualService).definir('Isaías 1–66');
+    const el = criar().nativeElement as HTMLElement;
+    expect(el.querySelector('.header__lugar')?.textContent?.trim()).toBe('Isaías 1–66');
+  });
+
+  it('mostra "Entrar" e "Criar conta" quando não há sessão', () => {
     const el = criar().nativeElement as HTMLElement;
     const entrar = el.querySelector('a[href="/entrar"]');
     const criarConta = el.querySelector('a[href="/registar"]');
@@ -33,7 +47,7 @@ describe('HeaderComponent', () => {
     expect(el.querySelector('a[href="/conta"]')).toBeNull();
   });
 
-  it('mostra "A minha conta" quando autenticado', () => {
+  it('mostra "Minha conta" quando autenticado', () => {
     TestBed.inject(AuthStore).definir({
       email: 'a@b.c',
       nomeExibicao: 'Ana',
@@ -41,7 +55,7 @@ describe('HeaderComponent', () => {
       deveTrocarSenha: false,
     });
     const el = criar().nativeElement as HTMLElement;
-    expect(el.querySelector('a[href="/conta"]')?.textContent?.trim()).toBe('A minha conta');
+    expect(el.querySelector('a[href="/conta"]')?.textContent?.trim()).toBe('Minha conta');
     expect(el.querySelector('a[href="/entrar"]')).toBeNull();
   });
 

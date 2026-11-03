@@ -1,167 +1,136 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
+// O cabeçalho é o título corrente de uma página de Bíblia: fino, com um filete de tinta.
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: #fff;
-  border-bottom: 1px solid $line;
+  position: relative;
+  background: $papel;
+  border-bottom: 2px solid $tinta;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 500;
 }
 
 .header__inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 24px;
-  max-width: 1200px;
+  gap: $sp-6;
+  max-width: $largura-folha;
+  min-height: $altura-header;
   margin: 0 auto;
-  padding: 0 24px;
-  height: $altura-header;
+  padding: 0 $margem-folha;
 
   @include mobile {
-    height: $altura-header-mobile;
-    padding: 0 18px;
-  }
-}
-
-.header__marca {
-  font-family: $fonte-display;
-  font-weight: 700;
-  font-size: 1.15rem;
-  color: $ink;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.header__toggle {
-  display: none;
-  margin-left: auto;
-  width: 40px;
-  height: 40px;
-  border: 1px solid $line;
-  border-radius: 3px;
-  background: #fff;
-  cursor: pointer;
-
-  @include mobile {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &-barra,
-  &-barra::before,
-  &-barra::after {
-    content: '';
-    display: block;
-    width: 16px;
-    height: 2px;
-    background: $ink;
-    position: relative;
-  }
-
-  &-barra::before {
-    position: absolute;
-    top: -5px;
-  }
-  &-barra::after {
-    position: absolute;
-    top: 5px;
-  }
-}
-
-.header__nav {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  gap: 24px;
-
-  @include mobile {
-    display: none;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: $altura-header-mobile;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    padding: 8px 18px 16px;
-    background: #fff;
-    border-bottom: 1px solid $line;
-
-    &--aberto {
-      display: flex;
-    }
+    grid-template-columns: 1fr auto;
+    min-height: $altura-header-mobile;
   }
 }
 
 .header__lista {
   display: flex;
-  gap: 20px;
-  list-style: none;
+  gap: $sp-6;
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+a {
+  color: $tinta;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+a.ativo {
+  color: $rubrica;
+}
+
+.header__lugar {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  white-space: nowrap;
 
   @include mobile {
-    flex-direction: column;
-    gap: 0;
+    display: none;
   }
+}
 
-  a {
-    font-family: $fonte-mono;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $ink;
-    text-decoration: none;
-    padding: 6px 0;
-    display: inline-block;
+.header__direita {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: $sp-6;
 
-    &:hover,
-    &.ativo {
-      color: $brass;
-    }
-
-    @include mobile {
-      padding: 10px 0;
-      border-bottom: 1px solid $line;
-    }
+  @include mobile {
+    justify-content: flex-start;
+    grid-column: 1;
+    grid-row: 1;
   }
+}
+
+.header__marca {
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .header__acoes {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-left: auto;
-
-  @include mobile {
-    margin-left: 0;
-    margin-top: 10px;
-  }
-
-  a {
-    font-family: $fonte-mono;
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: $ink;
-    text-decoration: none;
-
-    &:hover {
-      color: $brass;
-    }
-  }
+  gap: $sp-6;
 }
 
-.header__cta {
-  padding: 7px 14px;
-  border: 1px solid $brass;
-  border-radius: 3px;
-  color: $brass !important;
+.header__acoes--menu {
+  display: none;
+}
 
-  &:hover {
-    background: $brass;
-    color: #fff !important;
+.header__toggle {
+  display: none;
+  min-height: 44px;
+  padding: 0 $sp-3;
+  border: 0;
+  background: none;
+  color: $tinta;
+  font: inherit;
+  cursor: pointer;
+}
+
+@include mobile {
+  .header__acoes--barra {
+    display: none;
+  }
+
+  .header__toggle {
+    display: block;
+  }
+
+  .header__nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: $sp-4 $margem-folha $sp-6;
+    background: $papel;
+    border-bottom: 2px solid $tinta;
+  }
+
+  .header__nav--aberto {
+    display: block;
+  }
+
+  .header__lista,
+  .header__acoes--menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    a {
+      display: block;
+      padding: $sp-3 0;
+    }
   }
 }
