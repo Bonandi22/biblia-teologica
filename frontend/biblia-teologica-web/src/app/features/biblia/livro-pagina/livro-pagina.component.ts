@@ -91,7 +91,14 @@ export class LivroPaginaComponent {
     () => this.abas().find((a) => a.chave === this.ativa())?.rotulo ?? '',
   );
 
+  /** Nome só quando o fichário já carregou; nunca o slug (o título não pode vazá-lo). */
+  private readonly nomeCarregado = computed(
+    () => this.store.livros().find((l) => l.slug === this.slug())?.nome ?? null,
+  );
+
   constructor() {
+    this.store.carregar();
+
     effect(() => {
       const slug = this.slug();
       this.tentativa();
@@ -108,8 +115,15 @@ export class LivroPaginaComponent {
     });
 
     effect(() => {
-      if (this.estado() !== 'panorama' || !this.rotuloAtivo()) return;
-      this.titulo.setTitle(`${this.nome()}: ${this.rotuloAtivo()} | Bíblia Teológica`);
+      const estado = this.estado();
+      const nome = this.nomeCarregado();
+      if (estado === 'erro') {
+        this.titulo.setTitle('Erro ao carregar o livro | Bíblia Teológica');
+      } else if (estado === 'ficha' && nome) {
+        this.titulo.setTitle(`${nome} | Bíblia Teológica`);
+      } else if (estado === 'panorama' && nome && this.rotuloAtivo()) {
+        this.titulo.setTitle(`${nome}: ${this.rotuloAtivo()} | Bíblia Teológica`);
+      }
     });
   }
 

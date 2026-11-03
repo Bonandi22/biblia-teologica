@@ -103,6 +103,7 @@ describe('EstudoPaginaComponent', () => {
     expect(el().textContent).toContain('Estudo não encontrado');
     expect(el().querySelector('a[href="/estudos"]')).not.toBeNull();
     expect(el().querySelector('[role="alert"]')).toBeNull();
+    expect(TestBed.inject(Title).getTitle()).toBe('Estudo não encontrado | Bíblia Teológica');
   });
 
   it('mostra erro de conexão com nova tentativa, distinto do 404', async () => {
@@ -110,6 +111,7 @@ describe('EstudoPaginaComponent', () => {
     await responder(null, 500);
     expect(el().querySelector('[role="alert"]')).not.toBeNull();
     expect(el().textContent).not.toContain('Estudo não encontrado');
+    expect(TestBed.inject(Title).getTitle()).toBe('Erro ao carregar o estudo | Bíblia Teológica');
     (el().querySelector('button') as HTMLButtonElement).click();
     harness.detectChanges();
     http.expectOne('/api/estudos/servo-sofredor');

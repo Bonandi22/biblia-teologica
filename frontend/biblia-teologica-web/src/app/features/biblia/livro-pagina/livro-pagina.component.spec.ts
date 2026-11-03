@@ -201,10 +201,40 @@ describe('LivroPaginaComponent', () => {
     expect(router().url).toBe('/biblia/isaias');
   });
 
+  const carregarLivros = async () => {
+    http
+      .expectOne('/api/livros')
+      .flush([{ slug: 'isaias', nome: 'Isaías', ordem: 23, secao: 'ProfetasMaiores', secaoRotulo: 'Profetas maiores' }]);
+    await assentar();
+  };
+
   it('define o título da página por aba', async () => {
     await abrir('/biblia/isaias/contexto');
     await responder(panorama());
-    expect(TestBed.inject(Title).getTitle()).toContain('Contexto');
+    await carregarLivros();
+    expect(TestBed.inject(Title).getTitle()).toBe('Isaías: Contexto | Bíblia Teológica');
+  });
+
+  it('não põe o slug no título enquanto a lista de livros não carregou', async () => {
+    await abrir('/biblia/isaias/contexto');
+    await responder(panorama());
+    expect(TestBed.inject(Title).getTitle()).not.toContain('isaias');
+    await carregarLivros();
+    expect(TestBed.inject(Title).getTitle()).toBe('Isaías: Contexto | Bíblia Teológica');
+  });
+
+  it('define o título com o nome do livro na ficha sem panorama', async () => {
+    await abrir('/biblia/isaias');
+    await responder(null, 404);
+    await carregarLivros();
+    expect(TestBed.inject(Title).getTitle()).toBe('Isaías | Bíblia Teológica');
+  });
+
+  it('define um título de erro quando o panorama falha', async () => {
+    await abrir('/biblia/isaias');
+    http.expectOne('/api/panoramas/livros/isaias').error(new ProgressEvent('error'));
+    await assentar();
+    expect(TestBed.inject(Title).getTitle()).toBe('Erro ao carregar o livro | Bíblia Teológica');
   });
 
   it('mostra mensagem e tenta novamente em erro de rede, sem redirecionar nem mostrar a ficha', async () => {

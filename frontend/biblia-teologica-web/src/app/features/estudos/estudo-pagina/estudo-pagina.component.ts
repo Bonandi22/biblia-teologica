@@ -55,7 +55,10 @@ export class EstudoPaginaComponent {
 
     effect(() => {
       const e = this.estudo();
-      if (this.estado() === 'pronto' && e) this.titulo.setTitle(`${e.titulo} | Bíblia Teológica`);
+      const estado = this.estado();
+      if (estado === 'pronto' && e) this.titulo.setTitle(`${e.titulo} | Bíblia Teológica`);
+      else if (estado === 'naoEncontrado') this.titulo.setTitle('Estudo não encontrado | Bíblia Teológica');
+      else if (estado === 'erro') this.titulo.setTitle('Erro ao carregar o estudo | Bíblia Teológica');
     });
   }
 
