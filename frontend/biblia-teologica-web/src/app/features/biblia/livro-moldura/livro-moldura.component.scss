@@ -104,8 +104,33 @@
   min-width: 0;
 }
 
+// Mesma grade da linha de estudo: os capítulos ficam na coluna das referências.
 .moldura__cabecalho {
-  max-width: $coluna-leitura;
+  display: grid;
+  grid-template-columns: minmax(0, $coluna-leitura) minmax(0, $coluna-referencias);
+  column-gap: $sp-8;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.moldura__titulos {
+  min-width: 0;
+}
+
+.moldura__capitulos-titulo {
+  margin: 0 0 $sp-2;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 700;
+  color: $rubrica;
+
+  @include mobile {
+    position: sticky;
+    left: 0;
+    margin-bottom: 0;
+  }
 }
 
 .moldura__nome {
@@ -126,27 +151,26 @@
   text-wrap: pretty;
 }
 
-// Os capítulos quebram em linhas no computador; no celular rolam em uma só, para não empurrar o texto.
+// No computador os capítulos ocupam a coluna ao lado do título; só Salmos, com 150, precisa rolar.
+// No celular rolam em uma só linha, para não empurrar o texto.
 .moldura__capitulos {
-  margin-top: $sp-4;
+  padding-left: $sp-4;
+  border-left: 1px solid $filete;
 
   ol {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 2px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(28px, 1fr));
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   a {
-    display: inline-block;
-    min-width: 28px;
-    padding: 2px;
+    display: block;
     font-family: $fonte-corrente;
     font-size: $t-nota;
     font-weight: 500;
-    line-height: 24px;
+    line-height: 26px;
     text-align: center;
     color: $tinta-mut;
     text-decoration: none;
@@ -158,13 +182,16 @@
   }
 
   @include mobile {
+    margin-top: $sp-4;
+    padding-left: 0;
+    border-left: 0;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scrollbar-width: none;
     mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
 
     ol {
-      flex-wrap: nowrap;
+      display: flex;
       width: max-content;
       padding-right: $sp-8;
     }
@@ -173,5 +200,13 @@
       min-width: 32px;
       line-height: 36px;
     }
+  }
+}
+
+.moldura__capitulos--longo {
+  @media (min-width: #{$bp-mobile + 1}) {
+    max-height: 15rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
   }
 }

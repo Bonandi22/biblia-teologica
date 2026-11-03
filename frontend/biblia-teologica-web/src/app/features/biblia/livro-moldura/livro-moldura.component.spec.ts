@@ -76,6 +76,27 @@ describe('LivroMolduraComponent', () => {
     expect(capitulos[52].getAttribute('aria-label')).toBe('Isaías 53 na ARC, abre em nova aba');
   });
 
+  it('identifica os capítulos e os mantém fora do bloco do título', async () => {
+    const e = el(await montar());
+    const capitulos = e.querySelector('.moldura__capitulos')!;
+    expect(capitulos.querySelector('.moldura__capitulos-titulo')?.textContent?.trim()).toBe(
+      'Capítulos',
+    );
+    expect(e.querySelector('.moldura__titulos')?.contains(capitulos)).toBe(false);
+    expect(e.querySelector('.moldura__titulos h1')).not.toBeNull();
+  });
+
+  it('só limita a altura dos capítulos no livro que passa de 66', async () => {
+    const f = await montar();
+    const capitulos = () => el(f).querySelector('.moldura__capitulos')!;
+    expect(capitulos().classList).not.toContain('moldura__capitulos--longo');
+
+    f.componentInstance.slug.set('salmos');
+    f.detectChanges();
+    expect(capitulos().querySelectorAll('a')).toHaveLength(150);
+    expect(capitulos().classList).toContain('moldura__capitulos--longo');
+  });
+
   it('define o lugar atual e o limpa ao sair', async () => {
     const f = await montar();
     const lugar = TestBed.inject(LugarAtualService);

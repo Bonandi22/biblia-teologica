@@ -31,12 +31,19 @@
 
   <div class="moldura__principal">
     <header class="moldura__cabecalho">
-      <h1 class="moldura__nome">{{ nome() }}</h1>
-      @if (resumo(); as r) {
-        <p class="moldura__resumo">{{ r }}</p>
-      }
+      <div class="moldura__titulos">
+        <h1 class="moldura__nome">{{ nome() }}</h1>
+        @if (resumo(); as r) {
+          <p class="moldura__resumo">{{ r }}</p>
+        }
+      </div>
       @if (capitulos().length > 0) {
-        <nav class="moldura__capitulos" aria-label="Capítulos na ARC">
+        <nav
+          class="moldura__capitulos"
+          [class.moldura__capitulos--longo]="capitulos().length > 66"
+          aria-label="Capítulos na ARC"
+        >
+          <p class="moldura__capitulos-titulo">Capítulos</p>
           <ol>
             @for (c of capitulos(); track c.numero) {
               <li>
