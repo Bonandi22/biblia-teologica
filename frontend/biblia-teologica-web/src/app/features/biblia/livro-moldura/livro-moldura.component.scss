@@ -1,6 +1,9 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
+// As colunas laterais começam na altura das maiúsculas do nome do livro, não na caixa do título.
+$topo-laterais: $sp-3;
+
 :host {
   display: block;
 }
@@ -8,7 +11,7 @@
 .moldura {
   display: grid;
   grid-template-columns: $coluna-divisao minmax(0, 1fr);
-  column-gap: $sp-8;
+  column-gap: $sp-12;
   max-width: $largura-folha;
   margin: 0 auto;
   padding: $sp-8 $margem-folha $sp-16;
@@ -23,7 +26,7 @@
   position: sticky;
   top: $sp-6;
   align-self: start;
-  padding-top: $sp-6;
+  padding-top: $topo-laterais;
   font-family: $fonte-corrente;
   font-size: $t-corrente;
   font-weight: 500;
@@ -106,13 +109,7 @@
 
 // Mesma grade da linha de estudo: os capítulos ficam na coluna das referências.
 .moldura__cabecalho {
-  display: grid;
-  grid-template-columns: minmax(0, $coluna-leitura) minmax(0, $coluna-referencias);
-  column-gap: $sp-8;
-
-  @include mobile {
-    grid-template-columns: minmax(0, 1fr);
-  }
+  @include grade-estudo;
 }
 
 .moldura__titulos {
@@ -154,6 +151,8 @@
 // No computador os capítulos ocupam a coluna ao lado do título; só Salmos, com 150, precisa rolar.
 // No celular rolam em uma só linha, para não empurrar o texto.
 .moldura__capitulos {
+  align-self: start;
+  margin-top: $topo-laterais;
   padding-left: $sp-4;
   border-left: 1px solid $filete;
 

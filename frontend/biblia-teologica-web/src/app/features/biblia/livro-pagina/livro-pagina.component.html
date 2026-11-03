@@ -31,21 +31,18 @@
         <section class="corpo" [attr.aria-label]="rotuloAtivo()">
           @switch (ativa()) {
             @case ('panorama') {
-              <dl class="perfil">
+              <div class="perfil">
                 @for (item of l.perfil; track $index) {
-                  <div class="perfil__item">
-                    <dt>{{ item.rotulo }}</dt>
-                    <dd>
-                      <bt-linha-estudo
-                        [referencias]="item.referencias"
-                        [titulo]="$first && item.referencias.length > 0 ? 'Referências' : null"
-                      >
-                        <p>{{ item.texto }}</p>
-                      </bt-linha-estudo>
-                    </dd>
-                  </div>
+                  <bt-linha-estudo
+                    class="perfil__item"
+                    [referencias]="item.referencias"
+                    [titulo]="$first && item.referencias.length > 0 ? 'Referências' : null"
+                  >
+                    <h3 class="perfil__rotulo">{{ item.rotulo }}</h3>
+                    <p class="perfil__texto">{{ item.texto }}</p>
+                  </bt-linha-estudo>
                 }
-              </dl>
+              </div>
               <bt-bloco-conteudo [bloco]="l.panorama" prefixo="panorama" />
             }
             @case ('contexto') {

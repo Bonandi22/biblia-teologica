@@ -16,8 +16,7 @@
 .abas {
   display: flex;
   gap: $sp-6;
-  max-width: $coluna-leitura;
-  margin: $sp-6 0 $sp-8;
+  margin: $sp-8 0;
   border-block: 1px solid $tinta;
   overflow-x: auto;
   overscroll-behavior-x: contain;
@@ -60,27 +59,26 @@
 }
 
 .perfil {
-  margin: 0 0 $sp-12;
+  margin-bottom: $sp-12;
 }
 
 .perfil__item {
-  margin-bottom: $sp-4;
+  display: block;
+  margin-bottom: $sp-6;
+}
 
-  dt {
-    font-family: $fonte-corrente;
-    font-size: $t-corrente;
-    font-weight: 700;
-    color: $tinta-mut;
-  }
+.perfil__rotulo {
+  margin: 0 0 $sp-1;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 700;
+  line-height: 1.4;
+  color: $tinta-mut;
+}
 
-  dd {
-    margin: 0;
-  }
-
-  p {
-    margin: 0;
-    line-height: $entrelinha-texto;
-  }
+.perfil__texto {
+  margin: 0;
+  line-height: $entrelinha-texto;
 }
 
 .pagina--estado {

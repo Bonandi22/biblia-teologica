@@ -6,13 +6,7 @@
 }
 
 .linha {
-  display: grid;
-  grid-template-columns: minmax(0, $coluna-leitura) minmax(0, $coluna-referencias);
-  column-gap: $sp-8;
-
-  @include mobile {
-    grid-template-columns: minmax(0, 1fr);
-  }
+  @include grade-estudo;
 }
 
 .linha__texto {
@@ -51,12 +45,12 @@
   }
 }
 
+// Referências lado a lado, para uma lista curta não esticar a linha do texto.
 .linha__refs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px $sp-3;
   list-style: none;
-
-  li {
-    padding-block: 2px;
-  }
 }
 
 .linha__notas {

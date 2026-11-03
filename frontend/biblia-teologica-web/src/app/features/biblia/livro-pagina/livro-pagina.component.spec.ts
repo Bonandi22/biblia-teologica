@@ -154,12 +154,14 @@ describe('LivroPaginaComponent', () => {
   it('mostra cada item do perfil com rótulo e texto só na aba panorama', async () => {
     await abrir('/biblia/isaias/panorama');
     await responder(panorama());
-    const rotulos = Array.from(el().querySelectorAll('dt')).map((d) => d.textContent!.trim());
-    const textos = Array.from(el().querySelectorAll('dd')).map((d) => d.textContent!.trim());
+    const itens = Array.from(el().querySelectorAll('.perfil__item'));
+    const rotulos = itens.map((p) => p.querySelector('.perfil__rotulo')!.textContent!.trim());
     expect(rotulos).toEqual(['Origem e família', 'Ofício']);
-    expect(textos[0]).toContain('Filho de Amoz.');
-    expect(textos[0]).toContain('Isaías 1:1');
-    expect(textos[1]).toContain('Profeta.');
+    expect(itens[0].querySelector('.perfil__texto')!.textContent).toContain('Filho de Amoz.');
+    expect(itens[0].querySelector('.linha__coluna')!.textContent).toContain('Isaías 1:1');
+    expect(itens[1].querySelector('.perfil__texto')!.textContent).toContain('Profeta.');
+    // O rótulo fica na mesma linha de grade, para a coluna de referências começar na altura dele.
+    expect(itens[0].querySelector('.linha__texto .perfil__rotulo')).not.toBeNull();
 
     await harness.navigateByUrl('/biblia/isaias/contexto');
     await assentar();

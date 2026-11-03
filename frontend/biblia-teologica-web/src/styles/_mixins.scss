@@ -12,6 +12,17 @@
   }
 }
 
+// Grade de leitura: texto em medida fixa e coluna que vai até a margem direita da folha.
+@mixin grade-estudo {
+  display: grid;
+  grid-template-columns: minmax(0, $coluna-leitura) minmax($coluna-referencias-min, 1fr);
+  column-gap: $vao-colunas;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @mixin rotulo-mono {
   font-family: $fonte-mono;
   font-size: 0.68rem;
