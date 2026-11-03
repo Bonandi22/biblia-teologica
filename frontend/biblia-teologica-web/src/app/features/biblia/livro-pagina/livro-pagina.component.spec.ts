@@ -66,7 +66,7 @@ describe('LivroPaginaComponent', () => {
     await assentar();
   };
   const rotulosAbas = () =>
-    Array.from(el().querySelectorAll('nav a')).map((a) => a.textContent!.trim());
+    Array.from(el().querySelectorAll('nav.abas a')).map((a) => a.textContent!.trim());
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -171,7 +171,7 @@ describe('LivroPaginaComponent', () => {
     await abrir('/biblia/isaias/panorama');
     await responder(panorama());
     const ativa = () =>
-      Array.from(el().querySelectorAll('nav a[aria-current="page"]')).map((a) =>
+      Array.from(el().querySelectorAll('nav.abas a[aria-current="page"]')).map((a) =>
         a.textContent!.trim(),
       );
     expect(ativa()).toEqual(['Panorama']);

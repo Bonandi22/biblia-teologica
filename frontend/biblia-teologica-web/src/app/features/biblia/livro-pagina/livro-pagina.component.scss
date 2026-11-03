@@ -4,150 +4,110 @@
 // Página de topo: fundo e altura mínima próprios.
 :host {
   display: block;
-  min-height: calc(100vh - #{$altura-header} - 116px);
-  background: $paper;
+  min-height: calc(100vh - #{$altura-header} - 130px);
+  background: $papel;
 
   @include mobile {
-    min-height: calc(100vh - #{$altura-header-mobile} - 84px);
+    min-height: calc(100vh - #{$altura-header-mobile} - 180px);
   }
-}
-
-.pagina {
-  max-width: $largura-leitura;
-  min-width: 0;
-}
-
-.cabecalho__nome {
-  margin: 0 0 $sp-3;
-  font-family: $fonte-display;
-  font-size: $t-h1;
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: $tracking-tight;
-  color: $ink;
-}
-
-.cabecalho__resumo {
-  margin: 0;
-  font-family: $fonte-serif;
-  font-size: $t-lead;
-  line-height: 1.7;
-  color: $ink-mut;
 }
 
 // Abas: rolam na horizontal dentro do próprio <nav>, nunca alargam a página.
 .abas {
   display: flex;
   gap: $sp-6;
-  margin: $sp-8 0 $sp-8;
-  border-bottom: 1px solid $hair;
+  max-width: $coluna-leitura;
+  margin: $sp-6 0 $sp-8;
+  border-block: 1px solid $tinta;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
+  font-family: $fonte-corrente;
+  font-size: 1.125rem;
+  font-weight: 500;
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  @include mobile {
+    gap: $sp-4;
+    padding-right: $sp-8;
+    mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
   }
 }
 
 .aba {
   flex: 0 0 auto;
-  padding: $sp-3 0;
-  margin-bottom: -1px;
-  border-bottom: 2px solid transparent;
-  font-family: $fonte-display;
-  font-size: $t-body;
-  font-weight: 600;
-  color: $ink-mut;
+  padding-block: $sp-2;
+  line-height: 28px;
+  color: $tinta;
   text-decoration: none;
   white-space: nowrap;
 
   &:hover {
-    color: $ink;
+    text-decoration: underline;
   }
 
   &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 2px;
+    outline-offset: -2px;
   }
 }
 
 .aba--ativa {
-  color: $ink;
-  border-bottom-color: $acc;
+  color: $rubrica;
+  font-weight: 700;
 }
 
-.visao {
-  margin: 0 0 $sp-8;
+.perfil {
+  margin: 0 0 $sp-12;
 }
 
-.visao__linha {
-  display: grid;
-  grid-template-columns: 9rem 1fr;
-  gap: $sp-4;
-  padding: $sp-3 0;
-  border-top: 1px solid $hair;
-
-  &:last-child {
-    border-bottom: 1px solid $hair;
-  }
-
-  @include tablet {
-    grid-template-columns: 1fr;
-    gap: $sp-1;
-  }
+.perfil__item {
+  margin-bottom: $sp-4;
 
   dt {
-    font-family: $fonte-display;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: $ink-mut;
+    font-family: $fonte-corrente;
+    font-size: $t-corrente;
+    font-weight: 700;
+    color: $tinta-mut;
   }
 
   dd {
     margin: 0;
-    font-family: $fonte-serif;
-    font-size: $t-body;
-    line-height: 1.6;
-    color: $ink;
   }
-}
 
-.visao__refs {
-  display: block;
-  font-size: 0.875rem;
+  p {
+    margin: 0;
+    line-height: $entrelinha-texto;
+  }
 }
 
 .pagina--estado {
-  padding-top: $sp-8;
+  max-width: $largura-folha;
+  margin: 0 auto;
+  padding: $sp-12 $margem-folha;
 }
 
 .estado__texto {
+  max-width: $coluna-leitura;
   margin: 0 0 $sp-4;
-  font-family: $fonte-serif;
-  font-size: $t-body;
-  line-height: 1.6;
-  color: $ink;
+  line-height: $entrelinha-texto;
 }
 
 .estado__botao {
-  padding: $sp-2 $sp-4;
-  border: 1px solid $borda-controlo;
+  min-height: 44px;
+  padding: 0 $sp-4;
+  border: 1px solid $tinta;
   border-radius: $raio;
-  background: $superficie;
-  font-family: $fonte-display;
-  font-size: $t-body;
-  font-weight: 600;
-  color: $ink;
+  background: transparent;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 500;
+  color: $tinta;
   cursor: pointer;
 
   &:hover {
-    border-color: $acc;
-    color: $acc;
-  }
-
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 2px;
+    background: #f1f1ec;
   }
 }

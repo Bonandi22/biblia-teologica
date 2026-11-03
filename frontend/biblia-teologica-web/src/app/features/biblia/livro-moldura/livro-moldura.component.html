@@ -1,0 +1,58 @@
+<div class="moldura">
+  @if (secao(); as s) {
+    <nav class="moldura__divisao" [attr.aria-label]="'Livros de ' + s">
+      <p class="moldura__secao">{{ s }}</p>
+      <button
+        class="moldura__secao-botao"
+        type="button"
+        [attr.aria-expanded]="divisaoAberta()"
+        aria-controls="livros-da-divisao"
+        (click)="alternarDivisao()"
+      >
+        {{ s }}
+      </button>
+      <ul
+        id="livros-da-divisao"
+        class="moldura__livros"
+        [class.moldura__livros--aberta]="divisaoAberta()"
+      >
+        @for (l of daDivisao(); track l.slug) {
+          <li>
+            <a
+              [routerLink]="['/biblia', l.slug]"
+              [attr.aria-current]="l.slug === slug() ? 'page' : null"
+              >{{ l.nome }}</a
+            >
+          </li>
+        }
+      </ul>
+    </nav>
+  }
+
+  <div class="moldura__principal">
+    <header class="moldura__cabecalho">
+      <h1 class="moldura__nome">{{ nome() }}</h1>
+      @if (resumo(); as r) {
+        <p class="moldura__resumo">{{ r }}</p>
+      }
+      @if (capitulos().length > 0) {
+        <nav class="moldura__capitulos" aria-label="Capítulos na ARC">
+          <ol>
+            @for (c of capitulos(); track c.numero) {
+              <li>
+                <a
+                  [href]="c.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  [attr.aria-label]="nome() + ' ' + c.numero + ' na ARC, abre em nova aba'"
+                  >{{ c.numero }}</a
+                >
+              </li>
+            }
+          </ol>
+        </nav>
+      }
+    </header>
+    <ng-content />
+  </div>
+</div>

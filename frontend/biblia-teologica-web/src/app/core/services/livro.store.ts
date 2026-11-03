@@ -1,5 +1,6 @@
 import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { nomeDeExibicao, rotuloDeSecao } from '../biblia/nome-livro';
 import { LivroService } from './livro.service';
 import type { LivroListItem } from '../models/livro.model';
 
@@ -24,7 +25,13 @@ export class LivroStore {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (livros) => {
-          this._livros.set(livros);
+          this._livros.set(
+            livros.map((l) => ({
+              ...l,
+              nome: nomeDeExibicao(l.nome),
+              secaoRotulo: rotuloDeSecao(l.secaoRotulo),
+            })),
+          );
           this.carregado = true;
           this._carregando.set(false);
         },

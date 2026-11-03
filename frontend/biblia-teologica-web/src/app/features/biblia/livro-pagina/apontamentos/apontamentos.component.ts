@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import type { Apontamento } from '../../../../core/models/conteudo.model';
-import { BibliografiaComponent } from '../../../../shared/ui/bibliografia/bibliografia.component';
+import { LinhaEstudoComponent } from '../../../../shared/ui/linha-estudo/linha-estudo.component';
 import { ReferenciaComponent } from '../../../../shared/ui/referencia/referencia.component';
 import { TextoNotasComponent } from '../../../../shared/ui/texto-notas/texto-notas.component';
 
@@ -8,7 +8,7 @@ import { TextoNotasComponent } from '../../../../shared/ui/texto-notas/texto-not
 @Component({
   selector: 'bt-apontamentos',
   standalone: true,
-  imports: [ReferenciaComponent, TextoNotasComponent, BibliografiaComponent],
+  imports: [LinhaEstudoComponent, ReferenciaComponent, TextoNotasComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './apontamentos.component.html',
   styleUrl: './apontamentos.component.scss',

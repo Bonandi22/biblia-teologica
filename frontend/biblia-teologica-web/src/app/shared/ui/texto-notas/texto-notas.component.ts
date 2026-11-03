@@ -44,6 +44,9 @@ export class TextoNotasComponent {
 
   protected ir(evento: Event, numero: number): void {
     evento.preventDefault();
-    document.getElementById(this.id(numero))?.scrollIntoView({ block: 'center' });
+    const nota = document.getElementById(this.id(numero));
+    // No computador a nota já está ao lado do texto: só rola se estiver fora da tela.
+    nota?.scrollIntoView({ block: 'nearest' });
+    nota?.focus({ preventScroll: true });
   }
 }

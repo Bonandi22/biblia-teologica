@@ -3,24 +3,19 @@
     <bt-biblia-ficha />
   }
   @case ('erro') {
-    <div class="pagina pagina--estado" role="alert">
+    <div class="pagina--estado" role="alert">
       <p class="estado__texto">Não foi possível carregar este livro. Verifique a conexão e tente de novo.</p>
       <button type="button" class="estado__botao" (click)="tentarNovamente()">Tentar novamente</button>
     </div>
   }
   @case ('carregando') {
-    <div class="pagina pagina--estado" aria-busy="true">
+    <div class="pagina--estado" aria-busy="true">
       <p class="estado__texto">Carregando…</p>
     </div>
   }
   @case ('panorama') {
     @if (livro(); as l) {
-      <div class="pagina">
-        <header class="cabecalho">
-          <h1 class="cabecalho__nome">{{ nome() }}</h1>
-          <p class="cabecalho__resumo">{{ l.resumo }}</p>
-        </header>
-
+      <bt-livro-moldura [slug]="slug()" [resumo]="l.resumo">
         <nav class="abas" aria-label="Seções do livro">
           @for (aba of abas(); track aba.chave) {
             <a
@@ -36,19 +31,17 @@
         <section class="corpo" [attr.aria-label]="rotuloAtivo()">
           @switch (ativa()) {
             @case ('panorama') {
-              <dl class="visao">
+              <dl class="perfil">
                 @for (item of l.perfil; track $index) {
-                  <div class="visao__linha">
+                  <div class="perfil__item">
                     <dt>{{ item.rotulo }}</dt>
                     <dd>
-                      {{ item.texto }}
-                      @if (item.referencias.length > 0) {
-                        <span class="visao__refs">
-                          @for (r of item.referencias; track $index) {
-                            <bt-referencia [texto]="r" />@if (!$last) {; }
-                          }
-                        </span>
-                      }
+                      <bt-linha-estudo
+                        [referencias]="item.referencias"
+                        [titulo]="$first && item.referencias.length > 0 ? 'Referências' : null"
+                      >
+                        <p>{{ item.texto }}</p>
+                      </bt-linha-estudo>
                     </dd>
                   </div>
                 }
@@ -72,7 +65,7 @@
             }
           }
         </section>
-      </div>
+      </bt-livro-moldura>
     }
   }
 }

@@ -7,7 +7,7 @@ import {
   DestroyRef,
   signal,
 } from '@angular/core';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { LivroStore } from '../../../core/services/livro.store';
@@ -32,7 +32,7 @@ const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLo
   selector: 'bt-biblia-lista',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './biblia-lista.component.html',
   styleUrl: './biblia-lista.component.scss',
 })

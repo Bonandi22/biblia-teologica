@@ -44,8 +44,8 @@ describe('BibliaListaComponent', () => {
     fixture.componentInstance.busca.set('genes');
     fixture.detectChanges();
     const texto = fixture.nativeElement.textContent;
-    expect(texto).toContain('GÊNESIS');
-    expect(texto).not.toContain('ÊXODO');
+    expect(texto).toContain('Gênesis');
+    expect(texto).not.toContain('Êxodo');
   });
 
   describe('redirecionamento', () => {

@@ -1,32 +1,16 @@
 @use '../../../../../styles/variables' as *;
 
-:host {
-  display: block;
-  max-width: $largura-leitura;
-}
-
 .apontamento {
-  padding: $sp-8 0;
-  border-top: 1px solid $hair;
-
-  &:first-child {
-    border-top: 0;
-    padding-top: 0;
-  }
+  margin-bottom: $sp-8;
 }
 
 .apontamento__ref {
-  margin: 0 0 $sp-3;
-  font-family: $fonte-display;
-  font-size: $t-h3;
+  margin: 0;
+  font-size: $t-lead;
   font-weight: 700;
-  color: $ink;
 }
 
 .apontamento__anuncia {
-  margin: 0 0 $sp-4;
-  font-family: $fonte-serif;
-  font-size: $t-lead;
-  line-height: 1.75;
-  color: $ink;
+  margin: $sp-1 0 0;
+  line-height: $entrelinha-texto;
 }

@@ -1,0 +1,177 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+:host {
+  display: block;
+}
+
+.moldura {
+  display: grid;
+  grid-template-columns: $coluna-divisao minmax(0, 1fr);
+  column-gap: $sp-8;
+  max-width: $largura-folha;
+  margin: 0 auto;
+  padding: $sp-8 $margem-folha $sp-16;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: $sp-4;
+  }
+}
+
+.moldura__divisao {
+  position: sticky;
+  top: $sp-6;
+  align-self: start;
+  padding-top: $sp-6;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 500;
+
+  @include mobile {
+    position: static;
+    padding-top: 0;
+    margin-bottom: $sp-4;
+  }
+}
+
+.moldura__secao,
+.moldura__secao-botao {
+  margin: 0 0 $sp-2;
+  font: inherit;
+  font-weight: 700;
+  color: $rubrica;
+}
+
+.moldura__secao {
+  @include mobile {
+    display: none;
+  }
+}
+
+.moldura__secao-botao {
+  display: none;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+
+  @include mobile {
+    display: block;
+    margin: 0;
+  }
+}
+
+.moldura__livros {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: block;
+    padding-block: $sp-1;
+    color: $tinta-mut;
+    text-decoration: none;
+
+    &:hover {
+      color: $tinta;
+      text-decoration: underline;
+    }
+
+    &[aria-current='page'] {
+      color: $tinta;
+      font-weight: 700;
+    }
+  }
+
+  @include mobile {
+    display: none;
+
+    &--aberta {
+      display: block;
+    }
+
+    a {
+      padding-block: $sp-2;
+    }
+  }
+}
+
+.moldura__principal {
+  min-width: 0;
+}
+
+.moldura__cabecalho {
+  max-width: $coluna-leitura;
+}
+
+.moldura__nome {
+  margin: 0;
+  font-size: $t-h1;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.moldura__resumo {
+  margin: $sp-3 0 0;
+  font-size: $t-lead;
+  font-style: italic;
+  line-height: 1.45;
+  color: $rubrica;
+  text-wrap: pretty;
+}
+
+// Os capítulos quebram em linhas no computador; no celular rolam em uma só, para não empurrar o texto.
+.moldura__capitulos {
+  margin-top: $sp-4;
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-block;
+    min-width: 28px;
+    padding: 2px;
+    font-family: $fonte-corrente;
+    font-size: $t-nota;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+    color: $tinta-mut;
+    text-decoration: none;
+
+    &:hover {
+      color: $rubrica;
+      text-decoration: underline;
+    }
+  }
+
+  @include mobile {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+
+    ol {
+      flex-wrap: nowrap;
+      width: max-content;
+      padding-right: $sp-8;
+    }
+
+    a {
+      min-width: 32px;
+      line-height: 36px;
+    }
+  }
+}

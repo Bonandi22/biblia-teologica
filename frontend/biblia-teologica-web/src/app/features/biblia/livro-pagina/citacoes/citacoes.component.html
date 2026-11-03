@@ -1,17 +1,18 @@
 @for (c of citacoes(); track $index) {
-  <article class="citacao">
-    <p class="citacao__trecho"><bt-referencia [texto]="c.trecho" /></p>
-    <p class="citacao__lugares">
-      <span class="citacao__legenda">Citado em</span>
-      @for (r of c.citadoEm; track $index) {
-        <bt-referencia [texto]="r" />@if (!$last) {; }
+  <bt-linha-estudo
+    class="citacao"
+    titulo="Citado em"
+    [referencias]="c.citadoEm"
+    [notas]="c.notas"
+    [prefixo]="'cit-' + $index"
+  >
+    <article>
+      <h3 class="citacao__trecho"><bt-referencia [texto]="c.trecho" /></h3>
+      @if (c.comentario; as comentario) {
+        <p class="citacao__comentario">
+          <bt-texto-notas [texto]="comentario" [prefixo]="'cit-' + $index" />
+        </p>
       }
-    </p>
-    @if (c.comentario; as comentario) {
-      <p class="citacao__comentario">
-        <bt-texto-notas [texto]="comentario" [prefixo]="'cit-' + $index" />
-      </p>
-    }
-    <bt-bibliografia [notas]="c.notas" [prefixo]="'cit-' + $index" />
-  </article>
+    </article>
+  </bt-linha-estudo>
 }

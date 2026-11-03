@@ -1,0 +1,29 @@
+<div class="linha">
+  <div class="linha__texto"><ng-content /></div>
+  @if (temColuna()) {
+    <aside class="linha__coluna" [attr.aria-label]="titulo() ?? 'Referências e notas'">
+      @if (titulo(); as t) {
+        <p class="linha__titulo">{{ t }}</p>
+      }
+      @if (referencias().length > 0) {
+        <ul class="linha__refs">
+          @for (r of referencias(); track $index) {
+            <li><bt-referencia [texto]="r" /></li>
+          }
+        </ul>
+      }
+      @if (notas().length > 0) {
+        <ol class="linha__notas">
+          @for (n of notas(); track n.numero) {
+            <li [id]="id(n.numero)" [attr.value]="n.numero" tabindex="-1">
+              {{ n.citacao }}
+              @if (n.url) {
+                <a [href]="n.url" target="_blank" rel="noopener noreferrer">Abrir fonte</a>
+              }
+            </li>
+          }
+        </ol>
+      }
+    </aside>
+  }
+</div>

@@ -1,0 +1,98 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+:host {
+  display: block;
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: minmax(0, $coluna-leitura) minmax(0, $coluna-referencias);
+  column-gap: $sp-8;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.linha__texto {
+  min-width: 0;
+}
+
+.linha__coluna {
+  padding-left: $sp-4;
+  border-left: 1px solid $filete;
+  font-size: $t-nota;
+  line-height: 1.5;
+
+  @include mobile {
+    margin-top: $sp-3;
+    padding: $sp-3 0 0;
+    border-left: 0;
+    border-top: 1px solid $filete;
+  }
+}
+
+.linha__titulo {
+  margin: 0 0 $sp-2;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 700;
+  color: $rubrica;
+}
+
+.linha__refs,
+.linha__notas {
+  margin: 0 0 $sp-3;
+  padding: 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.linha__refs {
+  list-style: none;
+
+  li {
+    padding-block: 2px;
+  }
+}
+
+.linha__notas {
+  padding-left: $sp-6;
+  color: $tinta-mut;
+
+  li {
+    padding: 2px $sp-1;
+    margin-bottom: $sp-2;
+    scroll-margin-top: $sp-6;
+    transition: background 0.15s ease;
+
+    &::marker {
+      color: $rubrica;
+      font-weight: 700;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &.is-destaque,
+    &:target {
+      background: rgba(158, 27, 27, 0.08);
+      color: $tinta;
+    }
+  }
+
+  a {
+    color: $rubrica;
+    white-space: nowrap;
+  }
+}
+
+// A chamada fica no conteúdo projetado, fora do encapsulamento deste componente.
+:host ::ng-deep sup a.is-destaque {
+  background: $rubrica;
+  color: $papel;
+}

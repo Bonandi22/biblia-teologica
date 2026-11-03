@@ -17,7 +17,8 @@ import type { Bloco, LivroPanorama } from '../../../core/models/conteudo.model';
 import { ConteudoService } from '../../../core/services/conteudo.service';
 import { LivroStore } from '../../../core/services/livro.store';
 import { BlocoConteudoComponent } from '../../../shared/ui/bloco-conteudo/bloco-conteudo.component';
-import { ReferenciaComponent } from '../../../shared/ui/referencia/referencia.component';
+import { LinhaEstudoComponent } from '../../../shared/ui/linha-estudo/linha-estudo.component';
+import { LivroMolduraComponent } from '../livro-moldura/livro-moldura.component';
 import { BibliaFichaComponent } from '../biblia-ficha/biblia-ficha.component';
 import { CitacoesComponent } from './citacoes/citacoes.component';
 import { ApontamentosComponent } from './apontamentos/apontamentos.component';
@@ -47,7 +48,8 @@ const ABA_CITACOES: Aba = { chave: 'citacoes', rotulo: 'Citações' };
     RouterLink,
     BibliaFichaComponent,
     BlocoConteudoComponent,
-    ReferenciaComponent,
+    LinhaEstudoComponent,
+    LivroMolduraComponent,
     ApontamentosComponent,
     CitacoesComponent,
   ],

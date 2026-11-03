@@ -1,9 +1,10 @@
 @for (a of itens(); track $index) {
-  <article class="apontamento">
-    <h3 class="apontamento__ref"><bt-referencia [texto]="a.referencia" /></h3>
-    <p class="apontamento__anuncia">
-      <bt-texto-notas [texto]="a.anuncia" [prefixo]="prefixo() + '-' + $index" />
-    </p>
-    <bt-bibliografia [notas]="a.notas" [prefixo]="prefixo() + '-' + $index" />
-  </article>
+  <bt-linha-estudo class="apontamento" [notas]="a.notas" [prefixo]="prefixo() + '-' + $index">
+    <article>
+      <h3 class="apontamento__ref"><bt-referencia [texto]="a.referencia" /></h3>
+      <p class="apontamento__anuncia">
+        <bt-texto-notas [texto]="a.anuncia" [prefixo]="prefixo() + '-' + $index" />
+      </p>
+    </article>
+  </bt-linha-estudo>
 }

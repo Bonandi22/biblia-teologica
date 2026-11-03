@@ -60,6 +60,19 @@ describe('TextoNotasComponent', () => {
     alvo.remove();
   });
 
+  it('leva o foco à nota e só rola o mínimo necessário', () => {
+    const alvo = document.createElement('li');
+    alvo.id = 'nota-1';
+    alvo.tabIndex = -1;
+    alvo.scrollIntoView = vi.fn();
+    document.body.appendChild(alvo);
+    const el: HTMLElement = criar('Texto[^1]').nativeElement;
+    (el.querySelector('sup a') as HTMLElement).click();
+    expect(alvo.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+    expect(document.activeElement).toBe(alvo);
+    alvo.remove();
+  });
+
   it('não renderiza HTML presente no texto', () => {
     const el: HTMLElement = criar('<b>negrito</b><img src=x>').nativeElement;
     expect(el.querySelector('b')).toBeNull();
