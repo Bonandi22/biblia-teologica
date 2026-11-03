@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { Item } from '../../../core/models/conteudo.model';
+import { ReferenciaComponent } from '../referencia/referencia.component';
 import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
 
 @Component({
   selector: 'bt-item-estudo',
   standalone: true,
-  imports: [RouterLink, TextoNotasComponent],
+  imports: [RouterLink, ReferenciaComponent, TextoNotasComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <article class="item">
@@ -18,7 +19,11 @@ import { TextoNotasComponent } from '../texto-notas/texto-notas.component';
       }
       <p class="item__texto"><bt-texto-notas [texto]="item().texto" [prefixo]="prefixo()" /></p>
       @if (item().referencias.length > 0) {
-        <p class="item__refs">{{ item().referencias.join('; ') }}</p>
+        <p class="item__refs">
+          @for (r of item().referencias; track $index) {
+            <bt-referencia [texto]="r" />@if (!$last) {; }
+          }
+        </p>
       }
       @if (item().saberMais; as mais) {
         <details class="item__mais">

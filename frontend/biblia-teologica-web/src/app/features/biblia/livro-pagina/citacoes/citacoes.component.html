@@ -1,9 +1,11 @@
 @for (c of citacoes(); track $index) {
   <article class="citacao">
-    <blockquote class="citacao__trecho">{{ c.trecho }}</blockquote>
+    <p class="citacao__trecho"><bt-referencia [texto]="c.trecho" /></p>
     <p class="citacao__lugares">
       <span class="citacao__legenda">Citado em</span>
-      {{ c.citadoEm.join('; ') }}
+      @for (r of c.citadoEm; track $index) {
+        <bt-referencia [texto]="r" />@if (!$last) {; }
+      }
     </p>
     @if (c.comentario; as comentario) {
       <p class="citacao__comentario">

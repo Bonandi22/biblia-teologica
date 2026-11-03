@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import type { Apontamento } from '../../../../core/models/conteudo.model';
 import { BibliografiaComponent } from '../../../../shared/ui/bibliografia/bibliografia.component';
+import { ReferenciaComponent } from '../../../../shared/ui/referencia/referencia.component';
 import { TextoNotasComponent } from '../../../../shared/ui/texto-notas/texto-notas.component';
 
 /** Profecias ou promessas: só aponta o trecho, na ordem do livro, sem categoria nem cumprimento. */
 @Component({
   selector: 'bt-apontamentos',
   standalone: true,
-  imports: [TextoNotasComponent, BibliografiaComponent],
+  imports: [ReferenciaComponent, TextoNotasComponent, BibliografiaComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './apontamentos.component.html',
   styleUrl: './apontamentos.component.scss',

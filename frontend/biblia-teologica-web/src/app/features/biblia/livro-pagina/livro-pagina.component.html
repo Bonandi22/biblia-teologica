@@ -43,7 +43,11 @@
                     <dd>
                       {{ item.texto }}
                       @if (item.referencias.length > 0) {
-                        <span class="visao__refs">{{ item.referencias.join('; ') }}</span>
+                        <span class="visao__refs">
+                          @for (r of item.referencias; track $index) {
+                            <bt-referencia [texto]="r" />@if (!$last) {; }
+                          }
+                        </span>
                       }
                     </dd>
                   </div>

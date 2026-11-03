@@ -1,0 +1,12 @@
+@use '../../../../styles/variables' as *;
+
+.referencia {
+  color: $acc;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: $acc-dk;
+  }
+}

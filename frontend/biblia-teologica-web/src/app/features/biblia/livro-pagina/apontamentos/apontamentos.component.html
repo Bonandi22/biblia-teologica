@@ -1,6 +1,6 @@
 @for (a of itens(); track $index) {
   <article class="apontamento">
-    <h3 class="apontamento__ref">{{ a.referencia }}</h3>
+    <h3 class="apontamento__ref"><bt-referencia [texto]="a.referencia" /></h3>
     <p class="apontamento__anuncia">
       <bt-texto-notas [texto]="a.anuncia" [prefixo]="prefixo() + '-' + $index" />
     </p>
