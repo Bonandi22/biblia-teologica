@@ -12,6 +12,7 @@ public static class DependencyInjection
         services.AddScoped<Auth.IAuthService, Auth.AuthService>();
         services.AddScoped<Conta.IContaService, Conta.ContaService>();
         services.AddScoped<Conteudo.ImportadorConteudo>();
+        services.AddScoped<Conteudo.IConteudoQueryService, Conteudo.ConteudoQueryService>();
         return services;
     }
 }
