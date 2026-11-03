@@ -11,7 +11,7 @@
   padding: 10px 18px;
   border: 1px solid transparent;
   border-radius: $raio;
-  font-family: $fonte-display;
+  font-family: $fonte-corrente;
   font-size: $t-corrente;
   font-weight: 500;
   line-height: 1;
@@ -29,7 +29,7 @@
 }
 
 .botao--primario {
-  background: $ink;
+  background: $tinta;
   color: #fff;
 
   &:not(:disabled):hover {

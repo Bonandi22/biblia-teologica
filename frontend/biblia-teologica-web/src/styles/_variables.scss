@@ -48,28 +48,3 @@ $altura-header-mobile: 56px;
 // ── Breakpoints ──────────────────────
 $bp-mobile: 900px;
 $bp-tablet: 640px;
-
-// Aliases de transição: removidos na Task 9, quando nenhuma tela usar mais estes nomes.
-$ink: $tinta;
-$ink-mut: $tinta-mut;
-$paper: $papel;
-$superficie: $papel;
-$hair: $filete;
-$acc: $rubrica;
-$acc-dk: $rubrica-escura;
-$acc-tint: rgba(158, 27, 27, 0.08);
-$parchment: $papel;
-$parchment-2: #f1f1ec;
-$card: $papel;
-$line: $filete;
-$brass: $rubrica;
-$near-black: $tinta;
-$sage: $tinta-mut;
-$fonte-display: $fonte-corrente;
-$fonte-serif: $fonte-texto;
-$fonte-mono: $fonte-corrente;
-$t-eyebrow: 0.875rem;
-$tracking-tight: 0;
-$tracking-eyebrow: 0.02em;
-$largura-conteudo: 1080px;
-$largura-leitura: $coluna-leitura;

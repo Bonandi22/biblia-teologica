@@ -5,16 +5,15 @@
   max-width: 400px;
   margin: 0 auto;
   padding: $sp-8;
-  background: $superficie;
-  border: 1px solid $hair;
+  background: $papel;
+  border: 1px solid $filete;
   border-radius: $raio;
 }
 
 .cartao__titulo {
   margin: 0 0 $sp-6;
-  font-family: $fonte-display;
+  font-family: $fonte-corrente;
   font-weight: 700;
   font-size: $t-h3;
-  letter-spacing: $tracking-tight;
-  color: $ink;
+  color: $tinta;
 }

@@ -8,7 +8,7 @@
 .campo__rotulo {
   display: block;
   margin-bottom: $sp-2;
-  font-family: $fonte-display;
+  font-family: $fonte-corrente;
   font-size: $t-corrente;
   font-weight: 500;
   color: $tinta;
@@ -23,7 +23,7 @@
   padding: 9px 12px;
   border: 1px solid $borda-controlo;
   border-radius: $raio;
-  background: $superficie;
+  background: $papel;
   font-family: $fonte-texto;
   font-size: 1rem;
   color: $tinta;
@@ -33,7 +33,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid $acc;
+    outline: 2px solid $rubrica;
     outline-offset: 1px;
   }
 

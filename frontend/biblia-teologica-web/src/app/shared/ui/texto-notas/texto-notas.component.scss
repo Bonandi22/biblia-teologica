@@ -1,13 +1,13 @@
 @use '../../../../styles/variables' as *;
 
 .nota {
-  font-family: $fonte-display;
+  font-family: $fonte-corrente;
   font-size: 0.7em;
   line-height: 0;
   margin-left: 1px;
 
   a {
-    color: $acc;
+    color: $rubrica;
     text-decoration: none;
     padding: 0 2px;
     border-radius: 2px;
@@ -30,7 +30,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $acc;
+      outline: 2px solid $rubrica;
       outline-offset: 1px;
     }
   }
