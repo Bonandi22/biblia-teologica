@@ -1,0 +1,46 @@
+@use '../../../../styles/variables' as *;
+
+.biblio {
+  max-width: $largura-leitura;
+  margin-top: $sp-12;
+  padding-top: $sp-6;
+  border-top: 1px solid $hair;
+}
+
+.biblio__titulo {
+  margin: 0 0 $sp-4;
+  font-family: $fonte-display;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: $tracking-tight;
+  color: $ink;
+}
+
+.biblio__lista {
+  margin: 0;
+  padding-left: $sp-6;
+  font-family: $fonte-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: $ink-mut;
+}
+
+.biblio__item {
+  padding-left: $sp-1;
+  margin-bottom: $sp-2;
+  scroll-margin-top: calc(#{$altura-header} + #{$sp-6});
+
+  &:target {
+    color: $ink;
+  }
+
+  a {
+    margin-left: $sp-2;
+    color: $acc;
+
+    &:focus-visible {
+      outline: 2px solid $acc;
+      outline-offset: 2px;
+    }
+  }
+}

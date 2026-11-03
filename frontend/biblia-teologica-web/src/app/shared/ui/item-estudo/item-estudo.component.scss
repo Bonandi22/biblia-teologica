@@ -1,0 +1,78 @@
+@use '../../../../styles/variables' as *;
+
+.item {
+  max-width: $largura-leitura;
+  padding: $sp-4 0 $sp-4 $sp-4;
+  border-left: 2px solid $hair;
+}
+
+.item__quando {
+  margin: 0 0 $sp-1;
+  font-family: $fonte-display;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: $acc;
+}
+
+.item__nome {
+  margin: 0 0 $sp-1;
+  font-family: $fonte-display;
+  font-size: $t-lead;
+  font-weight: 700;
+  letter-spacing: $tracking-tight;
+  color: $ink;
+}
+
+.item__texto,
+.item__mais p {
+  margin: 0;
+  font-family: $fonte-serif;
+  font-size: $t-body;
+  line-height: 1.7;
+  color: $ink;
+}
+
+.item__refs {
+  margin: $sp-2 0 0;
+  font-family: $fonte-display;
+  font-size: 0.8125rem;
+  color: $ink-mut;
+}
+
+.item__mais {
+  margin-top: $sp-3;
+
+  summary {
+    cursor: pointer;
+    font-family: $fonte-display;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $acc-dk;
+
+    &:focus-visible {
+      outline: 2px solid $acc;
+      outline-offset: 2px;
+    }
+  }
+
+  p {
+    margin-top: $sp-2;
+    padding: $sp-3 $sp-4;
+    background: $parchment-2;
+    border-radius: $raio;
+  }
+}
+
+.item__estudo {
+  display: inline-block;
+  margin-top: $sp-3;
+  font-family: $fonte-display;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $acc;
+
+  &:focus-visible {
+    outline: 2px solid $acc;
+    outline-offset: 2px;
+  }
+}

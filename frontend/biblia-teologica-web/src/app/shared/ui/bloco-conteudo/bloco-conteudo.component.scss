@@ -1,0 +1,23 @@
+@use '../../../../styles/variables' as *;
+
+.bloco__explicacao {
+  max-width: $largura-leitura;
+  margin: 0 0 $sp-8;
+  font-family: $fonte-serif;
+  font-size: $t-lead;
+  line-height: 1.75;
+  color: $ink;
+}
+
+.bloco__secao {
+  margin-top: $sp-8;
+}
+
+.bloco__titulo {
+  margin: 0 0 $sp-3;
+  font-family: $fonte-display;
+  font-size: $t-h3;
+  font-weight: 700;
+  letter-spacing: $tracking-tight;
+  color: $ink;
+}

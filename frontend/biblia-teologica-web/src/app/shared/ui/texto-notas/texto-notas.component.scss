@@ -1,0 +1,24 @@
+@use '../../../../styles/variables' as *;
+
+.nota {
+  font-family: $fonte-display;
+  font-size: 0.7em;
+  line-height: 0;
+  margin-left: 1px;
+
+  a {
+    color: $acc;
+    text-decoration: none;
+    padding: 0 2px;
+    border-radius: 2px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $acc;
+      outline-offset: 1px;
+    }
+  }
+}
