@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { idNota } from '../texto-notas/texto-notas.component';
+import { idNota, irParaNota } from '../texto-notas/texto-notas.component';
 import { renderizarMarkdown } from './markdown';
 
 const HREF_NOTA = /^#nota-(\d+)$/;
@@ -24,6 +24,6 @@ export class MarkdownComponent {
     const m = HREF_NOTA.exec(link?.getAttribute('href') ?? '');
     if (!m) return;
     evento.preventDefault();
-    document.getElementById(idNota(Number(m[1]), this.prefixo()))?.scrollIntoView({ block: 'center' });
+    irParaNota(idNota(Number(m[1]), this.prefixo()));
   }
 }

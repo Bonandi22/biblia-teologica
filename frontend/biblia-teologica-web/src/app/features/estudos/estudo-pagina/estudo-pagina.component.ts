@@ -12,10 +12,11 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription, map } from 'rxjs';
+import { LugarAtualService } from '../../../core/layout/lugar-atual.service';
 import type { Estudo } from '../../../core/models/conteudo.model';
 import { ConteudoService } from '../../../core/services/conteudo.service';
 import { LivroStore } from '../../../core/services/livro.store';
-import { BibliografiaComponent } from '../../../shared/ui/bibliografia/bibliografia.component';
+import { LinhaEstudoComponent } from '../../../shared/ui/linha-estudo/linha-estudo.component';
 import { MarkdownComponent } from '../../../shared/ui/markdown/markdown.component';
 
 type Estado = 'carregando' | 'pronto' | 'naoEncontrado' | 'erro';
@@ -24,7 +25,7 @@ type Estado = 'carregando' | 'pronto' | 'naoEncontrado' | 'erro';
   selector: 'bt-estudo-pagina',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MarkdownComponent, BibliografiaComponent],
+  imports: [RouterLink, MarkdownComponent, LinhaEstudoComponent],
   templateUrl: './estudo-pagina.component.html',
   styleUrl: './estudo-pagina.component.scss',
 })
@@ -46,6 +47,9 @@ export class EstudoPaginaComponent {
 
   constructor() {
     this.store.carregar();
+    const lugar = inject(LugarAtualService);
+    lugar.definir('Estudo');
+    this.destroyRef.onDestroy(() => lugar.limpar());
 
     effect(() => {
       const slug = this.slug();

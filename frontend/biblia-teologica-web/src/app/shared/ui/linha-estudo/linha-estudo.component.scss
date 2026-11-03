@@ -27,6 +27,16 @@
   }
 }
 
+.linha__coluna--fixa {
+  position: sticky;
+  top: $sp-6;
+  align-self: start;
+
+  @include mobile {
+    position: static;
+  }
+}
+
 .linha__titulo {
   margin: 0 0 $sp-2;
   font-family: $fonte-corrente;

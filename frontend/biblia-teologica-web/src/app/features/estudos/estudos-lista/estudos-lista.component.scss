@@ -4,123 +4,97 @@
 // Página de topo: fundo e altura mínima próprios.
 :host {
   display: block;
-  min-height: calc(100vh - #{$altura-header} - 116px);
-  background: $paper;
-
-  @include mobile {
-    min-height: calc(100vh - #{$altura-header-mobile} - 84px);
-  }
+  min-height: calc(100vh - #{$altura-header} - 130px);
+  background: $papel;
 }
 
 .pagina {
-  max-width: $largura-conteudo;
+  max-width: $largura-folha;
   margin: 0 auto;
-  padding: $sp-12 $sp-6 $sp-16;
-
-  @include mobile {
-    padding: $sp-8 18px $sp-12;
-  }
+  padding: $sp-8 $margem-folha $sp-16;
 }
 
 .cabecalho {
-  max-width: $largura-leitura;
   margin-bottom: $sp-12;
+
+  h1 {
+    margin: 0;
+    font-size: $t-h1;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    max-width: $coluna-leitura;
+    margin: $sp-4 0 0;
+    font-size: $t-lead;
+    font-style: italic;
+    line-height: 1.45;
+  }
 }
 
-.cabecalho__titulo {
-  margin: 0 0 $sp-3;
-  font-family: $fonte-display;
-  font-size: $t-h1;
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: $tracking-tight;
-  color: $ink;
-}
-
-.cabecalho__texto {
-  margin: 0;
-  font-family: $fonte-serif;
-  font-size: $t-lead;
-  line-height: 1.7;
-  color: $ink-mut;
-}
-
-// Índice: linhas separadas por fio, sem caixas. O título carrega a hierarquia.
-.indice {
+.lista {
+  max-width: $coluna-leitura;
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid $hair;
-}
+  border-top: 1px solid $tinta;
 
-.entrada {
-  border-bottom: 1px solid $hair;
-}
-
-.entrada__link {
-  display: block;
-  max-width: $largura-leitura;
-  padding: $sp-6 0 $sp-8;
-  color: inherit;
-  text-decoration: none;
-
-  &:hover .entrada__titulo {
-    color: $acc;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+  li {
+    padding-block: $sp-6;
+    border-bottom: 1px solid $filete;
   }
 
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 4px;
+  h2 {
+    margin: 0;
+    font-size: $t-h3;
+    font-weight: 700;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  a {
+    color: $tinta;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  p {
+    margin: $sp-2 0 0;
+    color: $tinta-mut;
+    line-height: $entrelinha-texto;
   }
 }
 
-.entrada__titulo {
-  margin: 0 0 $sp-2;
-  font-family: $fonte-display;
-  font-size: $t-h2;
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: $tracking-tight;
-  color: $ink;
-}
-
-.entrada__resumo {
+.estado {
+  max-width: $coluna-leitura;
   margin: 0;
-  font-family: $fonte-serif;
-  font-size: $t-lead;
-  line-height: 1.7;
-  color: $ink-mut;
-}
 
-.estado__texto {
-  margin: 0 0 $sp-4;
-  font-family: $fonte-serif;
-  font-size: $t-body;
-  line-height: 1.6;
-  color: $ink;
-}
-
-.estado__botao {
-  padding: $sp-2 $sp-4;
-  border: 1px solid $borda-controlo;
-  border-radius: $raio;
-  background: $superficie;
-  font-family: $fonte-display;
-  font-size: $t-body;
-  font-weight: 600;
-  color: $ink;
-  cursor: pointer;
-
-  &:hover {
-    border-color: $acc;
-    color: $acc;
+  p {
+    margin: 0 0 $sp-4;
   }
 
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 2px;
+  a {
+    font-family: $fonte-corrente;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $tinta;
+  }
+
+  button {
+    min-height: 44px;
+    padding: 0 $sp-4;
+    border: 1px solid $tinta;
+    border-radius: $raio;
+    background: transparent;
+    font-family: $fonte-corrente;
+    font-size: $t-corrente;
+    font-weight: 500;
+    color: $tinta;
+    cursor: pointer;
   }
 }

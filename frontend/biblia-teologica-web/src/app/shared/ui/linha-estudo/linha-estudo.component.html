@@ -1,7 +1,7 @@
 <div class="linha">
   <div class="linha__texto"><ng-content /></div>
   @if (temColuna()) {
-    <aside class="linha__coluna" [attr.aria-label]="titulo() ?? 'Referências e notas'">
+    <aside class="linha__coluna" [class.linha__coluna--fixa]="fixa()" [attr.aria-label]="titulo() ?? 'Referências e notas'">
       @if (titulo(); as t) {
         <p class="linha__titulo">{{ t }}</p>
       }

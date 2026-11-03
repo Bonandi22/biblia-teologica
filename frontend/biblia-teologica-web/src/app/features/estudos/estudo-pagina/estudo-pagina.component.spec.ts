@@ -4,6 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { Title } from '@angular/platform-browser';
+import { LugarAtualService } from '../../../core/layout/lugar-atual.service';
 import { EstudoPaginaComponent } from './estudo-pagina.component';
 import type { Estudo } from '../../../core/models/conteudo.model';
 
@@ -62,18 +63,41 @@ describe('EstudoPaginaComponent', () => {
     expect(TestBed.inject(Title).getTitle()).toBe('O servo sofredor | Bíblia Teológica');
   });
 
-  it('mostra a bibliografia e os links das notas batem com os ids dela', async () => {
+  it('mostra as obras na coluna ao lado do corpo, e os links das notas batem com os ids', async () => {
     await abrir();
     await responder(estudo());
-    expect(el().querySelectorAll('bt-bibliografia li').length).toBe(2);
-    expect(el().textContent).toContain('Obra A, p. 10.');
+    const coluna = el().querySelector('.linha__coluna') as HTMLElement;
+    expect(coluna.textContent).toContain('Bibliografia');
+    expect(coluna.querySelectorAll('li').length).toBe(2);
+    expect(coluna.textContent).toContain('Obra A, p. 10.');
     const hrefs = Array.from(el().querySelectorAll('bt-markdown sup a')).map((a) =>
       a.getAttribute('href'),
     );
     expect(hrefs).toEqual(['#nota-1', '#nota-2']);
     for (const h of hrefs) {
-      expect(el().querySelector(`bt-bibliografia li[id="${h!.slice(1)}"]`)).not.toBeNull();
+      expect(coluna.querySelector(`li[id="${h!.slice(1)}"]`)).not.toBeNull();
     }
+  });
+
+  it('define o lugar atual e o limpa ao sair', async () => {
+    await abrir();
+    await responder(estudo());
+    const lugar = TestBed.inject(LugarAtualService);
+    expect(lugar.texto()).toBe('Estudo');
+    harness.fixture.destroy();
+    expect(lugar.texto()).toBe('');
+  });
+
+  it('mostra o nome do livro na grafia de exibição', async () => {
+    await abrir();
+    await responder(estudo());
+    http.expectOne('/api/livros').flush([
+      { slug: 'isaias', nome: 'ISAÍAS', ordem: 23, secao: 'PM', secaoRotulo: 'PROFETAS MAIORES' },
+    ]);
+    harness.detectChanges();
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+    expect(el().querySelector('a[href="/biblia/isaias"]')?.textContent).toContain('Isaías');
   });
 
   it('lista os estudos relacionados em Continue estudando', async () => {
@@ -83,6 +107,16 @@ describe('EstudoPaginaComponent', () => {
     expect(secao.textContent).toContain('Continue estudando');
     expect(secao.textContent).toContain('O remanescente');
     expect(secao.querySelector('a[href="/estudos/remanescente"]')).not.toBeNull();
+  });
+
+  it('clicar na chamada leva o foco à nota e só rola o mínimo necessário', async () => {
+    await abrir();
+    await responder(estudo());
+    const rolar = vi.fn();
+    Element.prototype.scrollIntoView = rolar;
+    (el().querySelector('bt-markdown sup a') as HTMLElement).click();
+    expect(rolar).toHaveBeenCalledWith({ block: 'nearest' });
+    expect(document.activeElement?.id).toBe('nota-1');
   });
 
   it('não mostra Continue estudando sem relacionados', async () => {

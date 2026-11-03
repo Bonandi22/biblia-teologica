@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { LugarAtualService } from '../../../core/layout/lugar-atual.service';
 import type { EstudoResumo } from '../../../core/models/conteudo.model';
 import { ConteudoService } from '../../../core/services/conteudo.service';
 
@@ -22,6 +24,10 @@ export class EstudosListaComponent {
   protected readonly estudos = signal<EstudoResumo[]>([]);
 
   constructor() {
+    inject(Title).setTitle('Estudos | Bíblia Teológica');
+    const lugar = inject(LugarAtualService);
+    lugar.definir('Estudos');
+    this.destroyRef.onDestroy(() => lugar.limpar());
     this.carregar();
   }
 

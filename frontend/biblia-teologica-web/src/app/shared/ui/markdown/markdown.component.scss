@@ -9,10 +9,10 @@
 }
 
 :host ::ng-deep .markdown {
-  font-family: $fonte-serif;
-  font-size: 1.1875rem;
-  line-height: 1.75;
-  color: $ink;
+  font-family: $fonte-texto;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: $tinta;
   overflow-wrap: break-word;
 
   > :first-child {
@@ -26,8 +26,7 @@
   h2,
   h3,
   h4 {
-    font-family: $fonte-display;
-    color: $ink;
+    color: $tinta;
     text-wrap: balance;
   }
 
@@ -36,7 +35,6 @@
     font-size: $t-h2;
     font-weight: 700;
     line-height: 1.15;
-    letter-spacing: $tracking-tight;
   }
 
   h3 {
@@ -44,7 +42,6 @@
     font-size: $t-h3;
     font-weight: 700;
     line-height: 1.25;
-    letter-spacing: $tracking-tight;
   }
 
   h4 {
@@ -74,11 +71,11 @@
     color: $ink-mut;
   }
 
-  // Citação: recuo com fio de acento; o texto fica em itálico, sem caixa.
+  // Citação: recuo com filete; o texto fica em itálico, sem caixa.
   blockquote {
     margin: 1.75em 0;
     padding: 0 0 0 1.25em;
-    border-left: 3px solid $acc;
+    border-left: 1px solid $filete;
     font-style: italic;
     color: $ink;
 
@@ -132,8 +129,7 @@
     padding: 0.1em 0.3em;
     border-radius: 3px;
     background: $parchment-2;
-    font-family: $fonte-mono;
-    font-size: 0.85em;
+    font-size: 0.9em;
   }
 
   pre {

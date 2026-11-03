@@ -3,6 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { Title } from '@angular/platform-browser';
+import { LugarAtualService } from '../../../core/layout/lugar-atual.service';
 import { EstudosListaComponent } from './estudos-lista.component';
 
 describe('EstudosListaComponent', () => {
@@ -48,10 +50,21 @@ describe('EstudosListaComponent', () => {
     expect(el().querySelector('a[href="/estudos/servo-sofredor"]')).not.toBeNull();
   });
 
-  it('mostra mensagem de preparo quando a lista vem vazia', async () => {
+  it('diz que ainda não há estudos e leva a Livros quando a lista vem vazia', async () => {
     await abrir();
     await responder([]);
-    expect(el().textContent).toContain('Os estudos estão sendo preparados.');
+    expect(el().textContent).toContain('Ainda não há estudos publicados.');
+    expect(el().querySelector('a[href="/biblia"]')?.textContent).toContain('Ver os livros');
+  });
+
+  it('define o título da aba e o lugar atual, e limpa o lugar ao sair', async () => {
+    await abrir();
+    await responder([]);
+    expect(TestBed.inject(Title).getTitle()).toBe('Estudos | Bíblia Teológica');
+    const lugar = TestBed.inject(LugarAtualService);
+    expect(lugar.texto()).toBe('Estudos');
+    harness.fixture.destroy();
+    expect(lugar.texto()).toBe('');
   });
 
   it('mostra erro com nova tentativa quando a requisição falha', async () => {

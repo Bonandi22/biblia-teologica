@@ -4,191 +4,117 @@
 // Página de topo: fundo e altura mínima próprios.
 :host {
   display: block;
-  min-height: calc(100vh - #{$altura-header} - 116px);
-  background: $paper;
-
-  @include mobile {
-    min-height: calc(100vh - #{$altura-header-mobile} - 84px);
-  }
+  min-height: calc(100vh - #{$altura-header} - 130px);
+  background: $papel;
 }
 
-// Tudo alinhado à esquerda numa coluna de leitura; o resto da largura fica em branco.
 .pagina {
-  max-width: calc(#{$largura-leitura} + #{$sp-6} * 2);
-  margin: 0 auto 0 0;
-  padding: $sp-12 $sp-6 $sp-16;
-  min-width: 0;
-
-  @include mobile {
-    padding: $sp-8 18px $sp-12;
-  }
-
-  // Em tela larga a coluna acompanha o container do site em vez de colar na borda.
-  @media (min-width: 1200px) {
-    margin-left: calc((100% - #{$largura-conteudo}) / 2);
-  }
+  max-width: $largura-folha;
+  margin: 0 auto;
+  padding: $sp-8 $margem-folha $sp-16;
 }
 
 .cabecalho {
-  margin-bottom: $sp-12;
-}
+  max-width: 56rem;
+  margin-bottom: $sp-8;
+  padding-bottom: $sp-6;
 
-.cabecalho__voltar {
-  display: inline-block;
-  margin-bottom: $sp-6;
-  font-family: $fonte-display;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: $ink-mut;
-  text-decoration: none;
-
-  &:hover {
-    color: $acc;
-    text-decoration: underline;
+  h1 {
+    margin: 0;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
-
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 2px;
-  }
-}
-
-.cabecalho__titulo {
-  margin: 0 0 $sp-4;
-  font-family: $fonte-display;
-  font-size: $t-h1;
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: $tracking-tight;
-  text-wrap: balance;
-  color: $ink;
 }
 
 .cabecalho__resumo {
-  margin: 0 0 $sp-6;
-  font-family: $fonte-serif;
-  font-size: $t-h3;
-  line-height: 1.5;
-  color: $ink-mut;
+  max-width: $coluna-leitura;
+  margin: $sp-4 0 0;
+  font-size: $t-lead;
+  font-style: italic;
+  line-height: 1.45;
+  color: $rubrica;
+  text-wrap: pretty;
 }
 
 .cabecalho__livros {
-  margin: 0;
-  padding-top: $sp-4;
-  border-top: 1px solid $hair;
-  font-family: $fonte-display;
-  font-size: 0.9375rem;
-  color: $ink-mut;
-}
+  margin: $sp-3 0 0;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 500;
+  color: $tinta-mut;
 
-.cabecalho__livro {
-  color: $ink;
-  font-weight: 600;
-
-  &:hover {
-    color: $acc;
-  }
-
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 2px;
+  a {
+    display: inline-block;
+    padding-block: 2px;
+    color: $tinta;
   }
 }
 
 .continue {
-  margin-top: $sp-16;
+  max-width: $coluna-leitura;
+  margin-top: $sp-12;
   padding-top: $sp-6;
-  border-top: 1px solid $hair;
-}
+  border-top: 1px solid $tinta;
 
-.continue__titulo {
-  margin: 0 0 $sp-4;
-  font-family: $fonte-display;
-  font-size: $t-h3;
-  font-weight: 700;
-  letter-spacing: $tracking-tight;
-  color: $ink;
-}
-
-.continue__lista {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.continue__item {
-  padding: $sp-3 0 $sp-4;
-}
-
-.continue__link {
-  font-family: $fonte-display;
-  font-size: $t-lead;
-  font-weight: 600;
-  color: $acc;
-
-  &:hover {
-    color: $acc-dk;
+  h2 {
+    margin: 0 0 $sp-4;
+    font-size: $t-h3;
+    font-weight: 700;
   }
 
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 2px;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: $sp-4;
+  }
+
+  a {
+    font-weight: 700;
+    color: $tinta;
+  }
+
+  p {
+    margin: $sp-1 0 0;
+    color: $tinta-mut;
   }
 }
 
-.continue__resumo {
-  margin: $sp-1 0 0;
-  font-family: $fonte-serif;
-  font-size: $t-body;
-  line-height: 1.6;
-  color: $ink-mut;
-}
-
-.pagina--estado {
-  padding-top: $sp-8;
-}
-
-.estado__titulo {
-  margin: 0 0 $sp-3;
-  font-family: $fonte-display;
-  font-size: $t-h2;
-  font-weight: 700;
-  letter-spacing: $tracking-tight;
-  color: $ink;
-}
-
-.estado__texto {
-  margin: 0 0 $sp-4;
-  font-family: $fonte-serif;
-  font-size: $t-body;
-  line-height: 1.6;
-  color: $ink;
-}
-
-.estado__link {
-  font-family: $fonte-display;
-  font-weight: 600;
-  color: $acc;
-}
-
-.estado__botao {
-  padding: $sp-2 $sp-4;
-  border: 1px solid $borda-controlo;
-  border-radius: $raio;
-  background: $superficie;
-  font-family: $fonte-display;
-  font-size: $t-body;
-  font-weight: 600;
-  color: $ink;
-  cursor: pointer;
-
-  &:hover {
-    border-color: $acc;
-    color: $acc;
+.estado {
+  h1 {
+    margin: 0 0 $sp-3;
+    font-size: $t-h2;
+    font-weight: 700;
   }
 
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 2px;
+  p {
+    max-width: $coluna-leitura;
+    margin: 0 0 $sp-4;
+  }
+
+  a {
+    font-family: $fonte-corrente;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $tinta;
+  }
+
+  button {
+    min-height: 44px;
+    padding: 0 $sp-4;
+    border: 1px solid $tinta;
+    border-radius: $raio;
+    background: transparent;
+    font-family: $fonte-corrente;
+    font-size: $t-corrente;
+    font-weight: 500;
+    color: $tinta;
+    cursor: pointer;
   }
 }
