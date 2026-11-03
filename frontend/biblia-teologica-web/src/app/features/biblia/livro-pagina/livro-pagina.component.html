@@ -37,18 +37,17 @@
           @switch (ativa()) {
             @case ('panorama') {
               <dl class="visao">
-                <div class="visao__linha">
-                  <dt>Quem escreveu</dt>
-                  <dd>{{ l.quem }}</dd>
-                </div>
-                <div class="visao__linha">
-                  <dt>Para quem</dt>
-                  <dd>{{ l.paraQuem }}</dd>
-                </div>
-                <div class="visao__linha">
-                  <dt>Por quê</dt>
-                  <dd>{{ l.porque }}</dd>
-                </div>
+                @for (item of l.perfil; track $index) {
+                  <div class="visao__linha">
+                    <dt>{{ item.rotulo }}</dt>
+                    <dd>
+                      {{ item.texto }}
+                      @if (item.referencias.length > 0) {
+                        <span class="visao__refs">{{ item.referencias.join('; ') }}</span>
+                      }
+                    </dd>
+                  </div>
+                }
               </dl>
               <bt-bloco-conteudo [bloco]="l.panorama" prefixo="panorama" />
             }
@@ -59,7 +58,10 @@
               <bt-bloco-conteudo [bloco]="l.mundo" prefixo="mundo" />
             }
             @case ('profecias') {
-              <bt-profecias [profecias]="l.profecias" />
+              <bt-apontamentos [itens]="l.profecias" prefixo="pro" />
+            }
+            @case ('promessas') {
+              <bt-apontamentos [itens]="l.promessas" prefixo="prm" />
             }
             @case ('citacoes') {
               <bt-citacoes [citacoes]="l.citacoes" />

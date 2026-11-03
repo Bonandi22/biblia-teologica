@@ -18,13 +18,15 @@ const bloco = (explicacao: string): Bloco => ({
 const panorama = (extra: Partial<LivroPanorama> = {}): LivroPanorama => ({
   livroSlug: 'isaias',
   resumo: 'Resumo do livro.',
-  quem: 'Isaías, filho de Amoz',
-  paraQuem: 'O reino de Judá',
-  porque: 'Chamar o povo de volta',
+  perfil: [
+    { rotulo: 'Origem e família', texto: 'Filho de Amoz.', referencias: ['Isaías 1:1'] },
+    { rotulo: 'Ofício', texto: 'Profeta.', referencias: [] },
+  ],
   panorama: bloco('Texto do panorama.'),
   contexto: bloco('Texto do contexto.'),
   mundo: bloco('Texto do mundo.'),
   profecias: [],
+  promessas: [],
   citacoes: [],
   ...extra,
 });
@@ -33,12 +35,10 @@ const profecias = [
   {
     referencia: 'Isaías 7:14',
     anuncia: 'Uma virgem conceberá.',
-    categoria: 'cumpridaEmCristo',
-    cumprimento: ['Mateus 1:23'],
-    fatoHistorico: null,
     notas: [],
   },
 ];
+const promessas = [{ referencia: 'Isaías 65:17', anuncia: 'Novos céus e nova terra.', notas: [] }];
 const citacoes = [
   { trecho: 'Eis o meu servo', citadoEm: ['Mateus 12:18'], comentario: null, notas: [] },
 ];
@@ -101,6 +101,32 @@ describe('LivroPaginaComponent', () => {
     expect(rotulosAbas()).toEqual(['Panorama', 'Contexto', 'Mundo', 'Profecias']);
   });
 
+  it('mostra a aba Promessas entre Profecias e Citações quando há promessas', async () => {
+    await abrir('/biblia/isaias');
+    await responder(panorama({ profecias, promessas, citacoes }));
+    expect(rotulosAbas()).toEqual([
+      'Panorama',
+      'Contexto',
+      'Mundo',
+      'Profecias',
+      'Promessas',
+      'Citações',
+    ]);
+  });
+
+  it('mostra as promessas na aba Promessas', async () => {
+    await abrir('/biblia/isaias/promessas');
+    await responder(panorama({ promessas }));
+    expect(el().textContent).toContain('Isaías 65:17');
+    expect(el().textContent).toContain('Novos céus e nova terra.');
+  });
+
+  it('redireciona para panorama quando a aba promessas não tem itens', async () => {
+    await abrir('/biblia/isaias/promessas');
+    await responder(panorama());
+    expect(router().url).toBe('/biblia/isaias/panorama');
+  });
+
   it('mostra a aba Citações quando há citações', async () => {
     await abrir('/biblia/isaias');
     await responder(panorama({ citacoes }));
@@ -125,16 +151,19 @@ describe('LivroPaginaComponent', () => {
     expect(router().url).toBe('/biblia/isaias/panorama');
   });
 
-  it('mostra quem, para quem e por quê só na aba panorama', async () => {
+  it('mostra cada item do perfil com rótulo e texto só na aba panorama', async () => {
     await abrir('/biblia/isaias/panorama');
     await responder(panorama());
-    expect(el().textContent).toContain('Isaías, filho de Amoz');
-    expect(el().textContent).toContain('O reino de Judá');
-    expect(el().textContent).toContain('Chamar o povo de volta');
+    const rotulos = Array.from(el().querySelectorAll('dt')).map((d) => d.textContent!.trim());
+    const textos = Array.from(el().querySelectorAll('dd')).map((d) => d.textContent!.trim());
+    expect(rotulos).toEqual(['Origem e família', 'Ofício']);
+    expect(textos[0]).toContain('Filho de Amoz.');
+    expect(textos[0]).toContain('Isaías 1:1');
+    expect(textos[1]).toContain('Profeta.');
 
     await harness.navigateByUrl('/biblia/isaias/contexto');
     await assentar();
-    expect(el().textContent).not.toContain('Isaías, filho de Amoz');
+    expect(el().textContent).not.toContain('Filho de Amoz.');
     expect(el().textContent).toContain('Texto do contexto.');
   });
 

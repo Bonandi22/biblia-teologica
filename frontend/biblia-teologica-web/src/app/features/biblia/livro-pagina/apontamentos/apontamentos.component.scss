@@ -1,0 +1,32 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  max-width: $largura-leitura;
+}
+
+.apontamento {
+  padding: $sp-8 0;
+  border-top: 1px solid $hair;
+
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+.apontamento__ref {
+  margin: 0 0 $sp-3;
+  font-family: $fonte-display;
+  font-size: $t-h3;
+  font-weight: 700;
+  color: $ink;
+}
+
+.apontamento__anuncia {
+  margin: 0 0 $sp-4;
+  font-family: $fonte-serif;
+  font-size: $t-lead;
+  line-height: 1.75;
+  color: $ink;
+}
