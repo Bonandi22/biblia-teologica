@@ -23,7 +23,7 @@ controller (Api) -> feature lazy-loaded (Angular).
   Spec: docs/superpowers/specs/2026-08-30-m2-auth-admin-livros-design.md
   Plano: docs/superpowers/plans/2026-08-30-m2-auth-admin-livros.md — entregue em 2 PRs:
   - M2a — autenticação + /conta (login 2FA, refresh, registo de Membro, perfil). ✅ entregue 2026-08-30.
-  - M2b — admin de Livros (CRUD, publicar, upload de capa) + área /admin. Planeado.
+  - M2b — admin de Livros (CRUD, publicar, upload de capa) + área /admin. Em espera: o conteúdo nasce em arquivos (ver Panorama Bíblico).
   M2 antecipa do M4 o conceito de Membro (role + perfil) e a infra de email transacional.
   O M4 acrescenta: confirmação de email no registo, recuperação de password, captura/envio de newsletter.
 - M2c — Casca do portal. Header/footer globais, homepage (hero + destaque do fichário +
@@ -40,8 +40,12 @@ controller (Api) -> feature lazy-loaded (Angular).
     Material, .gitattributes). Spec: docs/superpowers/specs/2026-08-31-m2d-a-fundacoes-design.md
     Plano: docs/superpowers/plans/2026-08-31-m2d-a-fundacoes.md
   - M2d-b — páginas públicas re-skin (auth, conta, header/footer, em-breve, 404, titles).
-  - M2d-c — homepage "portal" + re-skin do fichário.
-- M3 — Estudos (público + admin), corpo em Markdown, sanitização (DOMPurify).
+  - M2d-c — homepage "portal", sem o re-skin da ficha do livro (a ficha segue como está).
+- Panorama Bíblico — conteúdo editorial em arquivos (panorama dos livros e estudos em Markdown,
+  com notas e bibliografia), lido pela API e servido em /biblia/:slug e /estudos. Começa só por
+  Isaías. As divisões, os demais estudos e os demais livros vêm depois da aprovação do primeiro.
+- M3 — Estudos (público + admin), corpo em Markdown, sanitização (DOMPurify). O admin do M3
+  fica em espera, junto com o M2b.
 - M3.5 — Vídeos.
 - M4 — Confirmação de e-mail no registo + recuperação de password ("esqueci-me") + captura de newsletter.
 - M5+ — Doutrinas, Glossário, Cronologia, Teologia Sistemática, e-mail marketing, SSR/prerender, deploy real.

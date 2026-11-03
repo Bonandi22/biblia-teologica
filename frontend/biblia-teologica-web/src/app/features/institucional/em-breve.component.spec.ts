@@ -23,9 +23,8 @@ describe('EmBreveComponent', () => {
 });
 
 describe('rotas "Em breve"', () => {
-  it('estudos, noticias e curiosidades apontam para EmBreveComponent com data', () => {
+  it('noticias e curiosidades apontam para EmBreveComponent com data', () => {
     for (const [path, titulo] of [
-      ['estudos', 'Estudos'],
       ['noticias', 'Notícias'],
       ['curiosidades', 'Curiosidades'],
     ]) {

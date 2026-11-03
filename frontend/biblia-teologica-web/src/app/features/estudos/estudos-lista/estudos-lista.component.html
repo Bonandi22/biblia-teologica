@@ -1,0 +1,36 @@
+<div class="pagina">
+  <header class="cabecalho">
+    <h1 class="cabecalho__titulo">Estudos</h1>
+    <p class="cabecalho__texto">
+      Leituras longas, feitas para ir devagar, com as fontes consultadas listadas no fim de cada uma.
+    </p>
+  </header>
+
+  @switch (estado()) {
+    @case ('carregando') {
+      <p class="estado__texto" aria-busy="true">Carregando…</p>
+    }
+    @case ('erro') {
+      <div role="alert">
+        <p class="estado__texto">Não foi possível carregar os estudos. Verifique a conexão e tente de novo.</p>
+        <button type="button" class="estado__botao" (click)="carregar()">Tentar novamente</button>
+      </div>
+    }
+    @case ('pronto') {
+      @if (estudos().length === 0) {
+        <p class="estado__texto">Os estudos estão sendo preparados.</p>
+      } @else {
+        <ul class="indice">
+          @for (e of estudos(); track e.slug) {
+            <li class="entrada">
+              <a class="entrada__link" [routerLink]="['/estudos', e.slug]">
+                <h2 class="entrada__titulo">{{ e.titulo }}</h2>
+                <p class="entrada__resumo">{{ e.resumo }}</p>
+              </a>
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+</div>

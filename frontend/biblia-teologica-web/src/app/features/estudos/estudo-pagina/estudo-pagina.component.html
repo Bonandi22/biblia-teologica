@@ -1,0 +1,57 @@
+@switch (estado()) {
+  @case ('carregando') {
+    <div class="pagina pagina--estado" aria-busy="true">
+      <p class="estado__texto">Carregando…</p>
+    </div>
+  }
+  @case ('naoEncontrado') {
+    <div class="pagina pagina--estado">
+      <h1 class="estado__titulo">Estudo não encontrado</h1>
+      <p class="estado__texto">Este endereço não corresponde a nenhum estudo publicado.</p>
+      <a class="estado__link" routerLink="/estudos">Ver todos os estudos</a>
+    </div>
+  }
+  @case ('erro') {
+    <div class="pagina pagina--estado" role="alert">
+      <p class="estado__texto">Não foi possível carregar este estudo. Verifique a conexão e tente de novo.</p>
+      <button type="button" class="estado__botao" (click)="tentarNovamente()">Tentar novamente</button>
+    </div>
+  }
+  @case ('pronto') {
+    @if (estudo(); as e) {
+      <article class="pagina">
+        <header class="cabecalho">
+          <a class="cabecalho__voltar" routerLink="/estudos">Estudos</a>
+          <h1 class="cabecalho__titulo">{{ e.titulo }}</h1>
+          <p class="cabecalho__resumo">{{ e.resumo }}</p>
+          @if (e.livros.length > 0) {
+            <p class="cabecalho__livros">
+              Nos livros:
+              @for (l of e.livros; track l; let ultimo = $last) {
+                <a class="cabecalho__livro" [routerLink]="['/biblia', l]">{{ nomeLivro(l) }}</a
+                >@if (!ultimo) {<span>, </span>}
+              }
+            </p>
+          }
+        </header>
+
+        <bt-markdown [conteudo]="e.corpoMarkdown" />
+        <bt-bibliografia [notas]="e.notas" />
+
+        @if (e.relacionados.length > 0) {
+          <nav class="continue" aria-labelledby="continue-titulo">
+            <h2 class="continue__titulo" id="continue-titulo">Continue estudando</h2>
+            <ul class="continue__lista">
+              @for (r of e.relacionados; track r.slug) {
+                <li class="continue__item">
+                  <a class="continue__link" [routerLink]="['/estudos', r.slug]">{{ r.titulo }}</a>
+                  <p class="continue__resumo">{{ r.resumo }}</p>
+                </li>
+              }
+            </ul>
+          </nav>
+        }
+      </article>
+    }
+  }
+}

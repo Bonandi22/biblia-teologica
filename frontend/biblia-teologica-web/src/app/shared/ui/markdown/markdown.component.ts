@@ -10,6 +10,7 @@ const HREF_NOTA = /^#nota-(\d+)$/;
   changeDetection: ChangeDetectionStrategy.OnPush,
   // HTML já sanitizado por DOMPurify; o sanitizador do Angular segue ativo em [innerHTML].
   template: `<div class="markdown" [innerHTML]="html()" (click)="aoClicar($event)"></div>`,
+  styleUrl: './markdown.component.scss',
 })
 export class MarkdownComponent {
   readonly conteudo = input.required<string>();

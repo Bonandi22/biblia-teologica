@@ -15,12 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'estudos',
-    component: EmBreveComponent,
-    data: {
-      titulo: 'Estudos',
-      descricao:
-        'Artigos longos sobre teologia, história da igreja e vida cristã. Esta secção está a ser preparada.',
-    },
+    loadChildren: () => import('./features/estudos/estudos.routes').then((m) => m.estudosRoutes),
   },
   {
     path: 'noticias',
