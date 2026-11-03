@@ -156,6 +156,44 @@ describe('LivroPaginaComponent', () => {
     http.expectNone('/api/panoramas/livros/isaias');
   });
 
+  it('busca o novo livro ao trocar de slug, limpa o anterior e redireciona pelo livro novo', async () => {
+    await abrir('/biblia/isaias/profecias');
+    await responder(panorama({ profecias }));
+    expect(el().textContent).toContain('Isaías 7:14');
+
+    await harness.navigateByUrl('/biblia/jeremias/profecias');
+    await assentar();
+
+    // (a) nova requisição ao outro livro; (b) carregando, sem conteúdo do anterior;
+    // (c) sem redirecionar durante o carregamento, mesmo a aba existindo no livro antigo.
+    const req = http.expectOne('/api/panoramas/livros/jeremias');
+    expect(el().textContent).not.toContain('Isaías 7:14');
+    expect(el().querySelector('nav')).toBeNull();
+    expect(el().querySelector('[aria-busy="true"]')).not.toBeNull();
+    expect(router().url).toBe('/biblia/jeremias/profecias');
+
+    // o livro novo não tem profecias: redireciona para o panorama do livro NOVO.
+    req.flush(panorama({ livroSlug: 'jeremias' }));
+    await assentar();
+    expect(router().url).toBe('/biblia/jeremias/panorama');
+    expect(el().textContent).toContain('Texto do panorama.');
+    http.expectNone('/api/panoramas/livros/isaias');
+  });
+
+  it('não redireciona ao trocar de livro quando a aba existe só no livro novo', async () => {
+    await abrir('/biblia/isaias/panorama');
+    await responder(panorama());
+
+    await harness.navigateByUrl('/biblia/jeremias/profecias');
+    await assentar();
+    expect(router().url).toBe('/biblia/jeremias/profecias');
+
+    http.expectOne('/api/panoramas/livros/jeremias').flush(panorama({ profecias }));
+    await assentar();
+    expect(router().url).toBe('/biblia/jeremias/profecias');
+    expect(el().textContent).toContain('Isaías 7:14');
+  });
+
   it('trata a rota sem aba como panorama', async () => {
     await abrir('/biblia/isaias');
     await responder(panorama());
