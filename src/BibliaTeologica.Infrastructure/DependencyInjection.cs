@@ -26,6 +26,7 @@ public static class DependencyInjection
 
         services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
         services.AddScoped<ILivroRepository, LivroRepository>();
+        services.AddScoped<IDocumentoConteudoRepository, DocumentoConteudoRepository>();
         services.AddScoped<LivroSeeder>();
 
         services.Configure<JwtOptions>(config.GetSection(JwtOptions.Secao));

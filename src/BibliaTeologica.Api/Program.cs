@@ -3,6 +3,7 @@ using BibliaTeologica.Api.Auth;
 using BibliaTeologica.Api.Middleware;
 using BibliaTeologica.Application;
 using BibliaTeologica.Application.Common.Interfaces;
+using BibliaTeologica.Application.Conteudo;
 using BibliaTeologica.Infrastructure;
 using BibliaTeologica.Infrastructure.Persistence;
 using BibliaTeologica.Infrastructure.Persistence.Seed;
@@ -69,6 +70,26 @@ using (var scope = app.Services.CreateScope())
     await db.Database.MigrateAsync();
     await scope.ServiceProvider.GetRequiredService<LivroSeeder>().SeedAsync();
     await scope.ServiceProvider.GetRequiredService<IdentitySeeder>().SeedAsync();
+
+    // Rascunhos só entram fora de Production, mesmo que a config peça.
+    var incluirRascunhos = builder.Configuration.GetValue<bool>("Conteudo:IncluirRascunhos")
+                           && !app.Environment.IsProduction();
+    var logImportacao = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("ImportacaoConteudo");
+    try
+    {
+        await scope.ServiceProvider.GetRequiredService<ImportadorConteudo>().ImportarAsync(incluirRascunhos, CancellationToken.None);
+    }
+    catch (ConteudoInvalidoException ex)
+    {
+        foreach (var erro in ex.Erros)
+            logImportacao.LogError("Conteúdo inválido: {Erro}", erro);
+        throw;
+    }
+    catch (Exception ex)
+    {
+        logImportacao.LogError(ex, "Falha ao importar o conteúdo.");
+        throw;
+    }
 }
 
 if (app.Environment.IsDevelopment())

@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddScoped<Auth.IEmissorTokens, Auth.EmissorTokens>();
         services.AddScoped<Auth.IAuthService, Auth.AuthService>();
         services.AddScoped<Conta.IContaService, Conta.ContaService>();
+        services.AddScoped<Conteudo.ImportadorConteudo>();
         return services;
     }
 }
