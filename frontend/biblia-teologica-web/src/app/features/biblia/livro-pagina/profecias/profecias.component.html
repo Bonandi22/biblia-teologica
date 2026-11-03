@@ -1,0 +1,24 @@
+@for (p of profecias(); track $index) {
+  <article class="profecia" [attr.data-categoria]="p.categoria">
+    <header class="profecia__topo">
+      <h3 class="profecia__ref">{{ p.referencia }}</h3>
+      <p class="profecia__selo">{{ rotulo(p.categoria) }}</p>
+    </header>
+    <p class="profecia__anuncia">
+      <bt-texto-notas [texto]="p.anuncia" [prefixo]="'pro-' + $index" />
+    </p>
+    @if (p.cumprimento.length > 0) {
+      <p class="profecia__cumprimento">
+        <span class="profecia__legenda">Cumprimento</span>
+        {{ p.cumprimento.join('; ') }}
+      </p>
+    }
+    @if (p.fatoHistorico; as fato) {
+      <p class="profecia__fato">
+        <span class="profecia__legenda">Fato histórico</span>
+        <bt-texto-notas [texto]="fato" [prefixo]="'pro-' + $index" />
+      </p>
+    }
+    <bt-bibliografia [notas]="p.notas" [prefixo]="'pro-' + $index" />
+  </article>
+}

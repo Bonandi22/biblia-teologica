@@ -1,0 +1,73 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  max-width: $largura-leitura;
+}
+
+// Profecias são uma lista corrida separada por filetes, não uma grade de cartões.
+.profecia {
+  padding: $sp-8 0;
+  border-top: 1px solid $hair;
+
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+.profecia__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $sp-1 $sp-4;
+  margin-bottom: $sp-3;
+}
+
+.profecia__ref {
+  margin: 0;
+  font-family: $fonte-display;
+  font-size: $t-h3;
+  font-weight: 700;
+  letter-spacing: $tracking-tight;
+  color: $ink;
+}
+
+// O selo diz o estado da profecia; só "ainda aguardada" leva a cor de destaque.
+.profecia__selo {
+  margin: 0;
+  font-family: $fonte-display;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $ink-mut;
+}
+
+.profecia[data-categoria='promessaAguardada'] .profecia__selo {
+  color: $acc;
+}
+
+.profecia__anuncia {
+  margin: 0 0 $sp-4;
+  font-family: $fonte-serif;
+  font-size: $t-lead;
+  line-height: 1.75;
+  color: $ink;
+}
+
+.profecia__cumprimento,
+.profecia__fato {
+  margin: 0 0 $sp-3;
+  font-family: $fonte-serif;
+  font-size: $t-body;
+  line-height: 1.7;
+  color: $ink;
+}
+
+.profecia__legenda {
+  display: block;
+  font-family: $fonte-display;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: $ink-mut;
+}

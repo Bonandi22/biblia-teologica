@@ -1,0 +1,72 @@
+@switch (estado()) {
+  @case ('ficha') {
+    <bt-biblia-ficha />
+  }
+  @case ('erro') {
+    <div class="pagina pagina--estado" role="alert">
+      <p class="estado__texto">Não foi possível carregar este livro. Verifique a conexão e tente de novo.</p>
+      <button type="button" class="estado__botao" (click)="tentarNovamente()">Tentar novamente</button>
+    </div>
+  }
+  @case ('carregando') {
+    <div class="pagina pagina--estado" aria-busy="true">
+      <p class="estado__texto">Carregando…</p>
+    </div>
+  }
+  @case ('panorama') {
+    @if (livro(); as l) {
+      <div class="pagina">
+        <header class="cabecalho">
+          <h1 class="cabecalho__nome">{{ nome() }}</h1>
+          <p class="cabecalho__resumo">{{ l.resumo }}</p>
+        </header>
+
+        <nav class="abas" aria-label="Seções do livro">
+          @for (aba of abas(); track aba.chave) {
+            <a
+              class="aba"
+              [class.aba--ativa]="aba.chave === ativa()"
+              [routerLink]="['/biblia', slug(), aba.chave]"
+              [attr.aria-current]="aba.chave === ativa() ? 'page' : null"
+              >{{ aba.rotulo }}</a
+            >
+          }
+        </nav>
+
+        <section class="corpo" [attr.aria-label]="rotuloAtivo()">
+          @switch (ativa()) {
+            @case ('panorama') {
+              <dl class="visao">
+                <div class="visao__linha">
+                  <dt>Quem escreveu</dt>
+                  <dd>{{ l.quem }}</dd>
+                </div>
+                <div class="visao__linha">
+                  <dt>Para quem</dt>
+                  <dd>{{ l.paraQuem }}</dd>
+                </div>
+                <div class="visao__linha">
+                  <dt>Por quê</dt>
+                  <dd>{{ l.porque }}</dd>
+                </div>
+              </dl>
+              <bt-bloco-conteudo [bloco]="l.panorama" prefixo="panorama" />
+            }
+            @case ('contexto') {
+              <bt-bloco-conteudo [bloco]="l.contexto" prefixo="contexto" />
+            }
+            @case ('mundo') {
+              <bt-bloco-conteudo [bloco]="l.mundo" prefixo="mundo" />
+            }
+            @case ('profecias') {
+              <bt-profecias [profecias]="l.profecias" />
+            }
+            @case ('citacoes') {
+              <bt-citacoes [citacoes]="l.citacoes" />
+            }
+          }
+        </section>
+      </div>
+    }
+  }
+}

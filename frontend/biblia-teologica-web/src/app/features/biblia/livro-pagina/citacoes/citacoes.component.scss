@@ -1,0 +1,44 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  max-width: $largura-leitura;
+}
+
+.citacao {
+  padding: $sp-8 0;
+  border-top: 1px solid $hair;
+
+  &:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+.citacao__trecho {
+  margin: 0 0 $sp-3;
+  padding-left: $sp-4;
+  border-left: 2px solid $acc;
+  font-family: $fonte-serif;
+  font-size: $t-h3;
+  font-style: italic;
+  line-height: 1.5;
+  color: $ink;
+}
+
+.citacao__lugares,
+.citacao__comentario {
+  margin: 0 0 $sp-3;
+  font-family: $fonte-serif;
+  font-size: $t-body;
+  line-height: 1.7;
+  color: $ink;
+}
+
+.citacao__legenda {
+  display: block;
+  font-family: $fonte-display;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: $ink-mut;
+}

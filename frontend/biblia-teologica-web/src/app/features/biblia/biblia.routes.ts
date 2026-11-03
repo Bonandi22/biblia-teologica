@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { BibliaListaComponent } from './biblia-lista/biblia-lista.component';
+import { livroMatcher } from './livro-pagina/livro.matcher';
 
 export const bibliaRoutes: Routes = [
   {
@@ -7,9 +8,10 @@ export const bibliaRoutes: Routes = [
     component: BibliaListaComponent,
     children: [
       {
-        path: ':slug',
+        // `:slug` e `:slug/:aba` na mesma rota: trocar de aba reaproveita o componente.
+        matcher: livroMatcher,
         loadComponent: () =>
-          import('./biblia-ficha/biblia-ficha.component').then((m) => m.BibliaFichaComponent),
+          import('./livro-pagina/livro-pagina.component').then((m) => m.LivroPaginaComponent),
       },
     ],
   },

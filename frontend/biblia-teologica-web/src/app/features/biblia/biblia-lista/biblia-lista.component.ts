@@ -62,8 +62,8 @@ export class BibliaListaComponent {
     effect(() => {
       const livros = this.store.livros();
       if (livros.length === 0) return;
-      const temSlug = /\/biblia\/[^/]+$/.test(this.router.url);
-      if (!temSlug) {
+      const caminho = this.router.url.split(/[?#]/)[0].replace(/\/+$/, '');
+      if (caminho === '/biblia') {
         this.router.navigate(['/biblia', livros[0].slug]).catch(() => {});
       }
     });

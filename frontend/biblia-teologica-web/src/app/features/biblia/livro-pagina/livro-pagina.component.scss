@@ -1,0 +1,148 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+// Página de topo: fundo e altura mínima próprios.
+:host {
+  display: block;
+  min-height: calc(100vh - #{$altura-header} - 116px);
+  background: $paper;
+
+  @include mobile {
+    min-height: calc(100vh - #{$altura-header-mobile} - 84px);
+  }
+}
+
+.pagina {
+  max-width: $largura-leitura;
+  min-width: 0;
+}
+
+.cabecalho__nome {
+  margin: 0 0 $sp-3;
+  font-family: $fonte-display;
+  font-size: $t-h1;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: $tracking-tight;
+  color: $ink;
+}
+
+.cabecalho__resumo {
+  margin: 0;
+  font-family: $fonte-serif;
+  font-size: $t-lead;
+  line-height: 1.7;
+  color: $ink-mut;
+}
+
+// Abas: rolam na horizontal dentro do próprio <nav>, nunca alargam a página.
+.abas {
+  display: flex;
+  gap: $sp-6;
+  margin: $sp-8 0 $sp-8;
+  border-bottom: 1px solid $hair;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.aba {
+  flex: 0 0 auto;
+  padding: $sp-3 0;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  font-family: $fonte-display;
+  font-size: $t-body;
+  font-weight: 600;
+  color: $ink-mut;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    color: $ink;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $acc;
+    outline-offset: 2px;
+  }
+}
+
+.aba--ativa {
+  color: $ink;
+  border-bottom-color: $acc;
+}
+
+.visao {
+  margin: 0 0 $sp-8;
+}
+
+.visao__linha {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: $sp-4;
+  padding: $sp-3 0;
+  border-top: 1px solid $hair;
+
+  &:last-child {
+    border-bottom: 1px solid $hair;
+  }
+
+  @include tablet {
+    grid-template-columns: 1fr;
+    gap: $sp-1;
+  }
+
+  dt {
+    font-family: $fonte-display;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $ink-mut;
+  }
+
+  dd {
+    margin: 0;
+    font-family: $fonte-serif;
+    font-size: $t-body;
+    line-height: 1.6;
+    color: $ink;
+  }
+}
+
+.pagina--estado {
+  padding-top: $sp-8;
+}
+
+.estado__texto {
+  margin: 0 0 $sp-4;
+  font-family: $fonte-serif;
+  font-size: $t-body;
+  line-height: 1.6;
+  color: $ink;
+}
+
+.estado__botao {
+  padding: $sp-2 $sp-4;
+  border: 1px solid $borda-controlo;
+  border-radius: $raio;
+  background: $superficie;
+  font-family: $fonte-display;
+  font-size: $t-body;
+  font-weight: 600;
+  color: $ink;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $acc;
+    color: $acc;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $acc;
+    outline-offset: 2px;
+  }
+}
