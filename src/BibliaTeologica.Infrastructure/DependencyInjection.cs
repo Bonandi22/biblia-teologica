@@ -1,6 +1,7 @@
 using System.Text;
 using BibliaTeologica.Application.Common.Interfaces;
 using BibliaTeologica.Infrastructure.Configuracao;
+using BibliaTeologica.Infrastructure.Conteudo;
 using BibliaTeologica.Infrastructure.Email;
 using BibliaTeologica.Infrastructure.Identity;
 using BibliaTeologica.Infrastructure.Persistence;
@@ -29,6 +30,8 @@ public static class DependencyInjection
 
         services.Configure<JwtOptions>(config.GetSection(JwtOptions.Secao));
         services.Configure<EmailOptions>(config.GetSection(EmailOptions.Secao));
+        services.Configure<ConteudoOptions>(config.GetSection(ConteudoOptions.Secao));
+        services.AddScoped<IFonteConteudo, FonteConteudoArquivos>();
 
         var jwt = config.GetSection(JwtOptions.Secao).Get<JwtOptions>() ?? new JwtOptions();
         if (string.IsNullOrWhiteSpace(jwt.SigningKey) || jwt.SigningKey.Length < 32)
