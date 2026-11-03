@@ -102,7 +102,7 @@
     }
   }
 
-  // Marcador de nota: pequeno, sem sublinhado, área de toque ampliada pelo padding.
+  // Marcador de nota: pequeno, sem sublinhado, área de toque de 24x24px via pseudo-elemento.
   sup {
     font-family: $fonte-display;
     font-size: 0.7em;
@@ -112,6 +112,19 @@
     a {
       padding: 0 0.15em;
       text-decoration: none;
+
+      // Alvo de toque de 24x24px (WCAG 2.5.8) sem mexer na entrelinha nem no texto.
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: max(100%, 24px);
+        height: 24px;
+        transform: translate(-50%, -50%);
+      }
     }
   }
 
