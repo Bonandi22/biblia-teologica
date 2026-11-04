@@ -33,7 +33,7 @@ Staged — verificar o que está staged, inclusive arquivos de nome inocente, an
 
 Persistência: EF Core + SQLite (arquivo em volume Docker). Nada específico de provider fora da Infrastructure.
 
-Frontend: Angular 22 standalone + signals, CSR (sem SSR). Features lazy-loaded em features/. URL da API em environment.ts (/api).
+Frontend: Angular 22 standalone + signals, CSR (sem SSR). Features lazy-loaded em features/. URL da API em environment.ts (/api). Sem Angular Material: componentes próprios em shared/ui e sistema visual em DESIGN.md.
 
 ## Princípios de Engenharia
 
