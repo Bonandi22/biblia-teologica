@@ -6,6 +6,12 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__Default: "Data Source=/data/biblia.db"
       Cors__AllowedOrigins__0: "https://SEU-DOMINIO"
+      Email__Sink: "Smtp"
+      Email__Smtp__Host: "smtp.gmail.com"
+      Email__Smtp__Port: "587"
+      Email__Smtp__User: "${BT_SMTP_USER:?defina BT_SMTP_USER no .env}"
+      Email__Smtp__Password: "${BT_SMTP_SENHA:?defina BT_SMTP_SENHA no .env}"
+      Email__Smtp__From: "${BT_SMTP_USER:?defina BT_SMTP_USER no .env}"
     restart: unless-stopped
     ports: !reset []
     expose:

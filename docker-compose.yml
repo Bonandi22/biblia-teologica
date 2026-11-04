@@ -9,7 +9,6 @@ services:
       Jwt__SigningKey: "${BT_JWT_KEY:?defina BT_JWT_KEY no .env}"
       AdminSeed__0__Email: "${BT_ADMIN_EMAIL:?defina BT_ADMIN_EMAIL no .env}"
       AdminSeed__0__SenhaInicial: "${BT_ADMIN_SENHA:?defina BT_ADMIN_SENHA no .env}"
-      Email__Sink: "Dev"
     volumes:
       - biblia-data:/data
     ports:

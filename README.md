@@ -114,6 +114,11 @@ nos logs da API, na linha seguinte à do assunto:
 docker compose logs api | grep -A1 EMAIL
 ```
 
+O envio real usa o SMTP do Gmail, com `BT_SMTP_USER` e `BT_SMTP_SENHA` no `.env`. A
+senha é uma [senha de app do Google](https://myaccount.google.com/apppasswords), que
+exige verificação em duas etapas na conta. Para testar em desenvolvimento, defina
+também `BT_EMAIL_SINK=Smtp`. Em Production, a API não sobe sem o SMTP configurado.
+
 `/conta` traz o perfil (nome e e-mail) e a troca de senha, para qualquer usuário
 autenticado. `/registar` cria uma conta de Membro.
 
@@ -244,6 +249,6 @@ Push direto para `main` só com pedido explícito.
 
 Ainda não está em produção. Antes de abrir ao público faltam:
 
-- envio real de e-mail ([#34](../../issues/34)), hoje o código 2FA só sai nos logs;
+- conferir um envio real de e-mail pelo Gmail ([#34](../../issues/34));
 - conteúdo aprovado e confirmação escrita da SBB sobre os links para a ARC;
 - VPS, domínio, HTTPS e `.env` de produção (M5+ no roadmap).
