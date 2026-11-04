@@ -52,6 +52,7 @@ describe('renderizarMarkdown', () => {
     expect(a.getAttribute('data-nota')).toBe('12');
     expect(a.getAttribute('href')).toBe('#nota-12');
     expect(a.textContent).toBe('12');
+    expect(a.getAttribute('aria-label')).toBe('Nota 12');
   });
 
   it('não transforma [^n] dentro de bloco ou trecho de código', () => {

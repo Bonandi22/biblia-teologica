@@ -39,6 +39,14 @@ describe('LinhaEstudoComponent', () => {
     expect(coluna.querySelector('a[href="https://exemplo.org"]')?.textContent).toContain('Abrir fonte');
   });
 
+  it('coluna é um grupo rotulado, não um landmark repetido por parágrafo', () => {
+    const el = montar();
+    expect(el.querySelector('aside')).toBeNull();
+    const coluna = el.querySelector('.linha__coluna')!;
+    expect(coluna.getAttribute('role')).toBe('group');
+    expect(coluna.getAttribute('aria-label')).toBe('Referências');
+  });
+
   it('mantém o id da nota para a chamada encontrar a âncora', () => {
     const el = montar();
     const href = el.querySelector('sup a')!.getAttribute('href')!;

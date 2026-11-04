@@ -12,6 +12,12 @@ import { CampoSenhaComponent } from '../../../shared/ui/campo-senha/campo-senha.
 import { AuthService } from '../../../core/auth/auth.service';
 import { AuthStore } from '../../../core/auth/auth.store';
 
+function mensagemDeFalhaNoLogin(status: number): string {
+  if (status === 423) return 'Conta bloqueada temporariamente.';
+  if (status === 0 || status >= 500) return 'Não foi possível entrar agora. Tente de novo.';
+  return 'Credenciais inválidas.';
+}
+
 @Component({
   selector: 'bt-entrar',
   standalone: true,
@@ -39,6 +45,7 @@ export class EntrarComponent {
   readonly fase = signal<'credenciais' | 'codigo'>('credenciais');
   readonly erro = signal<string | null>(null);
   readonly aEnviar = signal(false);
+  readonly contaCriada = this.rota.snapshot.queryParamMap.has('registado');
   private tokenDesafio = '';
 
   readonly formCredenciais = this.fb.nonNullable.group({
@@ -70,9 +77,7 @@ export class EntrarComponent {
         this.aEnviar.set(false);
       },
       error: (e) => {
-        this.erro.set(
-          e.status === 423 ? 'Conta bloqueada temporariamente.' : 'Credenciais inválidas.',
-        );
+        this.erro.set(mensagemDeFalhaNoLogin(e.status));
         this.aEnviar.set(false);
       },
     });
@@ -101,5 +106,13 @@ export class EntrarComponent {
         this.aEnviar.set(false);
       },
     });
+  }
+
+  /** O desafio do 2FA expira e não há reenvio: pedir outro código é entrar com as credenciais de novo. */
+  voltar(): void {
+    this.tokenDesafio = '';
+    this.erro.set(null);
+    this.formCodigo.reset();
+    this.fase.set('credenciais');
   }
 }

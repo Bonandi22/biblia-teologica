@@ -46,9 +46,12 @@ h2 {
 }
 
 .msg {
-  margin: $sp-3 0 0;
-  font-size: $t-nota;
-  color: $capa;
+  margin-top: $sp-3;
+}
+
+// O botão de texto tem 4px de folga para o foco; o recuo alinha a palavra à margem.
+.tentar {
+  margin: $sp-3 0 0 -4px;
 }
 
 .acoes {

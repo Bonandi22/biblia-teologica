@@ -1,6 +1,10 @@
 <div class="folha">
   <h1>Entrar</h1>
 
+  @if (contaCriada && fase() === 'credenciais') {
+    <bt-alerta tipo="sucesso">Conta criada. Entre para continuar.</bt-alerta>
+  }
+
   @if (erro(); as e) {
     <bt-alerta tipo="erro">{{ e }}</bt-alerta>
   }
@@ -26,7 +30,12 @@
       </bt-campo>
       <bt-botao type="submit" [carregando]="aEnviar()">Entrar</bt-botao>
     </form>
+    <div class="voltar">
+      <bt-botao variante="texto" (click)="voltar()">Voltar e pedir outro código</bt-botao>
+    </div>
   }
 
-  <a routerLink="/registar" class="ligacao">Criar conta</a>
+  @if (fase() === 'credenciais') {
+    <a routerLink="/registar" class="ligacao">Criar conta</a>
+  }
 </div>

@@ -34,7 +34,7 @@ export function renderizarMarkdown(md: string): string {
   const bruto = marked.parse(md ?? '', { async: false });
   return purify.sanitize(bruto, {
     ALLOWED_TAGS: ['p', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'a', 'sup', 'code', 'pre', 'hr'],
-    ALLOWED_ATTR: ['href', 'rel', 'target', 'data-nota'],
+    ALLOWED_ATTR: ['href', 'rel', 'target', 'data-nota', 'aria-label'],
     ALLOWED_URI_REGEXP: URI_PERMITIDA,
   });
 }

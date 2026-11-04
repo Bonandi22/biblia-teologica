@@ -11,9 +11,9 @@
       <bt-campo label="Nome a exibir" [erro]="erroDe(formNome.controls.nomeExibicao)">
         <input btInput formControlName="nomeExibicao" autocomplete="name" />
       </bt-campo>
-      <bt-botao type="submit">Salvar nome</bt-botao>
-      @if (msgNome(); as m) {
-        <p class="msg" role="status">{{ m }}</p>
+      <bt-botao type="submit" [carregando]="aEnviarNome()">Salvar nome</bt-botao>
+      @if (avisoNome(); as a) {
+        <div class="msg"><bt-alerta [tipo]="a.tipo">{{ a.texto }}</bt-alerta></div>
       }
     </form>
 
@@ -28,15 +28,23 @@
         autocomplete="current-password"
         [erro]="erroDe(formEmail.controls.senha)"
       />
-      <bt-botao type="submit" variante="fantasma">Trocar e-mail</bt-botao>
-      @if (msgEmail(); as m) {
-        <p class="msg" role="status">{{ m }}</p>
+      <bt-botao type="submit" variante="fantasma" [carregando]="aEnviarEmail()">Trocar e-mail</bt-botao>
+      @if (avisoEmail(); as a) {
+        <div class="msg"><bt-alerta [tipo]="a.tipo">{{ a.texto }}</bt-alerta></div>
       }
     </form>
 
     <div class="acoes">
       <a routerLink="trocar-senha" class="ligacao">Trocar senha</a>
-      <bt-botao variante="texto" (click)="sair()">Sair</bt-botao>
+      <bt-botao variante="texto" [carregando]="aSair()" (click)="sair()">Sair</bt-botao>
+    </div>
+    @if (erroAoSair(); as e) {
+      <div class="msg"><bt-alerta tipo="erro">{{ e }}</bt-alerta></div>
+    }
+  } @else if (falhouAoCarregar()) {
+    <bt-alerta tipo="erro">Não foi possível carregar a sua conta.</bt-alerta>
+    <div class="tentar">
+      <bt-botao variante="texto" (click)="carregar()">Tentar de novo</bt-botao>
     </div>
   } @else {
     <p aria-busy="true">Carregando…</p>

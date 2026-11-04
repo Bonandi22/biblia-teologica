@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { EntrarComponent } from './entrar.component';
@@ -45,6 +46,46 @@ describe('EntrarComponent', () => {
     expect(c.erro()).toContain('Credenciais');
   });
 
+  it('submeterCredenciais_AvisaBloqueio_QuandoStatus423', () => {
+    const c = criar();
+    c.formCredenciais.setValue({ email: 'a@b.c', senha: 'x' });
+    c.submeterCredenciais();
+    http.expectOne('/api/auth/login').flush(null, { status: 423, statusText: 'Locked' });
+    expect(c.erro()).toBe('Conta bloqueada temporariamente.');
+  });
+
+  it('submeterCredenciais_NaoCulpaASenha_QuandoServidorOuRedeFalha', () => {
+    const c = criar();
+    c.formCredenciais.setValue({ email: 'a@b.c', senha: 'x' });
+    c.submeterCredenciais();
+    http.expectOne('/api/auth/login').flush(null, { status: 500, statusText: 'Erro' });
+    expect(c.erro()).toBe('Não foi possível entrar agora. Tente de novo.');
+
+    c.submeterCredenciais();
+    http.expectOne('/api/auth/login').error(new ProgressEvent('error'));
+    expect(c.erro()).toBe('Não foi possível entrar agora. Tente de novo.');
+  });
+
+  it('voltar_RetornaAsCredenciais_QuandoCodigoExpirou', () => {
+    const fixture = TestBed.createComponent(EntrarComponent);
+    fixture.detectChanges();
+    const c = fixture.componentInstance;
+    c.formCredenciais.setValue({ email: 'a@b.c', senha: 'x' });
+    c.submeterCredenciais();
+    http.expectOne('/api/auth/login').flush({ desafio2fa: true, tokenDesafio: 'T' });
+    c.formCodigo.setValue({ codigo: '123456' });
+    c.submeterCodigo();
+    http.expectOne('/api/auth/login/2fa').flush(null, { status: 400, statusText: 'Bad Request' });
+    expect(c.erro()).toBe('Código inválido ou expirado.');
+    fixture.detectChanges();
+
+    (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('.voltar button')!.click();
+
+    expect(c.fase()).toBe('credenciais');
+    expect(c.erro()).toBeNull();
+    expect(c.formCodigo.getRawValue().codigo).toBe('');
+  });
+
   it('não submete credenciais inválidas', () => {
     const c = criar();
     c.formCredenciais.setValue({ email: 'invalido', senha: '' });
@@ -85,6 +126,31 @@ describe('EntrarComponent', () => {
     });
 
     expect(nav).toHaveBeenCalledWith(['/conta/trocar-senha']);
+  });
+});
+
+describe('EntrarComponent depois do registro', () => {
+  const abrir = async (url: string) => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([{ path: 'entrar', component: EntrarComponent }]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
+    });
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl(url, EntrarComponent);
+    return harness.routeNativeElement as HTMLElement;
+  };
+
+  it('avisa que a conta foi criada, quando vem do registro', async () => {
+    const el = await abrir('/entrar?registado=1');
+    expect(el.querySelector('[role="status"]')?.textContent).toContain('Conta criada');
+  });
+
+  it('não mostra o aviso numa entrada comum', async () => {
+    const el = await abrir('/entrar');
+    expect(el.querySelector('[role="status"]')).toBeNull();
   });
 });
 

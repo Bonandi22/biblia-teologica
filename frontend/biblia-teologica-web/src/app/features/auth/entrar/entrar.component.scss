@@ -1,3 +1,4 @@
+@use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
 :host {
@@ -6,4 +7,9 @@
 
 .folha {
   @include folha-formulario;
+}
+
+// O botão de texto tem 4px de folga para o foco; o recuo alinha a palavra à margem.
+.voltar {
+  margin: $sp-4 0 0 -4px;
 }
