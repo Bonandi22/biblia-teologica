@@ -15,20 +15,14 @@ export const routes: Routes = [
   },
   {
     path: 'estudos',
-    component: EmBreveComponent,
-    data: {
-      titulo: 'Estudos',
-      descricao:
-        'Artigos longos sobre teologia, história da igreja e vida cristã. Esta secção está a ser preparada.',
-    },
+    loadChildren: () => import('./features/estudos/estudos.routes').then((m) => m.estudosRoutes),
   },
   {
     path: 'noticias',
     component: EmBreveComponent,
     data: {
       titulo: 'Notícias',
-      descricao:
-        'Notícias da igreja e do mundo, lidas à luz da Bíblia. Esta secção está a ser preparada.',
+      descricao: 'Esta seção ainda não tem conteúdo.',
     },
   },
   {
@@ -36,8 +30,7 @@ export const routes: Routes = [
     component: EmBreveComponent,
     data: {
       titulo: 'Curiosidades',
-      descricao:
-        'Pequenas descobertas sobre o texto bíblico e o seu contexto. Esta secção está a ser preparada.',
+      descricao: 'Esta seção ainda não tem conteúdo.',
     },
   },
   {

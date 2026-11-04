@@ -1,0 +1,35 @@
+<div class="pagina">
+  <header class="cabecalho">
+    <h1>Estudos</h1>
+    <p>Leituras longas, feitas para ir devagar, com as fontes consultadas ao lado do texto.</p>
+  </header>
+
+  @switch (estado()) {
+    @case ('carregando') {
+      <p class="estado" aria-busy="true">Carregando…</p>
+    }
+    @case ('erro') {
+      <div class="estado" role="alert">
+        <p>Não foi possível carregar os estudos. Verifique a conexão e tente de novo.</p>
+        <button type="button" (click)="carregar()">Tentar novamente</button>
+      </div>
+    }
+    @case ('pronto') {
+      @if (estudos().length === 0) {
+        <div class="estado">
+          <p>Ainda não há estudos publicados.</p>
+          <a routerLink="/biblia">Ver os livros</a>
+        </div>
+      } @else {
+        <ul class="lista">
+          @for (e of estudos(); track e.slug) {
+            <li>
+              <h2><a [routerLink]="['/estudos', e.slug]">{{ e.titulo }}</a></h2>
+              <p>{{ e.resumo }}</p>
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+</div>

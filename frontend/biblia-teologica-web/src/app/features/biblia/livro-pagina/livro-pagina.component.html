@@ -1,0 +1,72 @@
+@switch (estado()) {
+  @case ('ficha') {
+    <bt-biblia-ficha />
+  }
+  @case ('erro') {
+    <div class="pagina--estado" role="alert">
+      <p class="estado__texto">Não foi possível carregar este livro. Verifique a conexão e tente de novo.</p>
+      <button type="button" class="estado__botao" (click)="tentarNovamente()">Tentar novamente</button>
+    </div>
+  }
+  @case ('carregando') {
+    <div class="pagina--estado" aria-busy="true">
+      <p class="estado__texto">Carregando…</p>
+    </div>
+  }
+  @case ('panorama') {
+    @if (livro(); as l) {
+      <bt-livro-moldura [slug]="slug()" [resumo]="l.resumo">
+        <nav class="abas" aria-label="Seções do livro">
+          @for (aba of abas(); track aba.chave) {
+            <a
+              class="aba"
+              [class.aba--ativa]="aba.chave === ativa()"
+              [routerLink]="['/biblia', slug(), aba.chave]"
+              [attr.aria-current]="aba.chave === ativa() ? 'page' : null"
+              >{{ aba.rotulo }}</a
+            >
+          }
+        </nav>
+
+        <section class="corpo" [attr.aria-label]="rotuloAtivo()">
+          @switch (ativa()) {
+            @case ('panorama') {
+              <div class="perfil">
+                @for (item of l.perfil; track $index) {
+                  <bt-linha-estudo
+                    class="perfil__item"
+                    [referencias]="item.referencias"
+                    [titulo]="$index === primeiroPerfilComReferencia() ? 'Referências' : null"
+                  >
+                    <h3 class="perfil__rotulo">{{ item.rotulo }}</h3>
+                    <p class="perfil__texto">{{ item.texto }}</p>
+                  </bt-linha-estudo>
+                }
+              </div>
+              <bt-bloco-conteudo
+                [bloco]="l.panorama"
+                prefixo="panorama"
+                [comTituloColuna]="primeiroPerfilComReferencia() < 0"
+              />
+            }
+            @case ('contexto') {
+              <bt-bloco-conteudo [bloco]="l.contexto" prefixo="contexto" />
+            }
+            @case ('mundo') {
+              <bt-bloco-conteudo [bloco]="l.mundo" prefixo="mundo" />
+            }
+            @case ('profecias') {
+              <bt-apontamentos [itens]="l.profecias" prefixo="pro" />
+            }
+            @case ('promessas') {
+              <bt-apontamentos [itens]="l.promessas" prefixo="prm" />
+            }
+            @case ('citacoes') {
+              <bt-citacoes [citacoes]="l.citacoes" />
+            }
+          }
+        </section>
+      </bt-livro-moldura>
+    }
+  }
+}

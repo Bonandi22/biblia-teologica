@@ -31,12 +31,16 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "src/styles/material.scss"
+              "src/styles.scss"
             ]
           },
           "configurations": {
             "production": {
+              "optimization": {
+                "scripts": true,
+                "styles": { "minify": true, "inlineCritical": false },
+                "fonts": true
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

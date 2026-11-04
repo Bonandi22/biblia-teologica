@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using AwesomeAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace BibliaTeologica.Api.Tests.Auth;
@@ -82,6 +83,57 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
         var v = await client.PostAsJsonAsync("/api/auth/login/2fa", new { tokenDesafio = td, codigo = "000000" });
 
         v.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    /// <summary>Faz o login e devolve os cookies de refresh e CSRF, sem o de acesso: é a sessão com o acesso vencido.</summary>
+    private async Task<(string Refresh, string Csrf)> SessaoComAcessoVencidoAsync()
+    {
+        var client = await ClienteSemeadoAsync();
+        var login = await client.PostAsJsonAsync("/api/auth/login",
+            new { email = AutenticacaoWebFactory.MembroEmail, senha = AutenticacaoWebFactory.Senha });
+        var corpo = await login.Content.ReadFromJsonAsync<Dictionary<string, JsonElement>>();
+        var v = await client.PostAsJsonAsync("/api/auth/login/2fa",
+            new { tokenDesafio = corpo!["tokenDesafio"].GetString(), codigo = _f.Otp.UltimoCodigo! });
+        v.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var cookies = v.Headers.GetValues("Set-Cookie")
+            .Select(c => c.Split(';')[0].Split('=', 2))
+            .ToDictionary(p => p[0], p => p[1]);
+        return (cookies["bt_refresh"], cookies["bt_csrf"]);
+    }
+
+    private async Task<HttpResponseMessage> PostarComCookiesAsync(string url, string refresh, string csrf, bool comHeaderCsrf)
+    {
+        var client = _f.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = false });
+        using var req = new HttpRequestMessage(HttpMethod.Post, url);
+        req.Headers.Add("Cookie", $"bt_refresh={refresh}; bt_csrf={csrf}");
+        if (comHeaderCsrf) req.Headers.Add("X-CSRF-Token", Uri.UnescapeDataString(csrf));
+        return await client.SendAsync(req);
+    }
+
+    [Fact]
+    public async Task Logout_RevogaRefresh_QuandoAcessoVencido()
+    {
+        var (refresh, csrf) = await SessaoComAcessoVencidoAsync();
+
+        var res = await PostarComCookiesAsync("/api/auth/logout", refresh, csrf, comHeaderCsrf: true);
+
+        res.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        res.Headers.GetValues("Set-Cookie").Should().Contain(c => c.StartsWith("bt_refresh=;"));
+        var depois = await PostarComCookiesAsync("/api/auth/refresh", refresh, csrf, comHeaderCsrf: true);
+        depois.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task Logout_Retorna403ENaoRevoga_QuandoSemCsrf()
+    {
+        var (refresh, csrf) = await SessaoComAcessoVencidoAsync();
+
+        var res = await PostarComCookiesAsync("/api/auth/logout", refresh, csrf, comHeaderCsrf: false);
+
+        res.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        var depois = await PostarComCookiesAsync("/api/auth/refresh", refresh, csrf, comHeaderCsrf: true);
+        depois.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]

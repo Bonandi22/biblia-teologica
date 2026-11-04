@@ -1,0 +1,404 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T01:50:39.332Z",
+  "title": "Design System: Bíblia Teológica",
+  "extensions": {
+    "colorMeta": {
+      "papel": {
+        "role": "neutral",
+        "displayName": "Papel-Bíblia Frio",
+        "canonical": "#fbfbf8",
+        "tonalRamp": [
+          "oklch(15% 0.001 106.5)",
+          "oklch(26% 0.002 106.5)",
+          "oklch(37% 0.004 106.5)",
+          "oklch(48% 0.004 106.5)",
+          "oklch(59% 0.004 106.5)",
+          "oklch(70% 0.004 106.5)",
+          "oklch(82% 0.002 106.5)",
+          "oklch(95% 0.001 106.5)"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#16161a",
+        "tonalRamp": [
+          "oklch(15% 0.002 285.7)",
+          "oklch(26% 0.005 285.7)",
+          "oklch(37% 0.008 285.7)",
+          "oklch(48% 0.008 285.7)",
+          "oklch(59% 0.008 285.7)",
+          "oklch(70% 0.008 285.7)",
+          "oklch(82% 0.005 285.7)",
+          "oklch(95% 0.001 285.7)"
+        ]
+      },
+      "tinta-mut": {
+        "role": "neutral",
+        "displayName": "Tinta Mutada",
+        "canonical": "#55555c",
+        "tonalRamp": [
+          "oklch(15% 0.003 285.9)",
+          "oklch(26% 0.007 285.9)",
+          "oklch(37% 0.011 285.9)",
+          "oklch(48% 0.011 285.9)",
+          "oklch(59% 0.011 285.9)",
+          "oklch(70% 0.011 285.9)",
+          "oklch(82% 0.007 285.9)",
+          "oklch(95% 0.002 285.9)"
+        ]
+      },
+      "rubrica": {
+        "role": "primary",
+        "displayName": "Rubrica",
+        "canonical": "#9e1b1b",
+        "tonalRamp": [
+          "oklch(15% 0.039 27.0)",
+          "oklch(26% 0.100 27.0)",
+          "oklch(37% 0.161 27.0)",
+          "oklch(48% 0.166 27.0)",
+          "oklch(59% 0.166 27.0)",
+          "oklch(70% 0.166 27.0)",
+          "oklch(82% 0.100 27.0)",
+          "oklch(95% 0.028 27.0)"
+        ]
+      },
+      "rubrica-escura": {
+        "role": "primary",
+        "displayName": "Rubrica Escura",
+        "canonical": "#7c1414",
+        "tonalRamp": [
+          "oklch(15% 0.032 26.9)",
+          "oklch(26% 0.083 26.9)",
+          "oklch(37% 0.134 26.9)",
+          "oklch(48% 0.138 26.9)",
+          "oklch(59% 0.138 26.9)",
+          "oklch(70% 0.138 26.9)",
+          "oklch(82% 0.083 26.9)",
+          "oklch(95% 0.023 26.9)"
+        ]
+      },
+      "filete": {
+        "role": "neutral",
+        "displayName": "Filete",
+        "canonical": "#c9c8c0",
+        "tonalRamp": [
+          "oklch(15% 0.003 100.9)",
+          "oklch(26% 0.007 100.9)",
+          "oklch(37% 0.011 100.9)",
+          "oklch(48% 0.011 100.9)",
+          "oklch(59% 0.011 100.9)",
+          "oklch(70% 0.011 100.9)",
+          "oklch(82% 0.007 100.9)",
+          "oklch(95% 0.002 100.9)"
+        ]
+      },
+      "capa": {
+        "role": "secondary",
+        "displayName": "Capa em Tecido Azul",
+        "canonical": "#2a3550",
+        "tonalRamp": [
+          "oklch(15% 0.012 266.7)",
+          "oklch(26% 0.030 266.7)",
+          "oklch(37% 0.049 266.7)",
+          "oklch(48% 0.050 266.7)",
+          "oklch(59% 0.050 266.7)",
+          "oklch(70% 0.050 266.7)",
+          "oklch(82% 0.030 266.7)",
+          "oklch(95% 0.008 266.7)"
+        ]
+      },
+      "sobre-capa": {
+        "role": "secondary",
+        "displayName": "Texto sobre Capa",
+        "canonical": "#e9e7dd",
+        "tonalRamp": [
+          "oklch(15% 0.003 97.5)",
+          "oklch(26% 0.008 97.5)",
+          "oklch(37% 0.013 97.5)",
+          "oklch(48% 0.014 97.5)",
+          "oklch(59% 0.014 97.5)",
+          "oklch(70% 0.014 97.5)",
+          "oklch(82% 0.008 97.5)",
+          "oklch(95% 0.002 97.5)"
+        ]
+      },
+      "erro": {
+        "role": "tertiary",
+        "displayName": "Ferrugem de Erro",
+        "canonical": "#7a2d12",
+        "tonalRamp": [
+          "oklch(15% 0.027 38.5)",
+          "oklch(26% 0.069 38.5)",
+          "oklch(37% 0.110 38.5)",
+          "oklch(48% 0.114 38.5)",
+          "oklch(59% 0.114 38.5)",
+          "oklch(70% 0.114 38.5)",
+          "oklch(82% 0.069 38.5)",
+          "oklch(95% 0.019 38.5)"
+        ]
+      },
+      "borda-controlo": {
+        "role": "neutral",
+        "displayName": "Borda de Controle",
+        "canonical": "#6f6f76",
+        "tonalRamp": [
+          "oklch(15% 0.003 286.0)",
+          "oklch(26% 0.006 286.0)",
+          "oklch(37% 0.010 286.0)",
+          "oklch(48% 0.011 286.0)",
+          "oklch(59% 0.011 286.0)",
+          "oklch(70% 0.011 286.0)",
+          "oklch(82% 0.006 286.0)",
+          "oklch(95% 0.002 286.0)"
+        ]
+      },
+      "papel-realce": {
+        "role": "neutral",
+        "displayName": "Papel Realçado",
+        "canonical": "#f1f1ec",
+        "tonalRamp": [
+          "oklch(15% 0.002 106.5)",
+          "oklch(26% 0.004 106.5)",
+          "oklch(37% 0.006 106.5)",
+          "oklch(48% 0.007 106.5)",
+          "oklch(59% 0.007 106.5)",
+          "oklch(70% 0.007 106.5)",
+          "oklch(82% 0.004 106.5)",
+          "oklch(95% 0.001 106.5)"
+        ]
+      },
+      "sobre-tinta": {
+        "role": "neutral",
+        "displayName": "Sobre Tinta",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(37% 0.000 89.9)",
+          "oklch(48% 0.000 89.9)",
+          "oklch(59% 0.000 89.9)",
+          "oklch(70% 0.000 89.9)",
+          "oklch(82% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "tinta-funda": {
+        "role": "neutral",
+        "displayName": "Tinta Funda",
+        "canonical": "#000000",
+        "tonalRamp": [
+          "oklch(15% 0.000 0.0)",
+          "oklch(26% 0.000 0.0)",
+          "oklch(37% 0.000 0.0)",
+          "oklch(48% 0.000 0.0)",
+          "oklch(59% 0.000 0.0)",
+          "oklch(70% 0.000 0.0)",
+          "oklch(82% 0.000 0.0)",
+          "oklch(95% 0.000 0.0)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display-livro": {
+        "displayName": "Display do livro",
+        "purpose": "Só o nome do livro; chega a 112px a partir de 1400px de largura."
+      },
+      "display-pagina": {
+        "displayName": "Display de página",
+        "purpose": "Títulos da página inicial, de Livros e de Estudos."
+      },
+      "display-apoio": {
+        "displayName": "Display de apoio",
+        "purpose": "Conta e páginas de apoio."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Títulos de seção no markdown e na guarda."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Testamentos, Bibliografia e títulos de item."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Frase de abertura, em itálico."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto de leitura em coluna de 40rem."
+      },
+      "body-celular": {
+        "displayName": "Body no celular",
+        "purpose": "Corpo até 640px de largura."
+      },
+      "nota": {
+        "displayName": "Nota",
+        "purpose": "Notas, citações e bibliografia."
+      },
+      "corrente": {
+        "displayName": "Corrente",
+        "purpose": "Navegação, botões e rótulos de campo."
+      },
+      "corrente-rotulo": {
+        "displayName": "Rótulo",
+        "purpose": "Títulos de metadado e do aparato."
+      },
+      "corrente-aba": {
+        "displayName": "Aba",
+        "purpose": "Abas e links de ação isolados."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "estado",
+        "value": "0.15s ease",
+        "purpose": "Hover de botões e destaque da nota."
+      },
+      {
+        "name": "giro",
+        "value": "0.7s linear infinite",
+        "purpose": "Giro de carregamento do botão."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet",
+        "value": "640px"
+      },
+      {
+        "name": "mobile",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão primário",
+      "kind": "button",
+      "refersTo": "botao-primario",
+      "description": "Ação principal de formulário.",
+      "html": "<button class=\"ds-b ds-b-primario\">Entrar</button>",
+      "css": ".ds-b{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border:1px solid transparent;border-radius:2px;font-family:'Alegreya Sans SC','Gill Sans','Trebuchet MS',sans-serif;font-size:1.0625rem;font-weight:500;line-height:1;cursor:pointer;transition:background .15s ease,color .15s ease,border-color .15s ease;}.ds-b:focus-visible{outline:2px solid #9e1b1b;outline-offset:2px;}.ds-b-primario{background:#16161a;color:#fff;}.ds-b-primario:hover{background:#000;}"
+    },
+    {
+      "name": "Botão fantasma",
+      "kind": "button",
+      "refersTo": "botao-fantasma",
+      "description": "Ação secundária e \"Tentar novamente\".",
+      "html": "<button class=\"ds-b ds-b-fantasma\">Tentar novamente</button>",
+      "css": ".ds-b{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border:1px solid transparent;border-radius:2px;font-family:'Alegreya Sans SC','Gill Sans','Trebuchet MS',sans-serif;font-size:1.0625rem;font-weight:500;line-height:1;cursor:pointer;transition:background .15s ease,color .15s ease,border-color .15s ease;}.ds-b:focus-visible{outline:2px solid #9e1b1b;outline-offset:2px;}.ds-b-fantasma{background:transparent;border-color:#16161a;color:#16161a;}.ds-b-fantasma:hover{background:#f1f1ec;}"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "campo",
+      "description": "Campo com rótulo em versalete.",
+      "html": "<label class=\"ds-rotulo\" for=\"ds-c\">E-mail</label><input id=\"ds-c\" class=\"ds-campo\" type=\"email\" />",
+      "css": ".ds-rotulo{display:block;margin-bottom:8px;font-family:'Alegreya Sans SC','Gill Sans','Trebuchet MS',sans-serif;font-size:1.0625rem;font-weight:500;color:#16161a;}.ds-campo{width:100%;padding:9px 12px;border:1px solid #6f6f76;border-radius:2px;background:#fbfbf8;font-family:Gelasio,Georgia,'Times New Roman',serif;font-size:1rem;color:#16161a;}.ds-campo:focus{border-color:#16161a;}.ds-campo:focus-visible{outline:2px solid #9e1b1b;outline-offset:1px;}"
+    },
+    {
+      "name": "Título corrente",
+      "kind": "nav",
+      "refersTo": "titulo-corrente",
+      "description": "Cabeçalho fino de todas as páginas.",
+      "html": "<header class=\"ds-tc\"><nav><a class=\"ds-ativo\" href=\"#\">Livros</a> <a href=\"#\">Estudos</a></nav><strong>Isaías 1–66</strong><span class=\"ds-dir\"><b>Bíblia Teológica</b> <a href=\"#\">Entrar</a></span></header>",
+      "css": ".ds-tc{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;min-height:64px;padding:0 24px;background:#fbfbf8;border-bottom:2px solid #16161a;font-family:'Alegreya Sans SC','Gill Sans','Trebuchet MS',sans-serif;font-size:1.0625rem;font-weight:500;color:#16161a;}.ds-tc a{color:#16161a;text-decoration:none;margin-right:16px;}.ds-tc a:hover{text-decoration:underline;}.ds-tc a.ds-ativo{color:#9e1b1b;}.ds-tc a:focus-visible{outline:2px solid #9e1b1b;outline-offset:2px;}.ds-tc strong{font-size:1.25rem;font-weight:700;}.ds-dir{text-align:right;}"
+    },
+    {
+      "name": "Abas",
+      "kind": "nav",
+      "refersTo": "aba",
+      "description": "Abas do panorama entre dois filetes de tinta.",
+      "html": "<nav class=\"ds-abas\"><a class=\"ds-aba ds-aba-ativa\" href=\"#\">Panorama</a><a class=\"ds-aba\" href=\"#\">Contexto</a><a class=\"ds-aba\" href=\"#\">Mundo</a></nav>",
+      "css": ".ds-abas{display:flex;gap:24px;border-block:1px solid #16161a;font-family:'Alegreya Sans SC','Gill Sans','Trebuchet MS',sans-serif;font-size:1.125rem;font-weight:500;}.ds-aba{padding-block:8px;line-height:28px;color:#16161a;text-decoration:none;}.ds-aba:hover{text-decoration:underline;}.ds-aba:focus-visible{outline:2px solid #9e1b1b;outline-offset:-2px;}.ds-aba-ativa{color:#9e1b1b;font-weight:700;}"
+    },
+    {
+      "name": "Referência",
+      "kind": "custom",
+      "refersTo": "referencia",
+      "description": "Link para a ARC em nova aba.",
+      "html": "<a class=\"ds-ref\" href=\"#\">Isaías 6:1–8</a>",
+      "css": ".ds-ref{color:#9e1b1b;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;font-family:Gelasio,Georgia,'Times New Roman',serif;}.ds-ref:hover{color:#7c1414;}.ds-ref:focus-visible{outline:2px solid #9e1b1b;outline-offset:2px;}"
+    },
+    {
+      "name": "Coluna de referências",
+      "kind": "custom",
+      "description": "Assinatura: texto e aparato na mesma linha de grade.",
+      "html": "<div class=\"ds-linha\"><p>O texto vem primeiro, com a chamada ao lado da frase.<sup><a href=\"#\">1</a></sup></p><aside><b>Referências</b><br /><a href=\"#\">Isaías 1:1</a><ol><li>Nota da obra consultada.</li></ol></aside></div>",
+      "css": ".ds-linha{display:grid;grid-template-columns:minmax(0,40rem) minmax(14rem,1fr);column-gap:32px;font-family:Gelasio,Georgia,'Times New Roman',serif;font-size:1.1875rem;line-height:1.6;color:#16161a;}.ds-linha p{margin:0;}.ds-linha sup a{color:#9e1b1b;text-decoration:none;font-family:'Alegreya Sans SC','Gill Sans','Trebuchet MS',sans-serif;}.ds-linha sup a:hover{background:rgba(158,27,27,.14);text-decoration:underline;}.ds-linha aside{padding-left:16px;border-left:1px solid #c9c8c0;font-size:.9375rem;line-height:1.5;}.ds-linha b{font-family:'Alegreya Sans SC','Gill Sans','Trebuchet MS',sans-serif;font-size:1.0625rem;color:#9e1b1b;}.ds-linha aside a{color:#9e1b1b;}.ds-linha a:focus-visible{outline:2px solid #9e1b1b;outline-offset:2px;}.ds-linha ol{margin:12px 0 0;padding-left:24px;color:#55555c;}.ds-linha li{padding:2px 4px;transition:background .15s ease;}.ds-linha li:hover{background:rgba(158,27,27,.08);color:#16161a;}"
+    },
+    {
+      "name": "Rodapé",
+      "kind": "custom",
+      "refersTo": "rodape",
+      "description": "O campo de cor da capa.",
+      "html": "<footer class=\"ds-rodape\"><b>Bíblia Teológica</b> <a href=\"#\">Livros</a> <a href=\"#\">Estudos</a></footer>",
+      "css": ".ds-rodape{display:flex;gap:24px;align-items:baseline;padding:48px 24px;background:#2a3550;color:#e9e7dd;font-family:'Alegreya Sans SC','Gill Sans','Trebuchet MS',sans-serif;font-size:1.0625rem;font-weight:500;}.ds-rodape b{font-size:1.25rem;}.ds-rodape a{color:inherit;text-decoration:none;}.ds-rodape a:hover{text-decoration:underline;}.ds-rodape a:focus-visible{outline:2px solid #e9e7dd;outline-offset:2px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Bíblia de Estudo Aberta",
+    "overview": "A página é uma Bíblia de estudo aberta sobre a mesa: o texto no centro, cada afirmação com sua referência ao lado, um título corrente fino em cima e o tecido da capa aparecendo no fim. Quem lê entende onde está no cânon, lê o livro situado e confere a passagem na hora, abrindo a ARC em nova aba. O sistema só tem valor se essa conferência estiver sempre a um gesto de distância.\n\nA densidade é a de um livro de referência, não a de um portal. As divisões vêm de filetes, de versalete e da grade; não há caixas, sombras nem camadas. A hierarquia nasce do contraste entre um título muito grande e um corpo de leitura confortável, com poucos pesos e uma única cor de acento com função.\n\nRecusas confirmadas: herói, cartões e seções empilhadas de portal; Angular Material (decisão do utilizador em 2026-11-03, todas as telas usam componentes próprios); cruzes, pergaminho, douração, texturas envelhecidas e qualquer outro ornamento religioso; aparência fria de produto de tecnologia ou de modelo pronto.",
+    "keyCharacteristics": [
+      "Papel levemente frio, tinta quase preta, uma rubrica com significado e um único campo de cor cheia: a capa.",
+      "Gelasio para título e texto; Alegreya Sans SC para tudo o que orienta a leitura.",
+      "Coluna de referências sincronizada com o texto, linha a linha, como assinatura.",
+      "Plano por inteiro: nenhuma sombra e cantos de 2px só onde há controle.",
+      "Só um efeito de leitura: o destaque que liga a chamada à nota. Nenhuma animação de entrada."
+    ],
+    "rules": [
+      {
+        "name": "The Rubrica Rule",
+        "body": "Vermelho significa referência, nota, fonte ou lugar atual. A única exceção é a frase de resumo do livro, herdada da direção aprovada. Pergunta de auditoria: este vermelho leva a uma fonte ou diz onde a pessoa está? Se não, é tinta.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Field Rule",
+        "body": "A capa é o único campo de cor cheia. Ela aparece no fim da página, nunca atrás de conteúdo de leitura.",
+        "section": "colors"
+      },
+      {
+        "name": "The Small Caps Rule",
+        "body": "Rótulos e navegação usam Alegreya Sans SC em caixa mista, sem `text-transform` e sem espaçamento positivo entre letras.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Gelasio lê; Alegreya orienta. Texto corrido nunca vai em versalete, navegação nunca vai em Gelasio.",
+        "section": "typography"
+      },
+      {
+        "name": "The Same Height Rule",
+        "body": "O alinhamento é por parágrafo ou item, nunca por chamada. Texto e aparato começam na mesma linha de grade.",
+        "section": "layout"
+      },
+      {
+        "name": "The Printed Page Rule",
+        "body": "Nada flutua sobre a folha. Se um elemento precisa se destacar, ele ganha filete, peso ou rubrica.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do colocar toda referência bíblica em link para a ARC, em nova aba, em rubrica.",
+      "Do usar a grade de leitura sempre que um texto trouxer referências ou notas.",
+      "Do manter 40rem como coluna de leitura e 1,6 de entrelinha no corpo.",
+      "Do usar a capa só no rodapé e na guarda, com texto sobre capa e anel de foco na mesma cor.",
+      "Do garantir 44px em botões e pelo menos 24px em qualquer alvo de toque.",
+      "Do respeitar `prefers-reduced-motion`, que desliga transições e animações.",
+      "Do usar a cor de erro, nunca a rubrica, em estados de erro."
+    ],
+    "donts": [
+      "Don't usar Angular Material nem outra biblioteca de componentes visuais.",
+      "Don't usar sombras nem cartões para agrupar conteúdo; `bt-cartao` não existe em tela publicada.",
+      "Don't usar gradiente como efeito visual; a máscara que esmaece a borda de uma faixa rolável é a única exceção, porque avisa que há mais conteúdo.",
+      "Don't usar cruzes, pergaminho, douração, texturas envelhecidas ou outro ornamento religioso.",
+      "Don't usar rubrica como enfeite, nem para decidir uma interpretação: nenhum rótulo classifica uma profecia ou promessa.",
+      "Don't criar caixa alta com `text-transform` para rótulos.",
+      "Don't adicionar animação de entrada.",
+      "Don't arredondar cantos além de 2px, salvo o giro de carregamento."
+    ]
+  }
+}

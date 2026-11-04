@@ -1,38 +1,15 @@
-<div class="fichario">
-  <aside class="sidebar">
+<div class="lista">
+  <header class="lista__topo">
+    <h1>Livros</h1>
     <input
-      class="sidebar__busca"
+      class="lista__busca"
       type="search"
-      placeholder="Buscar livro…"
+      placeholder="Buscar livro"
+      aria-label="Buscar livro"
       autocomplete="off"
       [value]="busca()"
       (input)="busca.set($any($event.target).value)"
     />
-
-    @if (carregando()) {
-      <p class="sidebar__estado">Carregando…</p>
-    }
-
-    @for (secao of secoes(); track secao.chave) {
-      <section class="grupo">
-        <h2 class="grupo__titulo">
-          {{ secao.rotulo }} <span class="grupo__contagem">{{ secao.livros.length }}</span>
-        </h2>
-        <ul class="grupo__lista">
-          @for (livro of secao.livros; track livro.slug) {
-            <li>
-              <a class="item" [routerLink]="['/biblia', livro.slug]" routerLinkActive="item--ativo">
-                <span class="item__num">{{ livro.ordem.toString().padStart(2, '0') }}</span>
-                <span class="item__nome">{{ livro.nome }}</span>
-              </a>
-            </li>
-          }
-        </ul>
-      </section>
-    }
-  </aside>
-
-  <main class="conteudo">
-    <router-outlet />
-  </main>
+  </header>
+  <bt-indice-canon [filtro]="busca()" />
 </div>

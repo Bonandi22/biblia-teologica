@@ -1,0 +1,240 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+// As colunas laterais começam na altura das maiúsculas do nome do livro, não na caixa do título.
+$topo-laterais: $sp-3;
+
+:host {
+  display: block;
+}
+
+.moldura {
+  display: grid;
+  grid-template-columns: $coluna-divisao minmax(0, 1fr);
+  column-gap: $sp-12;
+  max-width: $largura-folha;
+  margin: 0 auto;
+  padding: $sp-8 $margem-folha $sp-16;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: $sp-8;
+  }
+}
+
+.moldura__divisao {
+  position: sticky;
+  top: $sp-6;
+  align-self: start;
+  padding-top: $topo-laterais;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 500;
+
+  @include mobile {
+    position: static;
+    order: 2;
+    padding-top: 0;
+    margin-top: $sp-2;
+  }
+}
+
+.moldura__secao,
+.moldura__secao-botao {
+  margin: 0 0 $sp-2;
+  font: inherit;
+  font-weight: 700;
+  color: $rubrica;
+}
+
+.moldura__secao {
+  @include mobile {
+    display: none;
+  }
+}
+
+.moldura__secao-botao {
+  display: none;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+
+  @include mobile {
+    display: block;
+    margin: 0;
+    color: $tinta;
+    font-weight: 500;
+  }
+}
+
+.moldura__livros {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: block;
+    padding-block: $sp-1;
+    color: $tinta-mut;
+    text-decoration: none;
+
+    &:hover {
+      color: $tinta;
+      text-decoration: underline;
+    }
+
+    &[aria-current='page'] {
+      color: $tinta;
+      font-weight: 700;
+    }
+  }
+
+  @include mobile {
+    display: none;
+
+    &--aberta {
+      display: block;
+    }
+
+    a {
+      padding-block: $sp-2;
+    }
+  }
+}
+
+.moldura__principal {
+  min-width: 0;
+}
+
+.moldura__conteudo {
+  min-width: 0;
+}
+
+// Mesma grade da linha de estudo: os capítulos ficam na coluna das referências.
+.moldura__cabecalho {
+  @include grade-estudo;
+}
+
+.moldura__titulos {
+  min-width: 0;
+}
+
+.moldura__capitulos-titulo {
+  margin: 0 0 $sp-2;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 700;
+  color: $rubrica;
+
+  @include mobile {
+    position: sticky;
+    left: 0;
+    margin-bottom: 0;
+  }
+}
+
+.moldura__nome {
+  margin: 0 0 0 $recuo-otico;
+  font-size: $t-h1;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.moldura__resumo {
+  margin: $sp-3 0 0;
+  font-size: $t-lead;
+  font-style: italic;
+  line-height: 1.45;
+  color: $rubrica;
+  text-wrap: pretty;
+}
+
+// No computador os capítulos ocupam a coluna ao lado do título; só Salmos, com 150, precisa rolar.
+// No celular rolam em uma só linha, para não empurrar o texto.
+.moldura__capitulos {
+  align-self: start;
+  margin-top: $topo-laterais;
+  padding-left: $sp-4;
+  border-left: 1px solid $filete;
+
+  ol {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(26px, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: block;
+    font-family: $fonte-corrente;
+    font-size: $t-nota;
+    font-weight: 500;
+    line-height: 26px;
+    text-align: center;
+    color: $tinta-mut;
+    text-decoration: none;
+
+    &:hover {
+      color: $rubrica;
+      text-decoration: underline;
+    }
+  }
+
+  @include mobile {
+    margin-top: $sp-2;
+    padding-left: 0;
+    border-left: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+
+    ol {
+      display: flex;
+      width: max-content;
+      padding-right: $sp-8;
+    }
+
+    a {
+      min-width: 32px;
+      line-height: 36px;
+    }
+  }
+}
+
+.moldura__capitulos--longo {
+  @media (min-width: #{$bp-mobile + 1}) {
+    max-height: 15rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
+// No celular a divisão desce para depois do nome: acima do título ela seria lida como rótulo.
+// Fica no fim do arquivo para vencer o display da grade do cabeçalho.
+@include mobile {
+  .moldura__principal,
+  .moldura__cabecalho {
+    display: contents;
+  }
+
+  .moldura__titulos {
+    order: 1;
+  }
+
+  .moldura__capitulos {
+    order: 3;
+  }
+
+  .moldura__conteudo {
+    order: 4;
+  }
+}

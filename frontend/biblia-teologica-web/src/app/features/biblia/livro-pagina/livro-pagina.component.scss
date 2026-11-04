@@ -1,0 +1,111 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+// Página de topo: fundo e altura mínima próprios.
+:host {
+  display: block;
+  min-height: calc(100vh - #{$altura-header} - 130px);
+  background: $papel;
+
+  @include mobile {
+    min-height: calc(100vh - #{$altura-header-mobile} - 180px);
+  }
+}
+
+// Abas: rolam na horizontal dentro do próprio <nav>, nunca alargam a página.
+.abas {
+  display: flex;
+  gap: $sp-6;
+  margin: $sp-8 0;
+  border-block: 1px solid $tinta;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  font-family: $fonte-corrente;
+  font-size: 1.125rem;
+  font-weight: 500;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include mobile {
+    gap: $sp-4;
+    padding-right: $sp-8;
+    mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  }
+}
+
+.aba {
+  flex: 0 0 auto;
+  padding-block: $sp-2;
+  line-height: 28px;
+  color: $tinta;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+.aba--ativa {
+  color: $rubrica;
+  font-weight: 700;
+}
+
+.perfil {
+  margin-bottom: $sp-12;
+}
+
+.perfil__item {
+  display: block;
+  margin-bottom: $sp-6;
+}
+
+.perfil__rotulo {
+  margin: 0 0 $sp-1;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 700;
+  line-height: 1.4;
+  color: $tinta-mut;
+}
+
+.perfil__texto {
+  margin: 0;
+  line-height: $entrelinha-texto;
+}
+
+.pagina--estado {
+  max-width: $largura-folha;
+  margin: 0 auto;
+  padding: $sp-12 $margem-folha;
+}
+
+.estado__texto {
+  max-width: $coluna-leitura;
+  margin: 0 0 $sp-4;
+  line-height: $entrelinha-texto;
+}
+
+.estado__botao {
+  min-height: 44px;
+  padding: 0 $sp-4;
+  border: 1px solid $tinta;
+  border-radius: $raio;
+  background: transparent;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 500;
+  color: $tinta;
+  cursor: pointer;
+
+  &:hover {
+    background: #f1f1ec;
+  }
+}

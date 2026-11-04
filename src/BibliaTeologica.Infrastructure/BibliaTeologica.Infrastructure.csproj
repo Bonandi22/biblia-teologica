@@ -20,12 +20,14 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Persistence/Seed/livros.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\content\**\*" LinkBase="content" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

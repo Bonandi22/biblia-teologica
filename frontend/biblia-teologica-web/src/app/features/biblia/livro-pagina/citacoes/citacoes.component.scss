@@ -1,0 +1,16 @@
+@use '../../../../../styles/variables' as *;
+
+.citacao {
+  margin-bottom: $sp-8;
+}
+
+.citacao__trecho {
+  margin: 0;
+  font-size: $t-lead;
+  font-weight: 700;
+}
+
+.citacao__comentario {
+  margin: $sp-1 0 0;
+  line-height: $entrelinha-texto;
+}

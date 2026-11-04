@@ -1,46 +1,47 @@
-@if (livro(); as l) {
-  <article class="ficha">
-    <header class="ficha__cabecalho">
-      <span class="ficha__num">Nº {{ l.ordem.toString().padStart(2, '0') }} / 66</span>
-      <bt-badge-secao [rotulo]="l.secaoRotulo" />
-    </header>
-
-    <h2 class="ficha__titulo">{{ l.nome }}</h2>
-
-    <div class="ficha__corpo">
-      <div class="ficha__grade">
-        <bt-campo-ficha rotulo="Quem escreveu">{{ l.quem }}</bt-campo-ficha>
-        <bt-campo-ficha rotulo="Estrutura">{{ l.estrutura }}</bt-campo-ficha>
-        <bt-campo-ficha rotulo="Porque escreveu">{{ l.porque }}</bt-campo-ficha>
-        <bt-campo-ficha rotulo="Pra quem escreveu">{{ l.paraQuem }}</bt-campo-ficha>
-      </div>
-
-      <bt-campo-ficha rotulo="Tema central">{{ l.tema }}</bt-campo-ficha>
-
-      <bt-campo-ficha rotulo="Ideias-chave">
-        <ul class="ideias">
+<bt-livro-moldura [slug]="slug()" [resumo]="livro()?.tema ?? null">
+  @if (livro(); as l) {
+    <article class="ficha">
+      <section>
+        <h2>Quem escreveu</h2>
+        <p>{{ l.quem }}</p>
+      </section>
+      <section>
+        <h2>Para quem escreveu</h2>
+        <p>{{ l.paraQuem }}</p>
+      </section>
+      <section>
+        <h2>Por que escreveu</h2>
+        <p>{{ l.porque }}</p>
+      </section>
+      <section>
+        <h2>Estrutura</h2>
+        <p>{{ l.estrutura }}</p>
+      </section>
+      <section>
+        <h2>Ideias-chave</h2>
+        <ul>
           @for (ideia of l.ideias; track ideia) {
             <li>{{ ideia }}</li>
           }
         </ul>
-      </bt-campo-ficha>
+      </section>
+      <section>
+        <h2>Versículo de referência</h2>
+        <p class="ficha__versiculo">{{ l.versiculo }}</p>
+      </section>
 
-      <bt-campo-ficha rotulo="Versículo de referência">
-        <p class="versiculo">{{ l.versiculo }}</p>
-      </bt-campo-ficha>
-
-      <nav class="ficha__nav">
+      <nav class="ficha__nav" aria-label="Livro anterior e próximo">
         @if (vizinhos().anterior; as ant) {
-          <a class="ficha__nav-link" [routerLink]="['/biblia', ant.slug]">‹ {{ ant.nome }}</a>
+          <a class="ficha__nav-link" [routerLink]="['/biblia', ant.slug]">Anterior: {{ ant.nome }}</a>
         }
         @if (vizinhos().proximo; as prox) {
           <a class="ficha__nav-link ficha__nav-link--proximo" [routerLink]="['/biblia', prox.slug]"
-            >{{ prox.nome }} ›</a
+            >Próximo: {{ prox.nome }}</a
           >
         }
       </nav>
-    </div>
-  </article>
-} @else {
-  <p class="ficha__estado">Carregando ficha…</p>
-}
+    </article>
+  } @else {
+    <p class="ficha__estado" aria-busy="true">Carregando a ficha…</p>
+  }
+</bt-livro-moldura>

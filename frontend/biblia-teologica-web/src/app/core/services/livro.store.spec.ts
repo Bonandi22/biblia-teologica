@@ -27,6 +27,14 @@ describe('LivroStore', () => {
     expect(store.livros().length).toBe(2);
   });
 
+  it('carregar_NormalizaNomeERotulo_QuandoApiDevolveCaixaAlta', () => {
+    store.carregar();
+    http.expectOne('/api/livros').flush([{ ...item('isaias', 23), nome: 'ISAÍAS', secaoRotulo: 'PROFETAS MAIORES' }]);
+    expect(store.livros()[0]).toEqual(
+      expect.objectContaining({ nome: 'Isaías', secaoRotulo: 'Profetas maiores' }),
+    );
+  });
+
   it('vizinhos() devolve anterior e próximo pela ordem', () => {
     store.carregar();
     http.expectOne('/api/livros').flush([item('genesis', 1), item('exodo', 2), item('levitico', 3)]);

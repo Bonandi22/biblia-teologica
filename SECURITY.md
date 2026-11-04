@@ -26,6 +26,7 @@ Ainda assim, interessam relatos sobre:
   `/admin` e o upload de capa chegam no M2b)
 - Injeção (SQL, comando, template), SSRF, path traversal
 - XSS no frontend (conteúdo não sanitizado, `bypassSecurityTrust*`)
+- XSS por conteúdo Markdown renderizado como HTML (sanitização, allowlist)
 - Configuração insegura de CORS, cabeçalhos ou Docker
 
 ## Boas práticas já aplicadas

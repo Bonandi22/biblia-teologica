@@ -18,6 +18,11 @@ appsettings.*.local.json
 .env
 .env.*
 !.env.example
+secrets.json
+*.pem
+*.key
+*.pfx
+*.p12
 
 # ---- Angular / Node ----
 node_modules/
@@ -28,7 +33,12 @@ npm-debug.log*
 
 # ---- IDE ----
 .idea/
+.vscode/
 *.DotSettings.user
+
+# ---- Ferramentas de IA (config local) ----
+.claude/
+.mcp.json
 
 # ---- OS ----
 .DS_Store
@@ -40,3 +50,10 @@ desktop.ini
 
 # ---- One-off scripts (não versionar) ----
 scripts/
+
+# Impeccable e Playwright: artefatos locais
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/config.local.json
+.impeccable/live/
+.playwright-mcp/

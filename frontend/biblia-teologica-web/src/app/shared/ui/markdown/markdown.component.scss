@@ -1,0 +1,161 @@
+@use '../../../../styles/variables' as *;
+
+// O HTML entra por [innerHTML] e não recebe o atributo de encapsulamento;
+// por isso ::ng-deep, sempre preso ao host para não vazar.
+// Medida: quem usa o componente define a largura da coluna (42rem ≈ 65 caracteres em 19px).
+:host {
+  display: block;
+  min-width: 0;
+}
+
+:host ::ng-deep .markdown {
+  font-family: $fonte-texto;
+  font-size: inherit;
+  line-height: $entrelinha-texto;
+  color: $tinta;
+  overflow-wrap: break-word;
+
+  p {
+    margin: 0 0 1.25em;
+  }
+
+  h2,
+  h3,
+  h4 {
+    color: $tinta;
+    text-wrap: balance;
+  }
+
+  h2 {
+    margin: 2.75em 0 0.75em;
+    font-size: $t-h2;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  h3 {
+    margin: 2.25em 0 0.5em;
+    font-size: $t-h3;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  h4 {
+    margin: 1.75em 0 0.4em;
+    font-size: $t-lead;
+    font-weight: 600;
+    line-height: 1.3;
+    color: $tinta-mut;
+  }
+
+  ul,
+  ol {
+    margin: 0 0 1.25em;
+    padding-left: 1.5em;
+  }
+
+  li {
+    margin-bottom: 0.5em;
+    padding-left: 0.25em;
+
+    > p {
+      margin-bottom: 0.5em;
+    }
+  }
+
+  li::marker {
+    color: $tinta-mut;
+  }
+
+  // Citação: recuo com filete; o texto fica em itálico, sem caixa.
+  blockquote {
+    margin: 1.75em 0;
+    padding: 0 0 0 1.25em;
+    border-left: 1px solid $filete;
+    font-style: italic;
+    color: $tinta;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  a {
+    color: $rubrica;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+
+    &:hover {
+      color: $rubrica-escura;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $rubrica;
+      outline-offset: 2px;
+    }
+
+    // Link sem destino, removido pelo sanitizador: não leva a uma fonte, então não leva rubrica.
+    &:not([href]) {
+      color: $tinta;
+      text-decoration: none;
+    }
+  }
+
+  // Marcador de nota: pequeno, sem sublinhado, área de toque de 24x24px via pseudo-elemento.
+  sup {
+    font-family: $fonte-corrente;
+    font-size: 0.7em;
+    font-weight: 600;
+    line-height: 0;
+
+    a {
+      padding: 0 0.15em;
+      text-decoration: none;
+
+      // Alvo de toque de 24x24px (WCAG 2.5.8) sem mexer na entrelinha nem no texto.
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: max(100%, 24px);
+        height: 24px;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  code {
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    background: #f1f1ec;
+    font-size: 0.9em;
+  }
+
+  pre {
+    margin: 0 0 1.25em;
+    padding: $sp-4;
+    overflow-x: auto;
+    border-radius: $raio;
+    background: #f1f1ec;
+    font-size: 0.9rem;
+    line-height: 1.6;
+
+    code {
+      padding: 0;
+      background: none;
+    }
+  }
+
+  hr {
+    margin: 2.5em 0;
+    border: 0;
+    border-top: 1px solid $filete;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+}

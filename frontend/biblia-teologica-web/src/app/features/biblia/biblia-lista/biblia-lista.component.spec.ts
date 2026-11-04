@@ -1,58 +1,57 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
+import { Router, provideRouter } from '@angular/router';
 import { BibliaListaComponent } from './biblia-lista.component';
-import type { LivroListItem } from '../../../core/models/livro.model';
+import { LugarAtualService } from '../../../core/layout/lugar-atual.service';
 
-const item = (
-  slug: string,
-  ordem: number,
-  secao = 'Pentateuco',
-  rotulo = 'PENTATEUCO',
-): LivroListItem => ({ slug, nome: slug, ordem, secao, secaoRotulo: rotulo });
+const LIVROS = [
+  { slug: 'genesis', nome: 'GÊNESIS', ordem: 1, secao: 'P', secaoRotulo: 'PENTATEUCO' },
+  { slug: 'exodo', nome: 'ÊXODO', ordem: 2, secao: 'P', secaoRotulo: 'PENTATEUCO' },
+];
 
 describe('BibliaListaComponent', () => {
-  let http: HttpTestingController;
-
-  beforeEach(() => {
+  const montar = async () => {
     TestBed.configureTestingModule({
       imports: [BibliaListaComponent],
       providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
     });
-    http = TestBed.inject(HttpTestingController);
-  });
-
-  it('lista os livros retornados pela API na sidebar', () => {
+    const navegar = vi.spyOn(TestBed.inject(Router), 'navigate');
+    const http = TestBed.inject(HttpTestingController);
     const fixture = TestBed.createComponent(BibliaListaComponent);
     fixture.detectChanges();
-    http.expectOne('/api/livros').flush([item('genesis', 1), item('exodo', 2)]);
+    http.expectOne('/api/livros').flush(LIVROS);
+    http.expectOne('/api/panoramas/livros').flush([]);
+    await fixture.whenStable();
     fixture.detectChanges();
-    const texto = fixture.nativeElement.textContent.toLowerCase();
-    expect(texto).toContain('genesis');
-    expect(texto).toContain('exodo');
+    return { fixture, navegar, el: fixture.nativeElement as HTMLElement };
+  };
+
+  it('mostra o índice e não redireciona para o primeiro livro', async () => {
+    const { el, navegar } = await montar();
+    expect(el.querySelector('h1')?.textContent?.trim()).toBe('Livros');
+    expect(el.textContent).toContain('Gênesis');
+    expect(navegar).not.toHaveBeenCalled();
+    expect(TestBed.inject(Title).getTitle()).toBe('Livros | Bíblia Teológica');
   });
 
-  it('filtra pela busca', () => {
-    const fixture = TestBed.createComponent(BibliaListaComponent);
+  it('filtra pela busca, com rótulo acessível', async () => {
+    const { fixture, el } = await montar();
+    const busca = el.querySelector('input[type="search"]') as HTMLInputElement;
+    expect(busca.getAttribute('aria-label')).toBe('Buscar livro');
+    busca.value = 'genes';
+    busca.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    http.expectOne('/api/livros').flush([
-      { ...item('genesis', 1), nome: 'GÊNESIS' },
-      { ...item('exodo', 2), nome: 'ÊXODO' },
-    ]);
-    fixture.componentInstance.busca.set('genes');
-    fixture.detectChanges();
-    const texto = fixture.nativeElement.textContent;
-    expect(texto).toContain('GÊNESIS');
-    expect(texto).not.toContain('ÊXODO');
+    expect(el.textContent).toContain('Gênesis');
+    expect(el.textContent).not.toContain('Êxodo');
   });
 
-  it('não repete a marca do site na sidebar (vem do header global)', () => {
-    const fixture = TestBed.createComponent(BibliaListaComponent);
-    fixture.detectChanges();
-    http.expectOne('/api/livros').flush([item('genesis', 1)]);
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.sidebar__brand')).toBeNull();
-    expect(fixture.nativeElement.querySelector('.sidebar__conta')).toBeNull();
+  it('define o lugar atual e o limpa ao sair', async () => {
+    const { fixture } = await montar();
+    const lugar = TestBed.inject(LugarAtualService);
+    expect(lugar.texto()).toBe('Os 66 livros');
+    fixture.destroy();
+    expect(lugar.texto()).toBe('');
   });
 });

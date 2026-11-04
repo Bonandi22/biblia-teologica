@@ -1,59 +1,37 @@
-<section class="hero">
-  <div class="hero__inner">
-    <h1 class="hero__titulo">Conhecer a Deus pela Sua Palavra</h1>
-    <p class="hero__lead">
-      Um portal de conhecimento teológico: as fichas dos 66 livros da Bíblia, estudos aprofundados e
-      reflexões — tudo ancorado nas Escrituras.
+<div class="home">
+  <header class="home__abertura">
+    <h1 class="home__nome">Bíblia Teológica</h1>
+    <p class="home__frase">
+      Os 66 livros da Bíblia, cada um situado: quem escreveu, para quem e por quê.
     </p>
-    <div class="hero__acoes">
-      <a class="btn btn--primario" routerLink="/biblia">Explorar o fichário</a>
-      <a class="btn btn--fantasma" routerLink="/registar">Criar conta</a>
-    </div>
-  </div>
-</section>
+  </header>
 
-<section class="secao destaque">
-  <div class="secao__inner">
-    <span class="destaque__selo">Disponível agora</span>
-    <h2 class="destaque__titulo">O fichário dos 66 livros</h2>
-    <p class="destaque__texto">
-      Cada livro do cânon protestante numa ficha estruturada — autor, data, contexto, esboço e como
-      Cristo aparece no livro.
-    </p>
-    <ul class="destaque__chips">
-      @for (livro of livrosDestaque; track livro) {
-        <li>{{ livro }}</li>
-      }
-    </ul>
-    <a class="destaque__link" routerLink="/biblia">Ver o fichário →</a>
-  </div>
-</section>
+  <bt-indice-canon />
 
-<section class="secao">
-  <div class="secao__inner">
-    <h2 class="secao__titulo">A crescer</h2>
-    <div class="grelha">
-      @for (secao of secoes; track secao.rota) {
-        <bt-secao-card
-          [titulo]="secao.titulo"
-          [descricao]="secao.descricao"
-          [rota]="secao.rota"
-          [disponivel]="false"
-        />
-      }
-    </div>
-  </div>
-</section>
+  @if (estudos().length > 0) {
+    <section class="home__estudos">
+      <h2>Estudos</h2>
+      <ul>
+        @for (e of estudos(); track e.slug) {
+          <li>
+            <a [routerLink]="['/estudos', e.slug]">{{ e.titulo }}</a>
+            <p>{{ e.resumo }}</p>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+</div>
 
-@if (!autenticado()) {
-  <section class="secao membros">
-    <div class="secao__inner">
-      <h2 class="secao__titulo">Alguns conteúdos serão só para membros</h2>
+@if (primeiroPanorama(); as l) {
+  <section class="home__guarda">
+    <div class="home__guarda-inner">
+      <h2>Nos panoramas, cada afirmação pode ser conferida</h2>
       <p>
-        Cria uma conta gratuita para acompanhares estudos e notícias reservadas quando começarem a
-        sair.
+        O que vem da Bíblia traz a referência ao lado do texto. O que vem de fora traz a obra
+        consultada.
       </p>
-      <a class="btn btn--primario" routerLink="/registar">Criar conta</a>
+      <a [routerLink]="['/biblia', l.slug]">Ler o panorama de {{ l.nome }}</a>
     </div>
   </section>
 }

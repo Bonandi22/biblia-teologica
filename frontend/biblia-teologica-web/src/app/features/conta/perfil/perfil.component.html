@@ -1,44 +1,52 @@
-<mat-card class="cartao">
-  <h1>A minha conta</h1>
+<div class="folha">
+  <h1>Minha conta</h1>
 
   @if (perfil(); as p) {
     <dl class="dados">
-      <div><dt>Email</dt><dd>{{ p.email }}</dd></div>
-      <div><dt>Perfis</dt><dd>{{ p.roles.join(', ') || '—' }}</dd></div>
+      <div><dt>E-mail</dt><dd>{{ p.email }}</dd></div>
+      <div><dt>Perfis</dt><dd>{{ p.roles.join(', ') || 'Nenhum' }}</dd></div>
     </dl>
 
-    <form [formGroup]="formNome" (ngSubmit)="guardarNome()">
-      <mat-form-field appearance="outline">
-        <mat-label>Nome a exibir</mat-label>
-        <input matInput formControlName="nomeExibicao" autocomplete="name" />
-      </mat-form-field>
-      <button mat-flat-button color="primary" type="submit">Guardar nome</button>
-      @if (msgNome(); as m) {
-        <p class="msg" role="status">{{ m }}</p>
+    <form [formGroup]="formNome" (ngSubmit)="guardarNome()" novalidate>
+      <bt-campo label="Nome a exibir" [erro]="erroDe(formNome.controls.nomeExibicao)">
+        <input btInput formControlName="nomeExibicao" autocomplete="name" />
+      </bt-campo>
+      <bt-botao type="submit" [carregando]="aEnviarNome()">Salvar nome</bt-botao>
+      @if (avisoNome(); as a) {
+        <div class="msg"><bt-alerta [tipo]="a.tipo">{{ a.texto }}</bt-alerta></div>
       }
     </form>
 
-    <form [formGroup]="formEmail" (ngSubmit)="guardarEmail()">
-      <h2>Trocar email</h2>
-      <mat-form-field appearance="outline">
-        <mat-label>Novo email</mat-label>
-        <input matInput type="email" formControlName="novoEmail" autocomplete="email" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Senha atual</mat-label>
-        <input matInput type="password" formControlName="senha" autocomplete="current-password" />
-      </mat-form-field>
-      <button mat-stroked-button type="submit">Trocar email</button>
-      @if (msgEmail(); as m) {
-        <p class="msg" role="status">{{ m }}</p>
+    <form class="secao" [formGroup]="formEmail" (ngSubmit)="guardarEmail()" novalidate>
+      <h2>Trocar e-mail</h2>
+      <bt-campo label="Novo e-mail" [erro]="erroDe(formEmail.controls.novoEmail)">
+        <input btInput type="email" formControlName="novoEmail" autocomplete="email" />
+      </bt-campo>
+      <bt-campo-senha
+        label="Senha atual"
+        formControlName="senha"
+        autocomplete="current-password"
+        [erro]="erroDe(formEmail.controls.senha)"
+      />
+      <bt-botao type="submit" variante="fantasma" [carregando]="aEnviarEmail()">Trocar e-mail</bt-botao>
+      @if (avisoEmail(); as a) {
+        <div class="msg"><bt-alerta [tipo]="a.tipo">{{ a.texto }}</bt-alerta></div>
       }
     </form>
 
     <div class="acoes">
-      <a routerLink="trocar-senha" mat-button>Trocar senha</a>
-      <button mat-button type="button" (click)="sair()">Sair</button>
+      <a routerLink="trocar-senha" class="ligacao">Trocar senha</a>
+      <bt-botao variante="texto" [carregando]="aSair()" (click)="sair()">Sair</bt-botao>
+    </div>
+    @if (erroAoSair(); as e) {
+      <div class="msg"><bt-alerta tipo="erro">{{ e }}</bt-alerta></div>
+    }
+  } @else if (falhouAoCarregar()) {
+    <bt-alerta tipo="erro">Não foi possível carregar a sua conta.</bt-alerta>
+    <div class="tentar">
+      <bt-botao variante="texto" (click)="carregar()">Tentar de novo</bt-botao>
     </div>
   } @else {
-    <p>A carregar…</p>
+    <p aria-busy="true">Carregando…</p>
   }
-</mat-card>
+</div>

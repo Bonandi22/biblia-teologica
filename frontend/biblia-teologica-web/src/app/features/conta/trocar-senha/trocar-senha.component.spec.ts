@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { TrocarSenhaComponent } from './trocar-senha.component';
 import { AuthStore } from '../../../core/auth/auth.store';
 
@@ -16,7 +15,6 @@ describe('TrocarSenhaComponent', () => {
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideNoopAnimations(),
       ],
     });
     http = TestBed.inject(HttpTestingController);
@@ -69,5 +67,34 @@ describe('TrocarSenhaComponent', () => {
       .expectOne('/api/conta/senha')
       .flush({ detail: 'Senha atual incorreta.' }, { status: 400, statusText: 'Bad Request' });
     expect(c.erro()).toBe('Senha atual incorreta.');
+  });
+});
+
+describe('TrocarSenhaComponent na tela', () => {
+  const montar = () => {
+    TestBed.configureTestingModule({
+      imports: [TrocarSenhaComponent],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
+    });
+    const fixture = TestBed.createComponent(TrocarSenhaComponent);
+    fixture.detectChanges();
+    return fixture;
+  };
+
+  it('usa os campos próprios', () => {
+    const el = montar().nativeElement as HTMLElement;
+    expect(el.querySelector('[class*="mat-"]')).toBeNull();
+    expect(el.querySelectorAll('bt-campo-senha').length).toBe(3);
+  });
+
+  it('diz quando as senhas não coincidem, no campo de confirmação', () => {
+    const fixture = montar();
+    const c = fixture.componentInstance;
+    c.form.setValue({ senhaAtual: 'atual', novaSenha: 'segredo123', confirmar: 'outra' });
+    const el = fixture.nativeElement as HTMLElement;
+    el.querySelector('form')!.dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+    expect(el.textContent).toContain('As senhas não coincidem.');
+    TestBed.inject(HttpTestingController).expectNone('/api/conta/senha');
   });
 });

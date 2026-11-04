@@ -10,6 +10,7 @@ COPY src/BibliaTeologica.Api/*.csproj src/BibliaTeologica.Api/
 RUN dotnet restore src/BibliaTeologica.Api/BibliaTeologica.Api.csproj
 
 COPY src/ src/
+COPY content/ content/
 RUN dotnet publish src/BibliaTeologica.Api/BibliaTeologica.Api.csproj -c Release -o /app --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime

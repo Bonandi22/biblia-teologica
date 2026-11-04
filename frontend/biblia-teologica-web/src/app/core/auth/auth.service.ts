@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { lerCookie } from '../interceptors/lercookie';
 import { AuthStore } from './auth.store';
 import type { DesafioLogin, Usuario } from './auth.models';
 
@@ -34,6 +35,14 @@ export class AuthService {
 
   carregarUsuario(): Observable<Usuario | null> {
     return this.http.get<Usuario>(`${this.base}/eu`).pipe(
+      catchError((erro: HttpErrorResponse) => {
+        // O interceptor não renova rotas /auth/. O cookie de CSRF indica sessão, e o visitante
+        // anônimo não faz chamada extra.
+        if (erro.status !== 401 || !lerCookie('bt_csrf')) return throwError(() => erro);
+        return this.http
+          .post<{ usuario: Usuario }>(`${this.base}/refresh`, {})
+          .pipe(map((r) => r.usuario));
+      }),
       tap((u) => this.store.definir(u)),
       catchError(() => {
         this.store.limpar();

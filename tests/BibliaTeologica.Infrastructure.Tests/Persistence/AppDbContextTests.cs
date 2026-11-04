@@ -85,5 +85,16 @@ public sealed class AppDbContextTests : IDisposable
         }
     }
 
+    [Fact]
+    public async Task SaveChanges_LancaExcecao_QuandoTipoESlugRepetidos()
+    {
+        await using var ctx = CriarContexto();
+        ctx.DocumentosConteudo.Add(DocumentoConteudo.Criar(TipoConteudo.Livro, "isaias", "Isaías", "r", "{}"));
+        ctx.DocumentosConteudo.Add(DocumentoConteudo.Criar(TipoConteudo.Livro, "isaias", "Isaías 2", "r", "{}"));
+
+        var acao = async () => await ctx.SaveChangesAsync();
+        await acao.Should().ThrowAsync<DbUpdateException>();
+    }
+
     public void Dispose() => _conexao.Dispose();
 }

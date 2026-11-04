@@ -1,0 +1,23 @@
+@use '../../../../styles/variables' as *;
+
+.bloco__texto {
+  margin: 0;
+  font-size: 1.05em;
+  line-height: 1.6;
+}
+
+.bloco__secao {
+  margin-top: $sp-12;
+}
+
+.bloco__titulo {
+  max-width: $coluna-leitura;
+  margin: 0 0 $sp-4;
+  font-size: $t-h3;
+  font-weight: 700;
+  color: $tinta;
+}
+
+.bloco__restantes {
+  margin-top: $sp-6;
+}

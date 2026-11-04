@@ -10,37 +10,48 @@ body {
   padding: 0;
 }
 
+html {
+  scrollbar-color: $filete $papel;
+}
+
 body {
-  background: $paper;
-  color: $ink;
-  font-family: $fonte-display;
+  background: $papel;
+  color: $tinta;
+  font-family: $fonte-texto;
   font-size: $t-body;
-  line-height: 1.55;
+  line-height: $entrelinha-texto;
+  font-variant-numeric: lining-nums;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: $acc;
-  text-decoration: none;
-
-  &:hover {
-    color: $acc-dk;
-  }
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 :focus-visible {
-  outline: 2px solid $acc;
+  outline: 2px solid $rubrica;
   outline-offset: 2px;
 }
 
+// Em tela estreita, 19px deixaria só 30 caracteres por linha.
+@media (max-width: $bp-tablet) {
+  body {
+    font-size: 1.0625rem;
+  }
+}
+
 ::selection {
-  background: $acc-tint;
+  background: $capa;
+  color: $sobre-capa;
 }
 
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
     animation: none !important;
+    scroll-behavior: auto !important;
   }
 }
