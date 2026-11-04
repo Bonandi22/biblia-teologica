@@ -89,6 +89,7 @@ public class AuthController : ControllerBase
 
     [HttpGet("eu")]
     [Authorize]
+    [PermitirSenhaPendente]
     public IActionResult Eu()
     {
         var email = User.FindFirst("email")?.Value ?? "";

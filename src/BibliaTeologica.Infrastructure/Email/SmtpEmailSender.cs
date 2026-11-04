@@ -34,7 +34,7 @@ public class SmtpEmailSender : IEmailSender
         }
         catch (Exception ex)
         {
-            _log.LogError(ex, "Falha ao enviar email para {Para}", para);
+            _log.LogError(ex, "Falha ao enviar e-mail.");
             throw;
         }
 #pragma warning restore SYSLIB0014

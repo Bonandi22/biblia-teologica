@@ -9,6 +9,7 @@ using BibliaTeologica.Infrastructure.Configuracao;
 using BibliaTeologica.Infrastructure.Persistence;
 using BibliaTeologica.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +30,20 @@ builder.Services.AddScoped<CsrfActionFilter>();
 builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme,
     options => options.MapInboundClaims = false);
 
-builder.Services.AddControllers();
+// Atrás do nginx, a conexão vem sempre do proxy. Só a rede dele pode informar o IP do cliente,
+// e só o último salto vale: o restante do X-Forwarded-For pode ter sido forjado pelo cliente.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor;
+    options.ForwardLimit = 1;
+    foreach (var rede in builder.Configuration.GetSection("Proxy:RedesConfiaveis").Get<string[]>() ?? Array.Empty<string>())
+    {
+        var r = System.Net.IPNetwork.Parse(rede);
+        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(r.BaseAddress, r.PrefixLength));
+    }
+});
+
+builder.Services.AddControllers(options => options.Filters.Add<SenhaPendenteFilter>());
 builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -101,6 +115,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseForwardedHeaders();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseCors("spa");

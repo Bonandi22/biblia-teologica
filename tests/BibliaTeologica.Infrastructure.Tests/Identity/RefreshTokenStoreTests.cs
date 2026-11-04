@@ -53,6 +53,7 @@ public sealed class RefreshTokenStoreTests : IDisposable
         var antigo = await new RefreshTokenStore(Novo()).ObterAsync("antigo", default);
         antigo!.Valido.Should().BeFalse();
         antigo.RevogadoEm.Should().NotBeNull();
+        antigo.Rotacionado.Should().BeTrue();
         (await new RefreshTokenStore(Novo()).ObterAsync("novo", default))!.Valido.Should().BeTrue();
     }
 

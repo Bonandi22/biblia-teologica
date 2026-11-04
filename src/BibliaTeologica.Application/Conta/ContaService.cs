@@ -10,11 +10,13 @@ public class ContaService : IContaService
 {
     private readonly IIdentityService _identity;
     private readonly IEmissorTokens _emissor;
+    private readonly IRefreshTokenStore _store;
 
-    public ContaService(IIdentityService identity, IEmissorTokens emissor)
+    public ContaService(IIdentityService identity, IEmissorTokens emissor, IRefreshTokenStore store)
     {
         _identity = identity;
         _emissor = emissor;
+        _store = store;
     }
 
     public async Task<PerfilDto?> ObterAsync(Guid userId, CancellationToken ct)
@@ -36,6 +38,9 @@ public class ContaService : IContaService
         var r = await _identity.TrocarSenhaAsync(userId, dto.SenhaAtual, dto.NovaSenha, ct);
         if (!r.Sucesso)
             return new ResultadoLoginDto(EstadoLogin.CredenciaisInvalidas, Erros: r.Erros);
+
+        // Antes de emitir: encerra as outras sessões e preserva a nova, desta sessão.
+        await _store.RevogarCadeiaAsync(userId, ct);
         return await _emissor.EmitirAsync(userId, ip, ct);
     }
 }

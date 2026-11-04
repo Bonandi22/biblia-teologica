@@ -59,7 +59,8 @@ public class AuthService : IAuthService
         var info = await _store.ObterAsync(hash, ct);
         if (info is null) return new ResultadoLoginDto(EstadoLogin.CredenciaisInvalidas);
 
-        if (info.RevogadoEm is not null)
+        // Só token já rotacionado indica roubo. Revogado por logout ou troca de senha é só sessão encerrada.
+        if (info.Rotacionado)
         {
             _log.LogWarning("Refresh token reutilizado para {UserId} — a revogar cadeia.", info.UserId);
             await _store.RevogarCadeiaAsync(info.UserId, ct);
