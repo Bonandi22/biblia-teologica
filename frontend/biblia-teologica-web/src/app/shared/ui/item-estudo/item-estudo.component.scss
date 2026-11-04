@@ -1,78 +1,59 @@
 @use '../../../../styles/variables' as *;
 
-.item {
-  max-width: $largura-leitura;
-  padding: $sp-4 0 $sp-4 $sp-4;
-  border-left: 2px solid $hair;
+:host {
+  display: block;
+  margin-bottom: $sp-6;
 }
 
 .item__quando {
-  margin: 0 0 $sp-1;
-  font-family: $fonte-display;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: $acc;
+  margin: 0;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 700;
+  color: $tinta-mut;
 }
 
 .item__nome {
-  margin: 0 0 $sp-1;
-  font-family: $fonte-display;
+  margin: 0;
   font-size: $t-lead;
   font-weight: 700;
-  letter-spacing: $tracking-tight;
-  color: $ink;
+  color: $tinta;
 }
 
 .item__texto,
 .item__mais p {
   margin: 0;
-  font-family: $fonte-serif;
-  font-size: $t-body;
-  line-height: 1.7;
-  color: $ink;
-}
-
-.item__refs {
-  margin: $sp-2 0 0;
-  font-family: $fonte-display;
-  font-size: 0.8125rem;
-  color: $ink-mut;
+  line-height: $entrelinha-texto;
+  color: $tinta;
 }
 
 .item__mais {
-  margin-top: $sp-3;
+  margin-top: $sp-2;
 
   summary {
+    display: inline-block;
+    min-height: 24px;
     cursor: pointer;
-    font-family: $fonte-display;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: $acc-dk;
-
-    &:focus-visible {
-      outline: 2px solid $acc;
-      outline-offset: 2px;
-    }
+    font-family: $fonte-corrente;
+    font-size: $t-corrente;
+    font-weight: 500;
+    color: $tinta;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
   }
 
   p {
     margin-top: $sp-2;
-    padding: $sp-3 $sp-4;
-    background: $parchment-2;
-    border-radius: $raio;
   }
 }
 
 .item__estudo {
   display: inline-block;
-  margin-top: $sp-3;
-  font-family: $fonte-display;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: $acc;
-
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 2px;
-  }
+  margin-top: $sp-2;
+  padding-block: 2px;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 500;
+  color: $tinta;
 }

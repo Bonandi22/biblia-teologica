@@ -2,22 +2,21 @@
 @use '../../../styles/mixins' as *;
 
 .provas {
-  max-width: $largura-conteudo;
+  max-width: $largura-folha;
   margin: 0 auto;
   padding: $sp-12 $sp-6;
 }
 
 h1 {
-  font-family: $fonte-display;
+  font-family: $fonte-corrente;
   font-weight: 700;
   font-size: $t-h2;
-  letter-spacing: $tracking-tight;
 }
 
 section {
   margin: $sp-8 0;
   padding-top: $sp-6;
-  border-top: 1px solid $hair;
+  border-top: 1px solid $filete;
   display: flex;
   flex-wrap: wrap;
   gap: $sp-4;
@@ -25,7 +24,9 @@ section {
 }
 
 section h2 {
-  @include eyebrow;
+  font-family: $fonte-corrente;
+  font-size: $t-nota;
+  color: $tinta-mut;
   flex-basis: 100%;
   margin: 0 0 $sp-2;
 }

@@ -41,17 +41,21 @@ public sealed class RegistroBloco
     public List<RegistroNota> Notas { get => _Notas; set => _Notas = value ?? new(); }
 }
 
-public sealed class RegistroProfecia
+/// <summary>Profecia ou promessa: só aponta o trecho, sem categoria nem indicação de cumprimento.</summary>
+public sealed class RegistroApontamento
 {
     public string? Referencia { get; set; }
     public string? Anuncia { get; set; }
-    /// <summary>cumpridaEmCristo | cumpridaNaHistoria | promessaAguardada</summary>
-    public string? Categoria { get; set; }
-    private List<string> _Cumprimento = new();
-    public List<string> Cumprimento { get => _Cumprimento; set => _Cumprimento = value ?? new(); }
-    public string? FatoHistorico { get; set; }
     private List<RegistroNota> _Notas = new();
     public List<RegistroNota> Notas { get => _Notas; set => _Notas = value ?? new(); }
+}
+
+public sealed class RegistroPerfilItem
+{
+    public string? Rotulo { get; set; }
+    public string? Texto { get; set; }
+    private List<string> _Referencias = new();
+    public List<string> Referencias { get => _Referencias; set => _Referencias = value ?? new(); }
 }
 
 public sealed class RegistroCitacao
@@ -72,14 +76,15 @@ public sealed class RegistroLivro
     public string Estado { get; set; } = string.Empty;
     public string? Livro { get; set; }
     public string? Resumo { get; set; }
-    public string? Quem { get; set; }
-    public string? ParaQuem { get; set; }
-    public string? Porque { get; set; }
+    private List<RegistroPerfilItem> _Perfil = new();
+    public List<RegistroPerfilItem> Perfil { get => _Perfil; set => _Perfil = value ?? new(); }
     public RegistroBloco? Panorama { get; set; }
     public RegistroBloco? Contexto { get; set; }
     public RegistroBloco? Mundo { get; set; }
-    private List<RegistroProfecia> _Profecias = new();
-    public List<RegistroProfecia> Profecias { get => _Profecias; set => _Profecias = value ?? new(); }
+    private List<RegistroApontamento> _Profecias = new();
+    public List<RegistroApontamento> Profecias { get => _Profecias; set => _Profecias = value ?? new(); }
+    private List<RegistroApontamento> _Promessas = new();
+    public List<RegistroApontamento> Promessas { get => _Promessas; set => _Promessas = value ?? new(); }
     private List<RegistroCitacao> _Citacoes = new();
     public List<RegistroCitacao> Citacoes { get => _Citacoes; set => _Citacoes = value ?? new(); }
 }

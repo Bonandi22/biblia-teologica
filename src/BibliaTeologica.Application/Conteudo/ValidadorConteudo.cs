@@ -10,9 +10,6 @@ namespace BibliaTeologica.Application.Conteudo;
 public static partial class ValidadorConteudo
 {
     private const string ArquivoBibliografia = "bibliografia.yaml";
-    private const int PrimeiraOrdemNovoTestamento = 40;
-
-    private static readonly string[] Categorias = { "cumpridaEmCristo", "cumpridaNaHistoria", "promessaAguardada" };
 
     public static IReadOnlyList<string> Validar(ConjuntoRegistros c, IReadOnlyList<LivroCanonico> livros)
     {
@@ -77,15 +74,10 @@ public static partial class ValidadorConteudo
         var a = l.Arquivo;
         Obrigatorio(ctx, a, "livro", l.Livro);
         Obrigatorio(ctx, a, "resumo", l.Resumo);
-        Obrigatorio(ctx, a, "quem", l.Quem);
-        Obrigatorio(ctx, a, "paraQuem", l.ParaQuem);
-        Obrigatorio(ctx, a, "porque", l.Porque);
-        // Estes campos não têm lista de notas: aspas só passam com marcador [^n], que então fica sem nota (rejeitado).
-        foreach (var (campo, valor) in new[] { ("resumo", l.Resumo), ("quem", l.Quem), ("paraQuem", l.ParaQuem), ("porque", l.Porque) })
-        {
-            ExigeOrigem(ctx, a, campo, valor, false);
-            ValidarMarcadoresSemNota(valor, campo, a, ctx);
-        }
+        // O resumo não tem lista de notas: aspas só passam com marcador [^n], que então fica sem nota (rejeitado).
+        ExigeOrigem(ctx, a, "resumo", l.Resumo, false);
+        ValidarMarcadoresSemNota(l.Resumo, "resumo", a, ctx);
+        ValidarPerfil(l.Perfil, a, ctx);
 
         if (!string.IsNullOrWhiteSpace(l.Livro))
         {
@@ -100,10 +92,30 @@ public static partial class ValidadorConteudo
         ValidarBloco(l.Mundo, "mundo", exigeNota: true, exigeAno: true, a, ctx);
 
         for (var i = 0; i < l.Profecias.Count; i++)
-            ValidarProfecia(l.Profecias[i], $"profecias[{i}]", a, ctx);
+            ValidarApontamento(l.Profecias[i], $"profecias[{i}]", a, ctx);
+
+        for (var i = 0; i < l.Promessas.Count; i++)
+            ValidarApontamento(l.Promessas[i], $"promessas[{i}]", a, ctx);
 
         for (var i = 0; i < l.Citacoes.Count; i++)
             ValidarCitacao(l.Citacoes[i], $"citacoes[{i}]", l.Livro, a, ctx);
+    }
+
+    private static void ValidarPerfil(IReadOnlyList<RegistroPerfilItem> perfil, string a, Contexto ctx)
+    {
+        if (perfil.Count == 0)
+            ctx.Erro(a, "perfil", "o perfil precisa de ao menos um item.");
+
+        for (var i = 0; i < perfil.Count; i++)
+        {
+            var item = perfil[i];
+            var p = $"perfil[{i}]";
+            Obrigatorio(ctx, a, $"{p}.rotulo", item.Rotulo);
+            Obrigatorio(ctx, a, $"{p}.texto", item.Texto);
+            ValidarReferencias(item.Referencias, $"{p}.referencias", a, ctx);
+            ExigeOrigem(ctx, a, $"{p}.texto", item.Texto, item.Referencias.Count > 0);
+            ValidarMarcadoresSemNota(item.Texto, $"{p}.texto", a, ctx);
+        }
     }
 
     private static void ValidarBloco(RegistroBloco? b, string caminho, bool exigeNota, bool exigeAno, string a, Contexto ctx)
@@ -157,28 +169,12 @@ public static partial class ValidadorConteudo
         }
     }
 
-    private static void ValidarProfecia(RegistroProfecia pf, string p, string a, Contexto ctx)
+    private static void ValidarApontamento(RegistroApontamento ap, string p, string a, Contexto ctx)
     {
-        Obrigatorio(ctx, a, $"{p}.anuncia", pf.Anuncia);
-        ValidarReferenciaUnica(pf.Referencia, $"{p}.referencia", a, ctx);
-        ValidarReferencias(pf.Cumprimento, $"{p}.cumprimento", a, ctx);
-        var origemPf = !string.IsNullOrWhiteSpace(pf.Referencia) || pf.Cumprimento.Count > 0;
-        ExigeOrigem(ctx, a, $"{p}.anuncia", pf.Anuncia, origemPf);
-        ExigeOrigem(ctx, a, $"{p}.fatoHistorico", pf.FatoHistorico, origemPf);
-        ValidarNotasEMarcadores(pf.Notas, new List<string?> { pf.Anuncia, pf.FatoHistorico }, $"{p}.notas", a, ctx, exigeUso: false);
-
-        if (string.IsNullOrWhiteSpace(pf.Categoria) || !Categorias.Contains(pf.Categoria))
-        {
-            ctx.Erro(a, $"{p}.categoria", $"categoria inválida; use {string.Join(" | ", Categorias)}.");
-            return;
-        }
-
-        if (pf.Categoria is "cumpridaEmCristo" or "promessaAguardada"
-            && !pf.Cumprimento.Any(r => TemLivroDoNovoTestamento(r, ctx)))
-            ctx.Erro(a, $"{p}.cumprimento", "precisa de ao menos uma referência do Novo Testamento (Mateus a Apocalipse).");
-
-        if (pf.Categoria == "cumpridaNaHistoria" && string.IsNullOrWhiteSpace(pf.FatoHistorico))
-            ctx.Erro(a, $"{p}.fatoHistorico", "obrigatório em profecias cumpridaNaHistoria.");
+        Obrigatorio(ctx, a, $"{p}.anuncia", ap.Anuncia);
+        ValidarReferenciaUnica(ap.Referencia, $"{p}.referencia", a, ctx);
+        ExigeOrigem(ctx, a, $"{p}.anuncia", ap.Anuncia, !string.IsNullOrWhiteSpace(ap.Referencia));
+        ValidarNotasEMarcadores(ap.Notas, new List<string?> { ap.Anuncia }, $"{p}.notas", a, ctx, exigeUso: false);
     }
 
     private static void ValidarCitacao(RegistroCitacao c, string p, string? livroDoArquivo, string a, Contexto ctx)
@@ -187,9 +183,11 @@ public static partial class ValidadorConteudo
             && livroDoArquivo is not null && slug != livroDoArquivo)
             ctx.Erro(a, $"{p}.trecho", $"o trecho '{c.Trecho}' não pertence ao livro '{livroDoArquivo}'.");
 
-        ValidarReferencias(c.CitadoEm, $"{p}.citadoEm", a, ctx);
-        if (!c.CitadoEm.Any(r => TemLivroDoNovoTestamento(r, ctx)))
-            ctx.Erro(a, $"{p}.citadoEm", "precisa de ao menos uma referência do Novo Testamento.");
+        if (c.CitadoEm.Count == 0)
+            ctx.Erro(a, $"{p}.citadoEm", "a citação precisa de ao menos uma referência.");
+        for (var i = 0; i < c.CitadoEm.Count; i++)
+            if (ValidarReferenciaUnica(c.CitadoEm[i], $"{p}.citadoEm[{i}]", a, ctx, out var slugCitado) && slugCitado == livroDoArquivo)
+                ctx.Erro(a, $"{p}.citadoEm[{i}]", $"'{c.CitadoEm[i]}' é do próprio livro; aponte para outro livro.");
 
         if (c.Notas.Count == 0)
             ctx.Erro(a, $"{p}.notas", "a citação precisa de ao menos uma nota, com a obra usada na conferência.");
@@ -303,11 +301,6 @@ public static partial class ValidadorConteudo
 
         return true;
     }
-
-    private static bool TemLivroDoNovoTestamento(string referencia, Contexto ctx) =>
-        ReferenciaBiblica.TentarLer(referencia, out var slug)
-        && ctx.OrdemPorSlug.TryGetValue(slug, out var ordem)
-        && ordem >= PrimeiraOrdemNovoTestamento;
 
     private static void Obrigatorio(Contexto ctx, string arquivo, string caminho, string? valor)
     {

@@ -1,225 +1,123 @@
-@use 'sass:color';
 @use '../../../styles/variables' as *;
 @use '../../../styles/mixins' as *;
 
-.secao__inner,
-.hero__inner {
-  max-width: 1000px;
+// Página de topo: fundo e altura mínima próprios.
+:host {
+  display: block;
+  min-height: calc(100vh - #{$altura-header} - 130px);
+  background: $papel;
+}
+
+.home {
+  max-width: $largura-folha;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: $sp-8 $margem-folha $sp-12;
 
   @include mobile {
-    padding: 0 18px;
+    padding-top: $sp-6;
   }
 }
 
-.hero {
-  padding: 72px 0 48px;
+.home__abertura {
+  margin-bottom: $sp-12;
 
   @include mobile {
-    padding: 44px 0 32px;
+    margin-bottom: $sp-8;
   }
 }
 
-.hero__titulo {
-  margin: 0 0 16px;
-  font-family: $fonte-display;
+.home__nome {
+  margin: 0 0 0 $recuo-otico;
+  font-size: $t-h1-pagina;
   font-weight: 700;
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  line-height: 1.08;
-  color: $ink;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-.hero__lead {
-  max-width: 60ch;
-  margin: 0 0 28px;
-  font-size: 1.15rem;
-  line-height: 1.6;
+.home__frase {
+  max-width: $coluna-leitura;
+  margin: $sp-4 0 0;
+  font-size: $t-lead;
+  font-style: italic;
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 
-.hero__acoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
+.home__estudos {
+  max-width: $coluna-leitura;
+  margin-top: $sp-8;
 
-.btn {
-  display: inline-block;
-  padding: 11px 20px;
-  border-radius: 3px;
-  font-family: $fonte-mono;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.btn--primario {
-  background: $brass;
-  color: #fff;
-
-  &:hover {
-    background: color.adjust($brass, $lightness: -6%);
+  h2 {
+    margin: 0 0 $sp-4;
+    padding-bottom: $sp-2;
+    border-bottom: 1px solid $tinta;
+    font-size: $t-h3;
+    font-weight: 700;
   }
-}
 
-.btn--fantasma {
-  border: 1px solid $brass;
-  color: $brass;
-
-  &:hover {
-    background: $brass;
-    color: #fff;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
-}
-
-.secao {
-  padding: 40px 0;
-}
-
-.secao__titulo {
-  margin: 0 0 20px;
-  font-family: $fonte-display;
-  font-weight: 600;
-  font-size: 1.6rem;
-  color: $ink;
-}
-
-.destaque {
-  background: $parchment-2;
-}
-
-.destaque__selo {
-  display: inline-block;
-  margin-bottom: 12px;
-  padding: 4px 10px;
-  border-radius: 3px;
-  background: $card;
-  border: 1px solid $line;
-  font-family: $fonte-mono;
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: $sage;
-}
-
-.destaque__titulo {
-  margin: 0 0 10px;
-  font-family: $fonte-display;
-  font-weight: 700;
-  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
-  color: $ink;
-}
-
-.destaque__texto {
-  max-width: 58ch;
-  margin: 0 0 18px;
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
-
-.destaque__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  list-style: none;
-  margin: 0 0 20px;
-  padding: 0;
 
   li {
-    padding: 6px 10px;
-    background: $card;
-    border: 1px solid $line;
-    border-radius: 3px;
-    font-size: 0.85rem;
-  }
-}
-
-.destaque__link {
-  font-family: $fonte-mono;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: $brass;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-// Índice de seções: linhas separadas por fio, como em estudos-lista.
-.indice {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid $hair;
-}
-
-.entrada {
-  border-bottom: 1px solid $hair;
-}
-
-.entrada__conteudo {
-  display: block;
-  max-width: $largura-leitura;
-  padding: $sp-6 0 $sp-8;
-  color: inherit;
-  text-decoration: none;
-}
-
-.entrada__link {
-  &:hover .entrada__titulo {
-    color: $acc;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+    margin-bottom: $sp-4;
   }
 
-  &:focus-visible {
-    outline: 2px solid $acc;
-    outline-offset: 4px;
+  a {
+    font-size: $t-lead;
+    font-weight: 700;
+    color: $tinta;
   }
-}
-
-.entrada__titulo {
-  margin: 0 0 $sp-2;
-  font-family: $fonte-display;
-  font-size: $t-h3;
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: $tracking-tight;
-  color: $ink;
-}
-
-.entrada__breve {
-  margin-left: $sp-2;
-  font-family: $fonte-serif;
-  font-size: 0.9rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: $ink-mut;
-}
-
-.entrada__texto {
-  margin: 0;
-  font-family: $fonte-serif;
-  font-size: $t-lead;
-  line-height: 1.7;
-  color: $ink-mut;
-}
-
-.entrada--breve .entrada__titulo {
-  color: $ink-mut;
-}
-
-.membros {
-  background: $parchment-2;
 
   p {
-    max-width: 56ch;
-    margin: 0 0 18px;
-    font-size: 1.05rem;
-    line-height: 1.6;
+    margin: $sp-1 0 0;
+    color: $tinta-mut;
+  }
+}
+
+// A guarda em cor de capa fecha a página, como a folha de guarda de um livro.
+.home__guarda {
+  background: $capa;
+  border-bottom: 1px solid rgba(233, 231, 221, 0.25);
+  color: $sobre-capa;
+}
+
+.home__guarda-inner {
+  max-width: $largura-folha;
+  margin: 0 auto;
+  padding: $sp-16 $margem-folha;
+
+  @include mobile {
+    padding-block: $sp-12;
+  }
+
+  h2 {
+    max-width: 40rem;
+    margin: 0;
+    font-size: $t-h2;
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  p {
+    max-width: $coluna-leitura;
+    margin: $sp-3 0 $sp-4;
+  }
+
+  a {
+    display: inline-block;
+    padding-block: $sp-1;
+    font-family: $fonte-corrente;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: inherit;
+  }
+
+  a:focus-visible {
+    outline-color: $sobre-capa;
   }
 }

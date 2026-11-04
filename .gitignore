@@ -50,3 +50,10 @@ desktop.ini
 
 # ---- One-off scripts (não versionar) ----
 scripts/
+
+# Impeccable e Playwright: artefatos locais
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/config.local.json
+.impeccable/live/
+.playwright-mcp/

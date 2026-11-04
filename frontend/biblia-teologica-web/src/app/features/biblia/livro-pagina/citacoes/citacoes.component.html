@@ -1,15 +1,18 @@
 @for (c of citacoes(); track $index) {
-  <article class="citacao">
-    <blockquote class="citacao__trecho">{{ c.trecho }}</blockquote>
-    <p class="citacao__lugares">
-      <span class="citacao__legenda">Citado em</span>
-      {{ c.citadoEm.join('; ') }}
-    </p>
-    @if (c.comentario; as comentario) {
-      <p class="citacao__comentario">
-        <bt-texto-notas [texto]="comentario" [prefixo]="'cit-' + $index" />
-      </p>
-    }
-    <bt-bibliografia [notas]="c.notas" [prefixo]="'cit-' + $index" />
-  </article>
+  <bt-linha-estudo
+    class="citacao"
+    titulo="Citado em"
+    [referencias]="c.citadoEm"
+    [notas]="c.notas"
+    [prefixo]="'cit-' + $index"
+  >
+    <article>
+      <h3 class="citacao__trecho"><bt-referencia [texto]="c.trecho" /></h3>
+      @if (c.comentario; as comentario) {
+        <p class="citacao__comentario">
+          <bt-texto-notas [texto]="comentario" [prefixo]="'cit-' + $index" />
+        </p>
+      }
+    </article>
+  </bt-linha-estudo>
 }

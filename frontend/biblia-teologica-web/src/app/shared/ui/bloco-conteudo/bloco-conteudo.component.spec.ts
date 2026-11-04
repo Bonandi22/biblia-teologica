@@ -42,6 +42,58 @@ describe('BlocoConteudoComponent', () => {
     expect(titulos).toEqual(['O que acontece']);
     expect(el.textContent).toContain('701 a.C.');
   });
+
+  const notaA = { numero: 1, citacao: 'Obra A', url: null };
+  const notaB = { numero: 2, citacao: 'Obra B', url: null };
+  const colunaDe = (raiz: Element) => raiz.querySelector('.linha__coluna')?.textContent ?? '';
+
+  it('põe a nota na linha do texto que a chama', () => {
+    const el = criar({
+      explicacao: 'Texto.[^1]',
+      personagens: [{ ...item, texto: 'Profeta.[^2]' }],
+      notas: [notaA, notaB],
+    });
+    expect(colunaDe(el.querySelector('.bloco__explicacao')!)).toContain('Obra A');
+    expect(colunaDe(el.querySelector('.bloco__explicacao')!)).not.toContain('Obra B');
+    expect(colunaDe(el.querySelector('bt-item-estudo')!)).toContain('Obra B');
+  });
+
+  it('mantém na linha do item a nota chamada só no Saber mais fechado', () => {
+    const el = criar({
+      personagens: [{ ...item, saberMais: 'Detalhe.[^1]' }],
+      notas: [notaA],
+    });
+    expect(colunaDe(el.querySelector('bt-item-estudo')!)).toContain('Obra A');
+  });
+
+  it('mostra em linha própria, no fim, a nota sem chamada', () => {
+    const el = criar({ notas: [notaA] });
+    expect(colunaDe(el.querySelector('.bloco__restantes')!)).toContain('Obra A');
+  });
+
+  it('mostra o título da coluna só na primeira linha que tem coluna', () => {
+    const el = criar({
+      explicacao: 'Texto sem nota.',
+      personagens: [
+        { ...item, texto: 'Primeiro.', referencias: ['Isaías 1:1'] },
+        { ...item, texto: 'Segundo.[^1]' },
+      ],
+      notas: [notaA],
+    });
+    const titulos = Array.from(el.querySelectorAll('.linha__titulo')).map((t) => t.textContent!.trim());
+    expect(titulos).toEqual(['Referências']);
+    expect(el.querySelector('bt-item-estudo .linha__titulo')).not.toBeNull();
+  });
+
+  it('mostra uma só vez a nota chamada em duas linhas', () => {
+    const el = criar({
+      explicacao: 'Texto.[^1]',
+      personagens: [{ ...item, texto: 'Profeta.[^1]' }],
+      notas: [notaA],
+    });
+    expect(el.querySelectorAll('[id="nota-1"]')).toHaveLength(1);
+    expect(el.querySelector('.bloco__restantes')).toBeNull();
+  });
 });
 
 @Component({

@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { RegistarComponent } from './registar.component';
 
 describe('RegistarComponent', () => {
@@ -15,7 +14,6 @@ describe('RegistarComponent', () => {
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideNoopAnimations(),
       ],
     });
     http = TestBed.inject(HttpTestingController);
@@ -55,5 +53,24 @@ describe('RegistarComponent', () => {
     c.form.setValue({ nomeExibicao: '', email: 'x', senha: '123' });
     c.submeter();
     http.expectNone('/api/auth/registar');
+  });
+});
+
+describe('RegistarComponent na tela', () => {
+  it('usa os campos próprios e diz o que falta ao enviar vazio', () => {
+    TestBed.configureTestingModule({
+      imports: [RegistarComponent],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
+    });
+    const fixture = TestBed.createComponent(RegistarComponent);
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('[class*="mat-"]')).toBeNull();
+    expect(el.querySelectorAll('.bt-input').length).toBe(3);
+    expect(el.textContent).toContain('Mínimo de 8 caracteres.');
+    expect(el.querySelector('a[href="/entrar"]')?.textContent).toContain('Já tenho conta');
+    el.querySelector('form')!.dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+    expect(el.querySelectorAll('.campo__erro').length).toBe(3);
   });
 });

@@ -1,54 +1,9 @@
-@use '../../../styles/variables' as *;
 @use '../../../styles/mixins' as *;
 
-.em-breve {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 80px 24px;
-  text-align: center;
-
-  @include mobile {
-    padding: 56px 18px;
-  }
+:host {
+  @include pagina-topo;
 }
 
-.em-breve__selo {
-  display: inline-block;
-  margin-bottom: 16px;
-  padding: 4px 12px;
-  border-radius: 3px;
-  background: $parchment-2;
-  border: 1px solid $line;
-  font-family: $fonte-mono;
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: $sage;
-}
-
-.em-breve__titulo {
-  margin: 0 0 14px;
-  font-family: $fonte-display;
-  font-weight: 700;
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  color: $ink;
-}
-
-.em-breve__descricao {
-  margin: 0 0 28px;
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-.em-breve__voltar {
-  font-family: $fonte-mono;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: $brass;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
+.folha {
+  @include folha-formulario;
 }

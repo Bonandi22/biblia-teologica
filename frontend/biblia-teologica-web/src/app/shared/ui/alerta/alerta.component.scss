@@ -4,18 +4,16 @@
   padding: $sp-3 $sp-4;
   border-radius: $raio;
   border: 1px solid;
-  font-size: 0.875rem;
-  line-height: 1.45;
+  font-size: $t-nota;
+  line-height: 1.5;
 }
 
 .alerta--erro {
-  background: $acc-tint;
-  border-color: rgba(166, 55, 28, 0.28);
-  color: $acc-dk;
+  border-color: $erro;
+  color: $erro;
 }
 
 .alerta--sucesso {
-  background: #eef3ee;
-  border-color: #cddccd;
-  color: #37503a;
+  border-color: $capa;
+  color: $capa;
 }

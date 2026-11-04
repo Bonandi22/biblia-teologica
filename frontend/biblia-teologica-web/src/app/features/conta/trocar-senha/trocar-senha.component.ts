@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Title } from '@angular/platform-browser';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { AlertaComponent } from '../../../shared/ui/alerta/alerta.component';
+import { BotaoComponent } from '../../../shared/ui/botao/botao.component';
+import { erroCampo } from '../../../shared/ui/campo/erro-campo';
+import { CampoSenhaComponent } from '../../../shared/ui/campo-senha/campo-senha.component';
 import { ContaService } from '../../../core/services/conta.service';
 import { AuthStore } from '../../../core/auth/auth.store';
 
@@ -17,7 +18,7 @@ function iguais(g: AbstractControl): { diferentes: true } | null {
   selector: 'bt-trocar-senha',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [ReactiveFormsModule, AlertaComponent, BotaoComponent, CampoSenhaComponent],
   templateUrl: './trocar-senha.component.html',
   styleUrl: './trocar-senha.component.scss',
 })
@@ -29,6 +30,7 @@ export class TrocarSenhaComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly erro = signal<string | null>(null);
+  readonly aEnviar = signal(false);
 
   readonly form = this.fb.nonNullable.group(
     {
@@ -39,15 +41,37 @@ export class TrocarSenhaComponent {
     { validators: iguais },
   );
 
+  constructor() {
+    inject(Title).setTitle('Trocar senha | Bíblia Teológica');
+  }
+
+  protected erroDe(controle: AbstractControl): string | null {
+    return erroCampo(controle);
+  }
+
+  protected erroConfirmar(): string | null {
+    const confirmar = this.form.controls.confirmar;
+    return (
+      erroCampo(confirmar) ??
+      (confirmar.touched && this.form.hasError('diferentes') ? 'As senhas não coincidem.' : null)
+    );
+  }
+
   submeter(): void {
+    this.form.markAllAsTouched();
     if (this.form.invalid) return;
+    this.aEnviar.set(true);
+    this.erro.set(null);
     const { senhaAtual, novaSenha } = this.form.getRawValue();
     this.conta
       .trocarSenha({ senhaAtual, novaSenha })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => void this.router.navigateByUrl(this.store.ehAdmin() ? '/admin' : '/conta'),
-        error: (e) => this.erro.set(e.error?.detail ?? 'Não foi possível trocar a senha.'),
+        error: (e) => {
+          this.erro.set(e.error?.detail ?? 'Não foi possível trocar a senha.');
+          this.aEnviar.set(false);
+        },
       });
   }
 }

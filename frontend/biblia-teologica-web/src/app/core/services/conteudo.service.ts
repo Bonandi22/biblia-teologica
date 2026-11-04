@@ -13,6 +13,10 @@ export class ConteudoService {
     return this.http.get<LivroPanorama>(`${this.base}/panoramas/livros/${slug}`);
   }
 
+  listarLivrosComPanorama(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.base}/panoramas/livros`);
+  }
+
   listarEstudos(): Observable<EstudoResumo[]> {
     return this.http.get<EstudoResumo[]>(`${this.base}/estudos`);
   }

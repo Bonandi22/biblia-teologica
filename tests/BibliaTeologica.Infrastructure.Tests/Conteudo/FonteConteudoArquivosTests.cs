@@ -44,9 +44,10 @@ public sealed class FonteConteudoArquivosTests : IDisposable
         estado: revisado
         livro: isaias
         resumo: "r"
-        quem: "q"
-        paraQuem: "p"
-        porque: "po"
+        perfil:
+          - rotulo: "Origem"
+            texto: "t"
+            referencias: ["Isaías 1:1"]
         panorama:
           explicacao: "Texto.[^1]"
           personagens:
@@ -58,8 +59,9 @@ public sealed class FonteConteudoArquivosTests : IDisposable
         profecias:
           - referencia: "Isaías 7:14"
             anuncia: "a"
-            categoria: cumpridaEmCristo
-            cumprimento: ["Mateus 1:22–23"]
+        promessas:
+          - referencia: "Isaías 65:17"
+            anuncia: "b"
         citacoes:
           - trecho: "Isaías 40:3"
             citadoEm: ["Mateus 3:3"]
@@ -93,7 +95,9 @@ public sealed class FonteConteudoArquivosTests : IDisposable
         livro.Livro.Should().Be("isaias");
         livro.Arquivo.Should().EndWith("isaias.yaml");
         livro.Panorama!.Personagens.Should().ContainSingle().Which.Nome.Should().Be("Ezequias");
-        livro.Profecias.Single().Categoria.Should().Be("cumpridaEmCristo");
+        livro.Perfil.Single().Rotulo.Should().Be("Origem");
+        livro.Profecias.Single().Referencia.Should().Be("Isaías 7:14");
+        livro.Promessas.Single().Anuncia.Should().Be("b");
         livro.Citacoes.Single().CitadoEm.Should().Equal("Mateus 3:3");
         var estudo = r.Estudos.Should().ContainSingle().Subject;
         estudo.Titulo.Should().Be("Cerco");

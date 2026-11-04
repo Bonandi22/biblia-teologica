@@ -1,6 +1,29 @@
 <header class="header">
   <div class="header__inner">
-    <a class="header__marca" routerLink="/" (click)="fecharMenu()">Bíblia Teológica</a>
+    <nav id="nav-principal" class="header__nav" [class.header__nav--aberto]="menuAberto()">
+      <ul class="header__lista">
+        @for (item of itens(); track item.rota) {
+          <li>
+            <a [routerLink]="item.rota" routerLinkActive="ativo" (click)="fecharMenu()">{{
+              item.rotulo
+            }}</a>
+          </li>
+        }
+      </ul>
+
+      <div class="header__acoes header__acoes--menu">
+        <ng-container *ngTemplateOutlet="acoes" />
+      </div>
+    </nav>
+
+    <p class="header__lugar">{{ lugar() }}</p>
+
+    <div class="header__direita">
+      <a class="header__marca" routerLink="/" (click)="fecharMenu()">Bíblia Teológica</a>
+      <div class="header__acoes header__acoes--barra">
+        <ng-container *ngTemplateOutlet="acoes" />
+      </div>
+    </div>
 
     <button
       class="header__toggle"
@@ -10,32 +33,16 @@
       aria-controls="nav-principal"
       (click)="alternarMenu()"
     >
-      <span class="header__toggle-barra"></span>
+      Menu
     </button>
-
-    <nav id="nav-principal" class="header__nav" [class.header__nav--aberto]="menuAberto()">
-      <ul class="header__lista">
-        @for (item of itens(); track item.rota) {
-          <li>
-            <a
-              [routerLink]="item.rota"
-              routerLinkActive="ativo"
-              [routerLinkActiveOptions]="{ exact: item.rota === '/' }"
-              (click)="fecharMenu()"
-              >{{ item.rotulo }}</a
-            >
-          </li>
-        }
-      </ul>
-
-      <div class="header__acoes">
-        @if (autenticado()) {
-          <a routerLink="/conta" (click)="fecharMenu()">A minha conta</a>
-        } @else {
-          <a routerLink="/entrar" (click)="fecharMenu()">Entrar</a>
-          <a class="header__cta" routerLink="/registar" (click)="fecharMenu()">Criar conta</a>
-        }
-      </div>
-    </nav>
   </div>
 </header>
+
+<ng-template #acoes>
+  @if (autenticado()) {
+    <a routerLink="/conta" routerLinkActive="ativo" (click)="fecharMenu()">Minha conta</a>
+  } @else {
+    <a routerLink="/entrar" routerLinkActive="ativo" (click)="fecharMenu()">Entrar</a>
+    <a routerLink="/registar" routerLinkActive="ativo" (click)="fecharMenu()">Criar conta</a>
+  }
+</ng-template>

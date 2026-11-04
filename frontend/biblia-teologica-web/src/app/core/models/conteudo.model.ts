@@ -25,13 +25,17 @@ export interface Bloco {
   notas: Nota[];
 }
 
-export interface Profecia {
+/** Profecia ou promessa: só aponta o trecho, sem categoria nem indicação de cumprimento. */
+export interface Apontamento {
   referencia: string;
   anuncia: string;
-  categoria: string;
-  cumprimento: string[];
-  fatoHistorico: string | null;
   notas: Nota[];
+}
+
+export interface PerfilItem {
+  rotulo: string;
+  texto: string;
+  referencias: string[];
 }
 
 export interface Citacao {
@@ -44,13 +48,12 @@ export interface Citacao {
 export interface LivroPanorama {
   livroSlug: string;
   resumo: string;
-  quem: string;
-  paraQuem: string;
-  porque: string;
+  perfil: PerfilItem[];
   panorama: Bloco;
   contexto: Bloco;
   mundo: Bloco;
-  profecias: Profecia[];
+  profecias: Apontamento[];
+  promessas: Apontamento[];
   citacoes: Citacao[];
 }
 

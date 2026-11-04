@@ -17,12 +17,14 @@ import type { Bloco, LivroPanorama } from '../../../core/models/conteudo.model';
 import { ConteudoService } from '../../../core/services/conteudo.service';
 import { LivroStore } from '../../../core/services/livro.store';
 import { BlocoConteudoComponent } from '../../../shared/ui/bloco-conteudo/bloco-conteudo.component';
+import { LinhaEstudoComponent } from '../../../shared/ui/linha-estudo/linha-estudo.component';
+import { LivroMolduraComponent } from '../livro-moldura/livro-moldura.component';
 import { BibliaFichaComponent } from '../biblia-ficha/biblia-ficha.component';
 import { CitacoesComponent } from './citacoes/citacoes.component';
-import { ProfeciasComponent } from './profecias/profecias.component';
+import { ApontamentosComponent } from './apontamentos/apontamentos.component';
 
 type Estado = 'carregando' | 'panorama' | 'ficha' | 'erro';
-type ChaveAba = 'panorama' | 'contexto' | 'mundo' | 'profecias' | 'citacoes';
+type ChaveAba = 'panorama' | 'contexto' | 'mundo' | 'profecias' | 'promessas' | 'citacoes';
 
 interface Aba {
   chave: ChaveAba;
@@ -35,6 +37,7 @@ const ABAS_BASE: Aba[] = [
   { chave: 'mundo', rotulo: 'Mundo' },
 ];
 const ABA_PROFECIAS: Aba = { chave: 'profecias', rotulo: 'Profecias' };
+const ABA_PROMESSAS: Aba = { chave: 'promessas', rotulo: 'Promessas' };
 const ABA_CITACOES: Aba = { chave: 'citacoes', rotulo: 'Citações' };
 
 @Component({
@@ -45,7 +48,9 @@ const ABA_CITACOES: Aba = { chave: 'citacoes', rotulo: 'Citações' };
     RouterLink,
     BibliaFichaComponent,
     BlocoConteudoComponent,
-    ProfeciasComponent,
+    LinhaEstudoComponent,
+    LivroMolduraComponent,
+    ApontamentosComponent,
     CitacoesComponent,
   ],
   templateUrl: './livro-pagina.component.html',
@@ -80,9 +85,14 @@ export class LivroPaginaComponent {
     return [
       ...ABAS_BASE,
       ...(l && l.profecias.length > 0 ? [ABA_PROFECIAS] : []),
+      ...(l && l.promessas.length > 0 ? [ABA_PROMESSAS] : []),
       ...(l && l.citacoes.length > 0 ? [ABA_CITACOES] : []),
     ];
   });
+
+  protected readonly primeiroPerfilComReferencia = computed(
+    () => this.livro()?.perfil.findIndex((p) => p.referencias.length > 0) ?? -1,
+  );
 
   /** Aba mostrada: sem segmento de aba na URL vale o panorama. */
   protected readonly ativa = computed<ChaveAba>(() => (this.abaDaRota() ?? 'panorama') as ChaveAba);

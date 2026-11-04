@@ -31,8 +31,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "src/styles/material.scss"
+              "src/styles.scss"
             ]
           },
           "configurations": {

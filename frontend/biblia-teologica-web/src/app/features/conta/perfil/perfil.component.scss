@@ -1,58 +1,71 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
 :host {
-  display: block;
-  max-width: 520px;
-  margin: 40px auto;
-  padding: 0 24px;
+  @include pagina-topo;
 }
 
-.cartao {
-  padding: 28px;
-}
-
-h1 {
-  margin: 0 0 16px;
-}
-
-h2 {
-  margin: 8px 0;
-  font-size: 1rem;
+.folha {
+  @include folha-formulario;
 }
 
 .dados {
-  margin: 0 0 24px;
+  margin: 0 0 $sp-8;
 
   div {
     display: flex;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 0 $sp-3;
+    padding-block: $sp-1;
   }
 
   dt {
-    font-weight: 600;
-    min-width: 72px;
+    min-width: 4.5rem;
+    font-family: $fonte-corrente;
+    font-size: $t-corrente;
+    font-weight: 700;
+    color: $tinta-mut;
   }
 
   dd {
     margin: 0;
+    overflow-wrap: anywhere;
   }
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 24px;
+.secao {
+  margin-top: $sp-8;
+  padding-top: $sp-6;
+  border-top: 1px solid $filete;
 }
 
-mat-form-field {
-  width: 100%;
+h2 {
+  margin: 0 0 $sp-4;
+  font-size: $t-h3;
+  font-weight: 700;
 }
 
 .msg {
-  margin: 4px 0 0;
-  color: var(--mat-sys-primary, #5c6b4f);
+  margin-top: $sp-3;
+}
+
+// O botão de texto tem 4px de folga para o foco; o recuo alinha a palavra à margem.
+.tentar {
+  margin: $sp-3 0 0 -4px;
 }
 
 .acoes {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
+  gap: $sp-4;
+  max-width: 26rem;
+  margin-top: $sp-8;
+  padding-top: $sp-4;
+  border-top: 1px solid $filete;
+
+  .ligacao {
+    margin-top: 0;
+  }
 }

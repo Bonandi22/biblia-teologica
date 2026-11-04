@@ -1,0 +1,16 @@
+@use '../../../../../styles/variables' as *;
+
+.apontamento {
+  margin-bottom: $sp-8;
+}
+
+.apontamento__ref {
+  margin: 0;
+  font-size: $t-lead;
+  font-weight: 700;
+}
+
+.apontamento__anuncia {
+  margin: $sp-1 0 0;
+  line-height: $entrelinha-texto;
+}

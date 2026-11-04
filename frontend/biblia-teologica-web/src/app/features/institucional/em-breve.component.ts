@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
@@ -17,4 +18,8 @@ export class EmBreveComponent {
 
   readonly titulo: string = this.rota.snapshot.data['titulo'] ?? 'Em breve';
   readonly descricao: string = this.rota.snapshot.data['descricao'] ?? '';
+
+  constructor() {
+    inject(Title).setTitle(`${this.titulo} | Bíblia Teológica`);
+  }
 }

@@ -33,7 +33,7 @@ Staged — verificar o que está staged, inclusive arquivos de nome inocente, an
 
 Persistência: EF Core + SQLite (arquivo em volume Docker). Nada específico de provider fora da Infrastructure.
 
-Frontend: Angular 22 standalone + signals, CSR (sem SSR). Features lazy-loaded em features/. URL da API em environment.ts (/api).
+Frontend: Angular 22 standalone + signals, CSR (sem SSR). Features lazy-loaded em features/. URL da API em environment.ts (/api). Sem Angular Material: componentes próprios em shared/ui e sistema visual em DESIGN.md.
 
 ## Princípios de Engenharia
 
@@ -79,7 +79,7 @@ Docker:
     docker compose up --build      # api :5080 + web :4300 — precisa de .env (copiar de .env.example: BT_JWT_KEY, BT_ADMIN_*)
     docker compose down -v         # zera o volume do SQLite
 
-Código 2FA em dev nos logs: docker compose logs api | grep EMAIL
+Código 2FA em dev nos logs (o código vem na linha seguinte à do assunto): docker compose logs api | grep -A1 EMAIL
 
 Swagger em dev: http://localhost:5080/swagger
 

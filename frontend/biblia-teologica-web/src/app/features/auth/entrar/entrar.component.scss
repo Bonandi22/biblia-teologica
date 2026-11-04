@@ -1,36 +1,15 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
 :host {
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  padding: 24px;
+  @include pagina-topo;
 }
 
-.cartao {
-  width: 100%;
-  max-width: 380px;
-  padding: 28px;
+.folha {
+  @include folha-formulario;
 }
 
-h1 {
-  margin: 0 0 16px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-mat-form-field {
-  width: 100%;
-}
-
-.erro {
-  color: var(--mat-sys-error, #b3261e);
-  margin: 0 0 12px;
-}
-
-.ligacao {
-  display: inline-block;
-  margin-top: 16px;
+// O botão de texto tem 4px de folga para o foco; o recuo alinha a palavra à margem.
+.voltar {
+  margin: $sp-4 0 0 -4px;
 }

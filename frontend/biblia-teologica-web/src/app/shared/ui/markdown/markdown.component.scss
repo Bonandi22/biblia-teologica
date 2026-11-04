@@ -9,15 +9,11 @@
 }
 
 :host ::ng-deep .markdown {
-  font-family: $fonte-serif;
-  font-size: 1.1875rem;
-  line-height: 1.75;
-  color: $ink;
+  font-family: $fonte-texto;
+  font-size: inherit;
+  line-height: $entrelinha-texto;
+  color: $tinta;
   overflow-wrap: break-word;
-
-  > :first-child {
-    margin-top: 0;
-  }
 
   p {
     margin: 0 0 1.25em;
@@ -26,8 +22,7 @@
   h2,
   h3,
   h4 {
-    font-family: $fonte-display;
-    color: $ink;
+    color: $tinta;
     text-wrap: balance;
   }
 
@@ -36,7 +31,6 @@
     font-size: $t-h2;
     font-weight: 700;
     line-height: 1.15;
-    letter-spacing: $tracking-tight;
   }
 
   h3 {
@@ -44,7 +38,6 @@
     font-size: $t-h3;
     font-weight: 700;
     line-height: 1.25;
-    letter-spacing: $tracking-tight;
   }
 
   h4 {
@@ -52,7 +45,7 @@
     font-size: $t-lead;
     font-weight: 600;
     line-height: 1.3;
-    color: $ink-mut;
+    color: $tinta-mut;
   }
 
   ul,
@@ -71,16 +64,16 @@
   }
 
   li::marker {
-    color: $ink-mut;
+    color: $tinta-mut;
   }
 
-  // Citação: recuo com fio de acento; o texto fica em itálico, sem caixa.
+  // Citação: recuo com filete; o texto fica em itálico, sem caixa.
   blockquote {
     margin: 1.75em 0;
     padding: 0 0 0 1.25em;
-    border-left: 3px solid $acc;
+    border-left: 1px solid $filete;
     font-style: italic;
-    color: $ink;
+    color: $tinta;
 
     p:last-child {
       margin-bottom: 0;
@@ -88,23 +81,29 @@
   }
 
   a {
-    color: $acc;
+    color: $rubrica;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.18em;
 
     &:hover {
-      color: $acc-dk;
+      color: $rubrica-escura;
     }
 
     &:focus-visible {
-      outline: 2px solid $acc;
+      outline: 2px solid $rubrica;
       outline-offset: 2px;
+    }
+
+    // Link sem destino, removido pelo sanitizador: não leva a uma fonte, então não leva rubrica.
+    &:not([href]) {
+      color: $tinta;
+      text-decoration: none;
     }
   }
 
   // Marcador de nota: pequeno, sem sublinhado, área de toque de 24x24px via pseudo-elemento.
   sup {
-    font-family: $fonte-display;
+    font-family: $fonte-corrente;
     font-size: 0.7em;
     font-weight: 600;
     line-height: 0;
@@ -131,9 +130,8 @@
   code {
     padding: 0.1em 0.3em;
     border-radius: 3px;
-    background: $parchment-2;
-    font-family: $fonte-mono;
-    font-size: 0.85em;
+    background: #f1f1ec;
+    font-size: 0.9em;
   }
 
   pre {
@@ -141,7 +139,7 @@
     padding: $sp-4;
     overflow-x: auto;
     border-radius: $raio;
-    background: $parchment-2;
+    background: #f1f1ec;
     font-size: 0.9rem;
     line-height: 1.6;
 
@@ -154,7 +152,7 @@
   hr {
     margin: 2.5em 0;
     border: 0;
-    border-top: 1px solid $hair;
+    border-top: 1px solid $filete;
   }
 
   strong {

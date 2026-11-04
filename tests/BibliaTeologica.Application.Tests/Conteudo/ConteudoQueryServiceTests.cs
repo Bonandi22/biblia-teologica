@@ -16,7 +16,7 @@ public class ConteudoQueryServiceTests
     private static BlocoDto BlocoVazio(string texto) => new(texto, [], [], []);
 
     private static LivroPanoramaDto Panorama() =>
-        new("isaias", "r", "q", "pq", "p", BlocoVazio("a"), BlocoVazio("b"), BlocoVazio("c"), [], []);
+        new("isaias", "r", [new PerfilItemDto("Origem", "t", [])], BlocoVazio("a"), BlocoVazio("b"), BlocoVazio("c"), [], [], []);
 
     private static EstudoDto Estudo(string slug) =>
         new(slug, "Título " + slug, "Resumo " + slug, "# Corpo", ["isaias"], [], []);
@@ -42,6 +42,30 @@ public class ConteudoQueryServiceTests
         dto.Should().NotBeNull();
         dto!.LivroSlug.Should().Be("isaias");
         dto.Panorama.Explicacao.Should().Be("a");
+    }
+
+    [Fact]
+    public async Task ListarLivrosComPanoramaAsync_RetornaSlugs_QuandoHaDocumentos()
+    {
+        var (servico, repo) = Criar();
+        repo.Setup(r => r.ListarAsync(TipoConteudo.Livro, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<DocumentoConteudo> { Doc(TipoConteudo.Livro, "isaias", "ISAÍAS", "r", Panorama()) });
+
+        var slugs = await servico.ListarLivrosComPanoramaAsync(CancellationToken.None);
+
+        slugs.Should().Equal("isaias");
+    }
+
+    [Fact]
+    public async Task ListarLivrosComPanoramaAsync_RetornaVazio_QuandoSemConteudo()
+    {
+        var (servico, repo) = Criar();
+        repo.Setup(r => r.ListarAsync(TipoConteudo.Livro, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<DocumentoConteudo>());
+
+        var slugs = await servico.ListarLivrosComPanoramaAsync(CancellationToken.None);
+
+        slugs.Should().BeEmpty();
     }
 
     [Fact]

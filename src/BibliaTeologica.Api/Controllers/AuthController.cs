@@ -60,8 +60,10 @@ public class AuthController : ControllerBase
         return Finalizar(await _auth.RefreshAsync(cru, Ip, ct));
     }
 
+    // Sem [Authorize], de propósito: com o acesso vencido, o 401 deixaria o refresh token válido
+    // e a sessão viva depois de "Sair". Só revoga o refresh que veio no cookie, e o CSRF continua exigido.
     [HttpPost("logout")]
-    [Authorize]
+    [AllowAnonymous]
     [ServiceFilter(typeof(CsrfActionFilter))]
     public async Task<IActionResult> Logout(CancellationToken ct)
     {

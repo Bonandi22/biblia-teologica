@@ -34,7 +34,16 @@ export function renderizarMarkdown(md: string): string {
   const bruto = marked.parse(md ?? '', { async: false });
   return purify.sanitize(bruto, {
     ALLOWED_TAGS: ['p', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'a', 'sup', 'code', 'pre', 'hr'],
-    ALLOWED_ATTR: ['href', 'rel', 'target', 'data-nota'],
+    ALLOWED_ATTR: ['href', 'rel', 'target', 'data-nota', 'aria-label'],
     ALLOWED_URI_REGEXP: URI_PERMITIDA,
   });
+}
+
+/** Blocos de topo do texto, para cada um ser uma linha de grade com as próprias notas. */
+export function blocosMarkdown(md: string): string[] {
+  const tokens = marked.lexer(md ?? '');
+  const definicoes = tokens.filter((t) => t.type === 'def').map((t) => t.raw.trim());
+  return tokens
+    .filter((t) => t.type !== 'space' && t.type !== 'def')
+    .map((t) => [t.raw.trim(), ...definicoes].join('\n\n'));
 }

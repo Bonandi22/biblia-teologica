@@ -12,17 +12,62 @@
   }
 }
 
-@mixin rotulo-mono {
-  font-family: $fonte-mono;
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+// Grade de leitura: texto em medida fixa e coluna que vai até a margem direita da folha.
+@mixin grade-estudo {
+  display: grid;
+  grid-template-columns: minmax(0, $coluna-leitura) minmax($coluna-referencias-min, 1fr);
+  column-gap: $vao-colunas;
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-@mixin eyebrow {
-  font-family: $fonte-mono;
-  font-size: $t-eyebrow;
-  letter-spacing: $tracking-eyebrow;
-  text-transform: uppercase;
-  color: $ink-mut;
+// Página de topo: fundo e altura mínima próprios.
+@mixin pagina-topo {
+  display: block;
+  min-height: calc(100vh - #{$altura-header} - 130px);
+  background: $papel;
+}
+
+// Conta e páginas de apoio: alinhadas à margem da folha, em coluna estreita, sem caixa em volta.
+@mixin folha-formulario {
+  max-width: $largura-folha;
+  margin: 0 auto;
+  padding: $sp-8 $margem-folha $sp-16;
+
+  h1 {
+    margin: 0 0 $sp-8;
+    font-size: $t-h1-apoio;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  form,
+  bt-alerta,
+  p,
+  dl {
+    display: block;
+    max-width: 26rem;
+  }
+
+  bt-alerta {
+    margin-bottom: $sp-4;
+  }
+
+  .aviso {
+    margin: 0 0 $sp-4;
+  }
+
+  .ligacao {
+    display: inline-block;
+    margin-top: $sp-6;
+    padding-block: $sp-1;
+    font-family: $fonte-corrente;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: $tinta;
+  }
 }

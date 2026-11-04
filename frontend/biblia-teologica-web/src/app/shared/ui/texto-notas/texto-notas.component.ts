@@ -21,6 +21,13 @@ export function idNota(numero: number, prefixo = ''): string {
   return prefixo ? `nota-${prefixo}-${numero}` : `nota-${numero}`;
 }
 
+/** Leva à nota: no computador ela já está ao lado do texto, então só rola se estiver fora da tela. */
+export function irParaNota(id: string): void {
+  const nota = document.getElementById(id);
+  nota?.scrollIntoView({ block: 'nearest' });
+  nota?.focus({ preventScroll: true });
+}
+
 @Component({
   selector: 'bt-texto-notas',
   standalone: true,
@@ -44,6 +51,6 @@ export class TextoNotasComponent {
 
   protected ir(evento: Event, numero: number): void {
     evento.preventDefault();
-    document.getElementById(this.id(numero))?.scrollIntoView({ block: 'center' });
+    irParaNota(this.id(numero));
   }
 }

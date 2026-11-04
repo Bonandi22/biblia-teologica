@@ -13,39 +13,32 @@ describe('FooterComponent', () => {
   const criar = () => {
     const fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
-    return fixture;
+    return fixture.nativeElement as HTMLElement;
   };
 
-  it('mostra os links de navegação do rodapé', () => {
-    const el = criar().nativeElement as HTMLElement;
-    expect(el.querySelector('a[href="/biblia"]')).toBeTruthy();
-    expect(el.querySelector('a[href="/estudos"]')).toBeTruthy();
-    expect(el.querySelector('a[href="/noticias"]')).toBeTruthy();
-    expect(el.querySelector('a[href="/curiosidades"]')).toBeTruthy();
+  it('tem links para Livros e Estudos, sem Notícias nem Curiosidades', () => {
+    const el = criar();
+    expect(el.querySelector('a[href="/biblia"]')?.textContent?.trim()).toBe('Livros');
+    expect(el.querySelector('a[href="/estudos"]')?.textContent?.trim()).toBe('Estudos');
+    expect(el.querySelector('a[href="/noticias"]')).toBeNull();
+    expect(el.querySelector('a[href="/curiosidades"]')).toBeNull();
   });
 
-  it('mostra as redes sociais com aria-label pelo nome', () => {
-    const el = criar().nativeElement as HTMLElement;
+  it('não tem formulário de newsletter nem redes sociais', () => {
+    const el = criar();
+    expect(el.querySelector('form')).toBeNull();
     for (const rede of ['Facebook', 'Instagram', 'YouTube']) {
-      const link = el.querySelector(`a[aria-label="${rede}"]`) as HTMLAnchorElement;
-      expect(link).toBeTruthy();
-      expect(link.getAttribute('aria-label')).toBe(rede);
+      expect(el.textContent).not.toContain(rede);
     }
   });
 
-  it('mostra o ano corrente no copyright', () => {
-    expect(criar().nativeElement.textContent).toContain(String(new Date().getFullYear()));
+  it('explica para onde as referências bíblicas levam', () => {
+    expect(criar().textContent).toContain(
+      'As referências bíblicas abrem a tradução Almeida Revista e Corrigida na Bíblia Online.',
+    );
   });
 
-  it('submeter a newsletter não navega e mostra aviso de indisponível', () => {
-    const fixture = criar();
-    const form = fixture.nativeElement.querySelector('form') as HTMLFormElement;
-    const evento = new Event('submit', { cancelable: true });
-    form.dispatchEvent(evento);
-    fixture.detectChanges();
-    expect(evento.defaultPrevented).toBe(true);
-    expect(fixture.componentInstance.mensagem()).toContain('Obrigado');
-    expect(fixture.componentInstance.mensagem()).toContain('ainda não está disponível');
-    expect(fixture.nativeElement.textContent).toContain('ainda não está disponível');
+  it('mostra o ano corrente', () => {
+    expect(criar().textContent).toContain(String(new Date().getFullYear()));
   });
 });

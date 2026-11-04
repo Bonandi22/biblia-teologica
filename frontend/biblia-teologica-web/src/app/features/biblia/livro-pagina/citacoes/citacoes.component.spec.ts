@@ -42,10 +42,11 @@ describe('CitacoesComponent', () => {
     expect(montar([citacao({ comentario: null })]).querySelector('.citacao__comentario')).toBeNull();
   });
 
-  it('mostra a bibliografia', () => {
-    const el = montar([citacao()]);
-    expect(el.textContent).toContain('Bibliografia');
-    expect(el.textContent).toContain('Obra A');
+  it('mostra as obras na coluna, com os lugares em que é citado', () => {
+    const coluna = montar([citacao()]).querySelector('.linha__coluna')!;
+    expect(coluna.textContent).toContain('Citado em');
+    expect(coluna.textContent).toContain('Mateus 1:23');
+    expect(coluna.textContent).toContain('Obra A');
   });
 
   it('usa ids de nota distintos por citação', () => {

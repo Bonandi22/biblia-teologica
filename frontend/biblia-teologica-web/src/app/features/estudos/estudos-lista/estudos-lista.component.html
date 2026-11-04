@@ -1,32 +1,31 @@
 <div class="pagina">
   <header class="cabecalho">
-    <h1 class="cabecalho__titulo">Estudos</h1>
-    <p class="cabecalho__texto">
-      Leituras longas, feitas para ir devagar, com as fontes consultadas listadas no fim de cada uma.
-    </p>
+    <h1>Estudos</h1>
+    <p>Leituras longas, feitas para ir devagar, com as fontes consultadas ao lado do texto.</p>
   </header>
 
   @switch (estado()) {
     @case ('carregando') {
-      <p class="estado__texto" aria-busy="true">Carregando…</p>
+      <p class="estado" aria-busy="true">Carregando…</p>
     }
     @case ('erro') {
-      <div role="alert">
-        <p class="estado__texto">Não foi possível carregar os estudos. Verifique a conexão e tente de novo.</p>
-        <button type="button" class="estado__botao" (click)="carregar()">Tentar novamente</button>
+      <div class="estado" role="alert">
+        <p>Não foi possível carregar os estudos. Verifique a conexão e tente de novo.</p>
+        <button type="button" (click)="carregar()">Tentar novamente</button>
       </div>
     }
     @case ('pronto') {
       @if (estudos().length === 0) {
-        <p class="estado__texto">Os estudos estão sendo preparados.</p>
+        <div class="estado">
+          <p>Ainda não há estudos publicados.</p>
+          <a routerLink="/biblia">Ver os livros</a>
+        </div>
       } @else {
-        <ul class="indice">
+        <ul class="lista">
           @for (e of estudos(); track e.slug) {
-            <li class="entrada">
-              <a class="entrada__link" [routerLink]="['/estudos', e.slug]">
-                <h2 class="entrada__titulo">{{ e.titulo }}</h2>
-                <p class="entrada__resumo">{{ e.resumo }}</p>
-              </a>
+            <li>
+              <h2><a [routerLink]="['/estudos', e.slug]">{{ e.titulo }}</a></h2>
+              <p>{{ e.resumo }}</p>
             </li>
           }
         </ul>

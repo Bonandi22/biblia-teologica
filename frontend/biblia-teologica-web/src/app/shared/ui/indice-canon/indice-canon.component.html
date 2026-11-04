@@ -1,0 +1,37 @@
+@if (falhou()) {
+  <div class="indice__estado" role="alert">
+    <p>Não foi possível carregar a lista de livros. Verifique a conexão e tente de novo.</p>
+    <button type="button" (click)="tentarNovamente()">Tentar novamente</button>
+  </div>
+} @else if (carregando()) {
+  <p class="indice__estado" aria-busy="true">Carregando os livros…</p>
+} @else if (semResultado()) {
+  <p class="indice__estado" role="status">Nenhum livro encontrado para "{{ filtro().trim() }}".</p>
+} @else {
+  <div class="indice">
+    @for (t of testamentos(); track t.nome) {
+      <section class="indice__testamento">
+        <h2 class="indice__titulo">{{ t.nome }}</h2>
+        <div class="indice__divisoes">
+          @for (d of t.divisoes; track d.rotulo) {
+            <section class="indice__divisao">
+              <h3>{{ d.rotulo }}</h3>
+              <ul>
+                @for (l of d.livros; track l.slug) {
+                  <li>
+                    <a [routerLink]="['/biblia', l.slug]">
+                      <span class="indice__nome">{{ l.nome }}</span>
+                      @if (temPanorama(l.slug)) {
+                        <span class="indice__marca">panorama</span>
+                      }
+                    </a>
+                  </li>
+                }
+              </ul>
+            </section>
+          }
+        </div>
+      </section>
+    }
+  </div>
+}

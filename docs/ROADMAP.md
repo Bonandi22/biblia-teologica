@@ -41,6 +41,13 @@ controller (Api) -> feature lazy-loaded (Angular).
     Plano: docs/superpowers/plans/2026-08-31-m2d-a-fundacoes.md
   - M2d-b — páginas públicas re-skin (auth, conta, header/footer, em-breve, 404, titles).
   - M2d-c — homepage "portal", sem o re-skin da ficha do livro (a ficha segue como está).
+  Direção substituída pela Repaginação Bíblia de Estudo.
+- Repaginação Bíblia de Estudo — todo o frontend no visual de Bíblia de estudo, sem Angular
+  Material em nenhuma tela (primitivos em src/app/shared/ui/). Notícias, Curiosidades, membros e
+  newsletter saem da navegação e da página inicial; as rotas continuam. Só frontend. Issue #30.
+  Spec: docs/superpowers/specs/2026-11-03-repaginacao-biblia-de-estudo-design.md
+  Plano: docs/superpowers/plans/2026-11-03-repaginacao-biblia-de-estudo.md
+  Design: DESIGN.md
 - Panorama Bíblico — conteúdo editorial em arquivos (panorama dos livros e estudos em Markdown,
   com notas e bibliografia), lido pela API e servido em /biblia/:slug e /estudos. Começa só por
   Isaías. As divisões, os demais estudos e os demais livros vêm depois da aprovação do primeiro.
