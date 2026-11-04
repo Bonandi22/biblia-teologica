@@ -224,12 +224,11 @@ BibliaTeologica/
 
 `.github/workflows/ci-cd.yml`:
 
-- **Em Pull Requests para `main`:** restore, build e testes (backend `dotnet test`, frontend `tsc`, build e `npm test`)
+- **Em Pull Requests para qualquer branch:** restore, build e testes (backend `dotnet test`, frontend `tsc`, build e `npm test`)
 - **Em push para `main`:** build e push de duas imagens Docker para o GitHub Container Registry: `biblia-teologica-api` e `biblia-teologica-web`
 
 Cada PR também passa pelo **code review automático** (`claude-code-review.yml`). Não
-faça merge com checks vermelhos. Em PRs empilhados, o CI só roda quando a base é
-`main`.
+faça merge com checks vermelhos.
 
 ## Contribuir
 
