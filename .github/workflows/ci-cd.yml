@@ -3,8 +3,8 @@ name: CI/CD
 on:
   push:
     branches: [main]
+  # Sem filtro de branch: PRs empilhados também passam pelo CI.
   pull_request:
-    branches: [main]
 
 jobs:
   # ── Build & Test (backend) ─────────────────────────────────────────────────
