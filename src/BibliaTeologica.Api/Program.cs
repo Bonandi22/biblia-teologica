@@ -5,6 +5,7 @@ using BibliaTeologica.Application;
 using BibliaTeologica.Application.Common.Interfaces;
 using BibliaTeologica.Application.Conteudo;
 using BibliaTeologica.Infrastructure;
+using BibliaTeologica.Infrastructure.Configuracao;
 using BibliaTeologica.Infrastructure.Persistence;
 using BibliaTeologica.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+(builder.Configuration.GetSection(EmailOptions.Secao).Get<EmailOptions>() ?? new EmailOptions())
+    .Validar(builder.Environment.IsProduction());
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsuarioAtual, UsuarioAtual>();

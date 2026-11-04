@@ -3,3 +3,10 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       Conteudo__IncluirRascunhos: "true"
+      # Dev grava o código 2FA no log. BT_EMAIL_SINK=Smtp no .env testa um envio real.
+      Email__Sink: "${BT_EMAIL_SINK:-Dev}"
+      Email__Smtp__Host: "smtp.gmail.com"
+      Email__Smtp__Port: "587"
+      Email__Smtp__User: "${BT_SMTP_USER:-}"
+      Email__Smtp__Password: "${BT_SMTP_SENHA:-}"
+      Email__Smtp__From: "${BT_SMTP_USER:-}"
