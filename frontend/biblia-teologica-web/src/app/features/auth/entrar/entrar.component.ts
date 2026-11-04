@@ -12,10 +12,14 @@ import { CampoSenhaComponent } from '../../../shared/ui/campo-senha/campo-senha.
 import { AuthService } from '../../../core/auth/auth.service';
 import { AuthStore } from '../../../core/auth/auth.store';
 
+const MUITAS_TENTATIVAS = 'Muitas tentativas. Aguarde um minuto e tente de novo.';
+
+/** Só o 401 fala da senha: dizer "credenciais inválidas" num 429 faz a pessoa duvidar de dados corretos. */
 function mensagemDeFalhaNoLogin(status: number): string {
+  if (status === 401) return 'Credenciais inválidas.';
   if (status === 423) return 'Conta bloqueada temporariamente.';
-  if (status === 0 || status >= 500) return 'Não foi possível entrar agora. Tente de novo.';
-  return 'Credenciais inválidas.';
+  if (status === 429) return MUITAS_TENTATIVAS;
+  return 'Não foi possível entrar agora. Tente de novo.';
 }
 
 @Component({
@@ -101,8 +105,8 @@ export class EntrarComponent {
         const retorno = this.rota.snapshot.queryParamMap.get('retorno');
         void this.router.navigateByUrl(retorno ?? (this.store.ehAdmin() ? '/admin' : '/conta'));
       },
-      error: () => {
-        this.erro.set('Código inválido ou expirado.');
+      error: (e) => {
+        this.erro.set(e.status === 429 ? MUITAS_TENTATIVAS : 'Código inválido ou expirado.');
         this.aEnviar.set(false);
       },
     });

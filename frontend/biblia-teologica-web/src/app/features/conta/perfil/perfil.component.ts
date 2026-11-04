@@ -132,9 +132,8 @@ export class PerfilComponent {
       .subscribe({
         next: () => void this.router.navigate(['/']),
         // A sessão só termina no servidor: limpar aqui faria parecer que saiu com os cookies ainda válidos.
-        // Recarregar renova o acesso vencido, e então o logout passa.
         error: () => {
-          this.erroAoSair.set('Não foi possível sair. Recarregue a página e tente de novo.');
+          this.erroAoSair.set('Não foi possível sair. Tente de novo.');
           this.aSair.set(false);
         },
       });

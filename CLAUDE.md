@@ -79,7 +79,7 @@ Docker:
     docker compose up --build      # api :5080 + web :4300 — precisa de .env (copiar de .env.example: BT_JWT_KEY, BT_ADMIN_*)
     docker compose down -v         # zera o volume do SQLite
 
-Código 2FA em dev nos logs: docker compose logs api | grep EMAIL
+Código 2FA em dev nos logs (o código vem na linha seguinte à do assunto): docker compose logs api | grep -A1 EMAIL
 
 Swagger em dev: http://localhost:5080/swagger
 

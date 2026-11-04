@@ -66,6 +66,33 @@ describe('EntrarComponent', () => {
     expect(c.erro()).toBe('Não foi possível entrar agora. Tente de novo.');
   });
 
+  it('submeterCredenciais_PedeParaAguardar_QuandoLimiteDeTentativas', () => {
+    const c = criar();
+    c.formCredenciais.setValue({ email: 'a@b.c', senha: 'x' });
+    c.submeterCredenciais();
+    http.expectOne('/api/auth/login').flush(null, { status: 429, statusText: 'Too Many Requests' });
+    expect(c.erro()).toBe('Muitas tentativas. Aguarde um minuto e tente de novo.');
+  });
+
+  it('submeterCredenciais_NaoCulpaASenha_QuandoCsrfOuOutroErro', () => {
+    const c = criar();
+    c.formCredenciais.setValue({ email: 'a@b.c', senha: 'x' });
+    c.submeterCredenciais();
+    http.expectOne('/api/auth/login').flush(null, { status: 403, statusText: 'Forbidden' });
+    expect(c.erro()).toBe('Não foi possível entrar agora. Tente de novo.');
+  });
+
+  it('submeterCodigo_PedeParaAguardar_QuandoLimiteDeTentativas', () => {
+    const c = criar();
+    c.formCredenciais.setValue({ email: 'a@b.c', senha: 'x' });
+    c.submeterCredenciais();
+    http.expectOne('/api/auth/login').flush({ desafio2fa: true, tokenDesafio: 'T' });
+    c.formCodigo.setValue({ codigo: '123456' });
+    c.submeterCodigo();
+    http.expectOne('/api/auth/login/2fa').flush(null, { status: 429, statusText: 'Too Many Requests' });
+    expect(c.erro()).toBe('Muitas tentativas. Aguarde um minuto e tente de novo.');
+  });
+
   it('voltar_RetornaAsCredenciais_QuandoCodigoExpirou', () => {
     const fixture = TestBed.createComponent(EntrarComponent);
     fixture.detectChanges();
