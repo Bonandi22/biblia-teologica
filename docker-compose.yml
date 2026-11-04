@@ -20,7 +20,7 @@ services:
     build:
       context: ./frontend/biblia-teologica-web
     ports:
-      - "4300:80"
+      - "4300:8080"
     depends_on:
       - api
 
