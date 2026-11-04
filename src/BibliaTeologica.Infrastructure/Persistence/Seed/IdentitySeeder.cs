@@ -51,12 +51,12 @@ public class IdentitySeeder
             var criado = await _users.CreateAsync(user, entrada.SenhaInicial);
             if (!criado.Succeeded)
             {
-                _log.LogError("Falha ao criar admin seed {Email}: {Erros}", entrada.Email,
-                    string.Join("; ", criado.Errors.Select(e => e.Description)));
+                _log.LogError("Falha ao criar admin seed: {Erros}",
+                    string.Join("; ", criado.Errors.Select(e => e.Code)));
                 continue;
             }
             await _users.AddToRoleAsync(user, RoleAdmin);
-            _log.LogInformation("Admin seed criado: {Email}", entrada.Email);
+            _log.LogInformation("Admin seed criado.");
         }
     }
 }

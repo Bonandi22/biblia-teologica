@@ -117,16 +117,29 @@ public class AuthServiceTests
     }
 
     [Fact]
-    public async Task RefreshAsync_RevogaCadeia_QuandoTokenJaRevogado()
+    public async Task RefreshAsync_RevogaCadeia_QuandoTokenRotacionadoEReutilizado()
     {
         _token.Setup(t => t.Hash("cru")).Returns("h");
         _store.Setup(s => s.ObterAsync("h", It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new RefreshTokenInfo(Uid, "h", DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddMinutes(-1)));
+            .ReturnsAsync(new RefreshTokenInfo(Uid, "h", DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddMinutes(-1), Rotacionado: true));
 
         var r = await Criar().RefreshAsync("cru", null, default);
 
         r.Estado.Should().Be(EstadoLogin.CredenciaisInvalidas);
         _store.Verify(s => s.RevogarCadeiaAsync(Uid, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task RefreshAsync_NaoRevogaCadeia_QuandoTokenFoiEncerradoSemRotacao()
+    {
+        _token.Setup(t => t.Hash("cru")).Returns("h");
+        _store.Setup(s => s.ObterAsync("h", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new RefreshTokenInfo(Uid, "h", DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddMinutes(-1), Rotacionado: false));
+
+        var r = await Criar().RefreshAsync("cru", null, default);
+
+        r.Estado.Should().Be(EstadoLogin.CredenciaisInvalidas);
+        _store.Verify(s => s.RevogarCadeiaAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]

@@ -16,7 +16,20 @@ public class ContaServiceTests
     private readonly Mock<IEmissorTokens> _emissor = new();
     private static readonly Guid Uid = Guid.NewGuid();
 
-    private ContaService Criar() => new(_identity.Object, _emissor.Object);
+    private readonly Mock<IRefreshTokenStore> _store = new();
+
+    private ContaService Criar() => new(_identity.Object, _emissor.Object, _store.Object);
+
+    [Fact]
+    public async Task TrocarSenhaAsync_NaoRevogaSessoes_QuandoIdentityFalha()
+    {
+        _identity.Setup(i => i.TrocarSenhaAsync(Uid, "errada", "x", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(IdentityResultDto.Falha("Senha atual incorreta."));
+
+        await Criar().TrocarSenhaAsync(Uid, new TrocarSenhaDto("errada", "x"), null, default);
+
+        _store.Verify(s => s.RevogarCadeiaAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
 
     [Fact]
     public async Task TrocarSenhaAsync_ReemiteTokens_QuandoSucesso()

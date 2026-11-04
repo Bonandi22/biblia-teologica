@@ -52,6 +52,7 @@ public class ContaController : ControllerBase
     }
 
     [HttpPost("senha")]
+    [PermitirSenhaPendente]
     [ServiceFilter(typeof(CsrfActionFilter))]
     public async Task<IActionResult> TrocarSenha(TrocarSenhaDto dto, CancellationToken ct)
     {

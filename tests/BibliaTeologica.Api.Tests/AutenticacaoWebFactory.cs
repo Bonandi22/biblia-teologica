@@ -148,7 +148,8 @@ public class AutenticacaoWebFactory : AppFactory
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
         {
-            var header = _cookies.GetCookieHeader(Alvo);
+            // Pelo caminho do pedido, como o navegador: bt_refresh só vale em /api/auth.
+            var header = _cookies.GetCookieHeader(request.RequestUri!);
             if (!string.IsNullOrEmpty(header))
                 request.Headers.TryAddWithoutValidation("Cookie", header);
 

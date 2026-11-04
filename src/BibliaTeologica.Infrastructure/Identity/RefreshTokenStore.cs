@@ -28,7 +28,7 @@ public class RefreshTokenStore : IRefreshTokenStore
     public async Task<RefreshTokenInfo?> ObterAsync(string hash, CancellationToken ct)
     {
         var t = await _db.RefreshTokens.AsNoTracking().FirstOrDefaultAsync(x => x.TokenHash == hash, ct);
-        return t is null ? null : new RefreshTokenInfo(t.UsuarioId, t.TokenHash, t.ExpiraEm, t.RevogadoEm);
+        return t is null ? null : new RefreshTokenInfo(t.UsuarioId, t.TokenHash, t.ExpiraEm, t.RevogadoEm, t.SubstituidoPorHash is not null);
     }
 
     public async Task RotacionarAsync(string hashAntigo, Guid userId, string hashNovo,

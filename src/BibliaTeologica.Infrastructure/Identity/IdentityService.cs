@@ -9,21 +9,20 @@ namespace BibliaTeologica.Infrastructure.Identity;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _users;
-    private readonly SignInManager<ApplicationUser> _signIn;
 
-    public IdentityService(UserManager<ApplicationUser> users, SignInManager<ApplicationUser> signIn)
-    {
-        _users = users;
-        _signIn = signIn;
-    }
+    public IdentityService(UserManager<ApplicationUser> users) => _users = users;
 
+    // Sem SignInManager: ele zera as falhas com a senha certa, e quem tem a senha poderia
+    // errar o código 2FA para sempre sem bloquear. As falhas só zeram depois do 2FA.
     public async Task<ResultadoSenha> VerificarSenhaAsync(string email, string senha, bool lockoutOnFailure, CancellationToken ct)
     {
         var user = await _users.FindByEmailAsync(email);
         if (user is null) return new ResultadoSenha(false, false, null);
+        if (await _users.IsLockedOutAsync(user)) return new ResultadoSenha(false, true, null);
+        if (await _users.CheckPasswordAsync(user, senha)) return new ResultadoSenha(true, false, user.Id);
 
-        var r = await _signIn.CheckPasswordSignInAsync(user, senha, lockoutOnFailure);
-        return new ResultadoSenha(r.Succeeded, r.IsLockedOut, r.Succeeded ? user.Id : null);
+        if (lockoutOnFailure) await _users.AccessFailedAsync(user);
+        return new ResultadoSenha(false, await _users.IsLockedOutAsync(user), null);
     }
 
     public async Task<Guid?> ResolverIdPorEmailAsync(string email, CancellationToken ct)
@@ -39,7 +38,12 @@ public class IdentityService : IIdentityService
     public async Task<bool> VerificarTokenEmailAsync(Guid userId, string codigo, CancellationToken ct)
     {
         var user = await _users.FindByIdAsync(userId.ToString());
-        return user is not null && await _users.VerifyTwoFactorTokenAsync(user, "Email", codigo);
+        if (user is null || await _users.IsLockedOutAsync(user)) return false;
+        if (!await _users.VerifyTwoFactorTokenAsync(user, "Email", codigo)) return false;
+
+        // O código deriva do security stamp: trocá-lo invalida o código recém-usado.
+        await _users.UpdateSecurityStampAsync(user);
+        return true;
     }
 
     public async Task RegistarFalhaAsync(Guid userId, CancellationToken ct)

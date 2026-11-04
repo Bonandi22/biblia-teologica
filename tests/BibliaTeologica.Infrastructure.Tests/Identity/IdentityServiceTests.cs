@@ -1,6 +1,9 @@
 using AwesomeAssertions;
+using BibliaTeologica.Infrastructure.Configuracao;
 using BibliaTeologica.Infrastructure.Identity;
 using BibliaTeologica.Infrastructure.Persistence;
+using BibliaTeologica.Infrastructure.Persistence.Seed;
+using BibliaTeologica.Infrastructure.Tests.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -40,8 +43,7 @@ public sealed class IdentityServiceTests : IDisposable
     }
 
     private IdentityService Criar()
-        => new(_sp.GetRequiredService<UserManager<ApplicationUser>>(),
-               _sp.GetRequiredService<SignInManager<ApplicationUser>>());
+        => new(_sp.GetRequiredService<UserManager<ApplicationUser>>());
 
     [Fact]
     public async Task CriarMembro_E_VerificarSenha()
@@ -66,6 +68,65 @@ public sealed class IdentityServiceTests : IDisposable
         var codigo = await svc.GerarTokenEmailAsync(id, default);
         (await svc.VerificarTokenEmailAsync(id, codigo, default)).Should().BeTrue();
         (await svc.VerificarTokenEmailAsync(id, "000000", default)).Should().BeFalse();
+    }
+
+    private async Task<(IdentityService Svc, Guid Id)> CriarContaAsync()
+    {
+        var svc = Criar();
+        await svc.CriarMembroAsync("c@teste.local", "Senha!Forte1", "C", default);
+        return (svc, (await svc.ResolverIdPorEmailAsync("c@teste.local", default))!.Value);
+    }
+
+    [Fact]
+    public async Task VerificarTokenEmail_RetornaFalse_QuandoCodigoJaFoiUsado()
+    {
+        var (svc, id) = await CriarContaAsync();
+        var codigo = await svc.GerarTokenEmailAsync(id, default);
+
+        (await svc.VerificarTokenEmailAsync(id, codigo, default)).Should().BeTrue();
+
+        (await svc.VerificarTokenEmailAsync(id, codigo, default)).Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task VerificarTokenEmail_RetornaFalse_QuandoContaBloqueada()
+    {
+        var (svc, id) = await CriarContaAsync();
+        var codigo = await svc.GerarTokenEmailAsync(id, default);
+        for (var i = 0; i < 5; i++) await svc.RegistarFalhaAsync(id, default);
+
+        (await svc.VerificarTokenEmailAsync(id, codigo, default)).Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task VerificarSenha_MantemFalhasDe2fa_QuandoSenhaCorreta()
+    {
+        var (svc, id) = await CriarContaAsync();
+        await svc.RegistarFalhaAsync(id, default);
+
+        (await svc.VerificarSenhaAsync("c@teste.local", "Senha!Forte1", true, default)).Sucesso.Should().BeTrue();
+
+        var usuarios = _sp.GetRequiredService<UserManager<ApplicationUser>>();
+        var usuario = await usuarios.FindByIdAsync(id.ToString());
+        (await usuarios.GetAccessFailedCountAsync(usuario!)).Should().Be(1);
+    }
+
+    [Theory]
+    [InlineData("Senha!Forte1")]
+    [InlineData("fraca")]
+    public async Task IdentitySeeder_NaoRegistraEmail_QuandoCriaOuFalha(string senha)
+    {
+        var logger = new LoggerEspiao<IdentitySeeder>();
+        var seeder = new IdentitySeeder(
+            _sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>(),
+            _sp.GetRequiredService<UserManager<ApplicationUser>>(),
+            new[] { new AdminSeedEntrada { Email = "dono@teste.local", SenhaInicial = senha } },
+            logger);
+
+        await seeder.SeedAsync();
+
+        logger.Mensagens.Should().NotBeEmpty();
+        logger.Mensagens.Should().NotContain(m => m.Contains("dono@teste.local"));
     }
 
     public void Dispose()

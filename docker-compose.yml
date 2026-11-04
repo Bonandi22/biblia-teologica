@@ -6,6 +6,8 @@ services:
     environment:
       ConnectionStrings__Default: "Data Source=/data/biblia.db"
       Cors__AllowedOrigins__0: "http://localhost:4300"
+      # Rede padrão do Docker, onde roda o nginx. Permite ao rate limit ver o IP real do cliente.
+      Proxy__RedesConfiaveis__0: "172.16.0.0/12"
       Jwt__SigningKey: "${BT_JWT_KEY:?defina BT_JWT_KEY no .env}"
       AdminSeed__0__Email: "${BT_ADMIN_EMAIL:?defina BT_ADMIN_EMAIL no .env}"
       AdminSeed__0__SenhaInicial: "${BT_ADMIN_SENHA:?defina BT_ADMIN_SENHA no .env}"
