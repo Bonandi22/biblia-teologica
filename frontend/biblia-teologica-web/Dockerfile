@@ -5,7 +5,8 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:1.27-alpine
+# Sem root: esta imagem roda como usuário comum e, por isso, escuta na 8080.
+FROM nginxinc/nginx-unprivileged:1.30-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/biblia-teologica-web/browser /usr/share/nginx/html
-EXPOSE 80
+EXPOSE 8080

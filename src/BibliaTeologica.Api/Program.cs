@@ -37,10 +37,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor;
     options.ForwardLimit = 1;
     foreach (var rede in builder.Configuration.GetSection("Proxy:RedesConfiaveis").Get<string[]>() ?? Array.Empty<string>())
-    {
-        var r = System.Net.IPNetwork.Parse(rede);
-        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(r.BaseAddress, r.PrefixLength));
-    }
+        options.KnownIPNetworks.Add(System.Net.IPNetwork.Parse(rede));
 });
 
 builder.Services.AddControllers(options => options.Filters.Add<SenhaPendenteFilter>());

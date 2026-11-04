@@ -19,5 +19,5 @@ services:
 
   web:
     restart: unless-stopped
-    ports:
-      - "80:80"
+    ports: !override
+      - "80:8080"

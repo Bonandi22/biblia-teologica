@@ -36,7 +36,7 @@ Roadmap completo: [`docs/ROADMAP.md`](docs/ROADMAP.md). Produto e público:
 
 ## Arquitetura
 
-Monólito .NET 8 em Clean Architecture de 4 camadas, sem microsserviços e sem
+Monólito .NET 10 em Clean Architecture de 4 camadas, sem microsserviços e sem
 mensageria.
 
 ```
@@ -72,7 +72,7 @@ Convenções e guardrails completos: [`CLAUDE.md`](CLAUDE.md).
 
 | Camada | Tecnologias |
 |---|---|
-| **Backend** | .NET 8 · ASP.NET Core · Entity Framework Core 8 (SQLite) · YamlDotNet |
+| **Backend** | .NET 10 · ASP.NET Core · Entity Framework Core 10 (SQLite) · YamlDotNet |
 | **Frontend** | Angular 22 · standalone components · signals · SCSS · marked + DOMPurify · CSR (sem SSR) |
 | **Testes** | xUnit · Moq · AwesomeAssertions · EF Core Sqlite · Vitest (frontend) |
 | **Infra** | Docker · Docker Compose · nginx · GitHub Actions (GHCR) |
@@ -103,6 +103,13 @@ SQLite fica no volume `biblia-data`.
 ```bash
 docker compose down             # para e preserva o volume
 docker compose down -v          # zera o volume do SQLite
+```
+
+Os containers rodam sem root. Um volume criado antes disso pertence ao root e precisa
+trocar de dono uma vez, sem perder os dados:
+
+```bash
+docker compose run --rm --no-deps --user root --entrypoint sh api -c 'chown -R "$APP_UID" /data'
 ```
 
 ### Autenticação
@@ -147,7 +154,7 @@ content/
 <details>
 <summary><strong>Pré-requisitos e passos</strong></summary>
 
-**Pré-requisitos:** [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8) · [Node.js 24+](https://nodejs.org/)
+**Pré-requisitos:** [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10) · [Node.js 24+](https://nodejs.org/)
 
 **Backend**
 

@@ -29,7 +29,7 @@ Staged — verificar o que está staged, inclusive arquivos de nome inocente, an
 
 ## Arquitetura
 
-1 monólito .NET 8 em Clean Architecture de 4 camadas: Domain (entidades, enums, exceções de domínio) -> Application (Application Services, DTOs, perfis AutoMapper) -> Infrastructure (DbContext EF Core, repositórios, migrações, seed) -> Api (controllers, Program.cs, middleware). Sem microserviços, sem mensageria.
+1 monólito .NET 10 em Clean Architecture de 4 camadas: Domain (entidades, enums, exceções de domínio) -> Application (Application Services, DTOs, perfis AutoMapper) -> Infrastructure (DbContext EF Core, repositórios, migrações, seed) -> Api (controllers, Program.cs, middleware). Sem microserviços, sem mensageria.
 
 Persistência: EF Core + SQLite (arquivo em volume Docker). Nada específico de provider fora da Infrastructure.
 
