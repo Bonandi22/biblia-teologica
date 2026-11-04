@@ -12,7 +12,7 @@ describe('interceptors', () => {
   let ctrl: HttpTestingController;
 
   beforeEach(() => {
-    document.cookie = 'bt_csrf=CSRF123';
+    document.cookie = 'bt_csrf=CSRF123; path=/';
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
@@ -26,7 +26,11 @@ describe('interceptors', () => {
     ctrl = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => ctrl.verify());
+  afterEach(() => {
+    // O document é compartilhado entre arquivos de teste: o cookie não pode vazar para eles.
+    document.cookie = 'bt_csrf=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    ctrl.verify();
+  });
 
   it('withCredentials: liga withCredentials em pedidos /api', () => {
     http.get('/api/livros').subscribe();
