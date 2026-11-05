@@ -108,6 +108,7 @@ public static class DependencyInjection
         services.AddSingleton<FilaEmailEmMemoria>();
         services.AddSingleton<IFilaEmail>(sp => sp.GetRequiredService<FilaEmailEmMemoria>());
         services.AddHostedService(sp => sp.GetRequiredService<FilaEmailEmMemoria>());
+        services.AddHostedService<LimpezaContasNaoConfirmadas>();
 
         var admins = config.GetSection(AdminSeedOptions.Secao).Get<List<AdminSeedEntrada>>() ?? new();
         services.AddScoped<IdentitySeeder>(sp => new IdentitySeeder(

@@ -3,6 +3,7 @@ using BibliaTeologica.Application.Common.Interfaces;
 using BibliaTeologica.Application.Common.Resultados;
 using BibliaTeologica.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BibliaTeologica.Infrastructure.Identity;
 
@@ -262,6 +263,20 @@ public class IdentityService : IIdentityService
         if (user is null) return IdentityResultDto.Falha("Utilizador não encontrado.");
         // Os refresh tokens saem junto, pela FK em cascata.
         return Mapear(await _users.DeleteAsync(user));
+    }
+
+    public async Task<int> ApagarNaoConfirmadasAsync(DateTime criadasAntesDe, CancellationToken ct)
+    {
+        var velhas = await _users.Users
+            .Where(u => !u.EmailConfirmed && u.CriadoEm < criadasAntesDe)
+            .ToListAsync(ct);
+        var apagadas = 0;
+        foreach (var user in velhas)
+        {
+            // Os refresh tokens saem junto, pela FK em cascata.
+            if ((await _users.DeleteAsync(user)).Succeeded) apagadas++;
+        }
+        return apagadas;
     }
 
     public async Task LimparDeveTrocarSenhaAsync(Guid userId, CancellationToken ct)

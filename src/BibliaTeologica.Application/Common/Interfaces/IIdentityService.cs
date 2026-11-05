@@ -35,5 +35,7 @@ public interface IIdentityService
     Task<bool> EhUltimoAdminAsync(Guid userId, CancellationToken ct);
     /// <summary>Apaga a conta e os dados ligados a ela (sessões em cascata).</summary>
     Task<IdentityResultDto> ApagarUsuarioAsync(Guid userId, CancellationToken ct);
+    /// <summary>Apaga contas com e-mail não confirmado criadas antes do limite; devolve quantas.</summary>
+    Task<int> ApagarNaoConfirmadasAsync(DateTime criadasAntesDe, CancellationToken ct);
     Task LimparDeveTrocarSenhaAsync(Guid userId, CancellationToken ct);
 }

@@ -199,6 +199,48 @@ public sealed class IdentityServiceTests : IDisposable
         logger.Mensagens.Should().NotContain(m => m.Contains("dono@teste.local"));
     }
 
+    private async Task CriarComAsync(string email, DateTime criadoEm, bool confirmada)
+    {
+        var id = (await CriarAsync(Criar(), email, "Fulano")).UserId!.Value;
+        var users = _sp.GetRequiredService<UserManager<ApplicationUser>>();
+        var user = (await users.FindByIdAsync(id.ToString()))!;
+        user.CriadoEm = criadoEm;
+        user.EmailConfirmed = confirmada;
+        await users.UpdateAsync(user);
+    }
+
+    [Fact]
+    public async Task ApagarNaoConfirmadas_Apaga_QuandoCriadaAntesDoLimite()
+    {
+        var limite = DateTime.UtcNow.AddDays(-7);
+        await CriarComAsync("velha@teste.local", limite.AddHours(-1), false);
+
+        var apagadas = await Criar().ApagarNaoConfirmadasAsync(limite, default);
+
+        apagadas.Should().Be(1);
+        (await Criar().ResolverIdPorEmailAsync("velha@teste.local", default)).Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ApagarNaoConfirmadas_Mantem_QuandoCriadaDepoisDoLimite()
+    {
+        var limite = DateTime.UtcNow.AddDays(-7);
+        await CriarComAsync("nova@teste.local", limite.AddHours(1), false);
+
+        (await Criar().ApagarNaoConfirmadasAsync(limite, default)).Should().Be(0);
+        (await Criar().ResolverIdPorEmailAsync("nova@teste.local", default)).Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task ApagarNaoConfirmadas_Mantem_QuandoConfirmada()
+    {
+        var limite = DateTime.UtcNow.AddDays(-7);
+        await CriarComAsync("ok@teste.local", limite.AddDays(-30), true);
+
+        (await Criar().ApagarNaoConfirmadasAsync(limite, default)).Should().Be(0);
+        (await Criar().ResolverIdPorEmailAsync("ok@teste.local", default)).Should().NotBeNull();
+    }
+
     public void Dispose()
     {
         _sp.Dispose();
