@@ -66,7 +66,7 @@ Toda resposta usa os contratos abaixo. Toda mensagem de erro é escrita por nós
 
 1. `POST /api/auth/registar` valida o formato e a política de senha **antes** de olhar se o e-mail existe. Senha fraca gera 400 nos dois casos.
 2. Conta nova: cria com `EmailConfirmed = false`, papel Membro, e enfileira o código.
-3. E-mail já cadastrado: não altera a conta e enfileira um aviso ao dono, dizendo que tentaram cadastrar o endereço e como recuperar a senha.
+3. E-mail já cadastrado: não altera a conta e não envia nada. A tela do código diz a todos, com ou sem conta: "Se este e-mail já tiver conta, nenhum código será enviado: use Entrar ou Esqueci minha senha." (decisão do utilizador em 2026-11-05, issue #53, no lugar do antigo e-mail de aviso).
 4. Campo invisível preenchido (bot): nada é criado ou enviado.
 5. Os três casos respondem `202 { tokenDesafio }`. Nos casos 3 e 4, o token é válido na forma, mas ligado a um id aleatório que não existe, então o código sempre falha com a mensagem genérica.
 
@@ -74,7 +74,7 @@ A pessoa digita o código na fase seguinte. O acerto confirma o e-mail e abre a 
 
 **Termo.** O formulário tem uma caixa obrigatória, nunca marcada de início, com o texto "Li e aceito o termo de proteção de dados e autorizo guardar os meus dados", e um link que abre `/privacidade` em nova aba. O servidor também exige o aceite: sem ele, responde 400, antes de olhar se o e-mail existe. A conta nova guarda a data do aceite e a versão do termo (`TermoAceitoEm`, `TermoVersao`), o que exige uma migração.
 
-**Cadastro abandonado.** Quem deixa o desafio vencer vai para `/entrar?aviso=cadastro`, com o texto "O tempo do código acabou. Para concluir o cadastro, use “Esqueci minha senha” com o e-mail que você informou." e um link para `/esqueci-senha`. Redefinir a senha confirma o e-mail e é o caminho de recuperação; a senha criada no cadastro não entra pelo login. Quem volta por "Criar conta" cai no caso 3: a senha digitada é descartada, a conta não muda, e o aviso por e-mail explica que o endereço já tem cadastro e indica "Entrar" e "Esqueci minha senha". Esse caso não ganha tratamento próprio, porque um código real ali criaria um novo caminho a proteger contra a revelação de contas.
+**Cadastro abandonado.** Quem deixa o desafio vencer vai para `/entrar?aviso=cadastro`, com o texto "O tempo do código acabou. Para concluir o cadastro, use “Esqueci minha senha” com o e-mail que você informou." e um link para `/esqueci-senha`. Redefinir a senha confirma o e-mail e é o caminho de recuperação; a senha criada no cadastro não entra pelo login. Quem volta por "Criar conta" cai no caso 3: a senha digitada é descartada, a conta não muda, e a frase da tela do código indica "Entrar" e "Esqueci minha senha". Esse caso não ganha tratamento próprio, porque um código real ali criaria um novo caminho a proteger contra a revelação de contas.
 
 ### Entrar
 
@@ -220,7 +220,7 @@ Entra nesta etapa como investigação de tempo limitado, porque mexe na mesma te
 - Avatar de iniciais, sem foto; linha "Perfis" removida da tela.
 - Destino depois do login, com `/` em vez de `/conta`, para todos até a etapa 3.
 - Fila simples em memória antes da etapa 4, usada em tudo exceto o código do login. Falha nesses envios não aparece na tela; a pessoa vê "tente de novo".
-- Quem refaz um cadastro abandonado recebe o aviso por e-mail, em vez de um novo código.
+- Quem refaz um cadastro abandonado não recebe um novo código; a tela do código o orienta para "Esqueci minha senha".
 - Issue #31 com tempo limitado, sem bloquear o merge.
 - Remoção de contas não confirmadas após 7 dias.
 - Link de redefinição válido por 1 hora; limite de 3 envios por 15 minutos.

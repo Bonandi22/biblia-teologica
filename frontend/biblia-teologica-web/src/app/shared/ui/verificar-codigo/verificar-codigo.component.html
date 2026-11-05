@@ -1,5 +1,11 @@
 <p class="lead">Enviamos um código para o seu e-mail.</p>
 <p class="nota">O código vale por 5 minutos. Se ele não chegar em alguns minutos, tente de novo.</p>
+@if (cadastro()) {
+  <p class="nota conta-existente">
+    Se este e-mail já tiver conta, nenhum código será enviado: use
+    <a routerLink="/entrar">Entrar</a> ou <a routerLink="/esqueci-senha">Esqueci minha senha</a>.
+  </p>
+}
 
 @if (erro(); as e) {
   <bt-alerta tipo="erro">{{ e }}</bt-alerta>

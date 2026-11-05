@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { AlertaComponent } from '../alerta/alerta.component';
 import { BotaoComponent } from '../botao/botao.component';
@@ -20,7 +21,7 @@ const VALIDADE_DESAFIO_MS = 5 * 60 * 1000;
   selector: 'bt-verificar-codigo',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, AlertaComponent, BotaoComponent, BtInputDirective, CampoComponent],
+  imports: [ReactiveFormsModule, RouterLink, AlertaComponent, BotaoComponent, BtInputDirective, CampoComponent],
   templateUrl: './verificar-codigo.component.html',
   styleUrl: './verificar-codigo.component.scss',
 })
@@ -31,6 +32,8 @@ export class VerificarCodigoComponent {
   readonly tokenDesafio = input.required<string>();
   readonly aEnviar = input(false);
   readonly erro = input<string | null>(null);
+  /** No cadastro, a mesma frase para todos explica o caso do e-mail que já tem conta, sem revelar nada. */
+  readonly cadastro = input(false);
 
   readonly enviar = output<string>();
   readonly voltar = output<void>();

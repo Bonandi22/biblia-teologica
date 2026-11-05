@@ -145,13 +145,13 @@ public class RedefinicaoSenhaTests
     }
 
     [Fact]
-    public async Task Redefinir_EnviaAvisoDeSeguranca_QuandoAvisosAnonimosEsgotaramOLimite()
+    public async Task Redefinir_EnviaAvisoDeSeguranca_QuandoAnonimoTentouCadastrarOEndereco()
     {
         await using var f = await NovaFabricaAsync(limite: 2);
         var client = f.CreateClient();
         await Esqueci(client, AutenticacaoWebFactory.MembroEmail);
         var (email, token) = LerLink(f);
-        // Um anônimo esgota a janela dos avisos "alguém tentou se cadastrar" para o endereço.
+        // Um anônimo tenta cadastrar o endereço várias vezes; isso não pode calar o aviso de segurança.
         for (var i = 0; i < 3; i++)
             await client.PostAsJsonAsync("/api/auth/registar", new
             {

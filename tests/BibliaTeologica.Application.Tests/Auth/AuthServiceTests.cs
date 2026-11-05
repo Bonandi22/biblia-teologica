@@ -290,19 +290,19 @@ public class AuthServiceTests
     }
 
     [Fact]
-    public async Task RegistarMembroAsync_EnfileiraAvisoSemCriar_QuandoEmailJaExiste()
+    public async Task RegistarMembroAsync_NaoEnviaNada_QuandoEmailJaExiste()
     {
         _identity.Setup(i => i.ValidarSenhaAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(IdentityResultDto.Ok());
         _identity.Setup(i => i.CriarMembroAsync(It.IsAny<NovoMembro>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ResultadoCriacao(null, true, Array.Empty<string>()));
         _token.Setup(t => t.GerarDesafioLogin(It.IsAny<Guid>())).Returns("falso");
-        _limite.Setup(l => l.TentarConsumir("m@b.c", FinalidadeEnvio.Aviso)).Returns(true);
 
         var r = await Criar().RegistarMembroAsync(Cadastro(), default);
 
         r.TokenDesafio.Should().Be("falso");
-        _fila.Verify(f => f.Enfileirar("m@b.c", ModelosEmail.CadastroExistente().Assunto, It.IsAny<string>()), Times.Once);
+        _fila.Verify(f => f.Enfileirar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        _limite.Verify(l => l.TentarConsumir(It.IsAny<string>(), It.IsAny<FinalidadeEnvio>()), Times.Never);
         _identity.Verify(i => i.GerarTokenEmailAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
