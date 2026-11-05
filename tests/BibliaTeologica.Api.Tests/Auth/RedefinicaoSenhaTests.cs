@@ -166,6 +166,27 @@ public class RedefinicaoSenhaTests
         f.Otp.UltimoCorpo.Should().Contain("alterada");
     }
     [Fact]
+    public async Task Login_Funciona_QuandoContaNaoConfirmadaRedefineASenha()
+    {
+        await using var f = await NovaFabricaAsync();
+        var client = f.CreateClient();
+        var email = $"novo-{Guid.NewGuid():N}@teste.local";
+        await client.PostAsJsonAsync("/api/auth/registar", new
+        {
+            email, senha = "Senha!Forte1", nomeExibicao = "X", aceitouTermo = true
+        });
+        (await client.PostAsJsonAsync("/api/auth/login", new { email, senha = "Senha!Forte1" }))
+            .StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        await Esqueci(client, email);
+        var (_, token) = LerLink(f);
+
+        (await Redefinir(client, email, token)).StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        (await client.PostAsJsonAsync("/api/auth/login", new { email, senha = NovaSenha }))
+            .StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
     public async Task Redefinir_Responde400Generico_QuandoTokenInvalidoOuEmailInexistente()
     {
         await using var f = await NovaFabricaAsync();

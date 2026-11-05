@@ -181,9 +181,11 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
 
     private static string EmailNovo() => $"novo-{Guid.NewGuid():N}@teste.local";
 
-    private async Task<ApplicationUser?> BuscarAsync(string email)
+    private Task<ApplicationUser?> BuscarAsync(string email) => BuscarAsync(_f, email);
+
+    private static async Task<ApplicationUser?> BuscarAsync(AutenticacaoWebFactory f, string email)
     {
-        using var scope = _f.Services.CreateScope();
+        using var scope = f.Services.CreateScope();
         return await scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>().FindByEmailAsync(email);
     }
 
@@ -234,19 +236,41 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
     }
 
     [Fact]
-    public async Task Login_PermiteEntrar_QuandoContaNaoConfirmada()
+    public async Task Login_Responde401IgualASenhaErrada_QuandoContaNaoConfirmadaComSenhaCerta()
     {
-        var client = await ClienteSemeadoAsync();
+        await using var f = new AutenticacaoWebFactory();
+        await f.SemearUsuariosAsync();
+        var client = f.CreateClient();
+        var email = EmailNovo();
+        (await client.PostAsJsonAsync("/api/auth/registar", Corpo(email))).StatusCode.Should().Be(HttpStatusCode.Accepted);
+        var enviadosAntes = f.Otp.Enviados.Count;
+
+        var certa = await client.PostAsJsonAsync("/api/auth/login", new { email, senha = "Senha!Forte1" });
+        var errada = await client.PostAsJsonAsync("/api/auth/login", new { email, senha = "Errada!Senha9" });
+
+        certa.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        certa.StatusCode.Should().Be(errada.StatusCode);
+        (await certa.Content.ReadAsStringAsync()).Should().Be(await errada.Content.ReadAsStringAsync());
+        f.Otp.Enviados.Should().HaveCount(enviadosAntes);
+        // Não conta como falha de bloqueio: a única falha contada é a da senha errada.
+        (await BuscarAsync(f, email))!.AccessFailedCount.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task Login_NaoConsomeLimiteDeEnvio_QuandoContaNaoConfirmada()
+    {
+        await using var f = new AutenticacaoWebFactory();
+        f.ConfiguracaoExtra["EnvioEmail:MaxPorJanela"] = "3";
+        await f.SemearUsuariosAsync();
+        var client = f.CreateClient();
         var email = EmailNovo();
         (await client.PostAsJsonAsync("/api/auth/registar", Corpo(email))).StatusCode.Should().Be(HttpStatusCode.Accepted);
 
-        var login = await client.PostAsJsonAsync("/api/auth/login", new { email, senha = "Senha!Forte1" });
-
-        login.StatusCode.Should().Be(HttpStatusCode.OK);
-        var td = await TokenDesafioAsync(login);
-        var v = await client.PostAsJsonAsync("/api/auth/login/2fa", new { tokenDesafio = td, codigo = _f.Otp.UltimoCodigo });
-        v.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await BuscarAsync(email))!.EmailConfirmed.Should().BeTrue();
+        for (var i = 0; i < 5; i++)
+            (await client.PostAsJsonAsync("/api/auth/login", new { email, senha = "Senha!Forte1" }))
+                .StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        (await BuscarAsync(f, email))!.AccessFailedCount.Should().Be(0);
+        f.Otp.Enviados.Count(e => e.Para == email).Should().Be(1); // só o código do cadastro
     }
 
     [Fact]

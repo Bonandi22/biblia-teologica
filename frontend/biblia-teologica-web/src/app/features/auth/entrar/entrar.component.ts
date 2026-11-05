@@ -25,7 +25,10 @@ function mensagemDeFalhaNoLogin(status: number): string {
 }
 
 const AVISOS = new Map<string, string>([
-  ['cadastro', 'O tempo do código acabou. Entre com o e-mail e a senha que você criou.'],
+  [
+    'cadastro',
+    'O tempo do código acabou. Para concluir o cadastro, use “Esqueci minha senha” com o e-mail que você informou.',
+  ],
   ['senha', 'Senha alterada. Entre com a nova senha.'],
 ]);
 
@@ -63,6 +66,7 @@ export class EntrarComponent {
 
   /** Texto fixo para um valor conhecido de `?aviso=`; nunca ecoa o que veio na URL. */
   protected readonly aviso = AVISOS.get(this.rota.snapshot.queryParamMap.get('aviso') ?? '') ?? null;
+  protected readonly avisoComLinkDeSenha = this.rota.snapshot.queryParamMap.get('aviso') === 'cadastro';
 
   readonly formCredenciais = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],

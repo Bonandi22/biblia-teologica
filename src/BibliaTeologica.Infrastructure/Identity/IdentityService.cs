@@ -36,7 +36,15 @@ public class IdentityService : IIdentityService
             return new ResultadoSenha(false, false, null);
         }
         if (await _users.IsLockedOutAsync(user)) return new ResultadoSenha(false, true, null);
-        if (await _users.CheckPasswordAsync(user, senha)) return new ResultadoSenha(true, false, user.Id);
+        if (await _users.CheckPasswordAsync(user, senha))
+        {
+            // Conta não confirmada não entra por aqui: responde como senha errada (sem contar falha de bloqueio),
+            // para o login não revelar que o e-mail acabou de ser cadastrado. O cadastro conclui pelo desafio
+            // de /registar; depois disso só "Esqueci minha senha" (que confirma o e-mail ao redefinir).
+            return user.EmailConfirmed
+                ? new ResultadoSenha(true, false, user.Id)
+                : new ResultadoSenha(false, false, null);
+        }
 
         if (lockoutOnFailure) await _users.AccessFailedAsync(user);
         return new ResultadoSenha(false, await _users.IsLockedOutAsync(user), null);

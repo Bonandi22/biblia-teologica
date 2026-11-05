@@ -74,7 +74,7 @@ A pessoa digita o código na fase seguinte. O acerto confirma o e-mail e abre a 
 
 **Termo.** O formulário tem uma caixa obrigatória, nunca marcada de início, com o texto "Li e aceito o termo de proteção de dados e autorizo guardar os meus dados", e um link que abre `/privacidade` em nova aba. O servidor também exige o aceite: sem ele, responde 400, antes de olhar se o e-mail existe. A conta nova guarda a data do aceite e a versão do termo (`TermoAceitoEm`, `TermoVersao`), o que exige uma migração.
 
-**Cadastro abandonado.** Quem deixa o desafio vencer vai para `/entrar`, com um texto neutro, e entra com a senha que criou. Quem volta por "Criar conta" cai no caso 3: a senha digitada é descartada, a conta não muda, e o aviso por e-mail explica que o endereço já tem cadastro e indica "Entrar" e "Esqueci minha senha". Esse caso não ganha tratamento próprio, porque um código real ali criaria um novo caminho a proteger contra a revelação de contas.
+**Cadastro abandonado.** Quem deixa o desafio vencer vai para `/entrar?aviso=cadastro`, com o texto "O tempo do código acabou. Para concluir o cadastro, use “Esqueci minha senha” com o e-mail que você informou." e um link para `/esqueci-senha`. Redefinir a senha confirma o e-mail e é o caminho de recuperação; a senha criada no cadastro não entra pelo login. Quem volta por "Criar conta" cai no caso 3: a senha digitada é descartada, a conta não muda, e o aviso por e-mail explica que o endereço já tem cadastro e indica "Entrar" e "Esqueci minha senha". Esse caso não ganha tratamento próprio, porque um código real ali criaria um novo caminho a proteger contra a revelação de contas.
 
 ### Entrar
 
@@ -82,7 +82,7 @@ A pessoa digita o código na fase seguinte. O acerto confirma o e-mail e abre a 
 2. Falha no SMTP: registra o erro e responde 503, com mensagem "Não conseguimos enviar o código agora. Tente de novo em alguns minutos." Hoje vira 500.
 3. `POST /api/auth/login/2fa`: o acerto abre a sessão. Passa também a pôr `EmailConfirmed = true`.
 
-Uma conta não confirmada pode entrar assim mesmo: o código enviado prova o endereço. Isso cobre quem abandonou o cadastro e voltou depois.
+Uma conta com `EmailConfirmed = false` não entra por aqui: com a senha certa, recebe o mesmo 401 "Credenciais inválidas" de uma senha errada. Nenhum código é enviado, nenhuma vaga de envio é gasta e a tentativa não conta como falha de bloqueio. A senha é conferida antes, para o tempo bater com o de uma senha errada. Assim, cadastrar e logar em seguida não revela se o e-mail já tinha conta. O desafio de `/registar`, `/login/2fa` e `/login/2fa/reenviar` continua valendo para a conta recém-criada: concluir o cadastro confirma o e-mail e abre a sessão.
 
 **Risco aceite pelo utilizador:** enquanto a etapa 4 não existir, uma falha do Gmail impede todos de entrar, incluindo o admin.
 
@@ -224,7 +224,7 @@ Entra nesta etapa como investigação de tempo limitado, porque mexe na mesma te
 - Issue #31 com tempo limitado, sem bloquear o merge.
 - Remoção de contas não confirmadas após 7 dias.
 - Link de redefinição válido por 1 hora; limite de 3 envios por 15 minutos.
-- Conta não confirmada pode entrar, porque o código prova o endereço.
+- Decisão do utilizador (revisão final, I2): conta não confirmada não entra pelo login e recebe o mesmo 401 de uma senha errada, para que cadastrar e logar em seguida não revele se o e-mail já tinha conta. Quem abandona o cadastro recupera o acesso por "Esqueci minha senha".
 - A mensagem de conta bloqueada (423) continua a existir, embora indique que a conta existe, porque a pessoa legítima precisa saber o motivo. Só surge depois de 5 falhas num endereço existente.
 
 ## Pendências antes de abrir ao público

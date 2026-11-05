@@ -54,7 +54,9 @@ public sealed class IdentityServiceTests : IDisposable
     public async Task CriarMembro_E_VerificarSenha()
     {
         var svc = Criar();
-        (await CriarAsync(svc, "m@teste.local", "Marta")).UserId.Should().NotBeNull();
+        var criada = await CriarAsync(svc, "m@teste.local", "Marta");
+        criada.UserId.Should().NotBeNull();
+        await ConfirmarAsync(criada.UserId!.Value);
 
         var ok = await svc.VerificarSenhaAsync("m@teste.local", "Senha!Forte1", false, default);
         ok.Sucesso.Should().BeTrue();
@@ -172,6 +174,7 @@ public sealed class IdentityServiceTests : IDisposable
     public async Task VerificarSenha_MantemFalhasDe2fa_QuandoSenhaCorreta()
     {
         var (svc, id) = await CriarContaAsync();
+        await ConfirmarAsync(id);
         await svc.RegistarFalhaAsync(id, default);
 
         (await svc.VerificarSenhaAsync("c@teste.local", "Senha!Forte1", true, default)).Sucesso.Should().BeTrue();
@@ -179,6 +182,28 @@ public sealed class IdentityServiceTests : IDisposable
         var usuarios = _sp.GetRequiredService<UserManager<ApplicationUser>>();
         var usuario = await usuarios.FindByIdAsync(id.ToString());
         (await usuarios.GetAccessFailedCountAsync(usuario!)).Should().Be(1);
+    }
+
+    private async Task ConfirmarAsync(Guid id)
+    {
+        var usuarios = _sp.GetRequiredService<UserManager<ApplicationUser>>();
+        var usuario = (await usuarios.FindByIdAsync(id.ToString()))!;
+        usuario.EmailConfirmed = true;
+        await usuarios.UpdateAsync(usuario);
+    }
+
+    [Fact]
+    public async Task VerificarSenha_Falha_SemContarFalha_QuandoContaNaoConfirmadaComSenhaCerta()
+    {
+        var (svc, id) = await CriarContaAsync();
+
+        var r = await svc.VerificarSenhaAsync("c@teste.local", "Senha!Forte1", true, default);
+
+        r.Sucesso.Should().BeFalse();
+        r.Bloqueado.Should().BeFalse();
+        r.UserId.Should().BeNull();
+        var usuarios = _sp.GetRequiredService<UserManager<ApplicationUser>>();
+        (await usuarios.GetAccessFailedCountAsync((await usuarios.FindByIdAsync(id.ToString()))!)).Should().Be(0);
     }
 
     [Theory]

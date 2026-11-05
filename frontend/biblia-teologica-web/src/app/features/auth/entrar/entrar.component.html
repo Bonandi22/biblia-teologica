@@ -6,7 +6,12 @@
       <bt-alerta tipo="erro">{{ e }}</bt-alerta>
     }
     @if (aviso) {
-      <p class="aviso">{{ aviso }}</p>
+      <p class="aviso">
+        {{ aviso }}
+        @if (avisoComLinkDeSenha) {
+          <a routerLink="/esqueci-senha">Esqueci minha senha</a>
+        }
+      </p>
     }
     <p class="lead">Use o e-mail e a senha da sua conta. Enviaremos um código para confirmar que é você.</p>
     <form [formGroup]="formCredenciais" (ngSubmit)="submeterCredenciais()" novalidate>

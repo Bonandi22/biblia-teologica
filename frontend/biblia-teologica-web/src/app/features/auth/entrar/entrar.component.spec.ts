@@ -221,7 +221,11 @@ describe('EntrarComponent depois de um cadastro sem código', () => {
 
   it('entrar_mostraTextoNeutro_quandoVemDoCadastroVencido', async () => {
     const el = await abrir('/entrar?aviso=cadastro');
-    expect(el.querySelector('.aviso')?.textContent).toContain('O tempo do código acabou.');
+    const texto = el.querySelector('.aviso')?.textContent ?? '';
+    expect(texto).toContain(
+      'O tempo do código acabou. Para concluir o cadastro, use “Esqueci minha senha” com o e-mail que você informou.',
+    );
+    expect(el.querySelector('.aviso a')?.getAttribute('href')).toBe('/esqueci-senha');
   });
 
   it('entrar_mostraTextoFixo_quandoVemDaSenhaRedefinida', async () => {
