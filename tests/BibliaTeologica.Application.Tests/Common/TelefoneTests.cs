@@ -16,6 +16,7 @@ public class TelefoneTests
     [InlineData("1234567890123456", false, null)]
     [InlineData("12a45678", false, null)]
     [InlineData("12+345678", false, null)]
+    [InlineData("11.98765.4321", false, null)]
     public void TentarNormalizar_DevolveResultadoEsperado_QuandoEntradaVaria(string? entrada, bool ok, string? esperado)
     {
         var resultado = Telefone.TentarNormalizar(entrada, out var normalizado);

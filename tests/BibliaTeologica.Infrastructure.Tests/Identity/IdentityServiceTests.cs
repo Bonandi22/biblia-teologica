@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using BibliaTeologica.Application.Common.Resultados;
 using BibliaTeologica.Infrastructure.Configuracao;
 using BibliaTeologica.Infrastructure.Identity;
 using BibliaTeologica.Infrastructure.Persistence;
@@ -42,6 +43,9 @@ public sealed class IdentityServiceTests : IDisposable
             .CreateAsync(new IdentityRole<Guid>("Membro")).GetAwaiter().GetResult();
     }
 
+    private static Task<ResultadoCriacao> CriarAsync(IdentityService svc, string email, string nome)
+        => svc.CriarMembroAsync(new NovoMembro(email, "Senha!Forte1", nome, null, "v1", DateTime.UtcNow), default);
+
     private IdentityService Criar()
         => new(_sp.GetRequiredService<UserManager<ApplicationUser>>());
 
@@ -49,7 +53,7 @@ public sealed class IdentityServiceTests : IDisposable
     public async Task CriarMembro_E_VerificarSenha()
     {
         var svc = Criar();
-        (await svc.CriarMembroAsync("m@teste.local", "Senha!Forte1", "Marta", default)).Sucesso.Should().BeTrue();
+        (await CriarAsync(svc, "m@teste.local", "Marta")).UserId.Should().NotBeNull();
 
         var ok = await svc.VerificarSenhaAsync("m@teste.local", "Senha!Forte1", false, default);
         ok.Sucesso.Should().BeTrue();
@@ -62,7 +66,7 @@ public sealed class IdentityServiceTests : IDisposable
     public async Task TokenEmail_RoundTrip()
     {
         var svc = Criar();
-        await svc.CriarMembroAsync("t@teste.local", "Senha!Forte1", "T", default);
+        await CriarAsync(svc, "t@teste.local", "T");
         var id = (await svc.ResolverIdPorEmailAsync("t@teste.local", default))!.Value;
 
         var codigo = await svc.GerarTokenEmailAsync(id, default);
@@ -73,7 +77,7 @@ public sealed class IdentityServiceTests : IDisposable
     private async Task<(IdentityService Svc, Guid Id)> CriarContaAsync()
     {
         var svc = Criar();
-        await svc.CriarMembroAsync("c@teste.local", "Senha!Forte1", "C", default);
+        await CriarAsync(svc, "c@teste.local", "C");
         return (svc, (await svc.ResolverIdPorEmailAsync("c@teste.local", default))!.Value);
     }
 

@@ -9,5 +9,5 @@ public interface IAuthService
     Task<ResultadoLoginDto> Verificar2faAsync(Verificar2faDto dto, string? ip, CancellationToken ct);
     Task<ResultadoLoginDto> RefreshAsync(string refreshTokenCru, string? ip, CancellationToken ct);
     Task LogoutAsync(string? refreshTokenCru, CancellationToken ct);
-    Task<IdentityResultDto> RegistarMembroAsync(RegistarMembroDto dto, CancellationToken ct);
+    Task<ResultadoCadastro> RegistarMembroAsync(RegistarMembroDto dto, CancellationToken ct);
 }

@@ -43,6 +43,13 @@ public class IdentityService : IIdentityService
 
         // O código deriva do security stamp: trocá-lo invalida o código recém-usado.
         await _users.UpdateSecurityStampAsync(user);
+
+        // O código chegou ao endereço, logo ele é do dono da conta.
+        if (!user.EmailConfirmed)
+        {
+            user.EmailConfirmed = true;
+            await _users.UpdateAsync(user);
+        }
         return true;
     }
 
@@ -72,21 +79,46 @@ public class IdentityService : IIdentityService
     public async Task<DateTime?> ObterCriadoEmAsync(Guid userId, CancellationToken ct)
         => (await _users.FindByIdAsync(userId.ToString()))?.CriadoEm;
 
-    public async Task<IdentityResultDto> CriarMembroAsync(string email, string senha, string nomeExibicao, CancellationToken ct)
+    public async Task<IdentityResultDto> ValidarSenhaAsync(string senha, CancellationToken ct)
+    {
+        var erros = new List<string>();
+        var modelo = new ApplicationUser();
+        foreach (var validador in _users.PasswordValidators)
+        {
+            var r = await validador.ValidateAsync(_users, modelo, senha);
+            if (!r.Succeeded) erros.AddRange(r.Errors.Select(e => e.Description));
+        }
+        return erros.Count == 0 ? IdentityResultDto.Ok() : IdentityResultDto.Falha(erros.ToArray());
+    }
+
+    public async Task<ResultadoCriacao> CriarMembroAsync(NovoMembro dados, CancellationToken ct)
     {
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid(),
-            UserName = email,
-            Email = email,
-            EmailConfirmed = true,
-            NomeExibicao = nomeExibicao,
-            DeveTrocarSenha = false
+            UserName = dados.Email,
+            Email = dados.Email,
+            EmailConfirmed = false,
+            PhoneNumber = dados.Telefone,
+            NomeExibicao = dados.NomeExibicao,
+            DeveTrocarSenha = false,
+            TermoVersao = dados.TermoVersao,
+            TermoAceitoEm = dados.TermoAceitoEm
         };
-        var criado = await _users.CreateAsync(user, senha);
-        if (!criado.Succeeded) return Mapear(criado);
+        var criado = await _users.CreateAsync(user, dados.Senha);
+        if (!criado.Succeeded)
+        {
+            if (criado.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.DuplicateEmail)
+                    or nameof(IdentityErrorDescriber.DuplicateUserName)))
+            {
+                // Iguala o custo do caminho de conta nova.
+                _users.PasswordHasher.HashPassword(new ApplicationUser(), dados.Senha);
+                return new ResultadoCriacao(null, true, Array.Empty<string>());
+            }
+            return new ResultadoCriacao(null, false, criado.Errors.Select(e => e.Description).ToArray());
+        }
         await _users.AddToRoleAsync(user, IdentitySeeder.RoleMembro);
-        return IdentityResultDto.Ok();
+        return new ResultadoCriacao(user.Id, false, Array.Empty<string>());
     }
 
     public async Task<IdentityResultDto> TrocarSenhaAsync(Guid userId, string atual, string nova, CancellationToken ct)

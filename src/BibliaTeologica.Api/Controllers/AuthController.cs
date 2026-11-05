@@ -77,12 +77,12 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Registar(RegistarMembroDto dto, CancellationToken ct)
     {
         var r = await _auth.RegistarMembroAsync(dto, ct);
-        return r.Sucesso
-            ? StatusCode(StatusCodes.Status201Created)
+        return r.Erros.Count == 0
+            ? Accepted(new { tokenDesafio = r.TokenDesafio })
             : BadRequest(new ProblemDetails
             {
                 Status = StatusCodes.Status400BadRequest,
-                Title = "Registo inválido",
+                Title = "Cadastro inválido",
                 Detail = string.Join(" ", r.Erros)
             });
     }

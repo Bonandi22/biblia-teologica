@@ -8,7 +8,7 @@ public static class Telefone
     private const int MaximoDigitos = 15;
 
     /// <summary>
-    /// Vazio é válido e resulta em null. Aceita um "+" inicial e separadores (espaço, hífen, ponto, parênteses);
+    /// Vazio é válido e resulta em null. Aceita um "+" inicial e separadores (espaço, hífen, parênteses);
     /// exige de 8 a 15 dígitos.
     /// </summary>
     public static bool TentarNormalizar(string? valor, out string? normalizado)
@@ -24,7 +24,7 @@ public static class Telefone
         foreach (var c in resto)
         {
             if (c is >= '0' and <= '9') digitos.Append(c);
-            else if (c is ' ' or '-' or '.' or '(' or ')') continue;
+            else if (c is ' ' or '-' or '(' or ')') continue;
             else return false;
         }
 

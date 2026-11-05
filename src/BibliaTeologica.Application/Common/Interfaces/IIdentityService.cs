@@ -14,7 +14,9 @@ public interface IIdentityService
     Task<UsuarioDto?> ObterUsuarioAsync(Guid userId, CancellationToken ct);
     Task<string?> ObterEmailAsync(Guid userId, CancellationToken ct);
     Task<DateTime?> ObterCriadoEmAsync(Guid userId, CancellationToken ct);
-    Task<IdentityResultDto> CriarMembroAsync(string email, string senha, string nomeExibicao, CancellationToken ct);
+    /// <summary>Roda a política de senha sem criar nada, para validar antes de olhar se o e-mail existe.</summary>
+    Task<IdentityResultDto> ValidarSenhaAsync(string senha, CancellationToken ct);
+    Task<ResultadoCriacao> CriarMembroAsync(NovoMembro dados, CancellationToken ct);
     Task<IdentityResultDto> TrocarSenhaAsync(Guid userId, string atual, string nova, CancellationToken ct);
     Task<IdentityResultDto> TrocarEmailAsync(Guid userId, string novoEmail, string senha, CancellationToken ct);
     Task AtualizarNomeAsync(Guid userId, string nomeExibicao, CancellationToken ct);
