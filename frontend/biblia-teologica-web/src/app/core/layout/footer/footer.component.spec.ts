@@ -38,6 +38,11 @@ describe('FooterComponent', () => {
     );
   });
 
+  it('rodape_linkaPrivacidade', () => {
+    const el = criar();
+    expect(el.querySelector('a[href="/privacidade"]')?.textContent?.trim()).toBe('Privacidade');
+  });
+
   it('mostra o ano corrente', () => {
     expect(criar().textContent).toContain(String(new Date().getFullYear()));
   });
