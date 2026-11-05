@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BibliaTeologica.Infrastructure;
@@ -32,6 +33,8 @@ public static class DependencyInjection
 
         services.Configure<JwtOptions>(config.GetSection(JwtOptions.Secao));
         services.Configure<EmailOptions>(config.GetSection(EmailOptions.Secao));
+        services.Configure<SiteOptions>(config.GetSection(SiteOptions.Secao));
+        services.AddSingleton<IConfiguracaoSite>(sp => sp.GetRequiredService<IOptions<SiteOptions>>().Value);
         services.Configure<ConteudoOptions>(config.GetSection(ConteudoOptions.Secao));
         services.AddScoped<IFonteConteudo, FonteConteudoArquivos>();
 
@@ -43,6 +46,7 @@ public static class DependencyInjection
         var lockoutMinutos = config.GetValue<int?>("Identity:Lockout:Minutos") ?? 15;
 
         services.AddDataProtection();
+        services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(1));
 
         services.AddIdentityCore<ApplicationUser>(o =>
             {

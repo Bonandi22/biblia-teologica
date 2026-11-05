@@ -22,7 +22,7 @@ public class AuthServiceTests
     private readonly Mock<ILimiteEnvio> _limite = new();
 
     private AuthService Criar() => new(_identity.Object, _token.Object, _store.Object,
-        _email.Object, _emissor.Object, _fila.Object, _limite.Object, NullLogger<AuthService>.Instance);
+        _email.Object, _emissor.Object, _fila.Object, _limite.Object, Mock.Of<IConfiguracaoSite>(), NullLogger<AuthService>.Instance);
 
     private static readonly Guid Uid = Guid.NewGuid();
 
@@ -69,7 +69,7 @@ public class AuthServiceTests
             .ThrowsAsync(new InvalidOperationException("smtp fora"));
         var log = new LoggerCapturador();
         var svc = new AuthService(_identity.Object, _token.Object, _store.Object, _email.Object,
-            _emissor.Object, _fila.Object, _limite.Object, log);
+            _emissor.Object, _fila.Object, _limite.Object, Mock.Of<IConfiguracaoSite>(), log);
 
         var r = await svc.LoginAsync(new LoginDto("a@b.c", "senha"), "ip", default);
 

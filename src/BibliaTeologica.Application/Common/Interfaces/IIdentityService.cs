@@ -3,6 +3,8 @@ using BibliaTeologica.Application.Common.Resultados;
 
 namespace BibliaTeologica.Application.Common.Interfaces;
 
+public record ResultadoRedefinicao(Guid? UserId, bool TokenInvalido, IReadOnlyList<string> Erros);
+
 public interface IIdentityService
 {
     Task<ResultadoSenha> VerificarSenhaAsync(string email, string senha, bool lockoutOnFailure, CancellationToken ct);
@@ -18,6 +20,8 @@ public interface IIdentityService
     /// <summary>Roda a política de senha sem criar nada, para validar antes de olhar se o e-mail existe.</summary>
     Task<IdentityResultDto> ValidarSenhaAsync(string senha, CancellationToken ct);
     Task<ResultadoCriacao> CriarMembroAsync(NovoMembro dados, CancellationToken ct);
+    Task<string> GerarTokenRedefinicaoAsync(Guid userId, CancellationToken ct);
+    Task<ResultadoRedefinicao> RedefinirSenhaAsync(string email, string token, string novaSenha, CancellationToken ct);
     Task<IdentityResultDto> TrocarSenhaAsync(Guid userId, string atual, string nova, CancellationToken ct);
     Task<IdentityResultDto> TrocarEmailAsync(Guid userId, string novoEmail, string senha, CancellationToken ct);
     Task AtualizarNomeAsync(Guid userId, string nomeExibicao, CancellationToken ct);

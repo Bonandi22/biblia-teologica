@@ -70,6 +70,7 @@ public class AutenticacaoWebFactory : AppFactory
         ConfiguracaoExtra["RateLimiting:PermitLimit"] = "100000";
         // Os testes partilham endereços: o limite por endereço não pode interferir.
         ConfiguracaoExtra["EnvioEmail:MaxPorJanela"] = "100000";
+        ConfiguracaoExtra["Site:UrlPublica"] = "https://site.teste";
         // Cookies são Secure — o CookieContainer só os devolve sobre https.
         ClientOptions.BaseAddress = new Uri("https://localhost");
     }

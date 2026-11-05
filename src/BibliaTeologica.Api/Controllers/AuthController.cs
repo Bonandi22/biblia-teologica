@@ -118,6 +118,31 @@ public class AuthController : ControllerBase
             });
     }
 
+    // Público: quem esqueceu a senha não tem sessão. Responde sempre 202 sem corpo, exista a conta ou não.
+    [HttpPost("senha/esqueci")]
+    [AllowAnonymous]
+    public async Task<IActionResult> EsqueciSenha(EsqueciSenhaDto dto, CancellationToken ct)
+    {
+        await _auth.PedirRedefinicaoAsync(dto, ct);
+        return Accepted();
+    }
+
+    // Público: a prova é o token de redefinição, de 1 hora e uso único. Token inválido e e-mail inexistente dão a mesma resposta.
+    [HttpPost("senha/redefinir")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RedefinirSenha(RedefinirSenhaDto dto, CancellationToken ct)
+    {
+        var r = await _auth.RedefinirSenhaAsync(dto, ct);
+        return r.Sucesso
+            ? NoContent()
+            : BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Redefinição inválida",
+                Detail = string.Join(" ", r.Erros)
+            });
+    }
+
     [HttpGet("eu")]
     [Authorize]
     [PermitirSenhaPendente]

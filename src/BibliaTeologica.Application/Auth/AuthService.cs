@@ -15,12 +15,14 @@ public class AuthService : IAuthService
     private readonly IEmissorTokens _emissor;
     private readonly IFilaEmail _fila;
     private readonly ILimiteEnvio _limite;
+    private readonly IConfiguracaoSite _site;
     private readonly ILogger<AuthService> _log;
 
     public AuthService(IIdentityService identity, ITokenService token, IRefreshTokenStore store,
         IEmailSender email, IEmissorTokens emissor, IFilaEmail fila, ILimiteEnvio limite,
-        ILogger<AuthService> log)
+        IConfiguracaoSite site, ILogger<AuthService> log)
     {
+        _site = site;
         _fila = fila;
         _limite = limite;
         _identity = identity;
@@ -164,6 +166,42 @@ public class AuthService : IAuthService
             _fila.Enfileirar(email, assunto, corpo);
         }
         return new ResultadoCadastro(_token.GerarDesafioLogin(userId), Array.Empty<string>());
+    }
+
+    public async Task PedirRedefinicaoAsync(EsqueciSenhaDto dto, CancellationToken ct)
+    {
+        // Robô: responde igual, sem enviar nada.
+        if (!string.IsNullOrWhiteSpace(dto.Site)) return;
+
+        var email = dto.Email.Trim();
+        // O limite vale para o endereço, exista a conta ou não: a resposta não muda.
+        if (!_limite.TentarConsumir(email, FinalidadeEnvio.Redefinicao)) return;
+
+        var userId = await _identity.ResolverIdPorEmailAsync(email, ct);
+        if (userId is null) return;
+
+        var token = await _identity.GerarTokenRedefinicaoAsync(userId.Value, ct);
+        // Fragmento (#): não chega a logs do servidor nem ao Referer. A base vem da configuração.
+        var link = $"{_site.UrlPublica}/redefinir-senha#email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(token)}";
+        var (assunto, corpo) = ModelosEmail.Redefinicao(link);
+        _fila.Enfileirar(email, assunto, corpo);
+    }
+
+    public async Task<IdentityResultDto> RedefinirSenhaAsync(RedefinirSenhaDto dto, CancellationToken ct)
+    {
+        var email = dto.Email.Trim();
+        var r = await _identity.RedefinirSenhaAsync(email, dto.Token, dto.NovaSenha, ct);
+        if (r.TokenInvalido || r.UserId is null)
+            return IdentityResultDto.Falha("Este link é inválido ou venceu.");
+        if (r.Erros.Count > 0) return new IdentityResultDto(false, r.Erros);
+
+        await _store.RevogarCadeiaAsync(r.UserId.Value, ct);
+        if (_limite.TentarConsumir(email, FinalidadeEnvio.Aviso))
+        {
+            var (assunto, corpo) = ModelosEmail.SenhaAlterada();
+            _fila.Enfileirar(email, assunto, corpo);
+        }
+        return IdentityResultDto.Ok();
     }
 
     // Id aleatório que não existe: o token tem a forma certa, mas o código nunca confere.

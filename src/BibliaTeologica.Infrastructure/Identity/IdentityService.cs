@@ -135,6 +135,36 @@ public class IdentityService : IIdentityService
         return new ResultadoCriacao(user.Id, false, Array.Empty<string>());
     }
 
+    public async Task<string> GerarTokenRedefinicaoAsync(Guid userId, CancellationToken ct)
+    {
+        var user = await _users.FindByIdAsync(userId.ToString())
+            ?? throw new InvalidOperationException("Utilizador não encontrado.");
+        return await _users.GeneratePasswordResetTokenAsync(user);
+    }
+
+    public async Task<ResultadoRedefinicao> RedefinirSenhaAsync(string email, string token, string novaSenha, CancellationToken ct)
+    {
+        var invalido = new ResultadoRedefinicao(null, true, Array.Empty<string>());
+        var user = await _users.FindByEmailAsync(email);
+        if (user is null) return invalido;
+
+        // Token antes da senha: só quem tem um link válido descobre a regra de senha.
+        if (!await _users.VerifyUserTokenAsync(user, _users.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", token))
+            return invalido;
+
+        var r = await _users.ResetPasswordAsync(user, token, novaSenha);
+        if (!r.Succeeded)
+            return new ResultadoRedefinicao(user.Id, false, r.Errors.Select(e => e.Description).ToArray());
+
+        // O link chegou ao endereço, logo ele é do dono da conta.
+        user.EmailConfirmed = true;
+        user.DeveTrocarSenha = false;
+        await _users.UpdateAsync(user);
+        await _users.SetLockoutEndDateAsync(user, null);
+        await _users.ResetAccessFailedCountAsync(user);
+        return new ResultadoRedefinicao(user.Id, false, Array.Empty<string>());
+    }
+
     public async Task<IdentityResultDto> TrocarSenhaAsync(Guid userId, string atual, string nova, CancellationToken ct)
     {
         var user = await _users.FindByIdAsync(userId.ToString());
