@@ -241,6 +241,66 @@ public sealed class IdentityServiceTests : IDisposable
         (await Criar().ResolverIdPorEmailAsync("ok@teste.local", default)).Should().NotBeNull();
     }
 
+    private sealed class UserManagerComCorrida : UserManager<ApplicationUser>
+    {
+        public UserManagerComCorrida(IServiceProvider sp, AppDbContext db) : base(
+            new UserStore<ApplicationUser, IdentityRole<Guid>, AppDbContext, Guid>(db),
+            Microsoft.Extensions.Options.Options.Create(new IdentityOptions()), new PasswordHasher<ApplicationUser>(),
+            Array.Empty<IUserValidator<ApplicationUser>>(), Array.Empty<IPasswordValidator<ApplicationUser>>(),
+            new UpperInvariantLookupNormalizer(), new IdentityErrorDescriber(), sp,
+            sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>()) { }
+
+        public override Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
+            => throw new DbUpdateException("UNIQUE constraint failed: AspNetUsers.NormalizedEmail");
+    }
+
+    [Fact]
+    public async Task CriarMembro_DevolveJaExiste_QuandoIndiceUnicoViolado()
+    {
+        var svc = new IdentityService(new UserManagerComCorrida(_sp, _sp.GetRequiredService<AppDbContext>()));
+
+        var r = await CriarAsync(svc, "corrida@teste.local", "Fulano");
+
+        r.JaExiste.Should().BeTrue();
+        r.UserId.Should().BeNull();
+    }
+    [Fact]
+    public async Task ConfirmarTrocaEmail_NaoAlteraConta_QuandoUpdateFalha()
+    {
+        // Este harness mantém os caracteres de UserName padrão (sem apóstrofo), o que força a falha.
+        var svc = Criar();
+        var id = (await CriarAsync(svc, "a@teste.local", "Ana")).UserId!.Value;
+        var users = _sp.GetRequiredService<UserManager<ApplicationUser>>();
+        var user = (await users.FindByIdAsync(id.ToString()))!;
+        user.EmailConfirmed = true;
+        await users.UpdateAsync(user);
+        var stampAntes = (await users.FindByIdAsync(id.ToString()))!.SecurityStamp;
+        var codigo = await svc.GerarCodigoTrocaEmailAsync(id, "o'neil@teste.local", default);
+
+        var r = await svc.ConfirmarTrocaEmailAsync(id, "o'neil@teste.local", codigo, default);
+
+        r.Sucesso.Should().BeFalse();
+        _sp.GetRequiredService<AppDbContext>().ChangeTracker.Clear();
+        var depois = (await users.FindByIdAsync(id.ToString()))!;
+        depois.Email.Should().Be("a@teste.local");
+        depois.UserName.Should().Be("a@teste.local");
+        depois.EmailConfirmed.Should().BeTrue();
+        depois.SecurityStamp.Should().Be(stampAntes);
+    }
+
+    [Fact]
+    public async Task ApagarNaoConfirmadas_Mantem_QuandoContaAnteriorAoTermo()
+    {
+        var limite = DateTime.UtcNow.AddDays(-7);
+        await CriarComAsync("antiga@teste.local", limite.AddDays(-30), false);
+        var users = _sp.GetRequiredService<UserManager<ApplicationUser>>();
+        var u = (await users.FindByEmailAsync("antiga@teste.local"))!;
+        u.TermoAceitoEm = null;
+        await users.UpdateAsync(u);
+
+        (await Criar().ApagarNaoConfirmadasAsync(limite, default)).Should().Be(0);
+        (await Criar().ResolverIdPorEmailAsync("antiga@teste.local", default)).Should().NotBeNull();
+    }
     public void Dispose()
     {
         _sp.Dispose();

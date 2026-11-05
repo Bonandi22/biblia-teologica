@@ -6,7 +6,9 @@ public enum FinalidadeEnvio
     Cadastro,
     Redefinicao,
     TrocaEmail,
-    Aviso
+    Aviso,
+    /// <summary>Avisos de segurança (senha ou e-mail alterado, conta apagada): só saem após ação autenticada e não dividem limite com o que um anônimo dispara.</summary>
+    AvisoSeguranca
 }
 
 /// <summary>Limite de envios de e-mail por par (endereço normalizado, finalidade).</summary>

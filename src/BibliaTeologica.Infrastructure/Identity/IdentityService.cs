@@ -4,6 +4,7 @@ using BibliaTeologica.Application.Common.Resultados;
 using BibliaTeologica.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace BibliaTeologica.Infrastructure.Identity;
 
@@ -15,7 +16,13 @@ public class IdentityService : IIdentityService
 
     private readonly UserManager<ApplicationUser> _users;
 
-    public IdentityService(UserManager<ApplicationUser> users) => _users = users;
+    private readonly ILogger<IdentityService>? _log;
+
+    public IdentityService(UserManager<ApplicationUser> users, ILogger<IdentityService>? log = null)
+    {
+        _users = users;
+        _log = log;
+    }
 
     // Sem SignInManager: ele zera as falhas com a senha certa, e quem tem a senha poderia
     // errar o código 2FA para sempre sem bloquear. As falhas só zeram depois do 2FA.
@@ -121,7 +128,17 @@ public class IdentityService : IIdentityService
             TermoVersao = dados.TermoVersao,
             TermoAceitoEm = dados.TermoAceitoEm
         };
-        var criado = await _users.CreateAsync(user, dados.Senha);
+        IdentityResult criado;
+        try
+        {
+            criado = await _users.CreateAsync(user, dados.Senha);
+        }
+        catch (DbUpdateException ex)
+        {
+            // Cadastro concorrente do mesmo e-mail: o índice único venceu a validação.
+            _log?.LogWarning(ex, "Violação de unicidade no cadastro; tratada como e-mail já existente.");
+            return new ResultadoCriacao(null, true, Array.Empty<string>());
+        }
         if (!criado.Succeeded)
         {
             if (criado.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.DuplicateEmail)
@@ -213,12 +230,14 @@ public class IdentityService : IIdentityService
             return invalido;
         }
 
-        // SetEmailAsync zera EmailConfirmed; o código chegou ao novo endereço, logo ele é do dono.
-        var r = await _users.SetEmailAsync(user, novoEmail);
-        if (r.Succeeded)
-        {
-            r = await _users.SetUserNameAsync(user, novoEmail);
-        }
+        // Uma só gravação: ou a conta troca inteira ou fica como estava. O código chegou ao novo
+        // endereço, logo ele é do dono. UpdateAsync valida e recalcula os nomes normalizados; o
+        // stamp novo invalida o código usado e os demais ligados ao stamp.
+        user.Email = novoEmail;
+        user.UserName = novoEmail;
+        user.EmailConfirmed = true;
+        user.SecurityStamp = Guid.NewGuid().ToString();
+        var r = await _users.UpdateAsync(user);
         if (!r.Succeeded)
         {
             // Endereço ocupado no meio-tempo (ou inválido): o mesmo erro genérico, sem dizer o motivo.
@@ -226,10 +245,6 @@ public class IdentityService : IIdentityService
             return invalido;
         }
 
-        user.EmailConfirmed = true;
-        await _users.UpdateAsync(user);
-        // Invalida o código usado e os demais ligados ao security stamp.
-        await _users.UpdateSecurityStampAsync(user);
         return IdentityResultDto.Ok();
     }
 
@@ -268,7 +283,7 @@ public class IdentityService : IIdentityService
     public async Task<int> ApagarNaoConfirmadasAsync(DateTime criadasAntesDe, CancellationToken ct)
     {
         var velhas = await _users.Users
-            .Where(u => !u.EmailConfirmed && u.CriadoEm < criadasAntesDe)
+            .Where(u => !u.EmailConfirmed && u.TermoAceitoEm != null && u.CriadoEm < criadasAntesDe)
             .ToListAsync(ct);
         var apagadas = 0;
         foreach (var user in velhas)

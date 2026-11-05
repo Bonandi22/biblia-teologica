@@ -11,6 +11,7 @@ namespace BibliaTeologica.Api.Controllers;
 
 [ApiController]
 [Route("api/conta")]
+// [Authorize] sem Roles de propósito: cada ação age só sobre a conta do próprio utilizador autenticado (Id do token).
 [Authorize]
 public class ContaController : ControllerBase
 {

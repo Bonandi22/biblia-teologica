@@ -52,7 +52,7 @@ public class ContaService : IContaService
 
         // O endereço é guardado antes de apagar: depois não há mais como consultá-lo.
         var email = await _identity.ObterEmailAsync(userId, ct);
-        if (email is not null && _limite.TentarConsumir(email, FinalidadeEnvio.Aviso))
+        if (email is not null && _limite.TentarConsumir(email, FinalidadeEnvio.AvisoSeguranca))
         {
             var (assunto, corpo) = ModelosEmail.ContaApagada();
             _fila.Enfileirar(email, assunto, corpo);
@@ -92,7 +92,7 @@ public class ContaService : IContaService
             return new ResultadoLoginDto(EstadoLogin.CredenciaisInvalidas, Erros: r.Erros);
 
         await _store.RevogarCadeiaAsync(userId, ct);
-        if (antigo is not null && _limite.TentarConsumir(antigo, FinalidadeEnvio.Aviso))
+        if (antigo is not null && _limite.TentarConsumir(antigo, FinalidadeEnvio.AvisoSeguranca))
         {
             var (assunto, corpo) = ModelosEmail.EmailAlterado();
             _fila.Enfileirar(antigo, assunto, corpo);
@@ -109,7 +109,7 @@ public class ContaService : IContaService
         // Antes de emitir: encerra as outras sessões e preserva a nova, desta sessão.
         await _store.RevogarCadeiaAsync(userId, ct);
         var email = await _identity.ObterEmailAsync(userId, ct);
-        if (email is not null && _limite.TentarConsumir(email, FinalidadeEnvio.Aviso))
+        if (email is not null && _limite.TentarConsumir(email, FinalidadeEnvio.AvisoSeguranca))
         {
             var (assunto, corpo) = ModelosEmail.SenhaAlterada();
             _fila.Enfileirar(email, assunto, corpo);

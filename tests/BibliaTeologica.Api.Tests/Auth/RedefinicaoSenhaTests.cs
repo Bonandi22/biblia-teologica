@@ -145,6 +145,27 @@ public class RedefinicaoSenhaTests
     }
 
     [Fact]
+    public async Task Redefinir_EnviaAvisoDeSeguranca_QuandoAvisosAnonimosEsgotaramOLimite()
+    {
+        await using var f = await NovaFabricaAsync(limite: 2);
+        var client = f.CreateClient();
+        await Esqueci(client, AutenticacaoWebFactory.MembroEmail);
+        var (email, token) = LerLink(f);
+        // Um anônimo esgota a janela dos avisos "alguém tentou se cadastrar" para o endereço.
+        for (var i = 0; i < 3; i++)
+            await client.PostAsJsonAsync("/api/auth/registar", new
+            {
+                email, senha = "Senha!Forte1", nomeExibicao = "X", aceitouTermo = true
+            });
+        var antes = f.Otp.Enviados.Count;
+
+        var res = await Redefinir(client, email, token);
+
+        res.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        f.Otp.Enviados.Count.Should().Be(antes + 1);
+        f.Otp.UltimoCorpo.Should().Contain("alterada");
+    }
+    [Fact]
     public async Task Redefinir_Responde400Generico_QuandoTokenInvalidoOuEmailInexistente()
     {
         await using var f = await NovaFabricaAsync();

@@ -196,7 +196,7 @@ public class AuthService : IAuthService
         if (r.Erros.Count > 0) return new IdentityResultDto(false, r.Erros);
 
         await _store.RevogarCadeiaAsync(r.UserId.Value, ct);
-        if (_limite.TentarConsumir(email, FinalidadeEnvio.Aviso))
+        if (_limite.TentarConsumir(email, FinalidadeEnvio.AvisoSeguranca))
         {
             var (assunto, corpo) = ModelosEmail.SenhaAlterada();
             _fila.Enfileirar(email, assunto, corpo);

@@ -334,6 +334,17 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
     }
 
     [Fact]
+    public async Task Registar_Responde202_QuandoEmailTemApostrofo()
+    {
+        var client = await ClienteSemeadoAsync();
+        var email = $"o'brien-{Guid.NewGuid():N}@exemplo.com";
+
+        var res = await client.PostAsJsonAsync("/api/auth/registar", Corpo(email));
+
+        res.StatusCode.Should().Be(HttpStatusCode.Accepted);
+        (await BuscarAsync(email)).Should().NotBeNull();
+    }
+    [Fact]
     public async Task Registar_Responde202ComMesmoFormato_QuandoEmailJaExiste()
     {
         var client = await ClienteSemeadoAsync();

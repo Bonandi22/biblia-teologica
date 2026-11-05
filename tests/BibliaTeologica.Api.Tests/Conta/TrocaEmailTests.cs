@@ -139,6 +139,25 @@ public class TrocaEmailTests
     }
 
     [Fact]
+    public async Task Confirmar_Troca_QuandoNovoEmailTemApostrofo()
+    {
+        const string comApostrofo = "o'brien@exemplo.com";
+        await using var f = await NovaFabricaAsync();
+        var client = await f.LoginAsync(Membro, Senha);
+        await Solicitar(client, comApostrofo);
+
+        var res = await Confirmar(client, comApostrofo, f.Otp.UltimoCodigo);
+
+        res.StatusCode.Should().Be(HttpStatusCode.OK);
+        using var scope = f.Services.CreateScope();
+        var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var u = await users.FindByEmailAsync(comApostrofo);
+        u.Should().NotBeNull();
+        u!.UserName.Should().Be(comApostrofo);
+        u.EmailConfirmed.Should().BeTrue();
+        (await users.FindByNameAsync(comApostrofo)).Should().NotBeNull();
+    }
+    [Fact]
     public async Task Confirmar_AvisaEnderecoAntigo_QuandoSucesso()
     {
         await using var f = await NovaFabricaAsync();

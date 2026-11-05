@@ -53,6 +53,8 @@ public static class DependencyInjection
                 o.Password.RequiredLength = 8;
                 o.Password.RequireNonAlphanumeric = false;
                 o.User.RequireUniqueEmail = true;
+                // O UserName é sempre o e-mail já validado; qualquer endereço válido serve.
+                o.User.AllowedUserNameCharacters = "";
                 o.Lockout.MaxFailedAccessAttempts = maxTentativas;
                 o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(lockoutMinutos);
                 o.SignIn.RequireConfirmedAccount = false;
