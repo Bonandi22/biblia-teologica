@@ -252,8 +252,8 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
         certa.StatusCode.Should().Be(errada.StatusCode);
         (await certa.Content.ReadAsStringAsync()).Should().Be(await errada.Content.ReadAsStringAsync());
         f.Otp.Enviados.Should().HaveCount(enviadosAntes);
-        // Não conta como falha de bloqueio: a única falha contada é a da senha errada.
-        (await BuscarAsync(f, email))!.AccessFailedCount.Should().Be(1);
+        // Mesma escrita da senha errada: cada tentativa conta uma falha, com a senha certa ou não.
+        (await BuscarAsync(f, email))!.AccessFailedCount.Should().Be(2);
     }
 
     [Fact]
@@ -266,10 +266,10 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
         var email = EmailNovo();
         (await client.PostAsJsonAsync("/api/auth/registar", Corpo(email))).StatusCode.Should().Be(HttpStatusCode.Accepted);
 
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < 3; i++)
             (await client.PostAsJsonAsync("/api/auth/login", new { email, senha = "Senha!Forte1" }))
                 .StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-        (await BuscarAsync(f, email))!.AccessFailedCount.Should().Be(0);
+        (await BuscarAsync(f, email))!.AccessFailedCount.Should().Be(3);
         f.Otp.Enviados.Count(e => e.Para == email).Should().Be(1); // só o código do cadastro
     }
 

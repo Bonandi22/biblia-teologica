@@ -193,7 +193,7 @@ public sealed class IdentityServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task VerificarSenha_Falha_SemContarFalha_QuandoContaNaoConfirmadaComSenhaCerta()
+    public async Task VerificarSenha_FalhaEContaFalha_QuandoContaNaoConfirmadaComSenhaCerta()
     {
         var (svc, id) = await CriarContaAsync();
 
@@ -203,7 +203,7 @@ public sealed class IdentityServiceTests : IDisposable
         r.Bloqueado.Should().BeFalse();
         r.UserId.Should().BeNull();
         var usuarios = _sp.GetRequiredService<UserManager<ApplicationUser>>();
-        (await usuarios.GetAccessFailedCountAsync((await usuarios.FindByIdAsync(id.ToString()))!)).Should().Be(0);
+        (await usuarios.GetAccessFailedCountAsync((await usuarios.FindByIdAsync(id.ToString()))!)).Should().Be(1);
     }
 
     [Theory]

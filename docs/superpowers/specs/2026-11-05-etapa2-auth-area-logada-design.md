@@ -82,7 +82,7 @@ A pessoa digita o código na fase seguinte. O acerto confirma o e-mail e abre a 
 2. Falha no SMTP: registra o erro e responde 503, com mensagem "Não conseguimos enviar o código agora. Tente de novo em alguns minutos." Hoje vira 500.
 3. `POST /api/auth/login/2fa`: o acerto abre a sessão. Passa também a pôr `EmailConfirmed = true`.
 
-Uma conta com `EmailConfirmed = false` não entra por aqui: com a senha certa, recebe o mesmo 401 "Credenciais inválidas" de uma senha errada. Nenhum código é enviado, nenhuma vaga de envio é gasta e a tentativa não conta como falha de bloqueio. A senha é conferida antes, para o tempo bater com o de uma senha errada. Assim, cadastrar e logar em seguida não revela se o e-mail já tinha conta. O desafio de `/registar`, `/login/2fa` e `/login/2fa/reenviar` continua valendo para a conta recém-criada: concluir o cadastro confirma o e-mail e abre a sessão.
+Uma conta com `EmailConfirmed = false` não entra por aqui: com a senha certa, recebe o mesmo 401 "Credenciais inválidas" de uma senha errada. Nenhum código é enviado e nenhuma vaga de envio é gasta. A senha é conferida antes e a tentativa conta como falha de bloqueio, exatamente como uma senha errada, para que resposta e escrita no banco (logo, o tempo) sejam as mesmas; redefinir a senha zera o bloqueio. Assim, cadastrar e logar em seguida não revela se o e-mail já tinha conta. O desafio de `/registar`, `/login/2fa` e `/login/2fa/reenviar` continua valendo para a conta recém-criada: concluir o cadastro confirma o e-mail e abre a sessão.
 
 **Risco aceite pelo utilizador:** enquanto a etapa 4 não existir, uma falha do Gmail impede todos de entrar, incluindo o admin.
 
