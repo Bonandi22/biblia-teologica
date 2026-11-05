@@ -23,7 +23,11 @@ public interface IIdentityService
     Task<string> GerarTokenRedefinicaoAsync(Guid userId, CancellationToken ct);
     Task<ResultadoRedefinicao> RedefinirSenhaAsync(string email, string token, string novaSenha, CancellationToken ct);
     Task<IdentityResultDto> TrocarSenhaAsync(Guid userId, string atual, string nova, CancellationToken ct);
-    Task<IdentityResultDto> TrocarEmailAsync(Guid userId, string novoEmail, string senha, CancellationToken ct);
+    /// <summary>Confere a senha de quem já está logado; cada falha conta para o bloqueio.</summary>
+    Task<ResultadoSenha> ConferirSenhaAsync(Guid userId, string senha, CancellationToken ct);
+    Task<string> GerarCodigoTrocaEmailAsync(Guid userId, string novoEmail, CancellationToken ct);
+    /// <summary>Confere o código ligado ao endereço e troca e-mail e nome de utilizador. Falhas contam para o bloqueio.</summary>
+    Task<IdentityResultDto> ConfirmarTrocaEmailAsync(Guid userId, string novoEmail, string codigo, CancellationToken ct);
     Task AtualizarNomeAsync(Guid userId, string nomeExibicao, CancellationToken ct);
     Task LimparDeveTrocarSenhaAsync(Guid userId, CancellationToken ct);
 }

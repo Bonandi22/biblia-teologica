@@ -18,7 +18,54 @@ public class ContaServiceTests
 
     private readonly Mock<IRefreshTokenStore> _store = new();
 
-    private ContaService Criar() => new(_identity.Object, _emissor.Object, _store.Object);
+    private readonly Mock<IFilaEmail> _fila = new();
+    private readonly Mock<ILimiteEnvio> _limite = new();
+
+    private ContaService Criar()
+    {
+        _limite.Setup(l => l.TentarConsumir(It.IsAny<string>(), It.IsAny<FinalidadeEnvio>())).Returns(true);
+        return new(_identity.Object, _emissor.Object, _store.Object, _fila.Object, _limite.Object);
+    }
+
+    [Fact]
+    public async Task SolicitarTrocaEmailAsync_NaoEnvia_QuandoSenhaErrada()
+    {
+        _identity.Setup(i => i.ConferirSenhaAsync(Uid, "x", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ResultadoSenha(false, false, null));
+
+        var r = await Criar().SolicitarTrocaEmailAsync(Uid, new SolicitarTrocaEmailDto("n@b.c", "x"), default);
+
+        r.Sucesso.Should().BeFalse();
+        r.Erros.Should().Contain("Senha incorreta.");
+        _fila.Verify(f => f.Enfileirar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task SolicitarTrocaEmailAsync_SinalizaLimite_QuandoEsgotado()
+    {
+        _identity.Setup(i => i.ConferirSenhaAsync(Uid, "s", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ResultadoSenha(true, false, Uid));
+        var svc = Criar();
+        _limite.Setup(l => l.TentarConsumir("n@b.c", FinalidadeEnvio.TrocaEmail)).Returns(false);
+
+        var r = await svc.SolicitarTrocaEmailAsync(Uid, new SolicitarTrocaEmailDto("n@b.c", "s"), default);
+
+        r.Limite.Should().BeTrue();
+        _fila.Verify(f => f.Enfileirar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task ConfirmarTrocaEmailAsync_NaoRevogaNemEmite_QuandoCodigoInvalido()
+    {
+        _identity.Setup(i => i.ConfirmarTrocaEmailAsync(Uid, "n@b.c", "1", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(IdentityResultDto.Falha("Código inválido ou vencido."));
+
+        var r = await Criar().ConfirmarTrocaEmailAsync(Uid, new ConfirmarTrocaEmailDto("n@b.c", "1"), null, default);
+
+        r.Estado.Should().Be(EstadoLogin.CredenciaisInvalidas);
+        _store.Verify(s => s.RevogarCadeiaAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Never);
+        _emissor.Verify(e => e.EmitirAsync(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
 
     [Fact]
     public async Task TrocarSenhaAsync_NaoRevogaSessoes_QuandoIdentityFalha()

@@ -100,6 +100,35 @@ public sealed class IdentityServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task ConferirSenha_ContaFalha_QuandoSenhaErrada()
+    {
+        var svc = Criar();
+        await CriarAsync(svc, "c@teste.local", "C");
+        var id = (await svc.ResolverIdPorEmailAsync("c@teste.local", default))!.Value;
+
+        (await svc.ConferirSenhaAsync(id, "Senha!Forte1", default)).Sucesso.Should().BeTrue();
+        for (var i = 0; i < 4; i++)
+            (await svc.ConferirSenhaAsync(id, "errada", default)).Sucesso.Should().BeFalse();
+        var ultima = await svc.ConferirSenhaAsync(id, "errada", default);
+
+        ultima.Bloqueado.Should().BeTrue();
+        (await svc.EstaBloqueadoAsync(id, default)).Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ConfirmarTrocaEmail_Falha_QuandoCodigoEraDeOutroEndereco()
+    {
+        var svc = Criar();
+        await CriarAsync(svc, "d@teste.local", "D");
+        var id = (await svc.ResolverIdPorEmailAsync("d@teste.local", default))!.Value;
+        var codigo = await svc.GerarCodigoTrocaEmailAsync(id, "a@teste.local", default);
+
+        (await svc.ConfirmarTrocaEmailAsync(id, "b@teste.local", codigo, default)).Sucesso.Should().BeFalse();
+        (await svc.ConfirmarTrocaEmailAsync(id, "a@teste.local", codigo, default)).Sucesso.Should().BeTrue();
+        (await svc.ObterEmailAsync(id, default)).Should().Be("a@teste.local");
+    }
+
+    [Fact]
     public async Task TokenEmail_RoundTrip()
     {
         var svc = Criar();

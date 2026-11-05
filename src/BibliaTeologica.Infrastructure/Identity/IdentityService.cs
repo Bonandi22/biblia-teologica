@@ -178,20 +178,58 @@ public class IdentityService : IIdentityService
         return Mapear(r);
     }
 
-    public async Task<IdentityResultDto> TrocarEmailAsync(Guid userId, string novoEmail, string senha, CancellationToken ct)
+    public async Task<ResultadoSenha> ConferirSenhaAsync(Guid userId, string senha, CancellationToken ct)
     {
         var user = await _users.FindByIdAsync(userId.ToString());
-        if (user is null) return IdentityResultDto.Falha("Utilizador não encontrado.");
-        if (!await _users.CheckPasswordAsync(user, senha))
-            return IdentityResultDto.Falha("Senha incorreta.");
+        if (user is null) return new ResultadoSenha(false, false, null);
+        if (await _users.IsLockedOutAsync(user)) return new ResultadoSenha(false, true, null);
+        if (await _users.CheckPasswordAsync(user, senha)) return new ResultadoSenha(true, false, user.Id);
 
-        var token = await _users.GenerateChangeEmailTokenAsync(user, novoEmail);
-        var r = await _users.ChangeEmailAsync(user, novoEmail, token);
+        await _users.AccessFailedAsync(user);
+        return new ResultadoSenha(false, await _users.IsLockedOutAsync(user), null);
+    }
+
+    // A finalidade carrega o endereço: um código pedido para A não vale para B.
+    private string FinalidadeTrocaEmail(string novoEmail) => "TrocarEmail:" + _users.NormalizeEmail(novoEmail.Trim());
+
+    public async Task<string> GerarCodigoTrocaEmailAsync(Guid userId, string novoEmail, CancellationToken ct)
+    {
+        var user = await _users.FindByIdAsync(userId.ToString())
+            ?? throw new InvalidOperationException("Utilizador não encontrado.");
+        return await _users.GenerateUserTokenAsync(user, TokenOptions.DefaultEmailProvider, FinalidadeTrocaEmail(novoEmail));
+    }
+
+    public async Task<IdentityResultDto> ConfirmarTrocaEmailAsync(Guid userId, string novoEmail, string codigo, CancellationToken ct)
+    {
+        var invalido = IdentityResultDto.Falha("Código inválido ou vencido.");
+        var user = await _users.FindByIdAsync(userId.ToString());
+        if (user is null || await _users.IsLockedOutAsync(user)) return invalido;
+
+        novoEmail = novoEmail.Trim();
+        if (!await _users.VerifyUserTokenAsync(user, TokenOptions.DefaultEmailProvider, FinalidadeTrocaEmail(novoEmail), codigo))
+        {
+            await _users.AccessFailedAsync(user);
+            return invalido;
+        }
+
+        // SetEmailAsync zera EmailConfirmed; o código chegou ao novo endereço, logo ele é do dono.
+        var r = await _users.SetEmailAsync(user, novoEmail);
         if (r.Succeeded)
         {
-            await _users.SetUserNameAsync(user, novoEmail);
+            r = await _users.SetUserNameAsync(user, novoEmail);
         }
-        return Mapear(r);
+        if (!r.Succeeded)
+        {
+            // Endereço ocupado no meio-tempo (ou inválido): o mesmo erro genérico, sem dizer o motivo.
+            await _users.AccessFailedAsync(user);
+            return invalido;
+        }
+
+        user.EmailConfirmed = true;
+        await _users.UpdateAsync(user);
+        // Invalida o código usado e os demais ligados ao security stamp.
+        await _users.UpdateSecurityStampAsync(user);
+        return IdentityResultDto.Ok();
     }
 
     public async Task AtualizarNomeAsync(Guid userId, string nomeExibicao, CancellationToken ct)
