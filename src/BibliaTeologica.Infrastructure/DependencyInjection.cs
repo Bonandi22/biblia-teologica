@@ -56,6 +56,7 @@ public static class DependencyInjection
             .AddRoles<IdentityRole<Guid>>()
             .AddSignInManager()
             .AddEntityFrameworkStores<AppDbContext>()
+            .AddErrorDescriber<DescritorErrosPortugues>()
             .AddDefaultTokenProviders();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -104,7 +105,7 @@ public static class DependencyInjection
         services.AddSingleton<IFilaEmail>(sp => sp.GetRequiredService<FilaEmailEmMemoria>());
         services.AddHostedService(sp => sp.GetRequiredService<FilaEmailEmMemoria>());
 
-        var admins =config.GetSection(AdminSeedOptions.Secao).Get<List<AdminSeedEntrada>>() ?? new();
+        var admins = config.GetSection(AdminSeedOptions.Secao).Get<List<AdminSeedEntrada>>() ?? new();
         services.AddScoped<IdentitySeeder>(sp => new IdentitySeeder(
             sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>(),
             sp.GetRequiredService<UserManager<ApplicationUser>>(),
