@@ -1,0 +1,32 @@
+<ng-template #itens>
+  <p class="menu__nome">{{ nome() }}</p>
+  <a class="menu__item" routerLink="/conta" (click)="fechar()">Meu perfil</a>
+  <button class="menu__item" type="button" [disabled]="aSair()" (click)="sair()">Sair</button>
+  @if (erroAoSair(); as e) {
+    <p class="menu__erro" role="alert">{{ e }}</p>
+  }
+</ng-template>
+
+@if (modo() === 'lista') {
+  <div class="lista">
+    <ng-container *ngTemplateOutlet="itens" />
+  </div>
+} @else {
+  <button
+    #botao
+    class="avatar"
+    type="button"
+    aria-haspopup="true"
+    aria-controls="menu-conta"
+    [attr.aria-expanded]="aberto()"
+    [attr.aria-label]="'Conta de ' + nome()"
+    (click)="alternar()"
+  >
+    {{ iniciais() }}
+  </button>
+  @if (aberto()) {
+    <div class="menu" id="menu-conta">
+      <ng-container *ngTemplateOutlet="itens" />
+    </div>
+  }
+}

@@ -1,0 +1,107 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  position: relative;
+  display: inline-block;
+}
+
+// Quadrado de tinta com as iniciais em versalete, como a marca de um exemplar.
+.avatar {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: $raio;
+  background: $tinta;
+  color: $papel;
+  font-family: $fonte-corrente;
+  font-size: $t-corrente;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+
+  &:hover {
+    background: $capa;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $rubrica;
+    outline-offset: 2px;
+  }
+}
+
+// Sem sombra: o filete de tinta no alto separa o menu da página.
+.menu {
+  position: absolute;
+  top: calc(100% + #{$sp-2});
+  right: 0;
+  z-index: 20;
+  min-width: 14rem;
+  padding: $sp-2 0;
+  background: $papel;
+  border: 1px solid $filete;
+  border-top: 2px solid $tinta;
+}
+
+.menu__nome {
+  margin: 0;
+  padding: $sp-3 $sp-4;
+  border-bottom: 1px solid $filete;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.menu__item {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: $sp-3 $sp-4;
+  border: 0;
+  background: none;
+  color: $tinta;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $rubrica;
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    color: $tinta-mut;
+    cursor: default;
+  }
+}
+
+.menu__erro {
+  margin: 0;
+  padding: $sp-2 $sp-4;
+  color: $erro;
+  font-size: $t-nota;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+
+  .menu__nome {
+    padding: $sp-3 0;
+    border-bottom: 0;
+  }
+
+  .menu__item {
+    width: auto;
+    min-height: 0;
+    padding: $sp-3 0;
+  }
+
+  .menu__erro {
+    padding: $sp-2 0;
+  }
+}
