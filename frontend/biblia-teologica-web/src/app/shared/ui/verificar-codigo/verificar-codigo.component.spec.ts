@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { VerificarCodigoComponent } from './verificar-codigo.component';
 
 describe('VerificarCodigoComponent', () => {
@@ -9,7 +10,7 @@ describe('VerificarCodigoComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [VerificarCodigoComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
     });
     http = TestBed.inject(HttpTestingController);
   });
@@ -18,9 +19,10 @@ describe('VerificarCodigoComponent', () => {
     vi.useRealTimers();
   });
 
-  function montar() {
+  function montar(cadastro = false) {
     const fixture = TestBed.createComponent(VerificarCodigoComponent);
     fixture.componentRef.setInput('tokenDesafio', 'T');
+    fixture.componentRef.setInput('cadastro', cadastro);
     fixture.detectChanges();
     const el = fixture.nativeElement as HTMLElement;
     const vencido = vi.fn();
@@ -28,6 +30,19 @@ describe('VerificarCodigoComponent', () => {
     const reenviar = () => el.querySelector<HTMLButtonElement>('.reenviar button')!;
     return { fixture, el, vencido, reenviar };
   }
+
+  it('verificarCodigo_explicaContaExistente_quandoCadastro', () => {
+    const { el } = montar(true);
+    const nota = el.querySelector('.conta-existente')!;
+    expect(nota.textContent).toContain('Se este e-mail já tiver conta, nenhum código será enviado');
+    const links = Array.from(nota.querySelectorAll('a')).map((a) => a.getAttribute('href'));
+    expect(links).toEqual(['/entrar', '/esqueci-senha']);
+  });
+
+  it('verificarCodigo_naoFalaDeContaExistente_quandoLogin', () => {
+    const { el } = montar(false);
+    expect(el.querySelector('.conta-existente')).toBeNull();
+  });
 
   it('verificarCodigo_reenviaEMostraAviso_quandoClicaReenviar', () => {
     const { fixture, el, reenviar } = montar();

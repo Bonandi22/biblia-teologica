@@ -189,8 +189,8 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
         return await scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>().FindByEmailAsync(email);
     }
 
-    private int AvisosPara(string email) => _f.Otp.Enviados.Count(e =>
-        string.Equals(e.Para, email, StringComparison.OrdinalIgnoreCase) && e.Assunto == ModelosEmail.CadastroExistente().Assunto);
+    private int EnviadosPara(string email) => _f.Otp.Enviados.Count(e =>
+        string.Equals(e.Para, email, StringComparison.OrdinalIgnoreCase));
 
     private static object Login(string email = AutenticacaoWebFactory.MembroEmail)
         => new { email, senha = AutenticacaoWebFactory.Senha };
@@ -373,7 +373,7 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
     {
         var client = await ClienteSemeadoAsync();
         var antes = await BuscarAsync(AutenticacaoWebFactory.MembroEmail);
-        var avisosAntes = AvisosPara(AutenticacaoWebFactory.MembroEmail);
+        var enviadosAntes = EnviadosPara(AutenticacaoWebFactory.MembroEmail);
 
         var res = await client.PostAsJsonAsync("/api/auth/registar", Corpo(AutenticacaoWebFactory.MembroEmail, "Outra!Senha9"));
 
@@ -383,8 +383,7 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
         var depois = await BuscarAsync(AutenticacaoWebFactory.MembroEmail);
         depois!.PasswordHash.Should().Be(antes!.PasswordHash);
         depois.TermoVersao.Should().BeNull();
-        AvisosPara(AutenticacaoWebFactory.MembroEmail).Should().Be(avisosAntes + 1);
-        _f.Otp.UltimoCorpo.Should().NotContain("<strong>");
+        EnviadosPara(AutenticacaoWebFactory.MembroEmail).Should().Be(enviadosAntes);
 
         var v = await client.PostAsJsonAsync("/api/auth/login/2fa",
             new { tokenDesafio = corpo["tokenDesafio"].GetString(), codigo = "123456" });
@@ -395,12 +394,14 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
     public async Task Registar_MesmaConta_QuandoEmailDifereEmCaixaEEspaco()
     {
         var client = await ClienteSemeadoAsync();
-        var avisosAntes = AvisosPara(AutenticacaoWebFactory.MembroEmail);
+        var antes = await BuscarAsync(AutenticacaoWebFactory.MembroEmail);
+        var enviadosAntes = EnviadosPara(AutenticacaoWebFactory.MembroEmail);
 
         var res = await client.PostAsJsonAsync("/api/auth/registar", Corpo(" Membro@Teste.Local "));
 
         res.StatusCode.Should().Be(HttpStatusCode.Accepted);
-        AvisosPara(AutenticacaoWebFactory.MembroEmail).Should().Be(avisosAntes + 1);
+        (await BuscarAsync(AutenticacaoWebFactory.MembroEmail))!.PasswordHash.Should().Be(antes!.PasswordHash);
+        EnviadosPara(AutenticacaoWebFactory.MembroEmail).Should().Be(enviadosAntes);
     }
 
     [Fact]
@@ -465,8 +466,8 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
             res.StatusCode.Should().Be(HttpStatusCode.Accepted);
         }
 
-        // 1 código (cadastro) + 1 aviso; o resto cai no limite.
-        f.Otp.Enviados.Count(e => e.Para == email).Should().Be(2);
+        // Só o código do primeiro cadastro; os seguintes encontram o e-mail já existente e não enviam nada.
+        f.Otp.Enviados.Count(e => e.Para == email).Should().Be(1);
     }
 
     [Fact]

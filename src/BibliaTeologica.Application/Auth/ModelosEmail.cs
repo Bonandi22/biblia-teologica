@@ -7,11 +7,6 @@ public static class ModelosEmail
         ("Seu código de acesso",
          $"<p>O seu código de acesso é <strong>{codigo}</strong>. Expira em 5 minutos.</p>");
 
-    public static (string Assunto, string Corpo) CadastroExistente() =>
-        ("Tentativa de cadastro com o seu e-mail",
-         "<p>Alguém tentou criar uma conta com este e-mail, mas ele já está cadastrado. " +
-         "Se foi você, basta entrar ou usar \"esqueci minha senha\". Se não foi, ignore esta mensagem.</p>");
-
     public static (string Assunto, string Corpo) Redefinicao(string link) =>
         ("Redefinição de senha",
          $"<p>Para definir uma nova senha, use o link abaixo. Ele vale por 1 hora.</p><p><a href=\"{link}\">Redefinir senha</a></p>" +

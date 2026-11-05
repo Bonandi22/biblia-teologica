@@ -147,15 +147,9 @@ public class AuthService : IAuthService
             new NovoMembro(email, dto.Senha, dto.NomeExibicao.Trim(), telefone,
                 TermoPrivacidade.VersaoAtual, DateTime.UtcNow), ct);
 
-        if (criacao.JaExiste)
-        {
-            if (_limite.TentarConsumir(email, FinalidadeEnvio.Aviso))
-            {
-                var (assunto, corpo) = ModelosEmail.CadastroExistente();
-                _fila.Enfileirar(email, assunto, corpo);
-            }
-            return DesafioFalso();
-        }
+        // E-mail já cadastrado: nada é enviado. A tela do código diz a todos que, se o e-mail
+        // já tiver conta, o caminho é Entrar ou Esqueci minha senha; a resposta não revela a conta.
+        if (criacao.JaExiste) return DesafioFalso();
 
         if (criacao.UserId is not { } userId) return new ResultadoCadastro(null, criacao.Erros);
 
