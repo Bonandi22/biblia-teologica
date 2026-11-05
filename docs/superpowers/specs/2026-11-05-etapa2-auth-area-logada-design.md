@@ -135,7 +135,7 @@ Sugerida por mim e aprovada pelo utilizador, porque quem autoriza guardar os dad
 
 A página `/privacidade` diz, em linguagem simples: quem é o responsável e como contactá-lo; quais dados são guardados (nome, e-mail, telefone opcional, data do aceite) e para quê; que o Gmail entrega os e-mails; por quanto tempo ficam (até a conta ser apagada; 7 dias para conta não confirmada); e os direitos de acesso, correção, apagamento, retirada da autorização e queixa à autoridade de controle.
 
-- **Responsável provisório:** o utilizador ainda não definiu nome e contato. A página mostra "Bíblia Teológica" e `privacidade@exemplo.com`, domínio reservado que não recebe e-mail, ambos em constantes num único lugar do front.
+- **Responsável provisório:** o utilizador ainda não definiu nome e contato. A página mostra "Bíblia Teológica" e `privacidade@example.com`, domínio reservado que não recebe e-mail, ambos em constantes num único lugar do front.
 - O telefone é explicado como opcional e ainda sem uso.
 - A versão do termo é uma constante no código, mostrada na página com a data. Pedir novo aceite quando o termo mudar fica para quando houver mudança.
 - As contas existentes (o admin do seed) não passam pelo aceite.

@@ -476,7 +476,7 @@ it('trocarSenha_exigeSenhaForte')
 - Modify: `app.routes.ts`, `core/layout/footer/footer.component.{html,ts,spec.ts}`
 
 **Interfaces:**
-- Produces: rota pública `/privacidade`; `RESPONSAVEL_DADOS = { nome: 'Bíblia Teológica', email: 'privacidade@exemplo.com' }`, com comentário `// PROVISÓRIO: trocar por dados reais antes de abrir ao público`; `VERSAO_TERMO = '2026-11-05'`, igual a `TermoPrivacidade.VersaoAtual`.
+- Produces: rota pública `/privacidade`; `RESPONSAVEL_DADOS = { nome: 'Bíblia Teológica', email: 'privacidade@example.com' }`, com comentário `// PROVISÓRIO: trocar por dados reais antes de abrir ao público`; `VERSAO_TERMO = '2026-11-05'`, igual a `TermoPrivacidade.VersaoAtual`.
 
 - [ ] **Step 1: Escreva os testes que falham**
 
