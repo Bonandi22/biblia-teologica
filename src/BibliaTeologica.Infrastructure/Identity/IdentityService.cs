@@ -111,8 +111,7 @@ public class IdentityService : IIdentityService
             if (criado.Errors.Any(e => e.Code is nameof(IdentityErrorDescriber.DuplicateEmail)
                     or nameof(IdentityErrorDescriber.DuplicateUserName)))
             {
-                // Iguala o custo do caminho de conta nova.
-                _users.PasswordHasher.HashPassword(new ApplicationUser(), dados.Senha);
+                // Sem hash extra: CreateAsync já calculou o hash da senha antes de checar a duplicidade.
                 return new ResultadoCriacao(null, true, Array.Empty<string>());
             }
             return new ResultadoCriacao(null, false, criado.Errors.Select(e => e.Description).ToArray());
