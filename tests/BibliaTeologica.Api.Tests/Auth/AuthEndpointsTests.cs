@@ -141,6 +141,30 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
         depois.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
+    // Regressão da issue #31: cookies de uma sessão vencida no navegador não podem estragar o primeiro login.
+    [Fact]
+    public async Task Login_Responde200_QuandoCookiesVencidosPresentes()
+    {
+        var (refresh, csrf) = await SessaoComAcessoVencidoAsync();
+        // Revoga o refresh: o navegador ficou com a sessão inteira de antes, já inválida no servidor.
+        (await PostarComCookiesAsync("/api/auth/logout", refresh, csrf, comHeaderCsrf: true))
+            .StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        var client = _f.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = false });
+        using var req = new HttpRequestMessage(HttpMethod.Post, "/api/auth/login")
+        {
+            Content = JsonContent.Create(new { email = AutenticacaoWebFactory.MembroEmail, senha = AutenticacaoWebFactory.Senha })
+        };
+        req.Headers.Add("Cookie", $"bt_access=eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjF9.assinatura-velha; bt_refresh={refresh}; bt_csrf={csrf}");
+        req.Headers.Add("X-CSRF-Token", "csrf-defasado");
+
+        var res = await client.SendAsync(req);
+
+        res.StatusCode.Should().Be(HttpStatusCode.OK);
+        var corpo = await res.Content.ReadFromJsonAsync<Dictionary<string, JsonElement>>();
+        corpo!["desafio2fa"].GetBoolean().Should().BeTrue();
+    }
+
     [Fact]
     public async Task Eu_Retorna401_SemCookie()
     {

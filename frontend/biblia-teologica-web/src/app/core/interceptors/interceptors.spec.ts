@@ -79,6 +79,17 @@ describe('interceptors', () => {
     expect(store.usuario()).toBeNull();
   });
 
+  it('login: com cookies de sessão vencida, o primeiro POST segue direto e o desafio chega', () => {
+    // Sessão vencida: o carregarUsuario do arranque já falhou e limpou o store.
+    let resposta: unknown;
+    http.post('/api/auth/login', { email: 'a@b.c', senha: 'x' }).subscribe((r) => (resposta = r));
+    const req = ctrl.expectOne('/api/auth/login');
+    expect(req.request.withCredentials).toBe(true);
+    req.flush({ desafio2fa: true, tokenDesafio: 'T' });
+    ctrl.expectNone('/api/auth/refresh');
+    expect(resposta).toEqual({ desafio2fa: true, tokenDesafio: 'T' });
+  });
+
   it('refresh: não intercepta 401 de /api/auth/* (login inválido)', () => {
     let erro: number | undefined;
     http.post('/api/auth/login', {}).subscribe({
