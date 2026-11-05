@@ -98,6 +98,23 @@ describe('AuthService', () => {
     req.flush(null, { status: 204, statusText: 'No Content' });
   });
 
+  it('registar_postaOCadastroEDevolveODesafio_quandoChamado', () => {
+    const dto = {
+      nomeExibicao: 'Ana',
+      email: 'a@b.c',
+      senha: 'Segredo123',
+      aceitouTermo: true,
+      telefone: null,
+      site: '',
+    };
+    let td: string | undefined;
+    svc.registar(dto).subscribe((r) => (td = r.tokenDesafio));
+    const req = http.expectOne('/api/auth/registar');
+    expect(req.request.body).toEqual(dto);
+    req.flush({ tokenDesafio: 'T9' }, { status: 202, statusText: 'Accepted' });
+    expect(td).toBe('T9');
+  });
+
   it('esqueciSenha_postaEmailESite_quandoChamado', () => {
     svc.esqueciSenha('a@b.c', 'https://x').subscribe();
     const req = http.expectOne('/api/auth/senha/esqueci');

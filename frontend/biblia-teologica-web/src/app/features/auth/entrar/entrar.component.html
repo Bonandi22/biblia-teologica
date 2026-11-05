@@ -5,6 +5,9 @@
     @if (erro(); as e) {
       <bt-alerta tipo="erro">{{ e }}</bt-alerta>
     }
+    @if (aviso) {
+      <p class="aviso">{{ aviso }}</p>
+    }
     <p class="lead">Use o e-mail e a senha da sua conta. Enviaremos um código para confirmar que é você.</p>
     <form [formGroup]="formCredenciais" (ngSubmit)="submeterCredenciais()" novalidate>
       <bt-campo label="E-mail" [erro]="erroDe(formCredenciais.controls.email)">

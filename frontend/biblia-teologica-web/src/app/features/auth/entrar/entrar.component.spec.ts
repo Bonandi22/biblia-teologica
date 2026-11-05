@@ -205,6 +205,31 @@ describe('EntrarComponent com retorno', () => {
   });
 });
 
+describe('EntrarComponent depois de um cadastro sem código', () => {
+  const abrir = async (url: string) => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([{ path: 'entrar', component: EntrarComponent }]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
+    });
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl(url, EntrarComponent);
+    return harness.routeNativeElement as HTMLElement;
+  };
+
+  it('entrar_mostraTextoNeutro_quandoVemDoCadastroVencido', async () => {
+    const el = await abrir('/entrar?aviso=cadastro');
+    expect(el.querySelector('.aviso')?.textContent).toContain('O tempo do código acabou.');
+  });
+
+  it('entrar_naoMostraAviso_quandoValorDesconhecido', async () => {
+    const el = await abrir('/entrar?aviso=qualquer%20coisa');
+    expect(el.querySelector('.aviso')).toBeNull();
+  });
+});
+
 describe('EntrarComponent na tela', () => {
   const montar = () => {
     TestBed.configureTestingModule({

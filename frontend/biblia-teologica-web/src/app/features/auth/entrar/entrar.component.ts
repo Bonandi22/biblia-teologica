@@ -56,6 +56,12 @@ export class EntrarComponent {
   /** Só caminhos internos; qualquer outro valor é descartado. */
   protected readonly retorno = caminhoInterno(this.rota.snapshot.queryParamMap.get('retorno'));
 
+  /** Texto fixo para um valor conhecido de `?aviso=`; nunca ecoa o que veio na URL. */
+  protected readonly aviso =
+    this.rota.snapshot.queryParamMap.get('aviso') === 'cadastro'
+      ? 'O tempo do código acabou. Entre com o e-mail e a senha que você criou.'
+      : null;
+
   readonly formCredenciais = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     senha: ['', Validators.required],
