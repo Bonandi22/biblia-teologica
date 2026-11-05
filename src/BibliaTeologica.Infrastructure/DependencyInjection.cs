@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
@@ -96,7 +97,14 @@ public static class DependencyInjection
         else
             services.AddScoped<IEmailSender, LogEmailSender>();
 
-        var admins = config.GetSection(AdminSeedOptions.Secao).Get<List<AdminSeedEntrada>>() ?? new();
+        services.AddMemoryCache();
+        services.TryAddSingleton(TimeProvider.System);
+        services.AddSingleton<ILimiteEnvio, LimiteEnvioEmMemoria>();
+        services.AddSingleton<FilaEmailEmMemoria>();
+        services.AddSingleton<IFilaEmail>(sp => sp.GetRequiredService<FilaEmailEmMemoria>());
+        services.AddHostedService(sp => sp.GetRequiredService<FilaEmailEmMemoria>());
+
+        var admins =config.GetSection(AdminSeedOptions.Secao).Get<List<AdminSeedEntrada>>() ?? new();
         services.AddScoped<IdentitySeeder>(sp => new IdentitySeeder(
             sp.GetRequiredService<RoleManager<IdentityRole<Guid>>>(),
             sp.GetRequiredService<UserManager<ApplicationUser>>(),

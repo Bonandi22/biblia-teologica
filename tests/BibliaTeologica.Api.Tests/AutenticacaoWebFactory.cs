@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -19,8 +20,14 @@ public sealed class OtpSink : IEmailSender
     public string? UltimoCorpo { get; private set; }
     public string? UltimoPara { get; private set; }
 
+    private readonly ConcurrentQueue<(string Para, string Assunto, string Corpo)> _enviados = new();
+
+    /// <summary>Todos os e-mails recebidos, na ordem de envio.</summary>
+    public IReadOnlyList<(string Para, string Assunto, string Corpo)> Enviados => _enviados.ToArray();
+
     public Task EnviarAsync(string para, string assunto, string corpoHtml, CancellationToken ct)
     {
+        _enviados.Enqueue((para, assunto, corpoHtml));
         UltimoPara = para;
         UltimoCorpo = corpoHtml;
         return Task.CompletedTask;
@@ -29,6 +36,13 @@ public sealed class OtpSink : IEmailSender
     public string? UltimoCodigo => UltimoCorpo is null
         ? null
         : Regex.Match(UltimoCorpo, @"<strong>([^<]+)</strong>").Groups[1].Value;
+}
+
+/// <summary>Dublê de <see cref="IFilaEmail"/> que entrega ao <see cref="OtpSink"/> sem esperar.</summary>
+public sealed class FilaEmailImediata(OtpSink sink) : IFilaEmail
+{
+    public void Enfileirar(string para, string assunto, string corpoHtml) =>
+        sink.EnviarAsync(para, assunto, corpoHtml, CancellationToken.None).GetAwaiter().GetResult();
 }
 
 /// <summary>
@@ -50,6 +64,8 @@ public class AutenticacaoWebFactory : AppFactory
         // Rate limit generoso: a fixture é partilhada por vários testes de auth no mesmo servidor.
         ConfiguracaoExtra["AuthRateLimiting:PermitLimit"] = "100000";
         ConfiguracaoExtra["RateLimiting:PermitLimit"] = "100000";
+        // Os testes partilham endereços: o limite por endereço não pode interferir.
+        ConfiguracaoExtra["EnvioEmail:MaxPorJanela"] = "100000";
         // Cookies são Secure — o CookieContainer só os devolve sobre https.
         ClientOptions.BaseAddress = new Uri("https://localhost");
     }
@@ -61,6 +77,10 @@ public class AutenticacaoWebFactory : AppFactory
         {
             services.RemoveAll<IEmailSender>();
             services.AddSingleton<IEmailSender>(Otp);
+
+            // Fila síncrona: o e-mail chega ao OtpSink na hora, para os testes serem determinísticos.
+            services.RemoveAll<IFilaEmail>();
+            services.AddSingleton<IFilaEmail>(new FilaEmailImediata(Otp));
         });
     }
 
