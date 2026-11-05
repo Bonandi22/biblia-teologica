@@ -23,14 +23,6 @@ export class ContaService {
     return this.http.get<Perfil>(this.base);
   }
 
-  atualizarNome(nomeExibicao: string): Observable<void> {
-    return this.http.put<void>(this.base, { nomeExibicao });
-  }
-
-  trocarEmail(dto: { novoEmail: string; senha: string }): Observable<void> {
-    return this.http.put<void>(`${this.base}/email`, dto);
-  }
-
   atualizarPerfil(dto: { nomeExibicao: string; telefone: string | null }): Observable<void> {
     return this.http.put<void>(this.base, dto);
   }

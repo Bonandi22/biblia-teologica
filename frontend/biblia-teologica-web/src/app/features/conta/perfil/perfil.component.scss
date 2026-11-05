@@ -9,44 +9,42 @@
   @include folha-formulario;
 }
 
-.dados {
-  margin: 0 0 $sp-8;
-
-  div {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 $sp-3;
-    padding-block: $sp-1;
-  }
-
-  dt {
-    min-width: 4.5rem;
-    font-family: $fonte-corrente;
-    font-size: $t-corrente;
-    font-weight: 700;
-    color: $tinta-mut;
-  }
-
-  dd {
-    margin: 0;
-    overflow-wrap: anywhere;
-  }
-}
-
+// Filete de tinta: cada seção começa onde o esboço aprovado a separa do que vem antes.
 .secao {
   margin-top: $sp-8;
-  padding-top: $sp-6;
-  border-top: 1px solid $filete;
+  padding-top: $sp-4;
+  border-top: 1px solid $tinta;
 }
 
 h2 {
-  margin: 0 0 $sp-4;
+  margin: 0 0 $sp-3;
   font-size: $t-h3;
   font-weight: 700;
 }
 
+.email-atual {
+  margin: 0 0 $sp-4;
+  overflow-wrap: anywhere;
+}
+
+.quebra {
+  overflow-wrap: anywhere;
+}
+
 .msg {
   margin-top: $sp-3;
+}
+
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $sp-3;
+}
+
+// Sem a margem de cima do mixin: o título da seção já separa.
+.sem-margem {
+  margin-top: 0;
 }
 
 // O botão de texto tem 4px de folga para o foco; o recuo alinha a palavra à margem.
@@ -54,18 +52,10 @@ h2 {
   margin: $sp-3 0 0 -4px;
 }
 
-.acoes {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: $sp-4;
-  max-width: 26rem;
-  margin-top: $sp-8;
-  padding-top: $sp-4;
-  border-top: 1px solid $filete;
-
-  .ligacao {
-    margin-top: 0;
+// O texto de erro aparece só no passo de confirmação, quando a ação já é irreversível.
+.perigo {
+  ::ng-deep .botao {
+    color: $erro;
+    border-color: $erro;
   }
 }

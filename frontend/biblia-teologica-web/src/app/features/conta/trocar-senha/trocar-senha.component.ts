@@ -2,13 +2,16 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AlertaComponent } from '../../../shared/ui/alerta/alerta.component';
 import { BotaoComponent } from '../../../shared/ui/botao/botao.component';
 import { erroCampo } from '../../../shared/ui/campo/erro-campo';
 import { CampoSenhaComponent } from '../../../shared/ui/campo-senha/campo-senha.component';
+import { senhaForte } from '../../../shared/ui/campo/senha-forte.validator';
 import { ContaService } from '../../../core/services/conta.service';
 import { AuthStore } from '../../../core/auth/auth.store';
+import { mensagemDeErro } from '../../../core/auth/erros-auth';
 
 function iguais(g: AbstractControl): { diferentes: true } | null {
   return g.get('novaSenha')!.value === g.get('confirmar')!.value ? null : { diferentes: true };
@@ -35,7 +38,7 @@ export class TrocarSenhaComponent {
   readonly form = this.fb.nonNullable.group(
     {
       senhaAtual: ['', Validators.required],
-      novaSenha: ['', [Validators.required, Validators.minLength(8)]],
+      novaSenha: ['', [Validators.required, senhaForte()]],
       confirmar: ['', Validators.required],
     },
     { validators: iguais },
@@ -68,8 +71,8 @@ export class TrocarSenhaComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => void this.router.navigateByUrl(this.store.ehAdmin() ? '/admin' : '/conta'),
-        error: (e) => {
-          this.erro.set(e.error?.detail ?? 'Não foi possível trocar a senha.');
+        error: (e: HttpErrorResponse) => {
+          this.erro.set(mensagemDeErro(e, 'Não foi possível trocar a senha.'));
           this.aEnviar.set(false);
         },
       });

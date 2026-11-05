@@ -21,7 +21,7 @@
   cursor: pointer;
 
   &:hover {
-    background: $capa;
+    background: #000; // mesmo hover do botão primário; a cor da capa é só do rodapé
   }
 
   &:focus-visible {
