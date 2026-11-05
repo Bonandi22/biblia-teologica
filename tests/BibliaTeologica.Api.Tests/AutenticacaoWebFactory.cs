@@ -20,6 +20,9 @@ public sealed class OtpSink : IEmailSender
     public string? UltimoCorpo { get; private set; }
     public string? UltimoPara { get; private set; }
 
+    /// <summary>Quando verdadeiro, o envio lança, como um SMTP fora do ar.</summary>
+    public bool Falhar { get; set; }
+
     private readonly ConcurrentQueue<(string Para, string Assunto, string Corpo)> _enviados = new();
 
     /// <summary>Todos os e-mails recebidos, na ordem de envio.</summary>
@@ -27,6 +30,7 @@ public sealed class OtpSink : IEmailSender
 
     public Task EnviarAsync(string para, string assunto, string corpoHtml, CancellationToken ct)
     {
+        if (Falhar) throw new InvalidOperationException("detalhe-interno-smtp");
         _enviados.Enqueue((para, assunto, corpoHtml));
         UltimoPara = para;
         UltimoCorpo = corpoHtml;

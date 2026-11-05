@@ -37,11 +37,43 @@ public class AuthService : IAuthService
         if (r.Bloqueado) return new ResultadoLoginDto(EstadoLogin.Bloqueado);
         if (!r.Sucesso || r.UserId is null) return new ResultadoLoginDto(EstadoLogin.CredenciaisInvalidas);
 
+        // Só depois da senha: quem erra a senha não gasta vagas de envio da conta alheia.
+        if (!_limite.TentarConsumir(dto.Email.Trim(), FinalidadeEnvio.Login))
+            return new ResultadoLoginDto(EstadoLogin.LimiteEnvio);
+
         var codigo = await _identity.GerarTokenEmailAsync(r.UserId.Value, ct);
-        await _email.EnviarAsync(dto.Email, "Código de acesso",
-            $"<p>O seu código de acesso é <strong>{codigo}</strong>. Expira em poucos minutos.</p>", ct);
+        var (assunto, corpo) = ModelosEmail.Codigo(codigo);
+        try
+        {
+            await _email.EnviarAsync(dto.Email, assunto, corpo, ct);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            // Nunca o código nem o corpo no log.
+            _log.LogError(ex, "Falha ao enviar o código de acesso para {UserId}.", r.UserId.Value);
+            return new ResultadoLoginDto(EstadoLogin.FalhaEnvio);
+        }
 
         return new ResultadoLoginDto(EstadoLogin.Desafio2fa, TokenDesafio: _token.GerarDesafioLogin(r.UserId.Value));
+    }
+
+    public async Task<ResultadoReenvio> ReenviarCodigoAsync(string tokenDesafio, CancellationToken ct)
+    {
+        var userId = _token.ValidarDesafioLogin(tokenDesafio);
+        if (userId is null) return ResultadoReenvio.DesafioInvalido;
+
+        // Sem conta, o id do desafio vira a chave: o limite e a resposta ficam iguais aos de uma conta real.
+        var email = await _identity.ObterEmailAsync(userId.Value, ct);
+        if (!_limite.TentarConsumir(email ?? $"desafio:{userId.Value}", FinalidadeEnvio.Login))
+            return ResultadoReenvio.Limite;
+
+        if (email is not null && !await _identity.EstaBloqueadoAsync(userId.Value, ct))
+        {
+            var codigo = await _identity.GerarTokenEmailAsync(userId.Value, ct);
+            var (assunto, corpo) = ModelosEmail.Codigo(codigo);
+            _fila.Enfileirar(email, assunto, corpo);
+        }
+        return ResultadoReenvio.Aceito;
     }
 
     public async Task<ResultadoLoginDto> Verificar2faAsync(Verificar2faDto dto, string? ip, CancellationToken ct)

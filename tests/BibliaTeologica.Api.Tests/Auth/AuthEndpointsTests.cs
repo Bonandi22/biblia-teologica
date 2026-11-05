@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using AwesomeAssertions;
 using BibliaTeologica.Application.Auth;
+using BibliaTeologica.Application.Common.Interfaces;
 using BibliaTeologica.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -164,6 +165,128 @@ public class AuthEndpointsTests : IClassFixture<AutenticacaoWebFactory>
 
     private int AvisosPara(string email) => _f.Otp.Enviados.Count(e =>
         string.Equals(e.Para, email, StringComparison.OrdinalIgnoreCase) && e.Assunto == ModelosEmail.CadastroExistente().Assunto);
+
+    private static object Login(string email = AutenticacaoWebFactory.MembroEmail)
+        => new { email, senha = AutenticacaoWebFactory.Senha };
+
+    private static async Task<string> TokenDesafioAsync(HttpResponseMessage login)
+        => (await login.Content.ReadFromJsonAsync<Dictionary<string, JsonElement>>())!["tokenDesafio"].GetString()!;
+
+    private static string DesafioDeContaInexistente(AutenticacaoWebFactory f)
+    {
+        using var scope = f.Services.CreateScope();
+        return scope.ServiceProvider.GetRequiredService<ITokenService>().GerarDesafioLogin(Guid.NewGuid());
+    }
+
+    [Fact]
+    public async Task Login_Responde503SemVazarDetalhe_QuandoEnvioFalha()
+    {
+        await using var f = new AutenticacaoWebFactory();
+        await f.SemearUsuariosAsync();
+        f.Otp.Falhar = true;
+
+        var res = await f.CreateClient().PostAsJsonAsync("/api/auth/login", Login());
+
+        res.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+        var corpo = await res.Content.ReadAsStringAsync();
+        corpo.Should().Contain("Não conseguimos enviar o código agora");
+        corpo.Should().NotContain("detalhe-interno-smtp").And.NotContain("InvalidOperationException");
+    }
+
+    [Fact]
+    public async Task Login_Responde429_QuandoLimiteEsgotado()
+    {
+        await using var f = new AutenticacaoWebFactory();
+        f.ConfiguracaoExtra["EnvioEmail:MaxPorJanela"] = "3";
+        await f.SemearUsuariosAsync();
+        var client = f.CreateClient();
+
+        for (var i = 0; i < 3; i++)
+            (await client.PostAsJsonAsync("/api/auth/login", Login())).StatusCode.Should().Be(HttpStatusCode.OK);
+        var res = await client.PostAsJsonAsync("/api/auth/login", Login());
+
+        res.StatusCode.Should().Be((HttpStatusCode)429);
+        f.Otp.Enviados.Should().HaveCount(3);
+    }
+
+    [Fact]
+    public async Task Login_PermiteEntrar_QuandoContaNaoConfirmada()
+    {
+        var client = await ClienteSemeadoAsync();
+        var email = EmailNovo();
+        (await client.PostAsJsonAsync("/api/auth/registar", Corpo(email))).StatusCode.Should().Be(HttpStatusCode.Accepted);
+
+        var login = await client.PostAsJsonAsync("/api/auth/login", new { email, senha = "Senha!Forte1" });
+
+        login.StatusCode.Should().Be(HttpStatusCode.OK);
+        var td = await TokenDesafioAsync(login);
+        var v = await client.PostAsJsonAsync("/api/auth/login/2fa", new { tokenDesafio = td, codigo = _f.Otp.UltimoCodigo });
+        v.StatusCode.Should().Be(HttpStatusCode.OK);
+        (await BuscarAsync(email))!.EmailConfirmed.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Reenviar_Responde204EEnfileira_QuandoDesafioDeContaReal()
+    {
+        var client = await ClienteSemeadoAsync();
+        var td = await TokenDesafioAsync(await client.PostAsJsonAsync("/api/auth/login", Login()));
+        var antes = _f.Otp.Enviados.Count;
+
+        var res = await client.PostAsJsonAsync("/api/auth/login/2fa/reenviar", new { tokenDesafio = td });
+
+        res.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        _f.Otp.Enviados.Should().HaveCount(antes + 1);
+        _f.Otp.UltimoPara.Should().Be(AutenticacaoWebFactory.MembroEmail);
+        _f.Otp.UltimoCodigo.Should().MatchRegex(@"^\d{6}$");
+    }
+
+    [Fact]
+    public async Task Reenviar_Responde204SemEnviar_QuandoDesafioDeContaInexistente()
+    {
+        var client = await ClienteSemeadoAsync();
+        var antes = _f.Otp.Enviados.Count;
+
+        var res = await client.PostAsJsonAsync("/api/auth/login/2fa/reenviar",
+            new { tokenDesafio = DesafioDeContaInexistente(_f) });
+
+        res.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        _f.Otp.Enviados.Should().HaveCount(antes);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task Reenviar_Responde429_QuandoLimiteEsgotado_ComContaOuSem(bool contaReal)
+    {
+        await using var f = new AutenticacaoWebFactory();
+        f.ConfiguracaoExtra["EnvioEmail:MaxPorJanela"] = "3";
+        await f.SemearUsuariosAsync();
+        var client = f.CreateClient();
+        var td = contaReal
+            ? await TokenDesafioAsync(await client.PostAsJsonAsync("/api/auth/login", Login()))
+            : DesafioDeContaInexistente(f);
+        // Conta real: o login já gastou 1 das 3 vagas, então o reenvio aceita 2 e recusa a 3ª.
+        var aceitos = contaReal ? 2 : 3;
+
+        for (var i = 0; i < aceitos; i++)
+            (await client.PostAsJsonAsync("/api/auth/login/2fa/reenviar", new { tokenDesafio = td }))
+                .StatusCode.Should().Be(HttpStatusCode.NoContent);
+        var res = await client.PostAsJsonAsync("/api/auth/login/2fa/reenviar", new { tokenDesafio = td });
+
+        res.StatusCode.Should().Be((HttpStatusCode)429);
+    }
+
+    [Theory]
+    [InlineData("isto-nao-e-um-token")]
+    [InlineData("")]
+    public async Task Reenviar_Responde400_QuandoDesafioAdulteradoOuVencido(string td)
+    {
+        var client = await ClienteSemeadoAsync();
+
+        var res = await client.PostAsJsonAsync("/api/auth/login/2fa/reenviar", new { tokenDesafio = td });
+
+        res.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
 
     [Fact]
     public async Task Registar_Responde202ComDesafio_QuandoContaNova()

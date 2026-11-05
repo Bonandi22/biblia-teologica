@@ -3,6 +3,7 @@ using BibliaTeologica.Application.Auth;
 using BibliaTeologica.Application.Auth.Dtos;
 using BibliaTeologica.Application.Common.Interfaces;
 using BibliaTeologica.Application.Common.Resultados;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
@@ -42,9 +43,126 @@ public class AuthServiceTests
             .Returns(("refresh-cru", "refresh-hash", DateTime.UtcNow.AddDays(14)));
     }
 
+    private sealed class LoggerCapturador : ILogger<AuthService>
+    {
+        public List<(LogLevel Nivel, string Mensagem)> Registros { get; } = new();
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+        public bool IsEnabled(LogLevel logLevel) => true;
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception,
+            Func<TState, Exception?, string> formatter) => Registros.Add((logLevel, formatter(state, exception)));
+    }
+
+    private void ArranjarSenhaOk()
+    {
+        _identity.Setup(i => i.VerificarSenhaAsync("a@b.c", "senha", true, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ResultadoSenha(true, false, Uid));
+        _identity.Setup(i => i.GerarTokenEmailAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync("123456");
+        _token.Setup(t => t.GerarDesafioLogin(Uid)).Returns("token-desafio");
+    }
+
+    [Fact]
+    public async Task LoginAsync_DevolveFalhaEnvioELogaSemCodigo_QuandoEnvioLanca()
+    {
+        ArranjarSenhaOk();
+        _limite.Setup(l => l.TentarConsumir("a@b.c", FinalidadeEnvio.Login)).Returns(true);
+        _email.Setup(e => e.EnviarAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("smtp fora"));
+        var log = new LoggerCapturador();
+        var svc = new AuthService(_identity.Object, _token.Object, _store.Object, _email.Object,
+            _emissor.Object, _fila.Object, _limite.Object, log);
+
+        var r = await svc.LoginAsync(new LoginDto("a@b.c", "senha"), "ip", default);
+
+        r.Estado.Should().Be(EstadoLogin.FalhaEnvio);
+        r.TokenDesafio.Should().BeNull();
+        log.Registros.Should().ContainSingle(x => x.Nivel == LogLevel.Error);
+        log.Registros.Should().OnlyContain(x => !x.Mensagem.Contains("123456"));
+    }
+
+    [Fact]
+    public async Task LoginAsync_DevolveLimiteEnvioSemEnviar_QuandoLimiteEsgotado()
+    {
+        ArranjarSenhaOk();
+        _limite.Setup(l => l.TentarConsumir("a@b.c", FinalidadeEnvio.Login)).Returns(false);
+
+        var r = await Criar().LoginAsync(new LoginDto("a@b.c", "senha"), "ip", default);
+
+        r.Estado.Should().Be(EstadoLogin.LimiteEnvio);
+        _email.Verify(e => e.EnviarAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task LoginAsync_NaoConsomeLimite_QuandoSenhaErrada()
+    {
+        _identity.Setup(i => i.VerificarSenhaAsync(It.IsAny<string>(), It.IsAny<string>(), true, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ResultadoSenha(false, false, null));
+
+        await Criar().LoginAsync(new LoginDto("a@b.c", "x"), null, default);
+
+        _limite.Verify(l => l.TentarConsumir(It.IsAny<string>(), It.IsAny<FinalidadeEnvio>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task ReenviarCodigoAsync_Enfileira_QuandoContaExisteELimiteLivre()
+    {
+        _token.Setup(t => t.ValidarDesafioLogin("td")).Returns(Uid);
+        _identity.Setup(i => i.ObterEmailAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync("a@b.c");
+        _identity.Setup(i => i.EstaBloqueadoAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+        _identity.Setup(i => i.GerarTokenEmailAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync("654321");
+        _limite.Setup(l => l.TentarConsumir("a@b.c", FinalidadeEnvio.Login)).Returns(true);
+
+        (await Criar().ReenviarCodigoAsync("td", default)).Should().Be(ResultadoReenvio.Aceito);
+
+        _fila.Verify(f => f.Enfileirar("a@b.c", It.IsAny<string>(), It.Is<string>(c => c.Contains("654321"))), Times.Once);
+    }
+
+    [Fact]
+    public async Task ReenviarCodigoAsync_UsaChaveDoDesafio_QuandoContaNaoExiste()
+    {
+        _token.Setup(t => t.ValidarDesafioLogin("td")).Returns(Uid);
+        _identity.Setup(i => i.ObterEmailAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync((string?)null);
+        _limite.Setup(l => l.TentarConsumir($"desafio:{Uid}", FinalidadeEnvio.Login)).Returns(true);
+
+        (await Criar().ReenviarCodigoAsync("td", default)).Should().Be(ResultadoReenvio.Aceito);
+
+        _fila.Verify(f => f.Enfileirar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task ReenviarCodigoAsync_NaoEnfileira_QuandoContaBloqueada()
+    {
+        _token.Setup(t => t.ValidarDesafioLogin("td")).Returns(Uid);
+        _identity.Setup(i => i.ObterEmailAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync("a@b.c");
+        _identity.Setup(i => i.EstaBloqueadoAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        _limite.Setup(l => l.TentarConsumir("a@b.c", FinalidadeEnvio.Login)).Returns(true);
+
+        (await Criar().ReenviarCodigoAsync("td", default)).Should().Be(ResultadoReenvio.Aceito);
+
+        _fila.Verify(f => f.Enfileirar(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task ReenviarCodigoAsync_DevolveLimite_QuandoLimiteEsgotado()
+    {
+        _token.Setup(t => t.ValidarDesafioLogin("td")).Returns(Uid);
+        _identity.Setup(i => i.ObterEmailAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync("a@b.c");
+        _limite.Setup(l => l.TentarConsumir("a@b.c", FinalidadeEnvio.Login)).Returns(false);
+
+        (await Criar().ReenviarCodigoAsync("td", default)).Should().Be(ResultadoReenvio.Limite);
+    }
+
+    [Fact]
+    public async Task ReenviarCodigoAsync_DevolveDesafioInvalido_QuandoTokenInvalido()
+    {
+        _token.Setup(t => t.ValidarDesafioLogin("ruim")).Returns((Guid?)null);
+
+        (await Criar().ReenviarCodigoAsync("ruim", default)).Should().Be(ResultadoReenvio.DesafioInvalido);
+    }
+
     [Fact]
     public async Task LoginAsync_EnviaOtpEDevolveDesafio_QuandoCredenciaisValidas()
     {
+        _limite.Setup(l => l.TentarConsumir("a@b.c", FinalidadeEnvio.Login)).Returns(true);
         _identity.Setup(i => i.VerificarSenhaAsync("a@b.c", "senha", true, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ResultadoSenha(true, false, Uid));
         _identity.Setup(i => i.GerarTokenEmailAsync(Uid, It.IsAny<CancellationToken>())).ReturnsAsync("123456");

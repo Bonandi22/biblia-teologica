@@ -7,6 +7,7 @@ public interface IIdentityService
 {
     Task<ResultadoSenha> VerificarSenhaAsync(string email, string senha, bool lockoutOnFailure, CancellationToken ct);
     Task<Guid?> ResolverIdPorEmailAsync(string email, CancellationToken ct);
+    Task<bool> EstaBloqueadoAsync(Guid userId, CancellationToken ct);
     Task<string> GerarTokenEmailAsync(Guid userId, CancellationToken ct);
     Task<bool> VerificarTokenEmailAsync(Guid userId, string codigo, CancellationToken ct);
     Task RegistarFalhaAsync(Guid userId, CancellationToken ct);

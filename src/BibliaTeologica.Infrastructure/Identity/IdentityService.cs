@@ -8,6 +8,10 @@ namespace BibliaTeologica.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {
+    // Hash com o mesmo custo do hasher padrão, calculado uma vez; a senha por trás dele é irrelevante.
+    private static readonly Lazy<string> HashDescartavel =
+        new(() => new PasswordHasher<ApplicationUser>().HashPassword(new ApplicationUser(), Guid.NewGuid().ToString("N")));
+
     private readonly UserManager<ApplicationUser> _users;
 
     public IdentityService(UserManager<ApplicationUser> users) => _users = users;
@@ -17,12 +21,23 @@ public class IdentityService : IIdentityService
     public async Task<ResultadoSenha> VerificarSenhaAsync(string email, string senha, bool lockoutOnFailure, CancellationToken ct)
     {
         var user = await _users.FindByEmailAsync(email);
-        if (user is null) return new ResultadoSenha(false, false, null);
+        if (user is null)
+        {
+            // Hash descartável: o tempo fica igual ao de uma senha errada numa conta real.
+            _users.PasswordHasher.VerifyHashedPassword(new ApplicationUser(), HashDescartavel.Value, senha);
+            return new ResultadoSenha(false, false, null);
+        }
         if (await _users.IsLockedOutAsync(user)) return new ResultadoSenha(false, true, null);
         if (await _users.CheckPasswordAsync(user, senha)) return new ResultadoSenha(true, false, user.Id);
 
         if (lockoutOnFailure) await _users.AccessFailedAsync(user);
         return new ResultadoSenha(false, await _users.IsLockedOutAsync(user), null);
+    }
+
+    public async Task<bool> EstaBloqueadoAsync(Guid userId, CancellationToken ct)
+    {
+        var user = await _users.FindByIdAsync(userId.ToString());
+        return user is not null && await _users.IsLockedOutAsync(user);
     }
 
     public async Task<Guid?> ResolverIdPorEmailAsync(string email, CancellationToken ct)

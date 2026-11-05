@@ -6,6 +6,7 @@ using BibliaTeologica.Infrastructure.Persistence;
 using BibliaTeologica.Infrastructure.Persistence.Seed;
 using BibliaTeologica.Infrastructure.Tests.Email;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +61,42 @@ public sealed class IdentityServiceTests : IDisposable
         ok.UserId.Should().NotBeNull();
 
         (await svc.VerificarSenhaAsync("m@teste.local", "errada", false, default)).Sucesso.Should().BeFalse();
+    }
+
+    private sealed class HasherEspiao : IPasswordHasher<ApplicationUser>
+    {
+        private readonly PasswordHasher<ApplicationUser> _real = new();
+        public int Verificacoes { get; private set; }
+        public string HashPassword(ApplicationUser user, string password) => _real.HashPassword(user, password);
+        public PasswordVerificationResult VerifyHashedPassword(ApplicationUser user, string hashedPassword, string providedPassword)
+        {
+            Verificacoes++;
+            return _real.VerifyHashedPassword(user, hashedPassword, providedPassword);
+        }
+    }
+
+    [Fact]
+    public async Task Login_CalculaHash_QuandoEmailDesconhecido()
+    {
+        var espiao = new HasherEspiao();
+        var svc = new IdentityService(new UserManager<ApplicationUser>(
+            new UserStore<ApplicationUser, IdentityRole<Guid>, AppDbContext, Guid>(_sp.GetRequiredService<AppDbContext>()),
+            Microsoft.Extensions.Options.Options.Create(new IdentityOptions()), espiao,
+            Array.Empty<IUserValidator<ApplicationUser>>(), Array.Empty<IPasswordValidator<ApplicationUser>>(),
+            new UpperInvariantLookupNormalizer(), new IdentityErrorDescriber(), _sp,
+            _sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>()));
+
+        var r = await svc.VerificarSenhaAsync("ninguem@teste.local", "qualquer", true, default);
+
+        r.Sucesso.Should().BeFalse();
+        r.Bloqueado.Should().BeFalse();
+        espiao.Verificacoes.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task EstaBloqueado_DevolveFalso_QuandoContaNaoExiste()
+    {
+        (await Criar().EstaBloqueadoAsync(Guid.NewGuid(), default)).Should().BeFalse();
     }
 
     [Fact]
