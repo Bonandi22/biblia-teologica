@@ -1,0 +1,53 @@
+<article class="folha">
+  <h1>Termo e privacidade</h1>
+  <p class="versao">Versão {{ versao }}, de {{ dataVersao }}.</p>
+
+  <h2>Quem cuida dos seus dados</h2>
+  <p>
+    O responsável é {{ responsavel.nome }}. Para qualquer pedido sobre seus dados, escreva para
+    <a [href]="'mailto:' + responsavel.email">{{ responsavel.email }}</a
+    >.
+  </p>
+
+  <h2>O que guardamos e para quê</h2>
+  <p>Ao criar uma conta, guardamos:</p>
+  <ul>
+    <li>seu nome e seu e-mail, para identificar você e enviar os códigos de acesso;</li>
+    <li>
+      seu telefone, só se você quiser informar. É opcional e hoje não é usado para nada;
+    </li>
+    <li>a data em que você aceitou este termo.</li>
+  </ul>
+  <p>Não pedimos nenhum outro dado e não usamos os seus para publicidade.</p>
+
+  <h2>Quem entrega os e-mails</h2>
+  <p>
+    Os e-mails do site, como códigos de acesso e avisos da conta, saem pelo Gmail, serviço do
+    Google. O Google recebe o seu endereço de e-mail e o conteúdo da mensagem para poder entregá-la.
+  </p>
+
+  <h2>Por quanto tempo ficam</h2>
+  <p>
+    Seus dados ficam até você apagar a conta. Se você criar a conta e não confirmar o e-mail, ela é
+    apagada sozinha depois de 7 dias, com tudo o que foi informado.
+  </p>
+
+  <h2>Seus direitos</h2>
+  <p>Você pode, a qualquer momento:</p>
+  <ul>
+    <li>ver os dados que temos sobre você;</li>
+    <li>corrigir o que estiver errado;</li>
+    <li>pedir o apagamento da conta e dos dados;</li>
+    <li>retirar a autorização que deu a este termo;</li>
+    <li>
+      reclamar à autoridade de controle de proteção de dados do seu país, se achar que seus dados
+      foram tratados de forma indevida.
+    </li>
+  </ul>
+  <p>
+    Para apagar a conta, entre em “Meu perfil” e use “Apagar conta”. Para os demais pedidos,
+    escreva para
+    <a [href]="'mailto:' + responsavel.email">{{ responsavel.email }}</a
+    >.
+  </p>
+</article>

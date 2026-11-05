@@ -12,7 +12,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BibliaTeologica.Infrastructure;
@@ -31,6 +33,8 @@ public static class DependencyInjection
 
         services.Configure<JwtOptions>(config.GetSection(JwtOptions.Secao));
         services.Configure<EmailOptions>(config.GetSection(EmailOptions.Secao));
+        services.Configure<SiteOptions>(config.GetSection(SiteOptions.Secao));
+        services.AddSingleton<IConfiguracaoSite>(sp => sp.GetRequiredService<IOptions<SiteOptions>>().Value);
         services.Configure<ConteudoOptions>(config.GetSection(ConteudoOptions.Secao));
         services.AddScoped<IFonteConteudo, FonteConteudoArquivos>();
 
@@ -42,12 +46,15 @@ public static class DependencyInjection
         var lockoutMinutos = config.GetValue<int?>("Identity:Lockout:Minutos") ?? 15;
 
         services.AddDataProtection();
+        services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(1));
 
         services.AddIdentityCore<ApplicationUser>(o =>
             {
                 o.Password.RequiredLength = 8;
                 o.Password.RequireNonAlphanumeric = false;
                 o.User.RequireUniqueEmail = true;
+                // O UserName é sempre o e-mail já validado; qualquer endereço válido serve.
+                o.User.AllowedUserNameCharacters = "";
                 o.Lockout.MaxFailedAccessAttempts = maxTentativas;
                 o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(lockoutMinutos);
                 o.SignIn.RequireConfirmedAccount = false;
@@ -55,6 +62,7 @@ public static class DependencyInjection
             .AddRoles<IdentityRole<Guid>>()
             .AddSignInManager()
             .AddEntityFrameworkStores<AppDbContext>()
+            .AddErrorDescriber<DescritorErrosPortugues>()
             .AddDefaultTokenProviders();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -95,6 +103,14 @@ public static class DependencyInjection
             services.AddScoped<IEmailSender, SmtpEmailSender>();
         else
             services.AddScoped<IEmailSender, LogEmailSender>();
+
+        services.AddMemoryCache();
+        services.TryAddSingleton(TimeProvider.System);
+        services.AddSingleton<ILimiteEnvio, LimiteEnvioEmMemoria>();
+        services.AddSingleton<FilaEmailEmMemoria>();
+        services.AddSingleton<IFilaEmail>(sp => sp.GetRequiredService<FilaEmailEmMemoria>());
+        services.AddHostedService(sp => sp.GetRequiredService<FilaEmailEmMemoria>());
+        services.AddHostedService<LimpezaContasNaoConfirmadas>();
 
         var admins = config.GetSection(AdminSeedOptions.Secao).Get<List<AdminSeedEntrada>>() ?? new();
         services.AddScoped<IdentitySeeder>(sp => new IdentitySeeder(

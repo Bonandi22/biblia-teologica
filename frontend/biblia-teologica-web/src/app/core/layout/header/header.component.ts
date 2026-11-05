@@ -13,12 +13,13 @@ import { filter } from 'rxjs';
 import { AuthStore } from '../../auth/auth.store';
 import { LugarAtualService } from '../lugar-atual.service';
 import { NAV_PRINCIPAL } from '../nav';
+import { MenuContaComponent } from './menu-conta/menu-conta.component';
 
 @Component({
   selector: 'bt-header',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, RouterLink, RouterLinkActive],
+  imports: [NgTemplateOutlet, RouterLink, RouterLinkActive, MenuContaComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   host: {

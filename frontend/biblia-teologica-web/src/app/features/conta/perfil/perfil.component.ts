@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
@@ -10,12 +11,15 @@ import { CampoComponent } from '../../../shared/ui/campo/campo.component';
 import { erroCampo } from '../../../shared/ui/campo/erro-campo';
 import { CampoSenhaComponent } from '../../../shared/ui/campo-senha/campo-senha.component';
 import { ContaService, Perfil } from '../../../core/services/conta.service';
-import { AuthService } from '../../../core/auth/auth.service';
+import { AuthStore } from '../../../core/auth/auth.store';
+import { mensagemDeErro } from '../../../core/auth/erros-auth';
 
 interface Aviso {
   tipo: 'erro' | 'sucesso';
   texto: string;
 }
+
+const ULTIMO_ADMIN = 'O último administrador não pode apagar a própria conta.';
 
 @Component({
   selector: 'bt-conta-perfil',
@@ -36,29 +40,43 @@ interface Aviso {
 export class PerfilComponent {
   private readonly fb = inject(FormBuilder);
   private readonly conta = inject(ContaService);
-  private readonly auth = inject(AuthService);
+  private readonly store = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly perfil = signal<Perfil | null>(null);
   readonly falhouAoCarregar = signal(false);
-  readonly avisoNome = signal<Aviso | null>(null);
-  readonly avisoEmail = signal<Aviso | null>(null);
-  readonly erroAoSair = signal<string | null>(null);
-  readonly aEnviarNome = signal(false);
-  readonly aEnviarEmail = signal(false);
-  readonly aSair = signal(false);
 
-  readonly formNome = this.fb.nonNullable.group({
+  readonly avisoPerfil = signal<Aviso | null>(null);
+  readonly aSalvar = signal(false);
+
+  readonly faseEmail = signal<'dados' | 'codigo'>('dados');
+  readonly emailPendente = signal('');
+  readonly erroEmail = signal<string | null>(null);
+  readonly avisoEmail = signal<string | null>(null);
+  readonly aEnviarEmail = signal(false);
+
+  readonly apagando = signal(false);
+  readonly erroApagar = signal<string | null>(null);
+  readonly aApagar = signal(false);
+
+  readonly formPerfil = this.fb.nonNullable.group({
     nomeExibicao: ['', [Validators.required, Validators.maxLength(80)]],
+    telefone: [''],
   });
   readonly formEmail = this.fb.nonNullable.group({
     novoEmail: ['', [Validators.required, Validators.email]],
     senha: ['', Validators.required],
   });
+  readonly formCodigo = this.fb.nonNullable.group({
+    codigo: ['', [Validators.required, Validators.minLength(4)]],
+  });
+  readonly formApagar = this.fb.nonNullable.group({
+    senha: ['', Validators.required],
+  });
 
   constructor() {
-    inject(Title).setTitle('Minha conta | Bíblia Teológica');
+    inject(Title).setTitle('Meu perfil | Bíblia Teológica');
     this.carregar();
   }
 
@@ -74,67 +92,127 @@ export class PerfilComponent {
       .subscribe({
         next: (p) => {
           this.perfil.set(p);
-          this.formNome.patchValue({ nomeExibicao: p.nomeExibicao });
+          this.formPerfil.patchValue({ nomeExibicao: p.nomeExibicao, telefone: p.telefone ?? '' });
         },
         error: () => this.falhouAoCarregar.set(true),
       });
   }
 
-  guardarNome(): void {
-    this.formNome.markAllAsTouched();
-    if (this.formNome.invalid) return;
-    this.avisoNome.set(null);
-    this.aEnviarNome.set(true);
+  salvar(): void {
+    this.formPerfil.markAllAsTouched();
+    if (this.formPerfil.invalid) return;
+    this.avisoPerfil.set(null);
+    this.aSalvar.set(true);
+    const { nomeExibicao, telefone } = this.formPerfil.getRawValue();
+    const dto = { nomeExibicao: nomeExibicao.trim(), telefone: telefone.trim() || null };
     this.conta
-      .atualizarNome(this.formNome.getRawValue().nomeExibicao)
+      .atualizarPerfil(dto)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.avisoNome.set({ tipo: 'sucesso', texto: 'Nome salvo.' });
-          this.aEnviarNome.set(false);
+          const u = this.store.usuario();
+          if (u) this.store.definir({ ...u, nomeExibicao: dto.nomeExibicao });
+          this.perfil.update((p) => p && { ...p, nomeExibicao: dto.nomeExibicao, telefone: dto.telefone });
+          this.avisoPerfil.set({ tipo: 'sucesso', texto: 'Dados salvos.' });
+          this.aSalvar.set(false);
         },
-        error: () => {
-          this.avisoNome.set({ tipo: 'erro', texto: 'Não foi possível salvar o nome. Tente de novo.' });
-          this.aEnviarNome.set(false);
+        error: (e: HttpErrorResponse) => {
+          this.avisoPerfil.set({
+            tipo: 'erro',
+            texto: mensagemDeErro(e, 'Não foi possível salvar. Tente de novo.'),
+          });
+          this.aSalvar.set(false);
         },
       });
   }
 
-  guardarEmail(): void {
+  pedirCodigo(): void {
     this.formEmail.markAllAsTouched();
     if (this.formEmail.invalid) return;
+    this.erroEmail.set(null);
     this.avisoEmail.set(null);
     this.aEnviarEmail.set(true);
     const dados = this.formEmail.getRawValue();
     this.conta
-      .trocarEmail(dados)
+      .solicitarTrocaEmail({ novoEmail: dados.novoEmail.trim(), senha: dados.senha })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.perfil.update((p) => p && { ...p, email: dados.novoEmail });
-          this.formEmail.reset();
-          this.avisoEmail.set({ tipo: 'sucesso', texto: 'E-mail alterado. Use-o no próximo login.' });
+          this.emailPendente.set(dados.novoEmail.trim());
+          this.formEmail.controls.senha.reset('');
+          this.formCodigo.reset();
+          this.faseEmail.set('codigo');
           this.aEnviarEmail.set(false);
         },
-        error: (e) => {
-          this.avisoEmail.set({ tipo: 'erro', texto: e.error?.detail ?? 'Não foi possível alterar o e-mail.' });
+        error: (e: HttpErrorResponse) => {
+          this.erroEmail.set(mensagemDeErro(e, 'Não foi possível pedir o código. Tente de novo.'));
           this.aEnviarEmail.set(false);
         },
       });
   }
 
-  sair(): void {
-    this.erroAoSair.set(null);
-    this.aSair.set(true);
-    this.auth
-      .logout()
+  confirmarCodigo(): void {
+    this.formCodigo.markAllAsTouched();
+    if (this.formCodigo.invalid) return;
+    this.erroEmail.set(null);
+    this.aEnviarEmail.set(true);
+    this.conta
+      .confirmarTrocaEmail({
+        novoEmail: this.emailPendente(),
+        codigo: this.formCodigo.getRawValue().codigo.trim(),
+      })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => void this.router.navigate(['/']),
-        // A sessão só termina no servidor: limpar aqui faria parecer que saiu com os cookies ainda válidos.
-        error: () => {
-          this.erroAoSair.set('Não foi possível sair. Tente de novo.');
-          this.aSair.set(false);
+        next: (u) => {
+          this.perfil.update((p) => p && { ...p, email: u.email });
+          this.formEmail.reset();
+          this.formCodigo.reset();
+          this.faseEmail.set('dados');
+          this.avisoEmail.set('E-mail alterado. Use o novo endereço no próximo login.');
+          this.aEnviarEmail.set(false);
+        },
+        error: (e: HttpErrorResponse) => {
+          this.erroEmail.set(mensagemDeErro(e, 'Não foi possível confirmar o código. Tente de novo.'));
+          this.aEnviarEmail.set(false);
+        },
+      });
+  }
+
+  cancelarEmail(): void {
+    this.erroEmail.set(null);
+    this.formCodigo.reset();
+    this.faseEmail.set('dados');
+  }
+
+  pedirApagar(): void {
+    this.erroApagar.set(null);
+    this.formApagar.reset();
+    this.apagando.set(true);
+  }
+
+  cancelarApagar(): void {
+    this.erroApagar.set(null);
+    this.formApagar.reset();
+    this.apagando.set(false);
+  }
+
+  apagar(): void {
+    this.formApagar.markAllAsTouched();
+    if (this.formApagar.invalid) return;
+    this.erroApagar.set(null);
+    this.aApagar.set(true);
+    this.conta
+      .apagar(this.formApagar.getRawValue().senha)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.store.limpar();
+          void this.router.navigate(['/']);
+        },
+        error: (e: HttpErrorResponse) => {
+          const padrao = e.status === 409 ? ULTIMO_ADMIN : 'Não foi possível apagar a conta. Tente de novo.';
+          this.erroApagar.set(mensagemDeErro(e, padrao));
+          this.aApagar.set(false);
         },
       });
   }

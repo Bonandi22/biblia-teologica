@@ -15,7 +15,7 @@ namespace BibliaTeologica.Infrastructure.Persistence.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.30");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
 
             modelBuilder.Entity("BibliaTeologica.Domain.Entities.DocumentoConteudo", b =>
                 {
@@ -184,6 +184,12 @@ namespace BibliaTeologica.Infrastructure.Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("TermoAceitoEm")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TermoVersao")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")

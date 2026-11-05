@@ -1,0 +1,27 @@
+<div class="folha">
+  <h1>Esqueci minha senha</h1>
+
+  @if (enviado()) {
+    <bt-alerta tipo="sucesso">{{ mensagem }}</bt-alerta>
+    <p class="abaixo"><a routerLink="/entrar" class="ligacao">Voltar para Entrar</a></p>
+  } @else {
+    @if (erro(); as e) {
+      <bt-alerta tipo="erro">{{ e }}</bt-alerta>
+    }
+    <p class="lead">Informe o e-mail da sua conta. Enviaremos um link para criar uma nova senha.</p>
+    <form [formGroup]="form" (ngSubmit)="submeter()" novalidate>
+      <bt-campo label="E-mail" [erro]="erroDe(form.controls.email)">
+        <input btInput type="email" formControlName="email" autocomplete="username" />
+      </bt-campo>
+
+      <div class="isca" aria-hidden="true">
+        <input type="text" name="site" formControlName="site" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="linha">
+        <bt-botao type="submit" [carregando]="aEnviar()">Enviar link</bt-botao>
+        <a routerLink="/entrar" class="ligacao">Voltar</a>
+      </div>
+    </form>
+  }
+</div>

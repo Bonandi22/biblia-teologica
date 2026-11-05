@@ -4,7 +4,7 @@ import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { lerCookie } from '../interceptors/lercookie';
 import { AuthStore } from './auth.store';
-import type { DesafioLogin, Usuario } from './auth.models';
+import type { DesafioLogin, NovoCadastro, Usuario } from './auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -25,8 +25,20 @@ export class AuthService {
       );
   }
 
-  registar(dto: { email: string; senha: string; nomeExibicao: string }): Observable<void> {
-    return this.http.post<void>(`${this.base}/registar`, dto);
+  registar(dto: NovoCadastro): Observable<DesafioLogin> {
+    return this.http.post<DesafioLogin>(`${this.base}/registar`, dto);
+  }
+
+  reenviarCodigo(tokenDesafio: string): Observable<void> {
+    return this.http.post<void>(`${this.base}/login/2fa/reenviar`, { tokenDesafio });
+  }
+
+  esqueciSenha(email: string, site: string): Observable<void> {
+    return this.http.post<void>(`${this.base}/senha/esqueci`, { email, site });
+  }
+
+  redefinirSenha(dto: { email: string; token: string; novaSenha: string }): Observable<void> {
+    return this.http.post<void>(`${this.base}/senha/redefinir`, dto);
   }
 
   logout(): Observable<void> {

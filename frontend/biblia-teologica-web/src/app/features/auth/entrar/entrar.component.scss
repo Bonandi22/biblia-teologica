@@ -9,7 +9,42 @@
   @include folha-formulario;
 }
 
-// O botão de texto tem 4px de folga para o foco; o recuo alinha a palavra à margem.
-.voltar {
-  margin: $sp-4 0 0 -4px;
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-4;
+
+  .ligacao {
+    margin-top: 0;
+  }
+}
+
+// Filete separa quem já tem conta de quem ainda vai criar.
+.abaixo {
+  margin: $sp-6 0 0;
+  padding-top: $sp-4;
+  border-top: 1px solid $filete;
+
+  .ligacao {
+    margin-top: 0;
+  }
+}
+
+// Alerta de sucesso do DESIGN.md: caixa fina sem fundo, cor da capa, tamanho de nota.
+.aviso {
+  margin: 0 0 $sp-4;
+  padding: $sp-3 $sp-4;
+  border: 1px solid $capa;
+  border-radius: $raio;
+  color: $capa;
+  font-size: $t-nota;
+  line-height: 1.5;
+
+  a {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+  }
 }

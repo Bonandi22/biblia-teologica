@@ -1,46 +1,94 @@
 <div class="folha">
-  <h1>Minha conta</h1>
+  <h1>Meu perfil</h1>
 
   @if (perfil(); as p) {
-    <dl class="dados">
-      <div><dt>E-mail</dt><dd>{{ p.email }}</dd></div>
-      <div><dt>Perfis</dt><dd>{{ p.roles.join(', ') || 'Nenhum' }}</dd></div>
-    </dl>
-
-    <form [formGroup]="formNome" (ngSubmit)="guardarNome()" novalidate>
-      <bt-campo label="Nome a exibir" [erro]="erroDe(formNome.controls.nomeExibicao)">
+    <form [formGroup]="formPerfil" (ngSubmit)="salvar()" novalidate>
+      <bt-campo label="Nome" [erro]="erroDe(formPerfil.controls.nomeExibicao)">
         <input btInput formControlName="nomeExibicao" autocomplete="name" />
       </bt-campo>
-      <bt-botao type="submit" [carregando]="aEnviarNome()">Salvar nome</bt-botao>
-      @if (avisoNome(); as a) {
-        <div class="msg"><bt-alerta [tipo]="a.tipo">{{ a.texto }}</bt-alerta></div>
-      }
-    </form>
-
-    <form class="secao" [formGroup]="formEmail" (ngSubmit)="guardarEmail()" novalidate>
-      <h2>Trocar e-mail</h2>
-      <bt-campo label="Novo e-mail" [erro]="erroDe(formEmail.controls.novoEmail)">
-        <input btInput type="email" formControlName="novoEmail" autocomplete="email" />
+      <bt-campo label="Telefone (opcional)" hint="Deixe em branco para apagar o número.">
+        <input btInput type="tel" formControlName="telefone" autocomplete="tel" />
       </bt-campo>
-      <bt-campo-senha
-        label="Senha atual"
-        formControlName="senha"
-        autocomplete="current-password"
-        [erro]="erroDe(formEmail.controls.senha)"
-      />
-      <bt-botao type="submit" variante="fantasma" [carregando]="aEnviarEmail()">Trocar e-mail</bt-botao>
-      @if (avisoEmail(); as a) {
+      <bt-botao type="submit" [carregando]="aSalvar()">Salvar</bt-botao>
+      @if (avisoPerfil(); as a) {
         <div class="msg"><bt-alerta [tipo]="a.tipo">{{ a.texto }}</bt-alerta></div>
       }
     </form>
 
-    <div class="acoes">
-      <a routerLink="trocar-senha" class="ligacao">Trocar senha</a>
-      <bt-botao variante="texto" [carregando]="aSair()" (click)="sair()">Sair</bt-botao>
-    </div>
-    @if (erroAoSair(); as e) {
-      <div class="msg"><bt-alerta tipo="erro">{{ e }}</bt-alerta></div>
-    }
+    <section class="secao">
+      <h2>E-mail</h2>
+      <p class="email-atual">{{ p.email }}</p>
+
+      @if (faseEmail() === 'dados') {
+        @if (avisoEmail(); as a) {
+          <div class="msg"><bt-alerta tipo="sucesso">{{ a }}</bt-alerta></div>
+        }
+        <form [formGroup]="formEmail" (ngSubmit)="pedirCodigo()" novalidate>
+          <bt-campo label="Novo e-mail" [erro]="erroDe(formEmail.controls.novoEmail)">
+            <input btInput type="email" formControlName="novoEmail" autocomplete="email" />
+          </bt-campo>
+          <bt-campo-senha
+            label="Senha atual"
+            formControlName="senha"
+            autocomplete="current-password"
+            [erro]="erroDe(formEmail.controls.senha)"
+          />
+          <bt-botao type="submit" variante="fantasma" [carregando]="aEnviarEmail()">Enviar código</bt-botao>
+          @if (erroEmail(); as e) {
+            <div class="msg"><bt-alerta tipo="erro">{{ e }}</bt-alerta></div>
+          }
+        </form>
+      } @else {
+        <form [formGroup]="formCodigo" (ngSubmit)="confirmarCodigo()" novalidate>
+          <p>
+            Enviamos um código para <strong class="quebra">{{ emailPendente() }}</strong>. Digite-o abaixo
+            para confirmar a troca.
+          </p>
+          <bt-campo label="Código" [erro]="erroDe(formCodigo.controls.codigo)">
+            <input btInput formControlName="codigo" inputmode="numeric" autocomplete="one-time-code" />
+          </bt-campo>
+          <div class="linha">
+            <bt-botao type="submit" [carregando]="aEnviarEmail()">Confirmar e-mail</bt-botao>
+            <bt-botao variante="texto" (click)="cancelarEmail()">Voltar</bt-botao>
+          </div>
+          @if (erroEmail(); as e) {
+            <div class="msg"><bt-alerta tipo="erro">{{ e }}</bt-alerta></div>
+          }
+        </form>
+      }
+    </section>
+
+    <section class="secao">
+      <h2>Senha</h2>
+      <a routerLink="trocar-senha" class="ligacao sem-margem">Trocar senha</a>
+    </section>
+
+    <section class="secao apagar">
+      <h2>Apagar conta</h2>
+      @if (!apagando()) {
+        <p>Apaga a sua conta e os seus dados, sem cópia. Não dá para desfazer.</p>
+        <bt-botao variante="fantasma" (click)="pedirApagar()">Apagar conta</bt-botao>
+      } @else {
+        <form [formGroup]="formApagar" (ngSubmit)="apagar()" novalidate>
+          <p>Para confirmar, digite a sua senha. A conta e os dados serão apagados agora.</p>
+          <bt-campo-senha
+            label="Senha atual"
+            formControlName="senha"
+            autocomplete="current-password"
+            [erro]="erroDe(formApagar.controls.senha)"
+          />
+          <div class="linha">
+            <bt-botao type="submit" variante="fantasma" class="perigo" [carregando]="aApagar()">
+              Apagar minha conta
+            </bt-botao>
+            <bt-botao variante="texto" (click)="cancelarApagar()">Cancelar</bt-botao>
+          </div>
+          @if (erroApagar(); as e) {
+            <div class="msg"><bt-alerta tipo="erro">{{ e }}</bt-alerta></div>
+          }
+        </form>
+      }
+    </section>
   } @else if (falhouAoCarregar()) {
     <bt-alerta tipo="erro">Não foi possível carregar a sua conta.</bt-alerta>
     <div class="tentar">

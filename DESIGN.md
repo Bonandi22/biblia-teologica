@@ -266,6 +266,7 @@ Caixa fina sem fundo: 1px e texto na mesma cor, ferrugem para erro e capa para s
 
 ### Navigation
 - **Título corrente:** navegação à esquerda, lugar atual ao centro (700, 1.25rem), marca e conta à direita, sobre filete de tinta de 2px. Sublinha no hover, rubrica na seção ativa.
+- **Avatar da conta:** quadrado de 44px, cantos de 2px, fundo tinta, com as iniciais (primeira letra do primeiro e do último nome) em papel, Alegreya Sans SC 700. Visitante vê só "Entrar". O menu abre sem sombra, com filete de tinta de 2px no alto e de 1px nos outros lados, e lista o nome, "Meu perfil" e "Sair". Fecha com Esc, clique fora e ao escolher um item, devolvendo o foco ao avatar. No celular, os mesmos itens entram direto no painel do menu, sem segundo nível.
 - **Abas:** faixa entre dois filetes de tinta de 1px; a ativa fica em rubrica e peso 700, sem fundo e sem marcador. Rolam dentro do próprio trilho e nunca alargam a página.
 - **Divisão:** nome da divisão em rubrica; livros em tinta mutada, com o atual em tinta e peso 700.
 - **Rodapé:** campo de capa com marca, links, nota sobre a ARC e ano. No celular, empilhado.

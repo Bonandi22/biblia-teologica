@@ -8,5 +8,6 @@ export function erroCampo(controle: AbstractControl | null): string | null {
   if (e['email']) return 'Digite um e-mail válido, como nome@exemplo.com.';
   if (e['minlength']) return `Use pelo menos ${e['minlength'].requiredLength} caracteres.`;
   if (e['maxlength']) return `Use no máximo ${e['maxlength'].requiredLength} caracteres.`;
+  if (e['senhaForte']) return 'Use pelo menos 8 caracteres, com maiúscula, minúscula e número.';
   return 'Confira este campo.';
 }

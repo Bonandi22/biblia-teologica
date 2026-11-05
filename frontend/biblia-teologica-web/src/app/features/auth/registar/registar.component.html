@@ -1,26 +1,64 @@
 <div class="folha">
   <h1>Criar conta</h1>
 
-  @if (erro(); as e) {
-    <bt-alerta tipo="erro">{{ e }}</bt-alerta>
-  }
+  @if (fase() === 'dados') {
+    @if (erro(); as e) {
+      <bt-alerta tipo="erro">{{ e }}</bt-alerta>
+    }
 
-  <form [formGroup]="form" (ngSubmit)="submeter()" novalidate>
-    <bt-campo label="Nome a exibir" [erro]="erroDe(form.controls.nomeExibicao)">
-      <input btInput formControlName="nomeExibicao" autocomplete="name" />
-    </bt-campo>
-    <bt-campo label="E-mail" [erro]="erroDe(form.controls.email)">
-      <input btInput type="email" formControlName="email" autocomplete="username" />
-    </bt-campo>
-    <bt-campo-senha
-      label="Senha"
-      hint="Mínimo de 8 caracteres."
-      formControlName="senha"
-      autocomplete="new-password"
-      [erro]="erroDe(form.controls.senha)"
+    <form [formGroup]="form" (ngSubmit)="submeter()" novalidate>
+      <bt-campo label="Nome" [erro]="erroDe(form.controls.nomeExibicao)">
+        <input btInput formControlName="nomeExibicao" autocomplete="name" />
+      </bt-campo>
+      <bt-campo label="E-mail" [erro]="erroDe(form.controls.email)">
+        <input btInput type="email" formControlName="email" autocomplete="username" />
+      </bt-campo>
+      <bt-campo label="Telefone (opcional)" [erro]="erroDe(form.controls.telefone)">
+        <input btInput type="tel" formControlName="telefone" autocomplete="tel" />
+      </bt-campo>
+      <bt-campo-senha
+        label="Senha"
+        hint="Pelo menos 8 caracteres, com maiúscula, minúscula e número."
+        formControlName="senha"
+        autocomplete="new-password"
+        [erro]="erroDe(form.controls.senha)"
+      />
+
+      <div class="termo">
+        <label class="termo__rotulo">
+          <input
+            type="checkbox"
+            formControlName="aceitouTermo"
+            [attr.aria-invalid]="erroDoTermo() ? 'true' : null"
+            aria-describedby="termo-erro"
+          />
+          <span>Li e aceito o termo de proteção de dados e autorizo guardar os meus dados</span>
+        </label>
+        <a href="/privacidade" target="_blank" rel="noopener" class="termo__ler">Ler o termo (abre em outra aba)</a>
+        @if (erroDoTermo()) {
+          <p class="termo__erro" id="termo-erro" role="alert">Aceite o termo para criar a conta.</p>
+        }
+      </div>
+
+      <div class="isca" aria-hidden="true">
+        <input type="text" name="site" formControlName="site" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <bt-botao type="submit" [carregando]="aEnviar()">Criar conta</bt-botao>
+    </form>
+
+    <p class="abaixo">
+      Já tem conta?
+      <a routerLink="/entrar" [queryParams]="retorno ? { retorno } : null" class="ligacao">Entrar</a>
+    </p>
+  } @else {
+    <bt-verificar-codigo
+      [tokenDesafio]="tokenDesafio()"
+      [aEnviar]="aEnviar()"
+      [erro]="erro()"
+      (enviar)="submeterCodigo($event)"
+      (voltar)="voltar()"
+      (vencido)="desafioVenceu()"
     />
-    <bt-botao type="submit" [carregando]="aEnviar()">Criar conta</bt-botao>
-  </form>
-
-  <a routerLink="/entrar" class="ligacao">Já tenho conta</a>
+  }
 </div>

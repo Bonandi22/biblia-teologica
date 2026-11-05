@@ -1,3 +1,4 @@
+@use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
 :host {
@@ -6,4 +7,60 @@
 
 .folha {
   @include folha-formulario;
+}
+
+// O termo é um compromisso: fica separado dos campos por espaço, e a caixa tem alvo de toque de 24px.
+.termo {
+  margin: $sp-6 0;
+
+  &__rotulo {
+    display: flex;
+    align-items: flex-start;
+    gap: $sp-3;
+    line-height: 1.45;
+    cursor: pointer;
+
+    input {
+      flex: none;
+      width: 24px;
+      height: 24px;
+      margin: 0;
+      accent-color: $tinta;
+    }
+  }
+
+  &__ler {
+    display: inline-block;
+    margin: $sp-2 0 0 36px; // alinha ao texto, depois da caixa e do vão
+    padding-block: $sp-1;
+    font-family: $fonte-corrente;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: $tinta;
+  }
+
+  &__erro {
+    margin: $sp-2 0 0 36px;
+    font-size: 0.9375rem;
+    color: $erro;
+  }
+}
+
+// Fora da tela e não em display:none: robôs que ignoram CSS escondido ainda a preenchem.
+.isca {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.abaixo {
+  margin: $sp-6 0 0;
+  padding-top: $sp-4;
+  border-top: 1px solid $filete;
+
+  .ligacao {
+    margin-top: 0;
+  }
 }

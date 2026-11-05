@@ -178,7 +178,8 @@ public class SegurancaApiTests
         {
             email = "novo@teste.local",
             senha = "Aa1!" + new string('a', 125),
-            nomeExibicao = "Novo"
+            nomeExibicao = "Novo",
+            aceitouTermo = true
         });
 
         r.StatusCode.Should().Be(HttpStatusCode.BadRequest);

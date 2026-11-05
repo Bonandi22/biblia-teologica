@@ -36,6 +36,13 @@ public class AuthController : ControllerBase
                 Title = "Conta bloqueada",
                 Detail = "Demasiadas tentativas. Tenta mais tarde."
             }),
+            EstadoLogin.LimiteEnvio => Limite(),
+            EstadoLogin.FalhaEnvio => StatusCode(StatusCodes.Status503ServiceUnavailable, new ProblemDetails
+            {
+                Status = StatusCodes.Status503ServiceUnavailable,
+                Title = "Envio indisponível",
+                Detail = "Não conseguimos enviar o código agora. Tente de novo em alguns minutos."
+            }),
             EstadoLogin.Desafio2fa => Ok(new { desafio2fa = true, tokenDesafio = r.TokenDesafio }),
             _ => Unauthorized(new ProblemDetails { Status = StatusCodes.Status401Unauthorized, Title = "Credenciais inválidas" })
         };
@@ -45,6 +52,30 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Login2fa(Verificar2faDto dto, CancellationToken ct)
         => Finalizar(await _auth.Verificar2faAsync(dto, Ip, ct));
+
+    // Público: quem está no meio do login ainda não tem sessão. O token de desafio assinado e de 5 minutos
+    // é a prova; a resposta não depende de a conta existir, e o limite de envio vale igual nos dois casos.
+    [HttpPost("login/2fa/reenviar")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ReenviarCodigo(ReenviarCodigoDto dto, CancellationToken ct)
+        => await _auth.ReenviarCodigoAsync(dto.TokenDesafio, ct) switch
+        {
+            ResultadoReenvio.Aceito => NoContent(),
+            ResultadoReenvio.Limite => Limite(),
+            _ => BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Desafio inválido",
+                Detail = "Este desafio é inválido ou venceu. Entre de novo."
+            })
+        };
+
+    private IActionResult Limite() => StatusCode(StatusCodes.Status429TooManyRequests, new ProblemDetails
+    {
+        Status = StatusCodes.Status429TooManyRequests,
+        Title = "Muitos envios",
+        Detail = "Enviamos códigos demais para este endereço. Aguarde alguns minutos e tente de novo."
+    });
 
     [HttpPost("refresh")]
     [AllowAnonymous]
@@ -77,12 +108,37 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Registar(RegistarMembroDto dto, CancellationToken ct)
     {
         var r = await _auth.RegistarMembroAsync(dto, ct);
-        return r.Sucesso
-            ? StatusCode(StatusCodes.Status201Created)
+        return r.Erros.Count == 0
+            ? Accepted(new { tokenDesafio = r.TokenDesafio })
             : BadRequest(new ProblemDetails
             {
                 Status = StatusCodes.Status400BadRequest,
-                Title = "Registo inválido",
+                Title = "Cadastro inválido",
+                Detail = string.Join(" ", r.Erros)
+            });
+    }
+
+    // Público: quem esqueceu a senha não tem sessão. Responde sempre 202 sem corpo, exista a conta ou não.
+    [HttpPost("senha/esqueci")]
+    [AllowAnonymous]
+    public async Task<IActionResult> EsqueciSenha(EsqueciSenhaDto dto, CancellationToken ct)
+    {
+        await _auth.PedirRedefinicaoAsync(dto, ct);
+        return Accepted();
+    }
+
+    // Público: a prova é o token de redefinição, de 1 hora e uso único. Token inválido e e-mail inexistente dão a mesma resposta.
+    [HttpPost("senha/redefinir")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RedefinirSenha(RedefinirSenhaDto dto, CancellationToken ct)
+    {
+        var r = await _auth.RedefinirSenhaAsync(dto, ct);
+        return r.Sucesso
+            ? NoContent()
+            : BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Redefinição inválida",
                 Detail = string.Join(" ", r.Erros)
             });
     }

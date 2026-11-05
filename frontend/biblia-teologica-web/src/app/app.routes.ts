@@ -34,6 +34,13 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'privacidade',
+    loadComponent: () =>
+      import('./features/institucional/privacidade/privacidade.component').then(
+        (m) => m.PrivacidadeComponent,
+      ),
+  },
+  {
     path: 'entrar',
     loadComponent: () =>
       import('./features/auth/entrar/entrar.component').then((m) => m.EntrarComponent),
@@ -42,6 +49,20 @@ export const routes: Routes = [
     path: 'registar',
     loadComponent: () =>
       import('./features/auth/registar/registar.component').then((m) => m.RegistarComponent),
+  },
+  {
+    path: 'esqueci-senha',
+    loadComponent: () =>
+      import('./features/auth/esqueci-senha/esqueci-senha.component').then(
+        (m) => m.EsqueciSenhaComponent,
+      ),
+  },
+  {
+    path: 'redefinir-senha',
+    loadComponent: () =>
+      import('./features/auth/redefinir-senha/redefinir-senha.component').then(
+        (m) => m.RedefinirSenhaComponent,
+      ),
   },
   {
     path: 'conta',

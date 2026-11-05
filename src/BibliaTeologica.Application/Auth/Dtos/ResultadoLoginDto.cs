@@ -1,6 +1,6 @@
 namespace BibliaTeologica.Application.Auth.Dtos;
 
-public enum EstadoLogin { CredenciaisInvalidas, Bloqueado, Desafio2fa, Autenticado }
+public enum EstadoLogin { CredenciaisInvalidas, Bloqueado, Desafio2fa, Autenticado, LimiteEnvio, FalhaEnvio }
 
 public record ResultadoLoginDto(
     EstadoLogin Estado,

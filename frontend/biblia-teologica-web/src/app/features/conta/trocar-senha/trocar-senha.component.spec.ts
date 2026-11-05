@@ -30,16 +30,27 @@ describe('TrocarSenhaComponent', () => {
 
   it('não submete quando as senhas não coincidem', () => {
     const c = criar();
-    c.form.setValue({ senhaAtual: 'atual123', novaSenha: 'nova12345', confirmar: 'outra12345' });
+    c.form.setValue({ senhaAtual: 'atual123', novaSenha: 'Nova12345', confirmar: 'Outra12345' });
     c.submeter();
     http.expectNone('/api/conta/senha');
     expect(c.form.hasError('diferentes')).toBe(true);
   });
 
+  it('trocarSenha_exigeSenhaForte', () => {
+    const c = criar();
+    c.form.setValue({ senhaAtual: 'atual123', novaSenha: 'tudominusculo1', confirmar: 'tudominusculo1' });
+    c.submeter();
+    http.expectNone('/api/conta/senha');
+    expect(c.form.controls.novaSenha.hasError('senhaForte')).toBe(true);
+
+    c.form.setValue({ senhaAtual: 'atual123', novaSenha: 'Forte12345', confirmar: 'Forte12345' });
+    expect(c.form.controls.novaSenha.valid).toBe(true);
+  });
+
   it('no sucesso navega para /conta (não-admin)', () => {
     const c = criar();
     const nav = vi.spyOn(TestBed.inject(Router), 'navigateByUrl').mockResolvedValue(true);
-    c.form.setValue({ senhaAtual: 'atual123', novaSenha: 'nova12345', confirmar: 'nova12345' });
+    c.form.setValue({ senhaAtual: 'atual123', novaSenha: 'Nova12345', confirmar: 'Nova12345' });
     c.submeter();
     http.expectOne('/api/conta/senha').flush({
       usuario: { email: 'a@b.c', nomeExibicao: 'Ana', roles: ['Membro'], deveTrocarSenha: false },
@@ -51,7 +62,7 @@ describe('TrocarSenhaComponent', () => {
   it('no sucesso navega para /admin quando é admin', () => {
     const c = criar();
     const nav = vi.spyOn(TestBed.inject(Router), 'navigateByUrl').mockResolvedValue(true);
-    c.form.setValue({ senhaAtual: 'atual123', novaSenha: 'nova12345', confirmar: 'nova12345' });
+    c.form.setValue({ senhaAtual: 'atual123', novaSenha: 'Nova12345', confirmar: 'Nova12345' });
     c.submeter();
     http.expectOne('/api/conta/senha').flush({
       usuario: { email: 'a@b.c', nomeExibicao: 'Ana', roles: ['Admin'], deveTrocarSenha: false },
@@ -61,7 +72,7 @@ describe('TrocarSenhaComponent', () => {
 
   it('mostra o detalhe do erro em falha', () => {
     const c = criar();
-    c.form.setValue({ senhaAtual: 'errada12', novaSenha: 'nova12345', confirmar: 'nova12345' });
+    c.form.setValue({ senhaAtual: 'errada12', novaSenha: 'Nova12345', confirmar: 'Nova12345' });
     c.submeter();
     http
       .expectOne('/api/conta/senha')
@@ -90,7 +101,7 @@ describe('TrocarSenhaComponent na tela', () => {
   it('diz quando as senhas não coincidem, no campo de confirmação', () => {
     const fixture = montar();
     const c = fixture.componentInstance;
-    c.form.setValue({ senhaAtual: 'atual', novaSenha: 'segredo123', confirmar: 'outra' });
+    c.form.setValue({ senhaAtual: 'atual', novaSenha: 'Segredo123', confirmar: 'outra' });
     const el = fixture.nativeElement as HTMLElement;
     el.querySelector('form')!.dispatchEvent(new Event('submit'));
     fixture.detectChanges();

@@ -3,10 +3,13 @@ using BibliaTeologica.Application.Common.Resultados;
 
 namespace BibliaTeologica.Application.Common.Interfaces;
 
+public record ResultadoRedefinicao(Guid? UserId, bool TokenInvalido, IReadOnlyList<string> Erros);
+
 public interface IIdentityService
 {
     Task<ResultadoSenha> VerificarSenhaAsync(string email, string senha, bool lockoutOnFailure, CancellationToken ct);
     Task<Guid?> ResolverIdPorEmailAsync(string email, CancellationToken ct);
+    Task<bool> EstaBloqueadoAsync(Guid userId, CancellationToken ct);
     Task<string> GerarTokenEmailAsync(Guid userId, CancellationToken ct);
     Task<bool> VerificarTokenEmailAsync(Guid userId, string codigo, CancellationToken ct);
     Task RegistarFalhaAsync(Guid userId, CancellationToken ct);
@@ -14,9 +17,25 @@ public interface IIdentityService
     Task<UsuarioDto?> ObterUsuarioAsync(Guid userId, CancellationToken ct);
     Task<string?> ObterEmailAsync(Guid userId, CancellationToken ct);
     Task<DateTime?> ObterCriadoEmAsync(Guid userId, CancellationToken ct);
-    Task<IdentityResultDto> CriarMembroAsync(string email, string senha, string nomeExibicao, CancellationToken ct);
+    /// <summary>Roda a política de senha sem criar nada, para validar antes de olhar se o e-mail existe.</summary>
+    Task<IdentityResultDto> ValidarSenhaAsync(string senha, CancellationToken ct);
+    Task<ResultadoCriacao> CriarMembroAsync(NovoMembro dados, CancellationToken ct);
+    Task<string> GerarTokenRedefinicaoAsync(Guid userId, CancellationToken ct);
+    Task<ResultadoRedefinicao> RedefinirSenhaAsync(string email, string token, string novaSenha, CancellationToken ct);
     Task<IdentityResultDto> TrocarSenhaAsync(Guid userId, string atual, string nova, CancellationToken ct);
-    Task<IdentityResultDto> TrocarEmailAsync(Guid userId, string novoEmail, string senha, CancellationToken ct);
-    Task AtualizarNomeAsync(Guid userId, string nomeExibicao, CancellationToken ct);
+    /// <summary>Confere a senha de quem já está logado; cada falha conta para o bloqueio.</summary>
+    Task<ResultadoSenha> ConferirSenhaAsync(Guid userId, string senha, CancellationToken ct);
+    Task<string> GerarCodigoTrocaEmailAsync(Guid userId, string novoEmail, CancellationToken ct);
+    /// <summary>Confere o código ligado ao endereço e troca e-mail e nome de utilizador. Falhas contam para o bloqueio.</summary>
+    Task<IdentityResultDto> ConfirmarTrocaEmailAsync(Guid userId, string novoEmail, string codigo, CancellationToken ct);
+    /// <summary>Substitui nome e telefone; o telefone já vem normalizado e null apaga o número.</summary>
+    Task AtualizarPerfilAsync(Guid userId, string nomeExibicao, string? telefone, CancellationToken ct);
+    Task<string?> ObterTelefoneAsync(Guid userId, CancellationToken ct);
+    /// <summary>Verdadeiro quando a conta é administradora e não há outro administrador.</summary>
+    Task<bool> EhUltimoAdminAsync(Guid userId, CancellationToken ct);
+    /// <summary>Apaga a conta e os dados ligados a ela (sessões em cascata).</summary>
+    Task<IdentityResultDto> ApagarUsuarioAsync(Guid userId, CancellationToken ct);
+    /// <summary>Apaga contas com e-mail não confirmado criadas antes do limite; devolve quantas.</summary>
+    Task<int> ApagarNaoConfirmadasAsync(DateTime criadasAntesDe, CancellationToken ct);
     Task LimparDeveTrocarSenhaAsync(Guid userId, CancellationToken ct);
 }

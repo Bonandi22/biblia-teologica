@@ -19,6 +19,8 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 (builder.Configuration.GetSection(EmailOptions.Secao).Get<EmailOptions>() ?? new EmailOptions())
     .Validar(builder.Environment.IsProduction());
+(builder.Configuration.GetSection(SiteOptions.Secao).Get<SiteOptions>() ?? new SiteOptions())
+    .Validar(builder.Environment.IsProduction());
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsuarioAtual, UsuarioAtual>();

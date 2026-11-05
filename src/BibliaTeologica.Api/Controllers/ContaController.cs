@@ -5,11 +5,13 @@ using BibliaTeologica.Application.Conta;
 using BibliaTeologica.Application.Conta.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BibliaTeologica.Api.Controllers;
 
 [ApiController]
 [Route("api/conta")]
+// [Authorize] sem Roles de propósito: cada ação age só sobre a conta do próprio utilizador autenticado (Id do token).
 [Authorize]
 public class ContaController : ControllerBase
 {
@@ -37,18 +39,78 @@ public class ContaController : ControllerBase
     [ServiceFilter(typeof(CsrfActionFilter))]
     public async Task<IActionResult> Atualizar(AtualizarPerfilDto dto, CancellationToken ct)
     {
-        await _conta.AtualizarAsync(Id, dto, ct);
-        return NoContent();
-    }
-
-    [HttpPut("email")]
-    [ServiceFilter(typeof(CsrfActionFilter))]
-    public async Task<IActionResult> TrocarEmail(TrocarEmailDto dto, CancellationToken ct)
-    {
-        var r = await _conta.TrocarEmailAsync(Id, dto, ct);
+        var r = await _conta.AtualizarAsync(Id, dto, ct);
         return r.Sucesso
             ? NoContent()
             : BadRequest(new ProblemDetails { Status = 400, Title = "Erro", Detail = string.Join(" ", r.Erros) });
+    }
+
+    [HttpDelete]
+    [EnableRateLimiting("auth")]
+    [ServiceFilter(typeof(CsrfActionFilter))]
+    public async Task<IActionResult> Apagar([FromBody] ApagarContaDto dto, CancellationToken ct)
+    {
+        switch (await _conta.ApagarAsync(Id, dto, ct))
+        {
+            case ResultadoApagar.Apagada:
+                _cookies.Limpar(Response);
+                return NoContent();
+            case ResultadoApagar.UltimoAdmin:
+                return Conflict(new ProblemDetails
+                {
+                    Status = StatusCodes.Status409Conflict,
+                    Title = "Último administrador",
+                    Detail = "Você é o único administrador. Passe o cargo a outra pessoa antes de apagar a conta."
+                });
+            default:
+                return BadRequest(new ProblemDetails { Status = 400, Title = "Erro", Detail = "Senha incorreta." });
+        }
+    }
+
+    [HttpPost("email/solicitar")]
+    [EnableRateLimiting("auth")]
+    [ServiceFilter(typeof(CsrfActionFilter))]
+    public async Task<IActionResult> SolicitarTrocaEmail(SolicitarTrocaEmailDto dto, CancellationToken ct)
+    {
+        var r = await _conta.SolicitarTrocaEmailAsync(Id, dto, ct);
+        if (r.Limite)
+            return StatusCode(StatusCodes.Status429TooManyRequests, new ProblemDetails
+            {
+                Status = StatusCodes.Status429TooManyRequests,
+                Title = "Muitos envios",
+                Detail = "Enviamos códigos demais para este endereço. Aguarde alguns minutos e tente de novo."
+            });
+        return r.Sucesso
+            ? NoContent()
+            : BadRequest(new ProblemDetails { Status = 400, Title = "Erro", Detail = string.Join(" ", r.Erros) });
+    }
+
+    [HttpPost("email/confirmar")]
+    [EnableRateLimiting("auth")]
+    [ServiceFilter(typeof(CsrfActionFilter))]
+    public async Task<IActionResult> ConfirmarTrocaEmail(ConfirmarTrocaEmailDto dto, CancellationToken ct)
+    {
+        var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        var r = await _conta.ConfirmarTrocaEmailAsync(Id, dto, ip, ct);
+        if (r.Estado != EstadoLogin.Autenticado || r.Tokens is null)
+            return BadRequest(new ProblemDetails
+            {
+                Status = 400,
+                Title = "Erro",
+                Detail = string.Join(" ", r.Erros ?? Array.Empty<string>())
+            });
+
+        _cookies.Escrever(Response, r.Tokens);
+        return Ok(new
+        {
+            usuario = new
+            {
+                r.Usuario!.Email,
+                r.Usuario.NomeExibicao,
+                r.Usuario.Roles,
+                r.Usuario.DeveTrocarSenha
+            }
+        });
     }
 
     [HttpPost("senha")]

@@ -10,7 +10,10 @@ const PERFIL = {
   nomeExibicao: 'Ana',
   roles: ['Membro'],
   criadoEm: '2026-01-01T00:00:00Z',
+  telefone: '+5511999990000',
 };
+const USUARIO = { email: 'a@b.c', nomeExibicao: 'Ana', roles: ['Membro'], deveTrocarSenha: false };
+const SEM_CONTEUDO = { status: 204, statusText: 'No Content' };
 
 describe('PerfilComponent', () => {
   let http: HttpTestingController;
@@ -18,47 +21,70 @@ describe('PerfilComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [PerfilComponent],
-      providers: [
-        provideRouter([]),
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
     });
     http = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => http.verify());
 
-  it('mostra o email do perfil', () => {
+  function criar() {
     const fixture = TestBed.createComponent(PerfilComponent);
     fixture.detectChanges();
     http.expectOne('/api/conta').flush(PERFIL);
     fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('a@b.c');
+    return fixture;
+  }
+
+  it('perfil_preencheNomeETelefone_quandoCarrega', () => {
+    const c = criar().componentInstance;
+    expect(c.formPerfil.getRawValue()).toEqual({ nomeExibicao: 'Ana', telefone: '+5511999990000' });
   });
 
-  it('pré-preenche o form do nome com o perfil', () => {
-    const fixture = TestBed.createComponent(PerfilComponent);
-    fixture.detectChanges();
-    http.expectOne('/api/conta').flush(PERFIL);
-    fixture.detectChanges();
-    expect(fixture.componentInstance.formNome.getRawValue().nomeExibicao).toBe('Ana');
+  it('perfil_naoMostraPerfis', () => {
+    const el = criar().nativeElement as HTMLElement;
+    expect(el.textContent).not.toContain('Perfis');
+    expect(el.textContent).not.toContain('Membro');
+    expect(el.textContent).toContain('a@b.c');
   });
 
-  it('guardarNome faz PUT e mostra confirmação', () => {
-    const fixture = TestBed.createComponent(PerfilComponent);
-    fixture.detectChanges();
-    http.expectOne('/api/conta').flush(PERFIL);
-    fixture.detectChanges();
+  it('perfil_naoTemSair_naTela', () => {
+    const el = criar().nativeElement as HTMLElement;
+    expect(el.textContent).not.toContain('Sair');
+  });
 
+  it('perfil_atualizaAvatar_quandoSalvaNome', () => {
+    const fixture = criar();
+    const store = TestBed.inject(AuthStore);
+    store.definir(USUARIO);
     const c = fixture.componentInstance;
-    c.formNome.setValue({ nomeExibicao: 'Ana Maria' });
-    c.guardarNome();
+    c.formPerfil.patchValue({ nomeExibicao: 'Ana Maria' });
+    c.salvar();
     const req = http.expectOne('/api/conta');
     expect(req.request.method).toBe('PUT');
-    expect(req.request.body).toEqual({ nomeExibicao: 'Ana Maria' });
-    req.flush(null);
-    expect(c.avisoNome()).toEqual({ tipo: 'sucesso', texto: 'Nome salvo.' });
+    expect(req.request.body).toEqual({ nomeExibicao: 'Ana Maria', telefone: '+5511999990000' });
+    req.flush(null, SEM_CONTEUDO);
+    expect(store.usuario()?.nomeExibicao).toBe('Ana Maria');
+    expect(c.avisoPerfil()).toEqual({ tipo: 'sucesso', texto: 'Dados salvos.' });
+  });
+
+  it('perfil_limpaTelefone_quandoCampoVazio', () => {
+    const c = criar().componentInstance;
+    c.formPerfil.patchValue({ telefone: '   ' });
+    c.salvar();
+    const req = http.expectOne('/api/conta');
+    expect(req.request.body).toEqual({ nomeExibicao: 'Ana', telefone: null });
+    req.flush(null, SEM_CONTEUDO);
+  });
+
+  it('perfil_mostraMensagemDoServidor_quandoSalvarFalha', () => {
+    const c = criar().componentInstance;
+    c.salvar();
+    http
+      .expectOne('/api/conta')
+      .flush({ detail: 'Telefone inválido.' }, { status: 400, statusText: 'Bad Request' });
+    expect(c.avisoPerfil()).toEqual({ tipo: 'erro', texto: 'Telefone inválido.' });
+    expect(c.aSalvar()).toBe(false);
   });
 
   it('carregar_MostraErroETentaDeNovo_QuandoPerfilFalha', () => {
@@ -68,8 +94,6 @@ describe('PerfilComponent', () => {
     fixture.detectChanges();
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('[role="alert"]')?.textContent).toContain('Não foi possível carregar');
-    expect(el.textContent).not.toContain('Carregando');
-
     el.querySelector<HTMLButtonElement>('.tentar button')!.click();
     http.expectOne('/api/conta').flush(PERFIL);
     fixture.detectChanges();
@@ -77,87 +101,137 @@ describe('PerfilComponent', () => {
     expect(el.textContent).toContain('a@b.c');
   });
 
-  it('sair_VaiParaInicial_QuandoLogoutPassa', () => {
-    const fixture = TestBed.createComponent(PerfilComponent);
+  it('perfil_pedeCodigo_depoisDeSolicitarTrocaEmail', () => {
+    const fixture = criar();
+    const c = fixture.componentInstance;
+    c.formEmail.setValue({ novoEmail: 'novo@b.c', senha: 'Segredo1' });
+    c.pedirCodigo();
+    const req = http.expectOne('/api/conta/email/solicitar');
+    expect(req.request.body).toEqual({ novoEmail: 'novo@b.c', senha: 'Segredo1' });
+    req.flush(null, SEM_CONTEUDO);
     fixture.detectChanges();
-    http.expectOne('/api/conta').flush(PERFIL);
-    const nav = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    expect(c.faseEmail()).toBe('codigo');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('novo@b.c');
+    expect(c.formEmail.getRawValue().senha).toBe('');
+  });
 
-    fixture.componentInstance.sair();
-    http.expectOne('/api/auth/logout').flush(null);
+  it('perfil_mostraErro_quandoSenhaErradaAoSolicitar', () => {
+    const c = criar().componentInstance;
+    c.formEmail.setValue({ novoEmail: 'novo@b.c', senha: 'x' });
+    c.pedirCodigo();
+    http
+      .expectOne('/api/conta/email/solicitar')
+      .flush({ detail: 'Senha incorreta.' }, { status: 400, statusText: 'Bad Request' });
+    expect(c.faseEmail()).toBe('dados');
+    expect(c.erroEmail()).toBe('Senha incorreta.');
+  });
+
+  it('perfil_mostraEmailNovo_quandoConfirmaCodigo', () => {
+    const fixture = criar();
+    const c = fixture.componentInstance;
+    c.formEmail.setValue({ novoEmail: 'novo@b.c', senha: 'Segredo1' });
+    c.pedirCodigo();
+    http.expectOne('/api/conta/email/solicitar').flush(null, SEM_CONTEUDO);
+    c.formCodigo.setValue({ codigo: '123456' });
+    c.confirmarCodigo();
+    const req = http.expectOne('/api/conta/email/confirmar');
+    expect(req.request.body).toEqual({ novoEmail: 'novo@b.c', codigo: '123456' });
+    req.flush({ usuario: { ...USUARIO, email: 'novo@b.c' } });
+    fixture.detectChanges();
+    expect(c.faseEmail()).toBe('dados');
+    expect((fixture.nativeElement as HTMLElement).querySelector('.email-atual')?.textContent).toContain(
+      'novo@b.c',
+    );
+    expect(TestBed.inject(AuthStore).usuario()?.email).toBe('novo@b.c');
+  });
+
+  it('perfil_mostraErro_quandoCodigoInvalido', () => {
+    const fixture = criar();
+    const c = fixture.componentInstance;
+    c.formEmail.setValue({ novoEmail: 'novo@b.c', senha: 'Segredo1' });
+    c.pedirCodigo();
+    http.expectOne('/api/conta/email/solicitar').flush(null, SEM_CONTEUDO);
+    c.formCodigo.setValue({ codigo: '000000' });
+    c.confirmarCodigo();
+    http
+      .expectOne('/api/conta/email/confirmar')
+      .flush({ detail: 'Código inválido ou vencido.' }, { status: 400, statusText: 'Bad Request' });
+    fixture.detectChanges();
+    expect(c.faseEmail()).toBe('codigo');
+    expect(c.erroEmail()).toBe('Código inválido ou vencido.');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Código inválido ou vencido.');
+  });
+
+  it('perfil_voltaAosDados_quandoCancelaCodigo', () => {
+    const c = criar().componentInstance;
+    c.formEmail.setValue({ novoEmail: 'novo@b.c', senha: 'Segredo1' });
+    c.pedirCodigo();
+    http.expectOne('/api/conta/email/solicitar').flush(null, SEM_CONTEUDO);
+    c.cancelarEmail();
+    expect(c.faseEmail()).toBe('dados');
+  });
+
+  it('perfil_pedeConfirmacaoEmTela_antesDeApagar', () => {
+    const confirmar = vi.spyOn(window, 'confirm');
+    const fixture = criar();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.apagar input')).toBeNull();
+    el.querySelector<HTMLButtonElement>('.apagar button')!.click();
+    fixture.detectChanges();
+    expect(confirmar).not.toHaveBeenCalled();
+    expect(fixture.componentInstance.apagando()).toBe(true);
+    expect(el.querySelector('.apagar input')).not.toBeNull();
+  });
+
+  it('perfil_naoApaga_quandoSenhaVazia', () => {
+    const c = criar().componentInstance;
+    c.pedirApagar();
+    c.apagar();
+    http.expectNone((r) => r.method === 'DELETE');
+  });
+
+  it('perfil_limpaSessaoENavegaParaRaiz_quandoApagada', () => {
+    const c = criar().componentInstance;
+    const store = TestBed.inject(AuthStore);
+    store.definir(USUARIO);
+    const nav = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    c.pedirApagar();
+    c.formApagar.setValue({ senha: 'Segredo1' });
+    c.apagar();
+    const req = http.expectOne('/api/conta');
+    expect(req.request.method).toBe('DELETE');
+    expect(req.request.body).toEqual({ senha: 'Segredo1' });
+    req.flush(null, SEM_CONTEUDO);
+    expect(store.usuario()).toBeNull();
     expect(nav).toHaveBeenCalledWith(['/']);
   });
 
-  it('sair_AvisaEContinuaNaConta_QuandoLogoutFalha', () => {
-    const fixture = TestBed.createComponent(PerfilComponent);
-    fixture.detectChanges();
-    http.expectOne('/api/conta').flush(PERFIL);
-    fixture.detectChanges();
+  it('perfil_explicaMotivo_quandoUltimoAdmin', () => {
+    const fixture = criar();
+    const c = fixture.componentInstance;
     const store = TestBed.inject(AuthStore);
-    store.definir({ email: 'a@b.c', nomeExibicao: 'Ana', roles: [], deveTrocarSenha: false });
+    store.definir(USUARIO);
     const nav = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
-
-    fixture.componentInstance.sair();
-    expect(fixture.componentInstance.aSair()).toBe(true);
-    http.expectOne('/api/auth/logout').flush(null, { status: 401, statusText: 'Unauthorized' });
+    c.pedirApagar();
+    c.formApagar.setValue({ senha: 'Segredo1' });
+    c.apagar();
+    http
+      .expectOne('/api/conta')
+      .flush({ detail: 'O último administrador não pode apagar a conta.' }, { status: 409, statusText: 'Conflict' });
     fixture.detectChanges();
-
+    expect(c.erroApagar()).toBe('O último administrador não pode apagar a conta.');
     expect(nav).not.toHaveBeenCalled();
     expect(store.usuario()).not.toBeNull();
-    expect(fixture.componentInstance.aSair()).toBe(false);
-    expect((fixture.nativeElement as HTMLElement).querySelector('[role="alert"]')?.textContent).toContain(
-      'Não foi possível sair',
-    );
+    expect(c.aApagar()).toBe(false);
   });
 
-  it('guardarEmail_AtualizaEmailELimpaSenha_QuandoPassa', () => {
-    const fixture = TestBed.createComponent(PerfilComponent);
-    fixture.detectChanges();
-    http.expectOne('/api/conta').flush(PERFIL);
-    fixture.detectChanges();
-
-    const c = fixture.componentInstance;
-    c.formEmail.setValue({ novoEmail: 'novo@b.c', senha: 'segredo' });
-    c.guardarEmail();
-    expect(c.aEnviarEmail()).toBe(true);
-    http.expectOne('/api/conta/email').flush(null);
-    fixture.detectChanges();
-
-    expect(c.aEnviarEmail()).toBe(false);
-    expect(c.formEmail.getRawValue()).toEqual({ novoEmail: '', senha: '' });
-    expect((fixture.nativeElement as HTMLElement).querySelector('.dados')?.textContent).toContain('novo@b.c');
-  });
-
-  it('guardarNome_LimpaAvisoAnterior_QuandoReenvia', () => {
-    const fixture = TestBed.createComponent(PerfilComponent);
-    fixture.detectChanges();
-    http.expectOne('/api/conta').flush(PERFIL);
-
-    const c = fixture.componentInstance;
-    c.formNome.setValue({ nomeExibicao: 'Ana Maria' });
-    c.guardarNome();
-    http.expectOne('/api/conta').flush(null);
-    c.guardarNome();
-    expect(c.avisoNome()).toBeNull();
-    expect(c.aEnviarNome()).toBe(true);
-    http.expectOne('/api/conta').flush(null, { status: 500, statusText: 'Erro' });
-    expect(c.avisoNome()?.tipo).toBe('erro');
-    expect(c.aEnviarNome()).toBe(false);
-  });
-
-  it('guardarEmail mostra o detalhe do erro em falha', () => {
-    const fixture = TestBed.createComponent(PerfilComponent);
-    fixture.detectChanges();
-    http.expectOne('/api/conta').flush(PERFIL);
-    fixture.detectChanges();
-
-    const c = fixture.componentInstance;
-    c.formEmail.setValue({ novoEmail: 'novo@b.c', senha: 'x' });
-    c.guardarEmail();
-    http
-      .expectOne('/api/conta/email')
-      .flush({ detail: 'Senha incorreta.' }, { status: 400, statusText: 'Bad Request' });
-    expect(c.avisoEmail()).toEqual({ tipo: 'erro', texto: 'Senha incorreta.' });
+  it('perfil_mostraErro_quandoSenhaErradaAoApagar', () => {
+    const c = criar().componentInstance;
+    c.pedirApagar();
+    c.formApagar.setValue({ senha: 'x' });
+    c.apagar();
+    http.expectOne('/api/conta').flush({ detail: 'Senha incorreta.' }, { status: 400, statusText: 'Bad Request' });
+    expect(c.erroApagar()).toBe('Senha incorreta.');
   });
 });
 
@@ -170,16 +244,13 @@ describe('PerfilComponent na tela', () => {
     const fixture = TestBed.createComponent(PerfilComponent);
     fixture.detectChanges();
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('h1')?.textContent?.trim()).toBe('Minha conta');
+    expect(el.querySelector('h1')?.textContent?.trim()).toBe('Meu perfil');
     expect(el.textContent).toContain('Carregando');
-    TestBed.inject(HttpTestingController)
-      .expectOne('/api/conta')
-      .flush({ email: 'a@b.c', nomeExibicao: 'Ana', roles: ['Membro'] });
+    TestBed.inject(HttpTestingController).expectOne('/api/conta').flush(PERFIL);
     fixture.detectChanges();
     expect(el.querySelector('[class*="mat-"]')).toBeNull();
-    expect(el.querySelectorAll('.bt-input').length).toBe(3);
-    expect(el.textContent).toContain('Salvar nome');
-    expect(el.textContent).not.toContain('Guardar');
+    expect(el.textContent).toContain('Salvar');
+    expect(el.textContent).toContain('Apagar conta');
     expect(el.querySelector('a[href$="trocar-senha"]')?.textContent).toContain('Trocar senha');
   });
 });

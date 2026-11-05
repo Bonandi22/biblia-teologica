@@ -1,0 +1,29 @@
+@use '../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  max-width: 26rem;
+}
+
+p {
+  margin: 0 0 $sp-4;
+}
+
+.nota {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: $tinta-mut;
+}
+
+bt-alerta {
+  display: block;
+  margin-bottom: $sp-4;
+}
+
+// Os botões de texto têm 4px de folga para o foco; o recuo alinha a primeira palavra à margem.
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-2 $sp-6;
+  margin: $sp-4 0 0 -4px;
+}
