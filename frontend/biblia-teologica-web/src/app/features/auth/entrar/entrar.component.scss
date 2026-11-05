@@ -9,7 +9,25 @@
   @include folha-formulario;
 }
 
-// O botão de texto tem 4px de folga para o foco; o recuo alinha a palavra à margem.
-.voltar {
-  margin: $sp-4 0 0 -4px;
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-4;
+
+  .ligacao {
+    margin-top: 0;
+  }
+}
+
+// Filete separa quem já tem conta de quem ainda vai criar.
+.abaixo {
+  margin: $sp-6 0 0;
+  padding-top: $sp-4;
+  border-top: 1px solid $filete;
+
+  .ligacao {
+    margin-top: 0;
+  }
 }

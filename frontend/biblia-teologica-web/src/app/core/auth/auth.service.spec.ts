@@ -90,6 +90,28 @@ describe('AuthService', () => {
     });
   });
 
+  it('reenviarCodigo_postaOToken_quandoChamado', () => {
+    svc.reenviarCodigo('T1').subscribe();
+    const req = http.expectOne('/api/auth/login/2fa/reenviar');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ tokenDesafio: 'T1' });
+    req.flush(null, { status: 204, statusText: 'No Content' });
+  });
+
+  it('esqueciSenha_postaEmailESite_quandoChamado', () => {
+    svc.esqueciSenha('a@b.c', 'https://x').subscribe();
+    const req = http.expectOne('/api/auth/senha/esqueci');
+    expect(req.request.body).toEqual({ email: 'a@b.c', site: 'https://x' });
+    req.flush(null, { status: 202, statusText: 'Accepted' });
+  });
+
+  it('redefinirSenha_postaOsDados_quandoChamado', () => {
+    svc.redefinirSenha({ email: 'a@b.c', token: 'tk', novaSenha: 'Nova#123' }).subscribe();
+    const req = http.expectOne('/api/auth/senha/redefinir');
+    expect(req.request.body).toEqual({ email: 'a@b.c', token: 'tk', novaSenha: 'Nova#123' });
+    req.flush(null, { status: 204, statusText: 'No Content' });
+  });
+
   it('logout limpa o store', () => {
     store.definir({ email: 'a@b.c', nomeExibicao: 'A', roles: [], deveTrocarSenha: false });
     svc.logout().subscribe();

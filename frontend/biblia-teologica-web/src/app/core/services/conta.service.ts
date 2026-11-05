@@ -10,6 +10,7 @@ export interface Perfil {
   nomeExibicao: string;
   roles: string[];
   criadoEm: string;
+  telefone: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -28,6 +29,25 @@ export class ContaService {
 
   trocarEmail(dto: { novoEmail: string; senha: string }): Observable<void> {
     return this.http.put<void>(`${this.base}/email`, dto);
+  }
+
+  atualizarPerfil(dto: { nomeExibicao: string; telefone: string | null }): Observable<void> {
+    return this.http.put<void>(this.base, dto);
+  }
+
+  solicitarTrocaEmail(dto: { novoEmail: string; senha: string }): Observable<void> {
+    return this.http.post<void>(`${this.base}/email/solicitar`, dto);
+  }
+
+  confirmarTrocaEmail(dto: { novoEmail: string; codigo: string }): Observable<Usuario> {
+    return this.http.post<{ usuario: Usuario }>(`${this.base}/email/confirmar`, dto).pipe(
+      map((r) => r.usuario),
+      tap((u) => this.store.definir(u)),
+    );
+  }
+
+  apagar(senha: string): Observable<void> {
+    return this.http.delete<void>(this.base, { body: { senha } });
   }
 
   trocarSenha(dto: { senhaAtual: string; novaSenha: string }): Observable<Usuario> {

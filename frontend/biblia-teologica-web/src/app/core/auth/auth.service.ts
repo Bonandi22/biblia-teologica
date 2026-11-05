@@ -29,6 +29,18 @@ export class AuthService {
     return this.http.post<void>(`${this.base}/registar`, dto);
   }
 
+  reenviarCodigo(tokenDesafio: string): Observable<void> {
+    return this.http.post<void>(`${this.base}/login/2fa/reenviar`, { tokenDesafio });
+  }
+
+  esqueciSenha(email: string, site: string): Observable<void> {
+    return this.http.post<void>(`${this.base}/senha/esqueci`, { email, site });
+  }
+
+  redefinirSenha(dto: { email: string; token: string; novaSenha: string }): Observable<void> {
+    return this.http.post<void>(`${this.base}/senha/redefinir`, dto);
+  }
+
   logout(): Observable<void> {
     return this.http.post<void>(`${this.base}/logout`, {}).pipe(tap(() => this.store.limpar()));
   }

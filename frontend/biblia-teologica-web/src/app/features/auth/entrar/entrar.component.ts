@@ -9,16 +9,18 @@ import { BtInputDirective } from '../../../shared/ui/bt-input.directive';
 import { CampoComponent } from '../../../shared/ui/campo/campo.component';
 import { erroCampo } from '../../../shared/ui/campo/erro-campo';
 import { CampoSenhaComponent } from '../../../shared/ui/campo-senha/campo-senha.component';
+import { VerificarCodigoComponent } from '../../../shared/ui/verificar-codigo/verificar-codigo.component';
 import { AuthService } from '../../../core/auth/auth.service';
 import { AuthStore } from '../../../core/auth/auth.store';
-
-const MUITAS_TENTATIVAS = 'Muitas tentativas. Aguarde um minuto e tente de novo.';
+import { caminhoInterno } from '../../../core/auth/caminho-interno';
+import { MUITAS_TENTATIVAS } from '../../../core/auth/erros-auth';
 
 /** Só o 401 fala da senha: dizer "credenciais inválidas" num 429 faz a pessoa duvidar de dados corretos. */
 function mensagemDeFalhaNoLogin(status: number): string {
   if (status === 401) return 'Credenciais inválidas.';
   if (status === 423) return 'Conta bloqueada temporariamente.';
   if (status === 429) return MUITAS_TENTATIVAS;
+  if (status === 503) return 'Não conseguimos enviar o código agora. Tente de novo em alguns minutos.';
   return 'Não foi possível entrar agora. Tente de novo.';
 }
 
@@ -34,6 +36,7 @@ function mensagemDeFalhaNoLogin(status: number): string {
     BtInputDirective,
     CampoComponent,
     CampoSenhaComponent,
+    VerificarCodigoComponent,
   ],
   templateUrl: './entrar.component.html',
   styleUrl: './entrar.component.scss',
@@ -49,15 +52,13 @@ export class EntrarComponent {
   readonly fase = signal<'credenciais' | 'codigo'>('credenciais');
   readonly erro = signal<string | null>(null);
   readonly aEnviar = signal(false);
-  readonly contaCriada = this.rota.snapshot.queryParamMap.has('registado');
-  private tokenDesafio = '';
+  readonly tokenDesafio = signal('');
+  /** Só caminhos internos; qualquer outro valor é descartado. */
+  protected readonly retorno = caminhoInterno(this.rota.snapshot.queryParamMap.get('retorno'));
 
   readonly formCredenciais = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     senha: ['', Validators.required],
-  });
-  readonly formCodigo = this.fb.nonNullable.group({
-    codigo: ['', [Validators.required, Validators.minLength(4)]],
   });
 
   constructor() {
@@ -76,7 +77,7 @@ export class EntrarComponent {
     const { email, senha } = this.formCredenciais.getRawValue();
     this.auth.login(email, senha).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (r) => {
-        this.tokenDesafio = r.tokenDesafio;
+        this.tokenDesafio.set(r.tokenDesafio);
         this.fase.set('codigo');
         this.aEnviar.set(false);
       },
@@ -87,36 +88,38 @@ export class EntrarComponent {
     });
   }
 
-  submeterCodigo(): void {
-    this.formCodigo.markAllAsTouched();
-    if (this.formCodigo.invalid) return;
+  submeterCodigo(codigo: string): void {
     this.aEnviar.set(true);
     this.erro.set(null);
     this.auth
-      .verificar2fa(this.tokenDesafio, this.formCodigo.getRawValue().codigo)
+      .verificar2fa(this.tokenDesafio(), codigo)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-      next: () => {
-        this.aEnviar.set(false);
-        if (this.store.deveTrocarSenha()) {
-          void this.router.navigate(['/conta/trocar-senha']);
-          return;
-        }
-        const retorno = this.rota.snapshot.queryParamMap.get('retorno');
-        void this.router.navigateByUrl(retorno ?? (this.store.ehAdmin() ? '/admin' : '/conta'));
-      },
-      error: (e) => {
-        this.erro.set(e.status === 429 ? MUITAS_TENTATIVAS : 'Código inválido ou expirado.');
-        this.aEnviar.set(false);
-      },
-    });
+        next: () => {
+          this.aEnviar.set(false);
+          if (this.store.deveTrocarSenha()) {
+            void this.router.navigate(['/conta/trocar-senha']);
+            return;
+          }
+          // A rota /admin ainda não existe: o admin segue a mesma regra até a etapa 3.
+          void this.router.navigateByUrl(this.retorno ?? '/');
+        },
+        error: (e) => {
+          this.erro.set(e.status === 429 ? MUITAS_TENTATIVAS : 'Código inválido ou expirado.');
+          this.aEnviar.set(false);
+        },
+      });
   }
 
-  /** O desafio do 2FA expira e não há reenvio: pedir outro código é entrar com as credenciais de novo. */
+  /** Pedir outro código é entrar com as credenciais de novo. */
   voltar(): void {
-    this.tokenDesafio = '';
+    this.tokenDesafio.set('');
     this.erro.set(null);
-    this.formCodigo.reset();
     this.fase.set('credenciais');
+  }
+
+  desafioVenceu(): void {
+    this.voltar();
+    this.erro.set('O tempo do código acabou. Entre de novo para receber outro.');
   }
 }
