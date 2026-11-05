@@ -38,8 +38,32 @@ public class ContaController : ControllerBase
     [ServiceFilter(typeof(CsrfActionFilter))]
     public async Task<IActionResult> Atualizar(AtualizarPerfilDto dto, CancellationToken ct)
     {
-        await _conta.AtualizarAsync(Id, dto, ct);
-        return NoContent();
+        var r = await _conta.AtualizarAsync(Id, dto, ct);
+        return r.Sucesso
+            ? NoContent()
+            : BadRequest(new ProblemDetails { Status = 400, Title = "Erro", Detail = string.Join(" ", r.Erros) });
+    }
+
+    [HttpDelete]
+    [EnableRateLimiting("auth")]
+    [ServiceFilter(typeof(CsrfActionFilter))]
+    public async Task<IActionResult> Apagar([FromBody] ApagarContaDto dto, CancellationToken ct)
+    {
+        switch (await _conta.ApagarAsync(Id, dto, ct))
+        {
+            case ResultadoApagar.Apagada:
+                _cookies.Limpar(Response);
+                return NoContent();
+            case ResultadoApagar.UltimoAdmin:
+                return Conflict(new ProblemDetails
+                {
+                    Status = StatusCodes.Status409Conflict,
+                    Title = "Último administrador",
+                    Detail = "Você é o único administrador. Passe o cargo a outra pessoa antes de apagar a conta."
+                });
+            default:
+                return BadRequest(new ProblemDetails { Status = 400, Title = "Erro", Detail = "Senha incorreta." });
+        }
     }
 
     [HttpPost("email/solicitar")]

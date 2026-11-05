@@ -1,5 +1,6 @@
 using BibliaTeologica.Application.Auth;
 using BibliaTeologica.Application.Auth.Dtos;
+using BibliaTeologica.Application.Common;
 using BibliaTeologica.Application.Common.Interfaces;
 using BibliaTeologica.Application.Common.Resultados;
 using BibliaTeologica.Application.Conta.Dtos;
@@ -29,11 +30,40 @@ public class ContaService : IContaService
         var u = await _identity.ObterUsuarioAsync(userId, ct);
         if (u is null) return null;
         var criadoEm = await _identity.ObterCriadoEmAsync(userId, ct) ?? DateTime.UtcNow;
-        return new PerfilDto(u.Email, u.NomeExibicao, u.Roles, criadoEm);
+        var telefone = await _identity.ObterTelefoneAsync(userId, ct);
+        return new PerfilDto(u.Email, u.NomeExibicao, u.Roles, criadoEm, telefone);
     }
 
-    public Task AtualizarAsync(Guid userId, AtualizarPerfilDto dto, CancellationToken ct)
-        => _identity.AtualizarNomeAsync(userId, dto.NomeExibicao, ct);
+    public async Task<IdentityResultDto> AtualizarAsync(Guid userId, AtualizarPerfilDto dto, CancellationToken ct)
+    {
+        if (!Telefone.TentarNormalizar(dto.Telefone, out var telefone))
+            return IdentityResultDto.Falha("Telefone inválido. Use de 8 a 15 dígitos, com + inicial opcional.");
+
+        await _identity.AtualizarPerfilAsync(userId, dto.NomeExibicao, telefone, ct);
+        return IdentityResultDto.Ok();
+    }
+
+    public async Task<ResultadoApagar> ApagarAsync(Guid userId, ApagarContaDto dto, CancellationToken ct)
+    {
+        var senha = await _identity.ConferirSenhaAsync(userId, dto.Senha, ct);
+        if (!senha.Sucesso) return ResultadoApagar.SenhaIncorreta;
+
+        if (await _identity.EhUltimoAdminAsync(userId, ct)) return ResultadoApagar.UltimoAdmin;
+
+        // O endereço é guardado antes de apagar: depois não há mais como consultá-lo.
+        var email = await _identity.ObterEmailAsync(userId, ct);
+        if (email is not null && _limite.TentarConsumir(email, FinalidadeEnvio.Aviso))
+        {
+            var (assunto, corpo) = ModelosEmail.ContaApagada();
+            _fila.Enfileirar(email, assunto, corpo);
+        }
+
+        await _store.RevogarCadeiaAsync(userId, ct);
+        var r = await _identity.ApagarUsuarioAsync(userId, ct);
+        if (!r.Sucesso)
+            throw new InvalidOperationException("Não foi possível apagar a conta.");
+        return ResultadoApagar.Apagada;
+    }
 
     public async Task<IdentityResultDto> SolicitarTrocaEmailAsync(Guid userId, SolicitarTrocaEmailDto dto, CancellationToken ct)
     {
@@ -78,6 +108,12 @@ public class ContaService : IContaService
 
         // Antes de emitir: encerra as outras sessões e preserva a nova, desta sessão.
         await _store.RevogarCadeiaAsync(userId, ct);
+        var email = await _identity.ObterEmailAsync(userId, ct);
+        if (email is not null && _limite.TentarConsumir(email, FinalidadeEnvio.Aviso))
+        {
+            var (assunto, corpo) = ModelosEmail.SenhaAlterada();
+            _fila.Enfileirar(email, assunto, corpo);
+        }
         return await _emissor.EmitirAsync(userId, ip, ct);
     }
 }

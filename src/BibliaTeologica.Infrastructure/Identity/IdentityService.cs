@@ -232,12 +232,36 @@ public class IdentityService : IIdentityService
         return IdentityResultDto.Ok();
     }
 
-    public async Task AtualizarNomeAsync(Guid userId, string nomeExibicao, CancellationToken ct)
+    public async Task AtualizarPerfilAsync(Guid userId, string nomeExibicao, string? telefone, CancellationToken ct)
     {
         var user = await _users.FindByIdAsync(userId.ToString());
         if (user is null) return;
         user.NomeExibicao = nomeExibicao;
+        if (user.PhoneNumber != telefone)
+        {
+            user.PhoneNumber = telefone;
+            user.PhoneNumberConfirmed = false;
+        }
         await _users.UpdateAsync(user);
+    }
+
+    public async Task<string?> ObterTelefoneAsync(Guid userId, CancellationToken ct)
+        => (await _users.FindByIdAsync(userId.ToString()))?.PhoneNumber;
+
+    public async Task<bool> EhUltimoAdminAsync(Guid userId, CancellationToken ct)
+    {
+        var user = await _users.FindByIdAsync(userId.ToString());
+        if (user is null || !await _users.IsInRoleAsync(user, IdentitySeeder.RoleAdmin)) return false;
+        var admins = await _users.GetUsersInRoleAsync(IdentitySeeder.RoleAdmin);
+        return !admins.Any(a => a.Id != userId);
+    }
+
+    public async Task<IdentityResultDto> ApagarUsuarioAsync(Guid userId, CancellationToken ct)
+    {
+        var user = await _users.FindByIdAsync(userId.ToString());
+        if (user is null) return IdentityResultDto.Falha("Utilizador não encontrado.");
+        // Os refresh tokens saem junto, pela FK em cascata.
+        return Mapear(await _users.DeleteAsync(user));
     }
 
     public async Task LimparDeveTrocarSenhaAsync(Guid userId, CancellationToken ct)

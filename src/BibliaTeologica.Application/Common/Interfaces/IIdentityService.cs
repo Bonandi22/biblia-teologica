@@ -28,6 +28,12 @@ public interface IIdentityService
     Task<string> GerarCodigoTrocaEmailAsync(Guid userId, string novoEmail, CancellationToken ct);
     /// <summary>Confere o código ligado ao endereço e troca e-mail e nome de utilizador. Falhas contam para o bloqueio.</summary>
     Task<IdentityResultDto> ConfirmarTrocaEmailAsync(Guid userId, string novoEmail, string codigo, CancellationToken ct);
-    Task AtualizarNomeAsync(Guid userId, string nomeExibicao, CancellationToken ct);
+    /// <summary>Substitui nome e telefone; o telefone já vem normalizado e null apaga o número.</summary>
+    Task AtualizarPerfilAsync(Guid userId, string nomeExibicao, string? telefone, CancellationToken ct);
+    Task<string?> ObterTelefoneAsync(Guid userId, CancellationToken ct);
+    /// <summary>Verdadeiro quando a conta é administradora e não há outro administrador.</summary>
+    Task<bool> EhUltimoAdminAsync(Guid userId, CancellationToken ct);
+    /// <summary>Apaga a conta e os dados ligados a ela (sessões em cascata).</summary>
+    Task<IdentityResultDto> ApagarUsuarioAsync(Guid userId, CancellationToken ct);
     Task LimparDeveTrocarSenhaAsync(Guid userId, CancellationToken ct);
 }

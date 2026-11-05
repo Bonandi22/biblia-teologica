@@ -4,10 +4,13 @@ using BibliaTeologica.Application.Conta.Dtos;
 
 namespace BibliaTeologica.Application.Conta;
 
+public enum ResultadoApagar { Apagada, SenhaIncorreta, UltimoAdmin }
+
 public interface IContaService
 {
     Task<PerfilDto?> ObterAsync(Guid userId, CancellationToken ct);
-    Task AtualizarAsync(Guid userId, AtualizarPerfilDto dto, CancellationToken ct);
+    Task<IdentityResultDto> AtualizarAsync(Guid userId, AtualizarPerfilDto dto, CancellationToken ct);
+    Task<ResultadoApagar> ApagarAsync(Guid userId, ApagarContaDto dto, CancellationToken ct);
     Task<IdentityResultDto> SolicitarTrocaEmailAsync(Guid userId, SolicitarTrocaEmailDto dto, CancellationToken ct);
     Task<ResultadoLoginDto> ConfirmarTrocaEmailAsync(Guid userId, ConfirmarTrocaEmailDto dto, string? ip, CancellationToken ct);
     Task<ResultadoLoginDto> TrocarSenhaAsync(Guid userId, TrocarSenhaDto dto, string? ip, CancellationToken ct);
