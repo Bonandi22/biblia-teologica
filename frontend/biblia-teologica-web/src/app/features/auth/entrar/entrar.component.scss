@@ -31,3 +31,14 @@
     margin-top: 0;
   }
 }
+
+// Alerta de sucesso do DESIGN.md: caixa fina sem fundo, cor da capa, tamanho de nota.
+.aviso {
+  margin: 0 0 $sp-4;
+  padding: $sp-3 $sp-4;
+  border: 1px solid $capa;
+  border-radius: $raio;
+  color: $capa;
+  font-size: $t-nota;
+  line-height: 1.5;
+}

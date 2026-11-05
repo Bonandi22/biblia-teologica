@@ -1,0 +1,39 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+:host {
+  @include pagina-topo;
+}
+
+.folha {
+  @include folha-formulario;
+}
+
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-4;
+
+  .ligacao {
+    margin-top: 0;
+  }
+}
+
+// Fora da tela e não em display:none: robôs que ignoram CSS escondido ainda a preenchem.
+.isca {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.abaixo {
+  margin: $sp-6 0 0;
+
+  .ligacao {
+    margin-top: 0;
+  }
+}

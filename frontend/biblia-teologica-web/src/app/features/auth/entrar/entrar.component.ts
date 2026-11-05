@@ -24,6 +24,11 @@ function mensagemDeFalhaNoLogin(status: number): string {
   return 'Não foi possível entrar agora. Tente de novo.';
 }
 
+const AVISOS = new Map<string, string>([
+  ['cadastro', 'O tempo do código acabou. Entre com o e-mail e a senha que você criou.'],
+  ['senha', 'Senha alterada. Entre com a nova senha.'],
+]);
+
 @Component({
   selector: 'bt-entrar',
   standalone: true,
@@ -57,10 +62,7 @@ export class EntrarComponent {
   protected readonly retorno = caminhoInterno(this.rota.snapshot.queryParamMap.get('retorno'));
 
   /** Texto fixo para um valor conhecido de `?aviso=`; nunca ecoa o que veio na URL. */
-  protected readonly aviso =
-    this.rota.snapshot.queryParamMap.get('aviso') === 'cadastro'
-      ? 'O tempo do código acabou. Entre com o e-mail e a senha que você criou.'
-      : null;
+  protected readonly aviso = AVISOS.get(this.rota.snapshot.queryParamMap.get('aviso') ?? '') ?? null;
 
   readonly formCredenciais = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],

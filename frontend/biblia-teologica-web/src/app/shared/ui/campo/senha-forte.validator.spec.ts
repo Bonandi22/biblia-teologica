@@ -24,7 +24,12 @@ describe('senhaForte', () => {
     expect(erroPara('Abcdefgh')).toEqual({ senhaForte: true });
   });
 
+  it('senhaForte_recusa_quandoMaiusculaEMinusculaSaoSoNaoAscii', () => {
+    expect(erroPara('Ábcdefg1')).toEqual({ senhaForte: true });
+  });
+
   it('senhaForte_deixaOCampoVazioParaORequired', () => {
     expect(erroPara('')).toBeNull();
   });
 });
+

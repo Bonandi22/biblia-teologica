@@ -44,6 +44,20 @@ export const routes: Routes = [
       import('./features/auth/registar/registar.component').then((m) => m.RegistarComponent),
   },
   {
+    path: 'esqueci-senha',
+    loadComponent: () =>
+      import('./features/auth/esqueci-senha/esqueci-senha.component').then(
+        (m) => m.EsqueciSenhaComponent,
+      ),
+  },
+  {
+    path: 'redefinir-senha',
+    loadComponent: () =>
+      import('./features/auth/redefinir-senha/redefinir-senha.component').then(
+        (m) => m.RedefinirSenhaComponent,
+      ),
+  },
+  {
     path: 'conta',
     canActivate: [authGuard],
     loadChildren: () => import('./features/conta/conta.routes').then((m) => m.contaRoutes),

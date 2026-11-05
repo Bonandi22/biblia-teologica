@@ -1,0 +1,18 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+:host {
+  @include pagina-topo;
+}
+
+.folha {
+  @include folha-formulario;
+}
+
+.abaixo {
+  margin: $sp-6 0 0;
+
+  .ligacao {
+    margin-top: 0;
+  }
+}

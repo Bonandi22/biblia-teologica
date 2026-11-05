@@ -224,6 +224,11 @@ describe('EntrarComponent depois de um cadastro sem código', () => {
     expect(el.querySelector('.aviso')?.textContent).toContain('O tempo do código acabou.');
   });
 
+  it('entrar_mostraTextoFixo_quandoVemDaSenhaRedefinida', async () => {
+    const el = await abrir('/entrar?aviso=senha');
+    expect(el.querySelector('.aviso')?.textContent).toContain('Senha alterada. Entre com a nova senha.');
+  });
+
   it('entrar_naoMostraAviso_quandoValorDesconhecido', async () => {
     const el = await abrir('/entrar?aviso=qualquer%20coisa');
     expect(el.querySelector('.aviso')).toBeNull();
@@ -282,3 +287,4 @@ describe('EntrarComponent na tela', () => {
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('Enviamos um código para o seu e-mail.');
   });
 });
+

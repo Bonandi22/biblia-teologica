@@ -1,0 +1,22 @@
+<div class="folha">
+  <h1>Nova senha</h1>
+
+  @if (linkInvalido()) {
+    <bt-alerta tipo="erro">{{ mensagemInvalido }}</bt-alerta>
+    <p class="abaixo"><a routerLink="/esqueci-senha" class="ligacao">Pedir outro link</a></p>
+  } @else {
+    @if (erro(); as e) {
+      <bt-alerta tipo="erro">{{ e }}</bt-alerta>
+    }
+    <form [formGroup]="form" (ngSubmit)="submeter()" novalidate>
+      <bt-campo-senha
+        label="Nova senha"
+        hint="Pelo menos 8 caracteres, com maiúscula, minúscula e número."
+        formControlName="senha"
+        autocomplete="new-password"
+        [erro]="erroDe(form.controls.senha)"
+      />
+      <bt-botao type="submit" [carregando]="aEnviar()">Salvar nova senha</bt-botao>
+    </form>
+  }
+</div>
