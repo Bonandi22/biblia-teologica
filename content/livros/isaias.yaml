@@ -1,12 +1,12 @@
-# Rascunho. Abas feitas: perfil, panorama, contexto e mundo. Faltam: profecias,
-# promessas e citacoes. ARC e fontes antigas conferidas nas urls em 2026-11-06.
+# Rascunho com todas as abas. ARC e fontes antigas conferidas nas urls em 2026-11-06;
+# revisão independente (Step 4) aplicada no mesmo dia.
 estado: rascunho
 livro: isaias
 resumo: "Profeta de Jerusalém sob quatro reis de Judá, Isaías fala primeiro a um povo ameaçado pela Assíria e, a partir do capítulo 40, a um povo que está na Babilônia."
 
 perfil:
   - rotulo: "Quem era"
-    texto: "Isaías, filho de Amoz. O livro não diz a que tribo pertencia nem qual era o seu ofício antes do chamado. Morava em Jerusalém e tinha acesso direto aos reis: vai ao encontro de Acaz e é procurado por Ezequias."
+    texto: "Isaías, filho de Amoz. O livro não diz a que tribo pertencia nem qual era o seu ofício antes do chamado. Atuava em Jerusalém e tinha acesso direto aos reis: vai ao encontro de Acaz e é procurado por Ezequias."
     referencias: ["Isaías 1:1", "Isaías 7:3", "Isaías 37:2"]
   - rotulo: "Quando profetizou"
     texto: "\"Nos dias de Uzias, Jotão, Acaz e Ezequias, reis de Judá.\" O chamado é datado no ano da morte de Uzias, e o último episódio narrado é a embaixada babilônica que visita Ezequias depois da doença do rei."
@@ -18,14 +18,14 @@ perfil:
     texto: "A esposa é chamada \"a profetisa\". Dois filhos são nomeados: Sear-Jasube, que acompanha o pai ao encontro de Acaz, e Maer-Salal-Hás-Baz, cujo nome vem com um anúncio sobre Damasco e Samaria. Isaías diz que ele e os filhos são \"sinais e maravilhas em Israel\"."
     referencias: ["Isaías 7:3", "Isaías 8:1–4", "Isaías 8:18"]
   - rotulo: "Para quem falou"
-    texto: "Primeiro a Judá e Jerusalém, como diz o título do livro. Os capítulos 13 a 23 dirigem oráculos a povos vizinhos, de Babilônia a Tiro. Do capítulo 40 em diante, a mensagem se volta a um povo que está na Babilônia e é chamado a sair dela."
+    texto: "Primeiro a Judá e Jerusalém, como diz o título do livro. Os capítulos 13 a 23 dirigem oráculos a outras nações, de Babilônia a Tiro. Do capítulo 40 em diante, a mensagem se volta a um povo que está na Babilônia e é chamado a sair dela."
     referencias: ["Isaías 1:1", "Isaías 13:1", "Isaías 23:1", "Isaías 48:20"]
   - rotulo: "Outros escritos"
     texto: "Crônicas atribui a Isaías um registro dos atos de Uzias e diz que os atos de Ezequias estão escritos na \"visão do profeta Isaías\". Nenhum desses registros chegou até nós fora da Bíblia."
     referencias: ["2 Crônicas 26:22", "2 Crônicas 32:32"]
 
 panorama:
-  explicacao: "São 66 capítulos em três partes. Os capítulos 1 a 35 trazem as mensagens do tempo de Acaz e Ezequias: denúncia da injustiça em Jerusalém, a crise da guerra com a Síria e Israel e os oráculos contra as nações. Os capítulos 36 a 39 são narrativa e repetem, com poucas diferenças, 2 Reis 18 a 20: o cerco de Senaqueribe, a doença de Ezequias e a visita dos enviados da Babilônia. O capítulo 40 começa com \"Consolai, consolai o meu povo\"[^1], e daí em diante o livro fala a um povo na Babilônia e nomeia Ciro como aquele que dirá a Jerusalém \"Sê edificada\"[^2]."
+  explicacao: "São 66 capítulos em três partes. Os capítulos 1 a 35 trazem as mensagens do tempo de Uzias a Ezequias: denúncia da injustiça em Jerusalém, a crise da guerra com a Síria e Israel e os oráculos contra as nações. Os capítulos 36 a 39 são narrativa e repetem 2 Reis 18 a 20: o cerco de Senaqueribe, a doença de Ezequias e a visita dos enviados da Babilônia. Há duas diferenças: Isaías não traz o tributo pago por Ezequias (2 Reis 18:14–16) e acrescenta o cântico que ele escreveu depois da cura (Isaías 38:9–20). O capítulo 40 começa com \"Consolai, consolai o meu povo\"[^1], e daí em diante o livro fala a um povo na Babilônia e nomeia Ciro como aquele que dirá a Jerusalém \"Sê edificada\"[^2]."
   personagens:
     - nome: Uzias
       texto: "Rei de Judá, chamado também Azarias em 2 Reis. Reinou cerca de 52 a 55 anos em Jerusalém, e o ano da sua morte é a data do chamado de Isaías. Crônicas conta que Uzias ficou leproso até morrer e viveu numa casa separada, enquanto o filho Jotão governava em seu lugar."
@@ -34,11 +34,11 @@ panorama:
       referencias: ["Isaías 6:1", "2 Reis 15:1–2", "2 Crônicas 26:3", "2 Crônicas 26:21"]
     - nome: Acaz
       texto: "Rei de Judá durante a guerra com Rezim, da Síria, e Peca, de Israel. Isaías vai ao encontro dele com o filho Sear-Jasube e lhe pede que não tema. Acaz recusa pedir um sinal, e é nesse diálogo que vem a palavra de Isaías 7:14."
-      saberMais: "Em 2 Reis, Acaz envia prata e ouro a Tiglate-Pileser, rei da Assíria, e pede socorro contra os mesmos dois reis. Enquanto Isaías lhe diz que não tema, o rei já paga à Assíria."
+      saberMais: "2 Reis conta que Acaz se declarou \"teu servo e teu filho\" a Tiglate-Pileser, rei da Assíria, pediu socorro contra os mesmos dois reis e mandou-lhe a prata e o ouro da casa do Senhor e do palácio."
       estudo: null
       referencias: ["Isaías 7:1–14", "2 Reis 16:5–9"]
     - nome: Ezequias
-      texto: "Filho de Acaz e o rei mais presente no livro. Durante o cerco assírio, rasga as vestes, vai à casa do Senhor e manda pedir a Isaías que ore. Depois adoece, ora e recebe mais quinze anos de vida. Por fim mostra os tesouros aos enviados da Babilônia, e Isaías anuncia que tudo será levado para lá."
+      texto: "Filho de Acaz e o rei mais presente no livro. Durante o cerco assírio, rasga as vestes, vai à casa do Senhor e manda pedir a Isaías que ore. \"Naqueles dias\" adoece, ora e recebe mais quinze anos de vida. Por fim mostra os tesouros aos enviados da Babilônia, e Isaías anuncia que tudo será levado para lá."
       saberMais: null
       estudo: null
       referencias: ["2 Reis 18:1", "Isaías 37:1–7", "Isaías 38:1–5", "Isaías 39:1–7"]
@@ -70,12 +70,12 @@ panorama:
       referencias: ["Isaías 44:28", "Isaías 45:1–4"]
   acontecimentos:
     - quando: "No ano da morte do rei Uzias"
-      texto: "Isaías tem a visão do trono e é enviado. O capítulo 6 explica por que a pregação dele encontrará resistência."
+      texto: "Isaías tem a visão do trono e é enviado a um povo que vai ouvir e não entender, até que as cidades fiquem assoladas."
       saberMais: null
       estudo: null
       referencias: ["Isaías 6:1–13"]
     - quando: "Nos dias de Acaz"
-      texto: "Síria e Israel sobem contra Jerusalém. Nos capítulos 7 e 8, Isaías responde a essa ameaça com o sinal do menino e com o nome Maer-Salal-Hás-Baz: antes que a criança saiba falar, os dois reis inimigos terão caído."
+      texto: "Síria e Israel sobem contra Jerusalém. Isaías responde com dois anúncios. No capítulo 7, o sinal do menino: \"antes que este menino saiba rejeitar o mal e escolher o bem\", a terra dos dois reis será desamparada. No capítulo 8, o filho de Isaías, Maer-Salal-Hás-Baz: \"antes que o menino saiba dizer meu pai ou minha mãe\", as riquezas de Damasco e os despojos de Samaria serão levados."
       saberMais: null
       estudo: null
       referencias: ["Isaías 7:1–16", "Isaías 8:3–4"]
@@ -104,7 +104,7 @@ panorama:
     - { numero: 2, obra: arc, local: "Isaías 44:28" }
 
 contexto:
-  explicacao: "Judá era um reino pequeno, com capital em Jerusalém, entre o Egito, ao sul, e a Assíria, que avançava a partir do norte. Na vida de Isaías, essa pressão trouxe três crises: a guerra com a Síria e Israel nos dias de Acaz, a queda de Samaria e a invasão de Senaqueribe nos dias de Ezequias.[^1] Em todas elas, a pergunta de Isaías aos reis é em quem confiar. Acaz manda prata e ouro ao rei da Assíria e pede socorro (2 Reis 16:7–8). Na geração seguinte, Judá busca o Egito, e Isaías responde: \"Ai dos que descem ao Egito a buscar socorro\".[^2] Dentro de Jerusalém, o livro denuncia governantes que amam o suborno e não defendem o órfão e a viúva (Isaías 1:23), e quem acumula casas e terras até não sobrar lugar para os outros (Isaías 5:8)."
+  explicacao: "Judá era um reino pequeno, com capital em Jerusalém, entre o Egito, ao sul, e a Assíria, que avançava a partir do norte. Na vida de Isaías, essa pressão trouxe três crises: a guerra com a Síria e Israel nos dias de Acaz (2 Reis 16:5), a queda de Samaria e a invasão de Senaqueribe nos dias de Ezequias.[^1] Nas crises de Acaz e de Ezequias, a pergunta de Isaías aos reis é em quem confiar. Acaz manda prata e ouro ao rei da Assíria e pede socorro (2 Reis 16:7–8). Na geração seguinte, Judá busca o Egito, e Isaías responde: \"Ai dos que descem ao Egito a buscar socorro\".[^2] Dentro de Jerusalém, o livro denuncia governantes que amam o suborno e não defendem o órfão e a viúva (Isaías 1:23), e quem acumula casas e terras até não sobrar lugar para os outros (Isaías 5:8)."
   personagens: []
   acontecimentos:
     - quando: "Por volta de 745 a.C."
@@ -115,19 +115,19 @@ contexto:
       referencias: ["2 Reis 16:7–9", "Isaías 7:17", "Isaías 8:7"]
     - quando: "No reinado de Tiglate-Pileser, entre cerca de 745 e 727 a.C."
       ano: -734
-      texto: "Rezim, rei da Síria, e Peca, rei de Israel, sobem contra Jerusalém. Acaz paga ao rei da Assíria, que toma Damasco e mata Rezim. É o pano de fundo de Isaías 7 e 8: o profeta pede a Acaz que não tema esses dois reis e não dependa da Assíria.[^3]"
+      texto: "Segundo a ABC 1, Tiglate-Pileser reina até cerca de 727 a.C.[^3] Nesse período, Rezim, rei da Síria, e Peca, rei de Israel, sobem contra Jerusalém. Acaz paga ao rei da Assíria, que toma Damasco e mata Rezim. É o pano de fundo de Isaías 7 e 8: o profeta pede a Acaz que não tema esses dois reis e anuncia que o rei da Assíria virá também sobre Judá (Isaías 7:17; 8:7–8)."
       saberMais: null
       estudo: null
       referencias: ["Isaías 7:1–9", "2 Reis 16:5–9"]
     - quando: "Por volta de 724 a 722 a.C."
       ano: -722
-      texto: "Salmaneser, rei da Assíria, cerca Samaria por três anos, e no nono ano de Oseias o reino do norte cai e o povo é levado para a Assíria. A crônica babilônica registra numa única linha que Salmaneser \"devastou Samaria\".[^4] Em Isaías 10, o rei da Assíria usa essa queda como argumento: o que fez a Samaria, faria também a Jerusalém.[^1]"
+      texto: "Salmaneser, rei da Assíria, cerca Samaria por três anos, e no nono ano de Oseias o reino do norte cai e o povo é levado para a Assíria. A queda é datada em 724 ou 722 a.C.[^1] A crônica babilônica registra numa única linha que Salmaneser \"devastou Samaria\".[^4] Em Isaías 10, o rei da Assíria usa essa queda como argumento: o que fez a Samaria, faria também a Jerusalém."
       saberMais: null
       estudo: null
       referencias: ["2 Reis 17:3–6", "Isaías 10:9–11"]
     - quando: "Por volta de 701 a.C."
       ano: -701
-      texto: "No décimo quarto ano de Ezequias, Senaqueribe toma as cidades fortificadas de Judá. Segundo 2 Reis, Ezequias manda dizer ao rei da Assíria, em Laquis, que pagará o que for imposto, e paga trezentos talentos de prata e trinta de ouro. Os anais de Senaqueribe dão a versão assíria: 46 cidades tomadas, Ezequias fechado em Jerusalém \"como um pássaro na gaiola\" e, depois da campanha, um tributo de 30 talentos de ouro e 800 de prata levado a Nínive.[^5] Os anais não dizem que Jerusalém foi tomada. A Bíblia atribui a retirada assíria ao Anjo do Senhor.[^1]"
+      texto: "No décimo quarto ano de Ezequias, em 701 a.C.,[^1] Senaqueribe toma as cidades fortificadas de Judá. Segundo 2 Reis, Ezequias manda dizer ao rei da Assíria, em Laquis, que pagará o que for imposto, e paga trezentos talentos de prata e trinta de ouro. Os anais de Senaqueribe dão a versão assíria: 46 cidades tomadas, Ezequias fechado em Jerusalém \"como um pássaro na gaiola\" e, depois da campanha, um tributo de 30 talentos de ouro e 800 de prata levado a Nínive.[^5] Os anais não dizem que Jerusalém foi tomada. A Bíblia atribui a retirada assíria ao Anjo do Senhor."
       saberMais: null
       estudo: null
       referencias: ["2 Reis 18:13–16", "Isaías 36:1", "Isaías 37:36–37"]
@@ -136,10 +136,10 @@ contexto:
     - { numero: 2, obra: arc, local: "Isaías 31:1" }
     - { numero: 3, obra: abc-1, local: "Col. i, linhas 1–2 e 24–26" }
     - { numero: 4, obra: abc-1, local: "Col. i, linhas 27–28" }
-    - { numero: 5, obra: rinap-senaqueribe-17, local: "Col. iii, linhas 18–75 (terceira campanha)" }
+    - { numero: 5, obra: rinap-senaqueribe-17, local: "Col. iii, linhas 38–75 (terceira campanha, trecho sobre Ezequias)" }
 
 mundo:
-  explicacao: "Isaías viveu sob o domínio da Assíria, mas o livro olha também para os impérios que viriam depois. A Babilônia aparece primeiro como reino rebelde contra a Assíria, com Merodaque-Baladã, e depois como o império para onde iriam os tesouros e os descendentes de Ezequias (Isaías 39:6–7). Os capítulos 13 e 14 e 40 a 48 falam da queda dessa Babilônia e nomeiam o persa Ciro. Nos acontecimentos abaixo, o que dizem os registros babilônicos e persas é atribuído a eles, ao lado do texto bíblico.[^1]"
+  explicacao: "Isaías viveu sob o domínio da Assíria, mas o livro olha também para os impérios que viriam depois. Merodaque-Baladã, que a crônica babilônica mostra lutando contra Sargão e Senaqueribe,[^1] manda enviados a Ezequias, e Isaías anuncia que os tesouros e os descendentes do rei iriam para a Babilônia (Isaías 39:6–7). Os capítulos 13 e 14 e 40 a 48 falam da queda dessa Babilônia e nomeiam o persa Ciro."
   personagens: []
   acontecimentos:
     - quando: "Por volta de 721 a 702 a.C."
@@ -176,16 +176,16 @@ profecias:
     anuncia: "Acaz se recusa a pedir um sinal, e o Senhor mesmo o dá à casa de Davi: \"eis que uma virgem conceberá, e dará à luz um filho, e será o seu nome Emanuel\"."
     notas: []
   - referencia: "Isaías 8:4"
-    anuncia: "Antes que o filho de Isaías saiba dizer \"meu pai\" ou \"minha mãe\", as riquezas de Damasco e os despojos de Samaria serão levados pelo rei da Assíria."
+    anuncia: "Antes que o filho de Isaías saiba dizer \"meu pai\" ou \"minha mãe\", as riquezas de Damasco e os despojos de Samaria serão levados \"diante do rei da Assíria\"."
     notas: []
   - referencia: "Isaías 9:2"
-    anuncia: "\"O povo que andava em trevas viu uma grande luz.\" O versículo anterior situa essa luz na Galileia, junto ao caminho do mar."
+    anuncia: "\"O povo que andava em trevas viu uma grande luz.\" O versículo anterior fala da terra de Zebulom e Naftali, \"a Galileia dos gentios\", junto ao caminho do mar."
     notas: []
   - referencia: "Isaías 9:6–7"
     anuncia: "Nasce um menino que terá o principado sobre os ombros e se chamará \"Maravilhoso Conselheiro, Deus Forte, Pai da Eternidade, Príncipe da Paz\". O seu reino, no trono de Davi, não terá fim."
     notas: []
   - referencia: "Isaías 11:1–2"
-    anuncia: "Do tronco de Jessé, pai de Davi, brotará um rebento, e sobre ele repousará o Espírito do Senhor, com sabedoria, conselho, fortaleza e temor do Senhor."
+    anuncia: "Do tronco de Jessé, pai de Davi, brotará um rebento, e sobre ele repousará o Espírito do Senhor, o Espírito \"de sabedoria e de inteligência\", \"de conselho e de fortaleza\", \"de conhecimento e de temor do Senhor\"."
     notas: []
   - referencia: "Isaías 11:10–12"
     anuncia: "As nações buscarão a raiz de Jessé, e o Senhor ajuntará de novo os dispersos de Israel e de Judá, da Assíria, do Egito e dos quatro cantos da terra."
@@ -221,10 +221,10 @@ profecias:
     anuncia: "O Senhor chama Ciro pelo nome, \"meu pastor\" e \"seu ungido\", e diz que ele mandará reconstruir Jerusalém e lançar os alicerces do templo."
     notas: []
   - referencia: "Isaías 49:6"
-    anuncia: "Restaurar as tribos de Jacó é pouco para o Servo: ele será também \"luz dos gentios\", para levar a salvação até a extremidade da terra."
+    anuncia: "Restaurar as tribos de Jacó é pouco para o Servo: ele será também \"luz dos gentios\", \"para seres a minha salvação até à extremidade da terra\"."
     notas: []
   - referencia: "Isaías 52:13–53:12"
-    anuncia: "O Servo será exaltado depois de ser \"desprezado e o mais indigno entre os homens\". Foi ferido pelas transgressões de outros, e \"pelas suas pisaduras, fomos sarados\". Levado como cordeiro ao matadouro, não abriu a boca."
+    anuncia: "O Servo será exaltado depois de ser \"desprezado e o mais indigno entre os homens\". \"Foi ferido pelas nossas transgressões\", e \"pelas suas pisaduras, fomos sarados\". Levado como cordeiro ao matadouro, não abriu a boca."
     notas: []
   - referencia: "Isaías 61:1–2"
     anuncia: "Alguém ungido pelo Espírito do Senhor é enviado para levar boas-novas aos mansos, liberdade aos cativos e para apregoar \"o ano aceitável do Senhor e o dia da vingança do nosso Deus\"."
@@ -265,7 +265,7 @@ promessas:
     anuncia: "Como a chuva que não volta ao céu sem regar a terra, a palavra do Senhor \"não voltará para mim vazia\"."
     notas: []
   - referencia: "Isaías 58:11"
-    anuncia: "\"O Senhor te guiará continuamente\", e quem o segue será como um jardim regado e uma fonte que nunca seca."
+    anuncia: "Se o povo abrir a alma ao faminto e fartar a alma aflita, \"o Senhor te guiará continuamente\", e será \"como um jardim regado\" e um manancial cujas águas nunca faltam."
     notas: []
   - referencia: "Isaías 65:17"
     anuncia: "\"Eu crio céus novos e nova terra\", e as coisas passadas não serão mais lembradas."
@@ -372,4 +372,4 @@ citacoes:
     comentario: "\"E Isaías ousadamente diz\": Paulo aplica o primeiro versículo aos que não buscavam a Deus e o segundo a Israel, \"um povo rebelde e contradizente\"."
   - trecho: "Isaías 66:1–2"
     citadoEm: ["Atos 7:48–50"]
-    comentario: "No discurso de Estêvão, depois de lembrar que \"Salomão lhe edificou casa\", vem a citação: \"o Altíssimo não habita em templos feitos por mãos de homens, como diz o profeta\"."
+    comentario: "No seu discurso, Estêvão lembra que \"Salomão lhe edificou casa\", diz que \"o Altíssimo não habita em templos feitos por mãos de homens, como diz o profeta\" e cita: \"O céu é o meu trono\"."
