@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, input
 import type { Nota } from '../../../core/models/conteudo.model';
 import { ReferenciaComponent } from '../referencia/referencia.component';
 import { idNota } from '../texto-notas/texto-notas.component';
+import { agruparReferencias } from './agrupar-referencias';
 
 const DESTAQUE = 'is-destaque';
 
@@ -31,6 +32,8 @@ export class LinhaEstudoComponent {
   readonly prefixo = input<string>('');
   /** Título da coluna, mostrado só onde ajuda a ler (em geral, a primeira linha). */
   readonly titulo = input<string | null>(null);
+
+  protected readonly grupos = computed(() => agruparReferencias(this.referencias()));
 
   protected readonly temColuna = computed(
     () => this.referencias().length > 0 || this.notas().length > 0,

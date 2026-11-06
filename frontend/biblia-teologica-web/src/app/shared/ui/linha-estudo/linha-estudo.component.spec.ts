@@ -24,6 +24,16 @@ class HostComponent {}
 })
 class HostSemColunaComponent {}
 
+@Component({
+  imports: [LinhaEstudoComponent],
+  template: `
+    <bt-linha-estudo [referencias]="['Isaías 1:1', 'Isaías 7:3', 'Romanos 9:33']">
+      <p>Texto.</p>
+    </bt-linha-estudo>
+  `,
+})
+class HostVariasRefsComponent {}
+
 describe('LinhaEstudoComponent', () => {
   const montar = () => {
     const f = TestBed.createComponent(HostComponent);
@@ -37,6 +47,21 @@ describe('LinhaEstudoComponent', () => {
     expect(coluna.querySelector('a')?.getAttribute('href')).toContain('/arc/is/1/1');
     expect(coluna.textContent).toContain('Obra A');
     expect(coluna.querySelector('a[href="https://exemplo.org"]')?.textContent).toContain('Abrir fonte');
+  });
+
+  it('escreve o livro uma vez por grupo, e cada referência continua sendo link para a ARC', () => {
+    const f = TestBed.createComponent(HostVariasRefsComponent);
+    f.detectChanges();
+    const refs = (f.nativeElement as HTMLElement).querySelector('.linha__refs')!;
+    const grupos = Array.from(refs.querySelectorAll(':scope > li')).map((li) =>
+      li.textContent!.replace(/\s+/g, ' ').trim(),
+    );
+    expect(grupos).toEqual(['Isaías 1:1; 7:3', 'Romanos 9:33']);
+    const links = refs.querySelectorAll('a');
+    expect(links.length).toBe(3);
+    expect(links[1].textContent).toBe('7:3');
+    expect(links[1].getAttribute('href')).toContain('/arc/is/7/3');
+    expect(links[1].getAttribute('aria-label')).toContain('Isaías 7:3');
   });
 
   it('coluna é um grupo rotulado, não um landmark repetido por parágrafo', () => {

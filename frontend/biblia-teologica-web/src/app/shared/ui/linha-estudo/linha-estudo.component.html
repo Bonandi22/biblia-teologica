@@ -7,8 +7,12 @@
       }
       @if (referencias().length > 0) {
         <ul class="linha__refs">
-          @for (r of referencias(); track $index) {
-            <li><bt-referencia [texto]="r" /></li>
+          @for (g of grupos(); track $index) {
+            <li>
+              @for (r of g; track $index) {
+                @if (!$first) {<span aria-hidden="true">; </span>}<bt-referencia [texto]="r.texto" [rotulo]="r.rotulo" />
+              }
+            </li>
           }
         </ul>
       }
