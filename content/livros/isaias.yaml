@@ -271,8 +271,10 @@ promessas:
     anuncia: "\"Eu crio céus novos e nova terra\", e as coisas passadas não serão mais lembradas."
     notas: []
 
-# Critério: entra só a passagem em que o texto que cita diz que a palavra é de Isaías
-# (pelo nome ou como "o livro do profeta Isaías"). Ordem: a do livro de Isaías.
+# Critério (utilizador, 2026-11-06): entra a passagem em que o texto que cita diz que a
+# palavra é de Isaías, ou a introduz como citação ("pelo profeta", "está escrito", "a
+# Escritura diz") e o texto corresponde ao de Isaías. Fica de fora a alusão sem fórmula
+# e a citação que junta Isaías a outro livro na mesma frase. Ordem: a do livro de Isaías.
 # Sem notas: cada referência de citadoEm abre o texto na ARC e já é a fonte.
 citacoes:
   - trecho: "Isaías 1:9"
@@ -281,6 +283,12 @@ citacoes:
   - trecho: "Isaías 6:9–10"
     citadoEm: ["Mateus 13:14–15", "João 12:39–41", "Atos 28:25–27"]
     comentario: "Em Mateus, Jesus diz que nos ouvintes das parábolas \"se cumpre a profecia de Isaías\". João acrescenta que \"Isaías disse isso quando viu a sua glória e falou dele\". Em Atos, Paulo atribui as palavras ao Espírito Santo, que falou \"pelo profeta Isaías\"."
+  - trecho: "Isaías 7:14"
+    citadoEm: ["Mateus 1:22–23"]
+    comentario: "Depois do sonho em que o anjo diz a José que o filho de Maria \"é do Espírito Santo\", Mateus cita o versículo como \"o que foi dito da parte do Senhor pelo profeta\" e traduz Emanuel: \"Deus conosco\"."
+  - trecho: "Isaías 8:14"
+    citadoEm: ["Romanos 9:33"]
+    comentario: "Paulo junta este versículo a Isaías 28:16 numa só citação, introduzida por \"como está escrito\": a \"pedra de tropeço\" e a \"rocha de escândalo\" postas em Sião."
   - trecho: "Isaías 9:1–2"
     citadoEm: ["Mateus 4:14–16"]
     comentario: "Mateus liga a ida de Jesus para Cafarnaum, \"nos confins de Zebulom e Naftali\", ao que \"foi dito pelo profeta Isaías\"."
@@ -290,15 +298,45 @@ citacoes:
   - trecho: "Isaías 11:10"
     citadoEm: ["Romanos 15:12"]
     comentario: "Paulo cita a raiz de Jessé com \"outra vez diz Isaías\", ao falar dos gentios que esperarão nele."
+  - trecho: "Isaías 25:8"
+    citadoEm: ["1 Coríntios 15:54"]
+    comentario: "Paulo diz que os mortos \"ressuscitarão incorruptíveis\" e que, quando o mortal se revestir da imortalidade, \"cumprir-se-á a palavra que está escrita: Tragada foi a morte na vitória\"."
+  - trecho: "Isaías 28:11–12"
+    citadoEm: ["1 Coríntios 14:21"]
+    comentario: "Paulo cita o trecho como \"está escrito na lei\" ao tratar do falar em línguas, e conclui que \"as línguas são um sinal, não para os fiéis, mas para os infiéis\"."
+  - trecho: "Isaías 28:16"
+    citadoEm: ["Romanos 9:33", "Romanos 10:11", "1 Pedro 2:6"]
+    comentario: "Em Romanos, Paulo cita a pedra posta em Sião duas vezes, a segunda com \"a Escritura diz: Todo aquele que nele crer não será confundido\". Pedro introduz o versículo com \"na Escritura se contém\" e fala da \"pedra principal da esquina\"."
   - trecho: "Isaías 29:13"
     citadoEm: ["Mateus 15:7–9", "Marcos 7:6–7"]
     comentario: "Na discussão sobre a tradição dos anciãos, Jesus diz aos fariseus e escribas: \"bem profetizou Isaías a vosso respeito\"."
+  - trecho: "Isaías 29:14"
+    citadoEm: ["1 Coríntios 1:19"]
+    comentario: "Depois de dizer que \"a palavra da cruz é loucura para os que perecem\", Paulo cita, com \"porque está escrito\": \"Destruirei a sabedoria dos sábios\"."
   - trecho: "Isaías 40:3–5"
     citadoEm: ["Mateus 3:3", "Marcos 1:2–3", "Lucas 3:4–6", "João 1:23"]
     comentario: "Os quatro evangelhos aplicam \"a voz do que clama no deserto\" a João Batista. No Evangelho de João, é o próprio Batista quem diz: \"Eu sou a voz do que clama no deserto\"."
   - trecho: "Isaías 42:1–4"
     citadoEm: ["Mateus 12:17–21"]
     comentario: "Depois de contar que Jesus curou a multidão e lhe recomendou \"que o não descobrissem\", Mateus cita o Servo que \"não contenderá, nem clamará\"."
+  - trecho: "Isaías 45:23"
+    citadoEm: ["Romanos 14:11"]
+    comentario: "Paulo lembra que \"todos havemos de comparecer ante o tribunal de Cristo\" e cita, com \"porque está escrito\": \"todo joelho se dobrará diante de mim\"."
+  - trecho: "Isaías 49:6"
+    citadoEm: ["Atos 13:47"]
+    comentario: "Em Antioquia da Pisídia, Paulo e Barnabé dizem aos judeus que os rejeitam: \"nos voltamos para os gentios\", porque \"o Senhor assim no-lo mandou: Eu te pus para luz dos gentios\"."
+  - trecho: "Isaías 49:8"
+    citadoEm: ["2 Coríntios 6:2"]
+    comentario: "Paulo exorta os coríntios a não receber \"a graça de Deus em vão\", cita \"Ouvi-te em tempo aceitável\" e acrescenta: \"eis aqui agora o tempo aceitável\"."
+  - trecho: "Isaías 52:5"
+    citadoEm: ["Romanos 2:24"]
+    comentario: "Paulo fala a quem se gloria na lei e a transgride: \"como está escrito, o nome de Deus é blasfemado entre os gentios por causa de vós\"."
+  - trecho: "Isaías 52:7"
+    citadoEm: ["Romanos 10:15"]
+    comentario: "\"E como pregarão, se não forem enviados?\" Paulo responde com \"como está escrito: Quão formosos os pés dos que anunciam a paz\"."
+  - trecho: "Isaías 52:15"
+    citadoEm: ["Romanos 15:21"]
+    comentario: "Paulo diz que procurou anunciar o evangelho \"não onde Cristo houvera sido nomeado\" e cita, \"como está escrito\": \"Aqueles a quem não foi anunciado o verão\"."
   - trecho: "Isaías 53:1"
     citadoEm: ["João 12:38", "Romanos 10:16"]
     comentario: "\"Senhor, quem creu na nossa pregação?\" aparece em João, sobre os que não criam apesar dos sinais, e em Romanos, sobre os que não obedecem ao evangelho."
@@ -308,9 +346,30 @@ citacoes:
   - trecho: "Isaías 53:7–8"
     citadoEm: ["Atos 8:28–35"]
     comentario: "O eunuco etíope lia o profeta Isaías no carro e perguntou a Filipe: \"de quem diz isto o profeta?\". Filipe, \"começando nesta Escritura, lhe anunciou a Jesus\"."
+  - trecho: "Isaías 53:12"
+    citadoEm: ["Lucas 22:37"]
+    comentario: "Na última noite com os discípulos, Jesus diz: \"importa que em mim se cumpra aquilo que está escrito: E com os malfeitores foi contado\"."
+  - trecho: "Isaías 54:1"
+    citadoEm: ["Gálatas 4:27"]
+    comentario: "Na alegoria dos dois filhos de Abraão, Paulo fala da \"Jerusalém que é de cima\", \"mãe de todos nós\", e cita, com \"porque está escrito\": \"Alegra-te, estéril, que não dás à luz\"."
+  - trecho: "Isaías 54:13"
+    citadoEm: ["João 6:45"]
+    comentario: "\"Está escrito nos profetas: E serão todos ensinados por Deus\". Jesus conclui que \"todo aquele que do Pai ouviu e aprendeu vem a mim\"."
+  - trecho: "Isaías 55:3"
+    citadoEm: ["Atos 13:34"]
+    comentario: "Na sinagoga de Antioquia da Pisídia, Paulo fala da ressurreição de Jesus e cita o que Deus disse: \"As santas e fiéis bênçãos de Davi vos darei\"."
+  - trecho: "Isaías 56:7"
+    citadoEm: ["Mateus 21:13", "Marcos 11:17", "Lucas 19:46"]
+    comentario: "Ao expulsar do templo os que vendiam e compravam, Jesus diz: \"Está escrito: A minha casa será chamada casa de oração\". Marcos traz a frase inteira, \"por todas as nações\"."
+  - trecho: "Isaías 59:20–21"
+    citadoEm: ["Romanos 11:26–27"]
+    comentario: "Paulo diz que \"todo o Israel será salvo, como está escrito: De Sião virá o Libertador\". O versículo 27 acrescenta palavras de Isaías 27:9: \"quando eu tirar os seus pecados\"."
   - trecho: "Isaías 61:1–2"
     citadoEm: ["Lucas 4:16–21"]
     comentario: "Na sinagoga de Nazaré, Jesus recebe \"o livro do profeta Isaías\", lê o trecho até \"o ano aceitável do Senhor\" e diz: \"Hoje se cumpriu esta Escritura em vossos ouvidos\"."
   - trecho: "Isaías 65:1–2"
     citadoEm: ["Romanos 10:20–21"]
     comentario: "\"E Isaías ousadamente diz\": Paulo aplica o primeiro versículo aos que não buscavam a Deus e o segundo a Israel, \"um povo rebelde e contradizente\"."
+  - trecho: "Isaías 66:1–2"
+    citadoEm: ["Atos 7:48–50"]
+    comentario: "No discurso de Estêvão, depois de lembrar que \"Salomão lhe edificou casa\", vem a citação: \"o Altíssimo não habita em templos feitos por mãos de homens, como diz o profeta\"."
