@@ -2,7 +2,7 @@
 # revisão independente (Step 4) aplicada no mesmo dia.
 estado: rascunho
 livro: isaias
-resumo: "Profeta de Jerusalém sob quatro reis de Judá, Isaías fala primeiro a um povo ameaçado pela Assíria e, a partir do capítulo 40, a um povo que está na Babilônia."
+resumo: "Profeta de Jerusalém sob quatro reis de Judá, Isaías fala primeiro a um povo ameaçado pela Assíria e, a partir do capítulo 40, a Jerusalém e a um povo cativo na Babilônia."
 
 perfil:
   - rotulo: "Quem era"
@@ -18,17 +18,17 @@ perfil:
     texto: "A esposa é chamada \"a profetisa\". Dois filhos são nomeados: Sear-Jasube, que acompanha o pai ao encontro de Acaz, e Maer-Salal-Hás-Baz, cujo nome vem com um anúncio sobre Damasco e Samaria. Isaías diz que ele e os filhos são \"sinais e maravilhas em Israel\"."
     referencias: ["Isaías 7:3", "Isaías 8:1–4", "Isaías 8:18"]
   - rotulo: "Para quem falou"
-    texto: "Primeiro a Judá e Jerusalém, como diz o título do livro. Os capítulos 13 a 23 dirigem oráculos a outras nações, de Babilônia a Tiro. Do capítulo 40 em diante, a mensagem se volta a um povo que está na Babilônia e é chamado a sair dela."
-    referencias: ["Isaías 1:1", "Isaías 13:1", "Isaías 23:1", "Isaías 48:20"]
+    texto: "Primeiro a Judá e Jerusalém, como diz o título do livro. Os capítulos 13 a 23 dirigem oráculos a outras nações, de Babilônia a Tiro. A partir do capítulo 40, o texto fala a Jerusalém e a um povo cativo na Babilônia, chamado a sair dela."
+    referencias: ["Isaías 1:1", "Isaías 13:1", "Isaías 23:1", "Isaías 40:2", "Isaías 48:20"]
   - rotulo: "Outros escritos"
     texto: "Crônicas atribui a Isaías um registro dos atos de Uzias e diz que os atos de Ezequias estão escritos na \"visão do profeta Isaías\". Nenhum desses registros chegou até nós fora da Bíblia."
     referencias: ["2 Crônicas 26:22", "2 Crônicas 32:32"]
 
 panorama:
-  explicacao: "São 66 capítulos em três partes. Os capítulos 1 a 35 trazem as mensagens do tempo de Uzias a Ezequias: denúncia da injustiça em Jerusalém, a crise da guerra com a Síria e Israel e os oráculos contra as nações. Os capítulos 36 a 39 são narrativa e repetem 2 Reis 18 a 20: o cerco de Senaqueribe, a doença de Ezequias e a visita dos enviados da Babilônia. Há duas diferenças: Isaías não traz o tributo pago por Ezequias (2 Reis 18:14–16) e acrescenta o cântico que ele escreveu depois da cura (Isaías 38:9–20). O capítulo 40 começa com \"Consolai, consolai o meu povo\"[^1], e daí em diante o livro fala a um povo na Babilônia e nomeia Ciro como aquele que dirá a Jerusalém \"Sê edificada\"[^2]."
+  explicacao: "São 66 capítulos em três partes. Os capítulos 1 a 35 trazem as mensagens do tempo de Uzias a Ezequias: denúncia da injustiça em Jerusalém, a crise da guerra com a Síria e Israel e os oráculos contra as nações. Os capítulos 36 a 39 são narrativa e repetem 2 Reis 18 a 20: o cerco de Senaqueribe, a doença de Ezequias e a visita dos enviados da Babilônia. Há duas diferenças: Isaías não traz o tributo pago por Ezequias (2 Reis 18:14–16) e acrescenta o cântico que ele escreveu depois da cura (Isaías 38:9–20). O capítulo 40 começa com \"Consolai, consolai o meu povo\"[^1], e daí em diante o texto fala a Jerusalém e a um povo cativo na Babilônia, chamado a sair dela (Isaías 40:2; 48:20), e nomeia Ciro como aquele que dirá a Jerusalém \"Sê edificada\"[^2]."
   personagens:
     - nome: Uzias
-      texto: "Rei de Judá, chamado também Azarias em 2 Reis. Reinou cerca de 52 a 55 anos em Jerusalém, e o ano da sua morte é a data do chamado de Isaías. Crônicas conta que Uzias ficou leproso até morrer e viveu numa casa separada, enquanto o filho Jotão governava em seu lugar."
+      texto: "Rei de Judá, chamado também Azarias em 2 Reis. Reinou 52 anos em Jerusalém, e o ano da sua morte é a data do chamado de Isaías. Crônicas conta que Uzias ficou leproso até morrer e viveu numa casa separada, enquanto o filho Jotão governava em seu lugar."
       saberMais: null
       estudo: null
       referencias: ["Isaías 6:1", "2 Reis 15:1–2", "2 Crônicas 26:3", "2 Crônicas 26:21"]
@@ -95,7 +95,7 @@ panorama:
       estudo: null
       referencias: ["Isaías 38:1–22"]
     - quando: "Depois da cura de Ezequias"
-      texto: "Os enviados de Merodaque-Baladã visitam Jerusalém e veem os tesouros do rei. Isaías responde que tudo seria levado para a Babilônia, e é a um povo na Babilônia que falam os capítulos 40 em diante."
+      texto: "Os enviados de Merodaque-Baladã visitam Jerusalém e veem os tesouros do rei. Isaías responde que tudo seria levado para a Babilônia. Do capítulo 40 em diante, o texto fala a Jerusalém e a um povo cativo na Babilônia."
       saberMais: null
       estudo: null
       referencias: ["Isaías 39:1–8"]
@@ -150,7 +150,7 @@ mundo:
       referencias: ["Isaías 39:1–2", "2 Reis 18:7"]
     - quando: "Por volta de 597 a.C."
       ano: -597
-      texto: "Segundo a Crônica de Jerusalém, Nabucodonosor sitiou \"a cidade de Judá\", tomou-a, capturou o rei e pôs no lugar um rei da sua escolha.[^2] 2 Reis narra o mesmo cerco: Joaquim é levado preso, os tesouros da casa do Senhor e da casa do rei vão para a Babilônia e Matanias, tio do rei, é posto no trono com o nome de Zedequias. Isaías 39:6–7 fala de tesouros e descendentes levados para a Babilônia."
+      texto: "Segundo a Crônica de Jerusalém, Nabucodonosor sitiou \"a cidade de Judá\", tomou-a, capturou o rei e pôs no lugar um rei da sua escolha.[^2] 2 Reis narra o mesmo cerco: Joaquim é levado preso, os tesouros da casa do Senhor e da casa do rei vão para a Babilônia e Matanias, tio do rei, é posto no trono com o nome de Zedequias. Sobre os tesouros, 2 Reis 24:13 diz que foram tirados \"como o Senhor tinha dito\"."
       saberMais: null
       estudo: null
       referencias: ["2 Reis 24:10–17", "Isaías 39:6–7"]
@@ -274,7 +274,8 @@ promessas:
 # Critério (utilizador, 2026-11-06): entra a passagem em que o texto que cita diz que a
 # palavra é de Isaías, ou a introduz como citação ("pelo profeta", "está escrito", "a
 # Escritura diz") e o texto corresponde ao de Isaías. Fica de fora a alusão sem fórmula
-# e a citação que junta Isaías a outro livro na mesma frase. Ordem: a do livro de Isaías.
+# e, quando o texto não nomeia Isaías, a citação que o junta a outro livro na mesma
+# frase. Marcos 1:2–3 entra porque nomeia Isaías. Ordem: a do livro de Isaías.
 # Sem notas: cada referência de citadoEm abre o texto na ARC e já é a fonte.
 citacoes:
   - trecho: "Isaías 1:9"
