@@ -12,7 +12,7 @@ perfil:
     texto: "\"Nos dias de Uzias, Jotão, Acaz e Ezequias, reis de Judá.\" O chamado é datado no ano da morte de Uzias, e o último episódio narrado é a embaixada babilônica que visita Ezequias depois da doença do rei."
     referencias: ["Isaías 1:1", "Isaías 6:1", "Isaías 39:1"]
   - rotulo: "O chamado"
-    texto: "No templo, Isaías vê o Senhor num trono, ouve os serafins e reconhece que é homem de lábios impuros. Depois que uma brasa do altar lhe toca a boca, responde à pergunta \"quem há de ir por nós?\" com \"eis-me aqui, envia-me a mim\". A missão que recebe é dura: falar a um povo que ouvirá e não entenderá."
+    texto: "No templo, Isaías vê o Senhor num trono, ouve os serafins e reconhece que é homem de lábios impuros. Depois que uma brasa do altar lhe toca a boca, responde à pergunta \"quem há de ir por nós?\" com \"eis-me aqui, envia-me a mim\". É enviado a um povo que vai ouvir e não entender."
     referencias: ["Isaías 6:1–10"]
   - rotulo: "Família"
     texto: "A esposa é chamada \"a profetisa\". Dois filhos são nomeados: Sear-Jasube, que acompanha o pai ao encontro de Acaz, e Maer-Salal-Hás-Baz, cujo nome vem com um anúncio sobre Damasco e Samaria. Isaías diz que ele e os filhos são \"sinais e maravilhas em Israel\"."
@@ -25,7 +25,7 @@ perfil:
     referencias: ["2 Crônicas 26:22", "2 Crônicas 32:32"]
 
 panorama:
-  explicacao: "São 66 capítulos em três partes. Os capítulos 1 a 35 trazem as mensagens do tempo de Acaz e Ezequias: denúncia da injustiça em Jerusalém, a crise da guerra com a Síria e Israel e os oráculos contra as nações. Os capítulos 36 a 39 são narrativa e repetem, com poucas diferenças, 2 Reis 18 a 20: o cerco de Senaqueribe, a doença de Ezequias e a visita dos enviados da Babilônia. Do capítulo 40 em diante o tom muda. O livro abre essa parte com \"Consolai, consolai o meu povo\"[^1], fala a um povo na Babilônia e nomeia Ciro como aquele que dirá a Jerusalém \"Sê edificada\"[^2]."
+  explicacao: "São 66 capítulos em três partes. Os capítulos 1 a 35 trazem as mensagens do tempo de Acaz e Ezequias: denúncia da injustiça em Jerusalém, a crise da guerra com a Síria e Israel e os oráculos contra as nações. Os capítulos 36 a 39 são narrativa e repetem, com poucas diferenças, 2 Reis 18 a 20: o cerco de Senaqueribe, a doença de Ezequias e a visita dos enviados da Babilônia. O capítulo 40 começa com \"Consolai, consolai o meu povo\"[^1], e daí em diante o livro fala a um povo na Babilônia e nomeia Ciro como aquele que dirá a Jerusalém \"Sê edificada\"[^2]."
   personagens:
     - nome: Uzias
       texto: "Rei de Judá, chamado também Azarias em 2 Reis. Reinou cerca de 52 a 55 anos em Jerusalém, e o ano da sua morte é a data do chamado de Isaías. Crônicas conta que Uzias ficou leproso até morrer e viveu numa casa separada, enquanto o filho Jotão governava em seu lugar."
@@ -34,7 +34,7 @@ panorama:
       referencias: ["Isaías 6:1", "2 Reis 15:1–2", "2 Crônicas 26:3", "2 Crônicas 26:21"]
     - nome: Acaz
       texto: "Rei de Judá durante a guerra com Rezim, da Síria, e Peca, de Israel. Isaías vai ao encontro dele com o filho Sear-Jasube e lhe pede que não tema. Acaz recusa pedir um sinal, e é nesse diálogo que vem a palavra de Isaías 7:14."
-      saberMais: "Em 2 Reis, Acaz escolhe outro caminho: envia prata e ouro a Tiglate-Pileser, rei da Assíria, e pede socorro. Saber disso ajuda a ler o capítulo 7 como um conflito entre confiar no Senhor e comprar a proteção da Assíria."
+      saberMais: "Em 2 Reis, Acaz envia prata e ouro a Tiglate-Pileser, rei da Assíria, e pede socorro contra os mesmos dois reis. Enquanto Isaías lhe diz que não tema, o rei já paga à Assíria."
       estudo: null
       referencias: ["Isaías 7:1–14", "2 Reis 16:5–9"]
     - nome: Ezequias
@@ -75,7 +75,7 @@ panorama:
       estudo: null
       referencias: ["Isaías 6:1–13"]
     - quando: "Nos dias de Acaz"
-      texto: "Síria e Israel sobem contra Jerusalém. Os capítulos 7 e 8 são lidos à luz dessa ameaça: o sinal do menino e o nome Maer-Salal-Hás-Baz anunciam o fim dos dois reis inimigos antes que a criança saiba falar."
+      texto: "Síria e Israel sobem contra Jerusalém. Nos capítulos 7 e 8, Isaías responde a essa ameaça com o sinal do menino e com o nome Maer-Salal-Hás-Baz: antes que a criança saiba falar, os dois reis inimigos terão caído."
       saberMais: null
       estudo: null
       referencias: ["Isaías 7:1–16", "Isaías 8:3–4"]
@@ -95,7 +95,7 @@ panorama:
       estudo: null
       referencias: ["Isaías 38:1–22"]
     - quando: "Depois da cura de Ezequias"
-      texto: "Os enviados de Merodaque-Baladã visitam Jerusalém. A resposta de Isaías, que tudo seria levado para a Babilônia, prepara a leitura dos capítulos 40 em diante."
+      texto: "Os enviados de Merodaque-Baladã visitam Jerusalém e veem os tesouros do rei. Isaías responde que tudo seria levado para a Babilônia, e é a um povo na Babilônia que falam os capítulos 40 em diante."
       saberMais: null
       estudo: null
       referencias: ["Isaías 39:1–8"]
@@ -139,15 +139,15 @@ contexto:
     - { numero: 5, obra: rinap-senaqueribe-17, local: "Col. iii, linhas 18–75 (terceira campanha)" }
 
 mundo:
-  explicacao: "Isaías viveu sob o domínio da Assíria, mas o livro olha também para os impérios que viriam depois. A Babilônia aparece primeiro como reino rebelde contra a Assíria, com Merodaque-Baladã, e depois como o império para onde iriam os tesouros e os descendentes de Ezequias (Isaías 39:6–7). Os capítulos 13 e 14 e 40 a 48 falam da queda dessa Babilônia e nomeiam o persa Ciro. Os registros babilônicos e persas citados abaixo são a versão desses povos, postos ao lado do texto bíblico.[^1]"
+  explicacao: "Isaías viveu sob o domínio da Assíria, mas o livro olha também para os impérios que viriam depois. A Babilônia aparece primeiro como reino rebelde contra a Assíria, com Merodaque-Baladã, e depois como o império para onde iriam os tesouros e os descendentes de Ezequias (Isaías 39:6–7). Os capítulos 13 e 14 e 40 a 48 falam da queda dessa Babilônia e nomeiam o persa Ciro. Nos acontecimentos abaixo, o que dizem os registros babilônicos e persas é atribuído a eles, ao lado do texto bíblico.[^1]"
   personagens: []
   acontecimentos:
     - quando: "Por volta de 721 a 702 a.C."
       ano: -710
-      texto: "A crônica babilônica chama Merodaque-Baladã de Marduk-apla-iddina. Diz que ele reinou doze anos em Babilônia até fugir de Sargão para Elão e que, anos depois, voltou e enfrentou Senaqueribe, de novo sem vencer.[^1] Isaías 39 mostra esse rei mandando cartas e um presente a Ezequias. A crônica mostra que os dois reis tinham o mesmo inimigo."
+      texto: "A crônica babilônica chama Merodaque-Baladã de Marduk-apla-iddina. Diz que ele reinou doze anos em Babilônia até fugir de Sargão para Elão e que, anos depois, voltou e enfrentou Senaqueribe, de novo sem vencer.[^1] Em Isaías 39, esse rei manda cartas e um presente a Ezequias, que também se tinha revoltado contra a Assíria."
       saberMais: null
       estudo: null
-      referencias: ["Isaías 39:1–2"]
+      referencias: ["Isaías 39:1–2", "2 Reis 18:7"]
     - quando: "Por volta de 597 a.C."
       ano: -597
       texto: "Segundo a Crônica de Jerusalém, Nabucodonosor sitiou \"a cidade de Judá\", tomou-a, capturou o rei e pôs no lugar um rei da sua escolha.[^2] 2 Reis narra o mesmo cerco: Joaquim é levado preso, os tesouros da casa do Senhor e da casa do rei vão para a Babilônia e Matanias, tio do rei, é posto no trono com o nome de Zedequias. Isaías 39:6–7 fala de tesouros e descendentes levados para a Babilônia."
