@@ -1,1 +1,44 @@
-[]
+# Catálogo de obras. Só entra fonte aberta, aberta na url e conferida
+# (content/GUIA-DE-ESTILO.md, seção 2). Conferidas em 2026-11-06.
+
+- id: arc
+  autor: Sociedade Bíblica do Brasil
+  titulo: Bíblia Sagrada, Almeida Revista e Corrigida
+  detalhes: "Texto consultado na Bíblia Online"
+  url: https://www.bibliaonline.com.br/arc
+
+- id: rinap-senaqueribe-17
+  autor: A. Kirk Grayson e Jamie Novotny
+  titulo: "Sennacherib 017 (Prisma de Senaqueribe), em The Royal Inscriptions of the Neo-Assyrian Period, vol. 3/1"
+  detalhes: "Edição acadêmica com transliteração e tradução inglesa, projeto RINAP/Oracc, 2012, licença CC BY-SA. Terceira campanha, col. iii"
+  url: https://oracc.museum.upenn.edu/rinap/Q003491
+
+- id: livius-prisma-senaqueribe
+  autor: Jona Lendering (Livius.org)
+  titulo: "The Sennacherib Prism"
+  detalhes: "Introdução histórica e trecho dos anais na tradução de M. Cogan. A introdução dá os reinados de Salmaneser V (726–722), Sargão II (721–705) e Senaqueribe (705–681), a queda de Samaria em 724 ou 722 e o cerco de Jerusalém em 701 a.C."
+  url: https://www.livius.org/sources/content/anet/287-the-sennacherib-prism/
+
+- id: abc-1
+  autor: Jona Lendering (Livius.org)
+  titulo: "ABC 1, Crônica dos reinados de Nabû-Nasir a Šamaš-šuma-ukin"
+  detalhes: "Tradução inglesa adaptada de A. K. Grayson, Assyrian and Babylonian Chronicles (1975), e de J.-J. Glassner, Mesopotamian Chronicles"
+  url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-1-from-nabu-nasir-to-samas-suma-ukin/
+
+- id: abc-5
+  autor: Jona Lendering (Livius.org)
+  titulo: "ABC 5, Crônica de Jerusalém (primeiros anos de Nabucodonosor II)"
+  detalhes: "Tradução inglesa adaptada de A. K. Grayson, Assyrian and Babylonian Chronicles (1975)"
+  url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-5-jerusalem-chronicle/
+
+- id: abc-7
+  autor: Jona Lendering (Livius.org)
+  titulo: "ABC 7, Crônica de Nabonido"
+  detalhes: "Tradução inglesa adaptada de A. K. Grayson, Assyrian and Babylonian Chronicles (1975)"
+  url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-7-nabonidus-chronicle/
+
+- id: cilindro-de-ciro
+  autor: Jona Lendering (Livius.org)
+  titulo: Cilindro de Ciro, tradução
+  detalhes: "Baseada na tradução de Mordechai Cogan em W. W. Hallo e K. L. Younger, The Context of Scripture, vol. II (2003), ajustada à edição de H. Schaudig"
+  url: https://www.livius.org/sources/content/cyrus-cylinder/cyrus-cylinder-translation/
