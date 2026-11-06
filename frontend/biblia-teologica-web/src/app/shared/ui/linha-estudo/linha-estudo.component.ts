@@ -3,6 +3,7 @@ import type { Nota } from '../../../core/models/conteudo.model';
 import { ReferenciaComponent } from '../referencia/referencia.component';
 import { idNota } from '../texto-notas/texto-notas.component';
 import { agruparReferencias } from './agrupar-referencias';
+import { urlReferencia } from '../../../core/biblia/arc';
 
 const DESTAQUE = 'is-destaque';
 
@@ -38,6 +39,11 @@ export class LinhaEstudoComponent {
   protected readonly temColuna = computed(
     () => this.referencias().length > 0 || this.notas().length > 0,
   );
+
+  /** Nota da Bíblia chega só com a referência ("Isaías 40:1"); vira link para o versículo. */
+  protected ehReferencia(citacao: string): boolean {
+    return urlReferencia(citacao) !== null;
+  }
 
   protected id(numero: number): string {
     return idNota(numero, this.prefixo());

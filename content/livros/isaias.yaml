@@ -136,7 +136,7 @@ contexto:
     - { numero: 2, obra: arc, local: "Isaías 31:1" }
     - { numero: 3, obra: abc-1, local: "Col. i, linhas 1–2 e 24–26" }
     - { numero: 4, obra: abc-1, local: "Col. i, linhas 27–28" }
-    - { numero: 5, obra: rinap-senaqueribe-17, local: "Col. iii, linhas 38–75 (terceira campanha, trecho sobre Ezequias)" }
+    - { numero: 5, obra: rinap-senaqueribe-17, local: "col. iii, linhas 38–75" }
 
 mundo:
   explicacao: "Isaías viveu sob o domínio da Assíria, mas o livro olha também para os impérios que viriam depois. Merodaque-Baladã, que a crônica babilônica mostra lutando contra Sargão e Senaqueribe,[^1] manda enviados a Ezequias, e Isaías anuncia que os tesouros e os descendentes do rei iriam para a Babilônia (Isaías 39:6–7). Os capítulos 13 e 14 e 40 a 48 falam da queda dessa Babilônia e nomeiam o persa Ciro."

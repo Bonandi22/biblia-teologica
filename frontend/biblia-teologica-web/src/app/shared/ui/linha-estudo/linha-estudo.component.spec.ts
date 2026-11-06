@@ -34,6 +34,16 @@ class HostSemColunaComponent {}
 })
 class HostVariasRefsComponent {}
 
+@Component({
+  imports: [LinhaEstudoComponent],
+  template: `
+    <bt-linha-estudo [notas]="[{ numero: 1, citacao: 'Isaías 40:1', url: null }]" prefixo="pan">
+      <p>Texto.</p>
+    </bt-linha-estudo>
+  `,
+})
+class HostNotaBibliaComponent {}
+
 describe('LinhaEstudoComponent', () => {
   const montar = () => {
     const f = TestBed.createComponent(HostComponent);
@@ -62,6 +72,16 @@ describe('LinhaEstudoComponent', () => {
     expect(links[1].textContent).toBe('7:3');
     expect(links[1].getAttribute('href')).toContain('/arc/is/7/3');
     expect(links[1].getAttribute('aria-label')).toContain('Isaías 7:3');
+  });
+
+  it('nota que é só referência bíblica vira link para o versículo, sem "Abrir fonte"', () => {
+    const f = TestBed.createComponent(HostNotaBibliaComponent);
+    f.detectChanges();
+    const nota = (f.nativeElement as HTMLElement).querySelector('#nota-pan-1')!;
+    const link = nota.querySelector('a')!;
+    expect(link.textContent).toBe('Isaías 40:1');
+    expect(link.getAttribute('href')).toContain('/arc/is/40/1');
+    expect(nota.textContent).not.toContain('Abrir fonte');
   });
 
   it('coluna é um grupo rotulado, não um landmark repetido por parágrafo', () => {

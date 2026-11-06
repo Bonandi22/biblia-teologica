@@ -20,7 +20,11 @@
         <ol class="linha__notas">
           @for (n of notas(); track n.numero) {
             <li [id]="id(n.numero)" [attr.value]="n.numero" tabindex="-1">
-              {{ n.citacao }}
+              @if (!n.url && ehReferencia(n.citacao)) {
+                <bt-referencia [texto]="n.citacao" />
+              } @else {
+                {{ n.citacao }}
+              }
               @if (n.url) {
                 <a [href]="n.url" target="_blank" rel="noopener noreferrer">Abrir fonte</a>
               }

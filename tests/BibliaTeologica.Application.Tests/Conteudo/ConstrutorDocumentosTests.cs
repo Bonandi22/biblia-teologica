@@ -55,6 +55,23 @@ public class ConstrutorDocumentosTests
     }
 
     [Fact]
+    public void Construir_MostraSoAReferencia_QuandoNotaEDaArc()
+    {
+        var bloco = Bloco();
+        bloco.Notas[0] = new RegistroNota { Numero = 1, Obra = "arc", Local = "Isaías 40:1" };
+        var arc = new RegistroObra
+            { Id = "arc", Autor = "Sociedade Bíblica do Brasil", Titulo = "ARC", Detalhes = "Bíblia Online", Url = "https://www.bibliaonline.com.br/arc" };
+
+        var docs = ConstrutorDocumentos.Construir(
+            new ConjuntoRegistros(new[] { Obra(), arc }, new[] { Livro(bloco, Bloco(), Bloco()) }, Array.Empty<RegistroEstudo>()), Titulos);
+        var dto = JsonSerializer.Deserialize<LivroPanoramaDto>(docs.Single().Json, new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
+
+        var nota = dto.Panorama.Notas.Should().ContainSingle().Subject;
+        nota.Citacao.Should().Be("Isaías 40:1");
+        nota.Url.Should().BeNull();
+    }
+
+    [Fact]
     public void Construir_OrdenaAcontecimentosPorAno_QuandoContextoEMundo()
     {
         var desordenado = new[] { Acontecimento("depois", -500, "b"), Acontecimento("antes", -701, "a") };

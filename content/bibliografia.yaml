@@ -1,5 +1,7 @@
 # Catálogo de obras. Só entra fonte aberta, aberta na url e conferida
 # (content/GUIA-DE-ESTILO.md, seção 2). Conferidas em 2026-11-06.
+# `detalhes` aparece na nota do site: só edição/tradução, curto. Anotação de
+# conferência fica em comentário. A nota da ARC aparece só como a referência.
 
 - id: arc
   autor: Sociedade Bíblica do Brasil
@@ -7,38 +9,46 @@
   detalhes: "Texto consultado na Bíblia Online"
   url: https://www.bibliaonline.com.br/arc
 
+# Edição acadêmica com transliteração e tradução inglesa, licença CC BY-SA.
+# Terceira campanha a partir de ii 58; trecho sobre Ezequias em iii 38–75.
 - id: rinap-senaqueribe-17
-  autor: A. Kirk Grayson e Jamie Novotny
-  titulo: "Sennacherib 017 (Prisma de Senaqueribe), em The Royal Inscriptions of the Neo-Assyrian Period, vol. 3/1"
-  detalhes: "Edição acadêmica com transliteração e tradução inglesa, projeto RINAP/Oracc, 2012, licença CC BY-SA. Terceira campanha, col. iii"
+  autor: A. K. Grayson e J. Novotny
+  titulo: "RINAP 3/1, Senaqueribe 17 (Prisma de Senaqueribe)"
+  detalhes: "Oracc, 2012"
   url: https://oracc.museum.upenn.edu/rinap/Q003491
 
+# A introdução dá os reinados de Salmaneser V (726–722), Sargão II (721–705) e
+# Senaqueribe (705–681), a queda de Samaria em 724 ou 722 e o cerco de Jerusalém em 701.
 - id: livius-prisma-senaqueribe
-  autor: Jona Lendering (Livius.org)
+  autor: Livius.org
   titulo: "The Sennacherib Prism"
-  detalhes: "Introdução histórica e trecho dos anais na tradução de M. Cogan. A introdução dá os reinados de Salmaneser V (726–722), Sargão II (721–705) e Senaqueribe (705–681), a queda de Samaria em 724 ou 722 e o cerco de Jerusalém em 701 a.C."
+  detalhes: "Trad. de M. Cogan"
   url: https://www.livius.org/sources/content/anet/287-the-sennacherib-prism/
 
+# Tradução inglesa adaptada de A. K. Grayson, Assyrian and Babylonian Chronicles
+# (1975), e de J.-J. Glassner, Mesopotamian Chronicles.
 - id: abc-1
-  autor: Jona Lendering (Livius.org)
-  titulo: "ABC 1, Crônica dos reinados de Nabû-Nasir a Šamaš-šuma-ukin"
-  detalhes: "Tradução inglesa adaptada de A. K. Grayson, Assyrian and Babylonian Chronicles (1975), e de J.-J. Glassner, Mesopotamian Chronicles"
+  autor: Livius.org
+  titulo: "Crônica babilônica ABC 1"
+  detalhes: "Trad. adaptada de A. K. Grayson (1975)"
   url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-1-from-nabu-nasir-to-samas-suma-ukin/
 
 - id: abc-5
-  autor: Jona Lendering (Livius.org)
-  titulo: "ABC 5, Crônica de Jerusalém (primeiros anos de Nabucodonosor II)"
-  detalhes: "Tradução inglesa adaptada de A. K. Grayson, Assyrian and Babylonian Chronicles (1975)"
+  autor: Livius.org
+  titulo: "Crônica de Jerusalém (ABC 5)"
+  detalhes: "Trad. adaptada de A. K. Grayson (1975)"
   url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-5-jerusalem-chronicle/
 
 - id: abc-7
-  autor: Jona Lendering (Livius.org)
-  titulo: "ABC 7, Crônica de Nabonido"
-  detalhes: "Tradução inglesa adaptada de A. K. Grayson, Assyrian and Babylonian Chronicles (1975)"
+  autor: Livius.org
+  titulo: "Crônica de Nabonido (ABC 7)"
+  detalhes: "Trad. adaptada de A. K. Grayson (1975)"
   url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-7-nabonidus-chronicle/
 
+# Baseada na tradução de Mordechai Cogan em W. W. Hallo e K. L. Younger, The Context
+# of Scripture, vol. II (2003), ajustada à edição de H. Schaudig.
 - id: cilindro-de-ciro
-  autor: Jona Lendering (Livius.org)
-  titulo: Cilindro de Ciro, tradução
-  detalhes: "Baseada na tradução de Mordechai Cogan em W. W. Hallo e K. L. Younger, The Context of Scripture, vol. II (2003), ajustada à edição de H. Schaudig"
+  autor: Livius.org
+  titulo: "Cilindro de Ciro"
+  detalhes: "Trad. de M. Cogan (2003)"
   url: https://www.livius.org/sources/content/cyrus-cylinder/cyrus-cylinder-translation/
