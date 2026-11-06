@@ -53,7 +53,9 @@ sem categoria, citações em qualquer livro).
   atribui cada posição à sua fonte da bibliografia.
 - [ ] **Citações** mostram onde o livro é citado em outro livro (inclusive do Antigo
   Testamento). O `comentario`, quando existe, descreve como o texto que cita usa o
-  trecho, com as palavras dele, sem acrescentar leitura própria.
+  trecho, com as palavras dele, sem acrescentar leitura própria. Citações não levam nota:
+  cada referência de `citadoEm` abre o texto na ARC e já é a fonte (utilizador,
+  2026-11-06).
 - [ ] Autoria e data: a posição tradicional é a do texto. Quando são discutidas, a
   posição crítica aparece em uma frase, atribuída a quem a defende.
 

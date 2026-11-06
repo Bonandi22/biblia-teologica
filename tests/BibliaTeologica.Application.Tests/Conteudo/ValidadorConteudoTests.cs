@@ -443,12 +443,13 @@ public class ValidadorConteudoTests
     }
 
     [Fact]
-    public void Validar_RetornaErroComArquivo_QuandoCitacaoSemNota()
+    public void Validar_Aceita_QuandoCitacaoSemNota()
     {
+        // A referência de citadoEm abre o texto na ARC e já serve de fonte.
         var l = LivroValido();
         l.Citacoes.Add(new RegistroCitacao { Trecho = "Isaías 40:3", CitadoEm = { "Mateus 3:3" } });
 
-        Validar(Conjunto(l)).Should().Contain(e => e.Contains(ArqLivro) && e.Contains("citacoes[0].notas"));
+        Validar(Conjunto(l)).Should().BeEmpty();
     }
 
     [Fact]
