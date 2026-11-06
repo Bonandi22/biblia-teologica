@@ -165,6 +165,110 @@ mundo:
     - { numero: 2, obra: abc-5, local: "Reverso, linhas 11–13" }
     - { numero: 3, obra: abc-7, local: "Col. iii, linhas 14–18" }
     - { numero: 4, obra: cilindro-de-ciro, local: "Linhas 30–33" }
-profecias: []
-promessas: []
+
+# Na ordem do livro. Só o que o trecho anuncia, com as palavras da ARC
+# (conferidas em 2026-11-06), sem categoria nem indicação de cumprimento.
+profecias:
+  - referencia: "Isaías 2:2–4"
+    anuncia: "Nos últimos dias, o monte da casa do Senhor ficará acima dos montes e todas as nações irão a ele. De Sião sairá a lei, e os povos \"converterão as suas espadas em enxadões\"."
+    notas: []
+  - referencia: "Isaías 7:14"
+    anuncia: "Acaz se recusa a pedir um sinal, e o Senhor mesmo o dá à casa de Davi: \"eis que uma virgem conceberá, e dará à luz um filho, e será o seu nome Emanuel\"."
+    notas: []
+  - referencia: "Isaías 8:4"
+    anuncia: "Antes que o filho de Isaías saiba dizer \"meu pai\" ou \"minha mãe\", as riquezas de Damasco e os despojos de Samaria serão levados pelo rei da Assíria."
+    notas: []
+  - referencia: "Isaías 9:2"
+    anuncia: "\"O povo que andava em trevas viu uma grande luz.\" O versículo anterior situa essa luz na Galileia, junto ao caminho do mar."
+    notas: []
+  - referencia: "Isaías 9:6–7"
+    anuncia: "Nasce um menino que terá o principado sobre os ombros e se chamará \"Maravilhoso Conselheiro, Deus Forte, Pai da Eternidade, Príncipe da Paz\". O seu reino, no trono de Davi, não terá fim."
+    notas: []
+  - referencia: "Isaías 11:1–2"
+    anuncia: "Do tronco de Jessé, pai de Davi, brotará um rebento, e sobre ele repousará o Espírito do Senhor, com sabedoria, conselho, fortaleza e temor do Senhor."
+    notas: []
+  - referencia: "Isaías 11:10–12"
+    anuncia: "As nações buscarão a raiz de Jessé, e o Senhor ajuntará de novo os dispersos de Israel e de Judá, da Assíria, do Egito e dos quatro cantos da terra."
+    notas: []
+  - referencia: "Isaías 13:19–20"
+    anuncia: "Babilônia, \"o ornamento dos reinos\", ficará como Sodoma e Gomorra e nunca mais será habitada nem reconstruída."
+    notas: []
+  - referencia: "Isaías 19:23–25"
+    anuncia: "Haverá uma estrada do Egito à Assíria, e os dois povos adorarão juntos ao Senhor. Israel será o terceiro, \"uma bênção no meio da terra\"."
+    notas: []
+  - referencia: "Isaías 21:9"
+    anuncia: "Um vigia vê chegar cavaleiros e ouve a notícia: \"Caída é Babilônia, caída é!\", com as imagens dos seus deuses quebradas no chão."
+    notas: []
+  - referencia: "Isaías 35:5–6"
+    anuncia: "Os olhos dos cegos e os ouvidos dos surdos se abrirão, o coxo saltará como um cervo e a língua do mudo cantará, enquanto brotam águas no deserto."
+    notas: []
+  - referencia: "Isaías 37:33–35"
+    anuncia: "Sobre o rei da Assíria, durante o cerco: \"Não entrará nesta cidade, nem lançará nela flecha alguma.\" Voltará pelo caminho por onde veio."
+    notas: []
+  - referencia: "Isaías 38:5"
+    anuncia: "Ezequias, doente, ora e chora, e Isaías volta com a resposta: \"acrescentarei aos teus dias quinze anos\"."
+    notas: []
+  - referencia: "Isaías 39:6–7"
+    anuncia: "Tudo o que os reis de Judá juntaram no palácio será levado para a Babilônia, e filhos de Ezequias servirão como eunucos no palácio do rei da Babilônia."
+    notas: []
+  - referencia: "Isaías 40:3–5"
+    anuncia: "\"Voz do que clama no deserto: Preparai o caminho do Senhor.\" Vales e montes serão nivelados, e toda carne verá a glória do Senhor."
+    notas: []
+  - referencia: "Isaías 42:1–4"
+    anuncia: "O Senhor apresenta o seu Servo, sobre quem pôs o seu Espírito. Ele levará justiça às nações sem gritar nas praças e \"a cana trilhada não quebrará\"."
+    notas: []
+  - referencia: "Isaías 44:28–45:1"
+    anuncia: "O Senhor chama Ciro pelo nome, \"meu pastor\" e \"seu ungido\", e diz que ele mandará reconstruir Jerusalém e lançar os alicerces do templo."
+    notas: []
+  - referencia: "Isaías 49:6"
+    anuncia: "Restaurar as tribos de Jacó é pouco para o Servo: ele será também \"luz dos gentios\", para levar a salvação até a extremidade da terra."
+    notas: []
+  - referencia: "Isaías 52:13–53:12"
+    anuncia: "O Servo será exaltado depois de ser \"desprezado e o mais indigno entre os homens\". Foi ferido pelas transgressões de outros, e \"pelas suas pisaduras, fomos sarados\". Levado como cordeiro ao matadouro, não abriu a boca."
+    notas: []
+  - referencia: "Isaías 61:1–2"
+    anuncia: "Alguém ungido pelo Espírito do Senhor é enviado para levar boas-novas aos mansos, liberdade aos cativos e para apregoar \"o ano aceitável do Senhor e o dia da vingança do nosso Deus\"."
+    notas: []
+
+promessas:
+  - referencia: "Isaías 1:18"
+    anuncia: "\"Ainda que os vossos pecados sejam como a escarlata, eles se tornarão brancos como a neve.\""
+    notas: []
+  - referencia: "Isaías 25:8"
+    anuncia: "O Senhor \"aniquilará a morte para sempre\" e enxugará as lágrimas de todos os rostos."
+    notas: []
+  - referencia: "Isaías 26:3"
+    anuncia: "\"Tu conservarás em paz aquele cuja mente está firme em ti; porque ele confia em ti.\""
+    notas: []
+  - referencia: "Isaías 40:31"
+    anuncia: "Quem espera no Senhor renova as forças: \"subirão com asas como águias; correrão e não se cansarão\"."
+    notas: []
+  - referencia: "Isaías 41:10"
+    anuncia: "\"Não temas, porque eu sou contigo\": o Senhor promete fortalecer, ajudar e sustentar."
+    notas: []
+  - referencia: "Isaías 43:2"
+    anuncia: "\"Quando passares pelas águas, estarei contigo\"; nem os rios nem o fogo destruirão o seu povo."
+    notas: []
+  - referencia: "Isaías 43:25"
+    anuncia: "O Senhor apaga as transgressões do seu povo \"por amor de mim\" e não se lembra mais dos seus pecados."
+    notas: []
+  - referencia: "Isaías 44:3"
+    anuncia: "Água sobre a terra seca e o seu Espírito sobre os descendentes do povo: \"derramarei o meu Espírito sobre a tua posteridade\"."
+    notas: []
+  - referencia: "Isaías 49:15–16"
+    anuncia: "Mesmo que uma mãe se esquecesse do filho, \"eu, todavia, me não esquecerei de ti\". O nome do povo está gravado nas palmas das mãos do Senhor."
+    notas: []
+  - referencia: "Isaías 54:10"
+    anuncia: "Os montes podem sair do lugar, \"mas a minha benignidade não se desviará de ti, e o concerto da minha paz não mudará\"."
+    notas: []
+  - referencia: "Isaías 55:10–11"
+    anuncia: "Como a chuva que não volta ao céu sem regar a terra, a palavra do Senhor \"não voltará para mim vazia\"."
+    notas: []
+  - referencia: "Isaías 58:11"
+    anuncia: "\"O Senhor te guiará continuamente\", e quem o segue será como um jardim regado e uma fonte que nunca seca."
+    notas: []
+  - referencia: "Isaías 65:17"
+    anuncia: "\"Eu crio céus novos e nova terra\", e as coisas passadas não serão mais lembradas."
+    notas: []
+
 citacoes: []
