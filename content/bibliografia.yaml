@@ -11,9 +11,10 @@
 
 # Edição acadêmica com transliteração e tradução inglesa, licença CC BY-SA.
 # Terceira campanha a partir de ii 58; trecho sobre Ezequias em iii 38–75.
+# Não é o exemplar de Chicago traduzido no Livius (lá a campanha começa em ii.37).
 - id: rinap-senaqueribe-17
   autor: A. K. Grayson e J. Novotny
-  titulo: "RINAP 3/1, Senaqueribe 17 (Prisma de Senaqueribe)"
+  titulo: "RINAP 3/1, Senaqueribe 17 (um prisma com os anais do rei)"
   detalhes: "Oracc, 2012"
   url: https://oracc.museum.upenn.edu/rinap/Q003491
 
@@ -52,12 +53,3 @@
   titulo: "Cilindro de Ciro"
   detalhes: "Trad. de M. Cogan (2003)"
   url: https://www.livius.org/sources/content/cyrus-cylinder/cyrus-cylinder-translation/
-
-# Tradução inglesa de A. D. Godley (Loeb, 1920), domínio público, no Perseus.
-# 2.141: Setos, sacerdote de Hefesto; "Sanacharib" vem com exército de árabes e assírios;
-# ratos do campo em Pelúsio. Conferida em 2026-11-07; a nota de rodapé é do tradutor.
-- id: herodoto-historias
-  autor: Heródoto
-  titulo: "Histórias"
-  detalhes: "Trad. de A. D. Godley (1920)"
-  url: https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0126:book=2:chapter=141

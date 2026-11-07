@@ -21,7 +21,6 @@ notas:
   - { numero: 14, obra: rinap-senaqueribe-17, local: "col. iii, linhas 38–65" }
   - { numero: 15, obra: rinap-senaqueribe-17, local: "col. iii, linhas 66–82" }
   - { numero: 16, obra: abc-1, local: "col. iii, linhas 34–36" }
-  - { numero: 17, obra: herodoto-historias, local: "Livro 2, 141" }
 ---
 
 Senaqueribe reinou na Assíria de 705 a 681 a.C., e a campanha contra Judá foi por volta
@@ -136,12 +135,3 @@ A crônica babilônica ABC 1 registra a morte numa frase: "No vigésimo dia do m
 Tebêtu, Senaqueribe, rei da Assíria, foi morto pelo seu filho numa rebelião". Diz também
 que ele reinou 24 anos.[^16] 2 Reis 19:37 dá os nomes de dois filhos, Adrameleque e
 Sarezer; a crônica fala de um filho e não diz o nome.
-
-## O relato de Heródoto
-
-O historiador grego Heródoto conta um episódio do reinado de Setos, rei do Egito e
-sacerdote de Hefesto. Quando Sanacaribe, que o tradutor A. D. Godley identifica em nota
-com Senaqueribe, veio contra o Egito "com um grande exército de árabes e assírios", Setos,
-sem os guerreiros, acampou em Pelúsio, onde a estrada entra no Egito, com mercadores e
-artesãos. À noite, ratos do campo roeram as aljavas, os arcos e as alças dos escudos dos
-invasores, e muitos foram mortos ao fugir desarmados no dia seguinte.[^17]

@@ -342,7 +342,7 @@ Esta task não cabe em um único subagente. Cada item é uma rodada: rascunho, c
 - [ ] **Step 4: Conferência independente.** Um revisor sem o contexto da escrita confere o rascunho contra o guia, marcando frases genéricas, fato sem utilidade para a leitura, nota sem correspondência e contradições com as salvaguardas. Corrigir.
 - [ ] **Step 5: Revisão do utilizador.** O utilizador lê em `docker compose up --build`, edita e muda para `revisado`. Registrar no guia os exemplos bons e ruins encontrados.
 - [ ] **Step 6: Fazer o estudo-piloto de Senaqueribe**, repetindo os Steps 3–5. **Parar até o utilizador aprovar o formato de estudo.** Depois, repetir os Steps 3–5 para cada estudo da lista aprovada, um de cada vez.
-- [ ] **Step 6.1: Comparar a fonte.** Mostrar a página real de Isaías com a Space Grotesk e até duas alternativas, carregando o skill `frontend-design:frontend-design`. O utilizador escolhe; aplicar a escolha nos tokens de `_variables.scss` e em `index.html`, rodando `npm test` e `npm run build`.
+- [x] **Step 6.1: Comparar a fonte.** Decidido pelo utilizador em 2026-11-07: fica a fonte da repaginação (Gelasio + Alegreya Sans SC), sem comparação com a Space Grotesk.
 - [ ] **Step 6.2: Aprovação final.** **Parar aqui até o utilizador aprovar Isaías por inteiro, incluindo conteúdo, formato e fonte.** Nenhum outro livro ou divisão começa antes disso, e esse trabalho terá plano próprio, com base na medição do Step 8.
 - [ ] **Step 7: Rodar** `dotnet test BibliaTeologica.sln --filter "FullyQualifiedName~ConteudoReal"`. Esperado: PASS, sem e com rascunhos.
 - [ ] **Step 8: Registrar a medição** em `2026-11-02-panorama-medicao.md`: tempo por etapa, tempo por aba e estimativa para os outros 65 livros. Incluir o guardrail de Custo do `CLAUDE.md`.
