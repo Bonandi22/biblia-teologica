@@ -57,8 +57,8 @@ describe('ApontamentosComponent', () => {
     const ids = Array.from(el.querySelectorAll('li[id]')).map((li) => li.id);
     expect(ids).toEqual(['nota-pro-0-1', 'nota-pro-1-1']);
     const hrefs = Array.from(el.querySelectorAll('sup a')).map((a) => a.getAttribute('href'));
-    expect(hrefs).toEqual(['#nota-pro-0-1', '#nota-pro-1-1']);
-    for (const h of hrefs) expect(el.querySelector(h!)).not.toBeNull();
+    expect(hrefs).toEqual(['/#nota-pro-0-1', '/#nota-pro-1-1']);
+    for (const h of hrefs) expect(el.querySelector(h!.slice(h!.indexOf('#')))).not.toBeNull();
   });
 
   it('prefixos de profecias e promessas geram ids de nota distintos', () => {

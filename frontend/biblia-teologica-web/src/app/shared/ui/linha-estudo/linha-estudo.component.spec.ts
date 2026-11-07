@@ -95,8 +95,8 @@ describe('LinhaEstudoComponent', () => {
   it('mantém o id da nota para a chamada encontrar a âncora', () => {
     const el = montar();
     const href = el.querySelector('sup a')!.getAttribute('href')!;
-    expect(href).toBe('#nota-ctx-1');
-    expect(el.querySelector(href)?.textContent).toContain('Obra A');
+    expect(href).toBe('/#nota-ctx-1');
+    expect(el.querySelector(href.slice(href.indexOf('#')))?.textContent).toContain('Obra A');
   });
 
   it('focar a chamada destaca a nota', () => {

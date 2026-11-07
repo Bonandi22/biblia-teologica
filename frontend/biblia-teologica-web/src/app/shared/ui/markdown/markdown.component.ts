@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { caminhoAtual } from '../texto-notas/caminho-atual';
 import { idNota, irParaNota } from '../texto-notas/texto-notas.component';
 import { renderizarMarkdown } from './markdown';
 
-const HREF_NOTA = /^#nota-(\d+)$/;
+const HREF_NOTA = /#nota-(\d+)$/;
+
+const escaparAtributo = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 
 @Component({
   standalone: true,
@@ -16,11 +19,18 @@ export class MarkdownComponent {
   readonly conteudo = input.required<string>();
   /** Mesmo papel que em bt-texto-notas: id do destino `nota-<prefixo>-<n>`. */
   readonly prefixo = input<string>('');
-  protected readonly html = computed(() => renderizarMarkdown(this.conteudo()));
+  private readonly caminho = caminhoAtual();
+  // O HTML sanitizado traz href="#nota-n"; o caminho da página entra depois (ver caminhoAtual).
+  protected readonly html = computed(() =>
+    renderizarMarkdown(this.conteudo()).replaceAll(
+      'href="#nota-',
+      `href="${escaparAtributo(this.caminho())}#nota-`,
+    ),
+  );
 
   protected aoClicar(evento: Event): void {
     const link = (evento.target as Element | null)?.closest?.('a');
-    // O sanitizador do Angular remove data-*; o número vem do href, restrito a #nota-<dígitos>.
+    // O sanitizador do Angular remove data-*; o número vem do href, restrito a terminar em #nota-<dígitos>.
     const m = HREF_NOTA.exec(link?.getAttribute('href') ?? '');
     if (!m) return;
     evento.preventDefault();

@@ -62,13 +62,15 @@ export class LinhaEstudoComponent {
   }
 
   private marcar(alvo: Element | null): void {
-    const chamada = alvo?.closest?.('a[href^="#nota-"]');
+    // O href da chamada é `<caminho da página>#nota-…`.
+    const chamada = alvo?.closest?.('a[href*="#nota-"]');
+    const href = chamada?.getAttribute('href');
     const nota = alvo?.closest?.('li[id^="nota-"]');
-    const id = chamada?.getAttribute('href')?.slice(1) ?? nota?.id;
+    const id = href ? href.slice(href.indexOf('#') + 1) : nota?.id;
     if (!id) return;
     const doc = this.el.nativeElement.ownerDocument;
     doc.getElementById(id)?.classList.add(DESTAQUE);
-    doc.querySelectorAll(`a[href="#${CSS.escape(id)}"]`).forEach((a) => a.classList.add(DESTAQUE));
+    doc.querySelectorAll(`a[href$="#${CSS.escape(id)}"]`).forEach((a) => a.classList.add(DESTAQUE));
   }
 
   protected limpar(): void {

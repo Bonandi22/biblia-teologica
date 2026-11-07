@@ -74,8 +74,8 @@ describe('EstudoPaginaComponent', () => {
     const hrefs = Array.from(el().querySelectorAll('bt-markdown sup a')).map((a) =>
       a.getAttribute('href'),
     );
-    expect(hrefs).toEqual(['#nota-1', '#nota-2']);
-    for (const h of hrefs) expect(el().querySelector(`li[id="${h!.slice(1)}"]`)).not.toBeNull();
+    expect(hrefs).toEqual(['/estudos/servo-sofredor#nota-1', '/estudos/servo-sofredor#nota-2']);
+    for (const h of hrefs) expect(el().querySelector(`li[id="${h!.split('#')[1]}"]`)).not.toBeNull();
   });
 
   it('mostra o título da coluna só na primeira linha com notas', async () => {

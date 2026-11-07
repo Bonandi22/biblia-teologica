@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { caminhoAtual } from './caminho-atual';
 
 export type SegmentoTexto = { texto: string } | { nota: number };
 
@@ -33,7 +34,7 @@ export function irParaNota(id: string): void {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `@for (s of segmentos(); track $index) {@if ('nota' in s) {<sup class="nota"><a
-            [href]="'#' + id(s.nota)"
+            [href]="caminho() + '#' + id(s.nota)"
             [attr.aria-label]="'Nota ' + s.nota"
             (click)="ir($event, s.nota)"
             >{{ s.nota }}</a></sup>} @else {{{ s.texto }}}}`,
@@ -44,6 +45,7 @@ export class TextoNotasComponent {
   /** Distingue a numeração de blocos diferentes na mesma página: id `nota-<prefixo>-<n>`. */
   readonly prefixo = input<string>('');
   protected readonly segmentos = computed(() => segmentarNotas(this.texto()));
+  protected readonly caminho = caminhoAtual();
 
   protected id(numero: number): string {
     return idNota(numero, this.prefixo());
