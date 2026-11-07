@@ -68,6 +68,13 @@ $coluna-estudo: 54rem;
     line-height: 1.7;
   }
 
+  // Texto justificado, como página de livro; a hifenização (pt-BR) evita buracos
+  // entre as palavras. Títulos seguem alinhados à esquerda.
+  ::ng-deep .markdown :is(p, li, blockquote) {
+    text-align: justify;
+    hyphens: auto;
+  }
+
   // Em tela estreita vale a regra do site (17px), senão sobram poucos caracteres por linha.
   @media (max-width: $bp-tablet) {
     font-size: inherit;
