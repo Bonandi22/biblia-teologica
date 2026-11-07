@@ -38,12 +38,3 @@ export function renderizarMarkdown(md: string): string {
     ALLOWED_URI_REGEXP: URI_PERMITIDA,
   });
 }
-
-/** Blocos de topo do texto, para cada um ser uma linha de grade com as próprias notas. */
-export function blocosMarkdown(md: string): string[] {
-  const tokens = marked.lexer(md ?? '');
-  const definicoes = tokens.filter((t) => t.type === 'def').map((t) => t.raw.trim());
-  return tokens
-    .filter((t) => t.type !== 'space' && t.type !== 'def')
-    .map((t) => [t.raw.trim(), ...definicoes].join('\n\n'));
-}

@@ -63,35 +63,28 @@ describe('EstudoPaginaComponent', () => {
     expect(TestBed.inject(Title).getTitle()).toBe('O servo sofredor | Bíblia Teológica');
   });
 
-  it('põe cada nota na linha do parágrafo que a chama, e os links batem com os ids', async () => {
+  it('Corpo_SemColunaDeReferencias_EChamadasLevamABibliografia', async () => {
     await abrir();
     await responder(estudo());
-    const linhas = Array.from(el().querySelectorAll('.corpo bt-linha-estudo'));
-    const comNotas = linhas.filter((l) => l.querySelector('li[id]'));
-    expect(comNotas).toHaveLength(1);
-    expect(comNotas[0].querySelector('bt-markdown')?.textContent).toContain('O texto fala de alguém');
-    expect(comNotas[0].querySelectorAll('li[id]')).toHaveLength(2);
+    expect(el().querySelector('.corpo bt-linha-estudo')).toBeNull();
+    expect(el().querySelector('.corpo .linha__coluna')).toBeNull();
+    expect(el().querySelector('.corpo bt-markdown')?.textContent).toContain('O texto fala de alguém');
     const hrefs = Array.from(el().querySelectorAll('bt-markdown sup a')).map((a) =>
       a.getAttribute('href'),
     );
     expect(hrefs).toEqual(['/estudos/servo-sofredor#nota-1', '/estudos/servo-sofredor#nota-2']);
-    for (const h of hrefs) expect(el().querySelector(`li[id="${h!.split('#')[1]}"]`)).not.toBeNull();
+    const bib = el().querySelector('.bibliografia') as HTMLElement;
+    for (const h of hrefs) expect(bib.querySelector(`[id="${h!.split('#')[1]}"]`)).not.toBeNull();
   });
 
-  it('mostra o título da coluna só na primeira linha com notas', async () => {
-    await abrir();
-    await responder(estudo());
-    const titulos = Array.from(el().querySelectorAll('.corpo .linha__titulo'));
-    expect(titulos.map((t) => t.textContent!.trim())).toEqual(['Referências']);
-  });
-
-  it('mantém a bibliografia completa no fim, sem repetir ids', async () => {
+  it('mantém a bibliografia completa no fim, com um destino por nota', async () => {
     await abrir();
     await responder(estudo());
     const bib = el().querySelector('.bibliografia') as HTMLElement;
     expect(bib.querySelector('h2')?.textContent).toContain('Bibliografia');
     expect(bib.querySelectorAll('li')).toHaveLength(2);
-    expect(bib.querySelector('[id]')).toBeNull();
+    const ids = Array.from(bib.querySelectorAll('[id]')).map((e) => e.id);
+    expect(ids).toEqual(['nota-1', 'nota-2']);
     expect(bib.querySelector('a[href="https://exemplo.org/b"]')?.textContent).toContain('Abrir fonte');
   });
 
@@ -121,12 +114,14 @@ describe('EstudoPaginaComponent', () => {
     expect(itens).toHaveLength(1);
     expect(itens[0].getAttribute('value')).toBe('2');
     expect(itens[0].textContent).toContain('Obra A');
+    // Toda chamada da ARC tem destino na linha da ARC, inclusive a referência repetida.
+    for (const n of [1, 3, 4, 5]) expect(biblia.querySelector(`[id="nota-${n}"]`)).not.toBeNull();
   });
 
   it('mantém visível a nota que nenhum parágrafo chama', async () => {
     await abrir();
     await responder(estudo({ notas: [...estudo().notas, { numero: 9, citacao: 'Obra sem chamada.', url: null }] }));
-    expect(el().querySelector('.corpo li[id="nota-9"]')?.textContent).toContain('Obra sem chamada.');
+    expect(el().querySelector('.bibliografia li[id="nota-9"]')?.textContent).toContain('Obra sem chamada.');
   });
 
   it('define o lugar atual e o limpa ao sair', async () => {

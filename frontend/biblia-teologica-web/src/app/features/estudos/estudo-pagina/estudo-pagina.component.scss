@@ -53,8 +53,13 @@
   }
 }
 
+// Uma coluna de leitura, sem coluna lateral de referências.
+.corpo {
+  max-width: $coluna-leitura;
+}
+
 // O primeiro bloco encosta no cabeçalho; os títulos seguintes mantêm o respiro acima.
-.corpo bt-linha-estudo:first-child ::ng-deep .markdown > :first-child {
+.corpo ::ng-deep .markdown > :first-child {
   margin-top: 0;
 }
 
@@ -80,6 +85,17 @@
     bt-referencia {
       white-space: nowrap;
     }
+  }
+
+  // Destino da chamada de nota. A rolagem até a nota usa block: 'nearest' (feito para a
+  // coluna lateral dos livros); a margem evita que o destino pare colado na borda da tela.
+  [id^='nota-'] {
+    scroll-margin-block: 30vh;
+  }
+
+  [id^='nota-']:focus {
+    outline: 2px solid $rubrica;
+    outline-offset: 2px;
   }
 
   ol {

@@ -34,15 +34,9 @@
           }
         </header>
 
+        <!-- Sem coluna lateral: as chamadas de nota levam à bibliografia do fim. -->
         <div class="corpo">
-          @for (l of linhas().blocos; track $index) {
-            <bt-linha-estudo [notas]="l.notas" [titulo]="l.comTitulo ? 'Referências' : null">
-              <bt-markdown [conteudo]="l.md" />
-            </bt-linha-estudo>
-          }
-          @if (linhas().restantes.length > 0) {
-            <bt-linha-estudo [notas]="linhas().restantes" />
-          }
+          <bt-markdown [conteudo]="e.corpoMarkdown" />
         </div>
 
         @if (e.notas.length > 0) {
@@ -53,7 +47,15 @@
                 Bíblia Sagrada, Almeida Revista e Corrigida:
                 @for (g of bibliografia().biblia; track $index; let ultimoGrupo = $last) {
                   @for (r of g; track $index) {
-                    @if (!$first) {<span aria-hidden="true">; </span>}<bt-referencia [texto]="r.texto" [rotulo]="r.rotulo" />
+                    @if (!$first) {<span aria-hidden="true">; </span>}<span
+                      class="bibliografia__ref"
+                      [id]="'nota-' + r.numeros[0]"
+                      tabindex="-1"
+                      ><bt-referencia [texto]="r.texto" [rotulo]="r.rotulo" />@for (
+                        n of r.numeros.slice(1);
+                        track n
+                      ) {<span [id]="'nota-' + n" tabindex="-1"></span>}</span
+                    >
                   }
                   @if (!ultimoGrupo) {<span aria-hidden="true">; </span>}
                 }
@@ -61,7 +63,7 @@
             }
             <ol>
               @for (n of bibliografia().obras; track n.numero) {
-                <li [attr.value]="n.numero">
+                <li [attr.value]="n.numero" [id]="'nota-' + n.numero" tabindex="-1">
                   {{ n.citacao }}
                   @if (n.url) {
                     <a [href]="n.url" target="_blank" rel="noopener noreferrer">Abrir fonte</a>

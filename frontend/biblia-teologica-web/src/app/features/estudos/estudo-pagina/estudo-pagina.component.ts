@@ -20,10 +20,7 @@ import { agruparReferencias } from '../../../shared/ui/linha-estudo/agrupar-refe
 import { ReferenciaComponent } from '../../../shared/ui/referencia/referencia.component';
 import { ConteudoService } from '../../../core/services/conteudo.service';
 import { LivroStore } from '../../../core/services/livro.store';
-import { LinhaEstudoComponent } from '../../../shared/ui/linha-estudo/linha-estudo.component';
-import { blocosMarkdown } from '../../../shared/ui/markdown/markdown';
 import { MarkdownComponent } from '../../../shared/ui/markdown/markdown.component';
-import { notasDoTexto } from '../../../shared/ui/texto-notas/notas-do-texto';
 
 type Estado = 'carregando' | 'pronto' | 'naoEncontrado' | 'erro';
 
@@ -31,7 +28,7 @@ type Estado = 'carregando' | 'pronto' | 'naoEncontrado' | 'erro';
   selector: 'bt-estudo-pagina',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MarkdownComponent, LinhaEstudoComponent, ReferenciaComponent],
+  imports: [RouterLink, MarkdownComponent, ReferenciaComponent],
   templateUrl: './estudo-pagina.component.html',
   styleUrl: './estudo-pagina.component.scss',
 })
@@ -50,33 +47,23 @@ export class EstudoPaginaComponent {
   protected readonly estudo = signal<Estudo | null>(null);
   private readonly tentativa = signal(0);
 
-  /** Cada bloco do texto com as notas que chama; cada nota só aparece uma vez, porque o id é único. */
-  protected readonly linhas = computed(() => {
-    const e = this.estudo();
-    const usadas = new Set<number>();
-    let comTitulo = true;
-    const blocos = blocosMarkdown(e?.corpoMarkdown ?? '').map((md) => {
-      const notas = notasDoTexto(md, e?.notas ?? []).filter((n) => !usadas.has(n.numero));
-      notas.forEach((n) => usadas.add(n.numero));
-      const titulo = comTitulo && notas.length > 0;
-      if (titulo) comTitulo = false;
-      return { md, notas, comTitulo: titulo };
-    });
-    return { blocos, restantes: (e?.notas ?? []).filter((n) => !usadas.has(n.numero)) };
-  });
-
   /**
-   * Bibliografia do fim: as notas da ARC chegam só com a referência e vão numa linha só,
-   * sem repetição e com o livro uma vez só; as outras obras seguem numeradas pela nota.
+   * Bibliografia do fim, destino de todas as chamadas de nota (o estudo não tem coluna lateral).
+   * As notas da ARC chegam só com a referência e vão numa linha só, sem repetição e com o livro
+   * uma vez só; cada uma guarda os números das notas que a citam, para cada chamada ter um id.
+   * As outras obras seguem numeradas pelo número da nota.
    */
   protected readonly bibliografia = computed(() => {
     const notas = this.estudo()?.notas ?? [];
     const ehBiblica = (n: Nota) => !n.url && urlReferencia(n.citacao) !== null;
-    const referencias = [...new Set(notas.filter(ehBiblica).map((n) => n.citacao))];
-    return {
-      biblia: agruparReferencias(referencias),
-      obras: notas.filter((n) => !ehBiblica(n)),
-    };
+    const numeros = new Map<string, number[]>();
+    for (const n of notas.filter(ehBiblica)) {
+      numeros.set(n.citacao, [...(numeros.get(n.citacao) ?? []), n.numero]);
+    }
+    const biblia = agruparReferencias([...numeros.keys()]).map((g) =>
+      g.map((r) => ({ ...r, numeros: numeros.get(r.texto) ?? [] })),
+    );
+    return { biblia, obras: notas.filter((n) => !ehBiblica(n)) };
   });
 
   private requisicao: Subscription | null = null;
