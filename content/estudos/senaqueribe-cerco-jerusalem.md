@@ -1,5 +1,5 @@
 ---
-estado: rascunho
+estado: revisado
 titulo: "Senaqueribe, Ezequias e o cerco de Jerusalém"
 resumo: "Por volta de 701 a.C., o rei da Assíria tomou as cidades fortes de Judá e mandou um grande exército a Jerusalém. A Bíblia conta o episódio três vezes, e os anais de Senaqueribe dão a versão assíria."
 livros: [isaias, 2-reis, 2-cronicas]

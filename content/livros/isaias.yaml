@@ -45,13 +45,13 @@ panorama:
     - nome: Senaqueribe
       texto: "Rei da Assíria. No décimo quarto ano de Ezequias toma as cidades fortificadas de Judá e manda o Rabsaqué, a partir de Laquis, exigir a rendição de Jerusalém. O relato bíblico termina com a morte de 185 mil soldados assírios, a volta de Senaqueribe a Nínive e o seu assassinato pelos próprios filhos."
       saberMais: null
-      estudo: null
+      estudo: senaqueribe-cerco-jerusalem
       referencias: ["Isaías 36:1–2", "Isaías 37:36–38"]
       # 37:38 nomeia os filhos Adrameleque e Sarezer; conferido na ARC.
     - nome: Rabsaqué
       texto: "Oficial de Senaqueribe que discursa diante dos muros de Jerusalém. Os enviados de Ezequias pedem que fale em siríaco, mas ele insiste em falar na língua de Judá, para que o povo sobre os muros entenda. Zomba da confiança no Egito e no Senhor e compara Judá aos povos cujos deuses não os livraram."
       saberMais: null
-      estudo: null
+      estudo: senaqueribe-cerco-jerusalem
       referencias: ["Isaías 36:4–20"]
     - nome: Sebna e Eliaquim
       texto: "Sebna, o mordomo do palácio, é repreendido por cavar para si um túmulo em lugar alto, e Isaías anuncia que Eliaquim, filho de Hilquias, ficará com o cargo. No cerco, Eliaquim já aparece como mordomo e Sebna como escrivão."
@@ -87,7 +87,7 @@ panorama:
     - quando: "No décimo quarto ano de Ezequias"
       texto: "Senaqueribe invade Judá e cerca Jerusalém. Os capítulos 36 e 37 contam o cerco, a oração de Ezequias, a resposta de Isaías e a retirada assíria."
       saberMais: null
-      estudo: null
+      estudo: senaqueribe-cerco-jerusalem
       referencias: ["Isaías 36:1", "Isaías 37:36–37"]
     - quando: "Naqueles dias"
       texto: "Ezequias adoece, Isaías anuncia a morte do rei e, depois da oração, anuncia mais quinze anos e o sinal da sombra que volta dez graus. O capítulo traz também o cântico escrito por Ezequias depois da cura."
