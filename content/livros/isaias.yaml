@@ -1,0 +1,376 @@
+# Todas as abas. ARC e fontes antigas conferidas nas urls em 2026-11-06;
+# revisão independente (Step 4) em 2026-11-06; revisado pelo utilizador em 2026-11-07.
+estado: revisado
+livro: isaias
+resumo: "Profeta de Jerusalém sob quatro reis de Judá, Isaías fala primeiro a um povo ameaçado pela Assíria e, a partir do capítulo 40, a Jerusalém e a um povo cativo na Babilônia."
+
+perfil:
+  - rotulo: "Quem era"
+    texto: "Isaías, filho de Amoz. O livro não diz a que tribo pertencia nem qual era o seu ofício antes do chamado. Atuava em Jerusalém e tinha acesso direto aos reis: vai ao encontro de Acaz e é procurado por Ezequias."
+    referencias: ["Isaías 1:1", "Isaías 7:3", "Isaías 37:2"]
+  - rotulo: "Quando profetizou"
+    texto: "\"Nos dias de Uzias, Jotão, Acaz e Ezequias, reis de Judá.\" O chamado é datado no ano da morte de Uzias, e o último episódio narrado é a embaixada babilônica que visita Ezequias depois da doença do rei."
+    referencias: ["Isaías 1:1", "Isaías 6:1", "Isaías 39:1"]
+  - rotulo: "O chamado"
+    texto: "No templo, Isaías vê o Senhor num trono, ouve os serafins e reconhece que é homem de lábios impuros. Depois que uma brasa do altar lhe toca a boca, responde à pergunta \"quem há de ir por nós?\" com \"eis-me aqui, envia-me a mim\". É enviado a um povo que vai ouvir e não entender."
+    referencias: ["Isaías 6:1–10"]
+  - rotulo: "Família"
+    texto: "A esposa é chamada \"a profetisa\". Dois filhos são nomeados: Sear-Jasube, que acompanha o pai ao encontro de Acaz, e Maer-Salal-Hás-Baz, cujo nome vem com um anúncio sobre Damasco e Samaria. Isaías diz que ele e os filhos são \"sinais e maravilhas em Israel\"."
+    referencias: ["Isaías 7:3", "Isaías 8:1–4", "Isaías 8:18"]
+  - rotulo: "Para quem falou"
+    texto: "Primeiro a Judá e Jerusalém, como diz o título do livro. Os capítulos 13 a 23 dirigem oráculos a outras nações, de Babilônia a Tiro. A partir do capítulo 40, o texto fala a Jerusalém e a um povo cativo na Babilônia, chamado a sair dela."
+    referencias: ["Isaías 1:1", "Isaías 13:1", "Isaías 23:1", "Isaías 40:2", "Isaías 48:20"]
+  - rotulo: "Outros escritos"
+    texto: "Crônicas atribui a Isaías um registro dos atos de Uzias e diz que os atos de Ezequias estão escritos na \"visão do profeta Isaías\". Nenhum desses registros chegou até nós fora da Bíblia."
+    referencias: ["2 Crônicas 26:22", "2 Crônicas 32:32"]
+
+panorama:
+  explicacao: "São 66 capítulos em três partes. Os capítulos 1 a 35 trazem as mensagens do tempo de Uzias a Ezequias: denúncia da injustiça em Jerusalém, a crise da guerra com a Síria e Israel e os oráculos contra as nações. Os capítulos 36 a 39 são narrativa e repetem 2 Reis 18 a 20: o cerco de Senaqueribe, a doença de Ezequias e a visita dos enviados da Babilônia. Há duas diferenças: Isaías não traz o tributo pago por Ezequias (2 Reis 18:14–16) e acrescenta o cântico que ele escreveu depois da cura (Isaías 38:9–20). O capítulo 40 começa com \"Consolai, consolai o meu povo\"[^1], e daí em diante o texto fala a Jerusalém e a um povo cativo na Babilônia, chamado a sair dela (Isaías 40:2; 48:20), e nomeia Ciro como aquele que dirá a Jerusalém \"Sê edificada\"[^2]."
+  personagens:
+    - nome: Uzias
+      texto: "Rei de Judá, chamado também Azarias em 2 Reis. Reinou 52 anos em Jerusalém, e o ano da sua morte é a data do chamado de Isaías. Crônicas conta que Uzias ficou leproso até morrer e viveu numa casa separada, enquanto o filho Jotão governava em seu lugar."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 6:1", "2 Reis 15:1–2", "2 Crônicas 26:3", "2 Crônicas 26:21"]
+    - nome: Acaz
+      texto: "Rei de Judá durante a guerra com Rezim, da Síria, e Peca, de Israel. Isaías vai ao encontro dele com o filho Sear-Jasube e lhe pede que não tema. Acaz recusa pedir um sinal, e é nesse diálogo que vem a palavra de Isaías 7:14."
+      saberMais: "2 Reis conta que Acaz se declarou \"teu servo e teu filho\" a Tiglate-Pileser, rei da Assíria, pediu socorro contra os mesmos dois reis e mandou-lhe a prata e o ouro da casa do Senhor e do palácio."
+      estudo: null
+      referencias: ["Isaías 7:1–14", "2 Reis 16:5–9"]
+    - nome: Ezequias
+      texto: "Filho de Acaz e o rei mais presente no livro. Durante o cerco assírio, rasga as vestes, vai à casa do Senhor e manda pedir a Isaías que ore. \"Naqueles dias\" adoece, ora e recebe mais quinze anos de vida. Por fim mostra os tesouros aos enviados da Babilônia, e Isaías anuncia que tudo será levado para lá."
+      saberMais: null
+      estudo: null
+      referencias: ["2 Reis 18:1", "Isaías 37:1–7", "Isaías 38:1–5", "Isaías 39:1–7"]
+    - nome: Senaqueribe
+      texto: "Rei da Assíria. No décimo quarto ano de Ezequias toma as cidades fortificadas de Judá e manda o Rabsaqué, a partir de Laquis, exigir a rendição de Jerusalém. O relato bíblico termina com a morte de 185 mil soldados assírios, a volta de Senaqueribe a Nínive e o seu assassinato pelos próprios filhos."
+      saberMais: null
+      estudo: senaqueribe-cerco-jerusalem
+      referencias: ["Isaías 36:1–2", "Isaías 37:36–38"]
+      # 37:38 nomeia os filhos Adrameleque e Sarezer; conferido na ARC.
+    - nome: Rabsaqué
+      texto: "Oficial de Senaqueribe que discursa diante dos muros de Jerusalém. Os enviados de Ezequias pedem que fale em siríaco, mas ele insiste em falar na língua de Judá, para que o povo sobre os muros entenda. Zomba da confiança no Egito e no Senhor e compara Judá aos povos cujos deuses não os livraram."
+      saberMais: null
+      estudo: senaqueribe-cerco-jerusalem
+      referencias: ["Isaías 36:4–20"]
+    - nome: Sebna e Eliaquim
+      texto: "Sebna, o mordomo do palácio, é repreendido por cavar para si um túmulo em lugar alto, e Isaías anuncia que Eliaquim, filho de Hilquias, ficará com o cargo. No cerco, Eliaquim já aparece como mordomo e Sebna como escrivão."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 22:15–22", "Isaías 36:3"]
+    - nome: Merodaque-Baladã
+      texto: "Rei da Babilônia que envia cartas e um presente a Ezequias quando sabe da sua cura. A visita é a ocasião do anúncio de que os tesouros e descendentes do rei irão para a Babilônia."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 39:1–7"]
+    - nome: Ciro
+      texto: "Rei estrangeiro chamado pelo nome nos capítulos 44 e 45. O Senhor o chama de \"meu pastor\" e \"seu ungido\" e diz que ele mandará reconstruir Jerusalém e o templo."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 44:28", "Isaías 45:1–4"]
+  acontecimentos:
+    - quando: "No ano da morte do rei Uzias"
+      texto: "Isaías tem a visão do trono e é enviado a um povo que vai ouvir e não entender, até que as cidades fiquem assoladas."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 6:1–13"]
+    - quando: "Nos dias de Acaz"
+      texto: "Síria e Israel sobem contra Jerusalém. Isaías responde com dois anúncios. No capítulo 7, o sinal do menino: \"antes que este menino saiba rejeitar o mal e escolher o bem\", a terra dos dois reis será desamparada. No capítulo 8, o filho de Isaías, Maer-Salal-Hás-Baz: \"antes que o menino saiba dizer meu pai ou minha mãe\", as riquezas de Damasco e os despojos de Samaria serão levados."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 7:1–16", "Isaías 8:3–4"]
+    - quando: "No ano em que Tartã, enviado por Sargão, tomou Asdode"
+      texto: "Isaías anda nu e descalço durante três anos, como sinal de que a Assíria levaria cativos o Egito e a Etiópia. O capítulo termina com o espanto de quem tinha posto neles a sua esperança."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 20:1–6"]
+    - quando: "No décimo quarto ano de Ezequias"
+      texto: "Senaqueribe invade Judá e cerca Jerusalém. Os capítulos 36 e 37 contam o cerco, a oração de Ezequias, a resposta de Isaías e a retirada assíria."
+      saberMais: null
+      estudo: senaqueribe-cerco-jerusalem
+      referencias: ["Isaías 36:1", "Isaías 37:36–37"]
+    - quando: "Naqueles dias"
+      texto: "Ezequias adoece, Isaías anuncia a morte do rei e, depois da oração, anuncia mais quinze anos e o sinal da sombra que volta dez graus. O capítulo traz também o cântico escrito por Ezequias depois da cura."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 38:1–22"]
+    - quando: "Depois da cura de Ezequias"
+      texto: "Os enviados de Merodaque-Baladã visitam Jerusalém e veem os tesouros do rei. Isaías responde que tudo seria levado para a Babilônia. Do capítulo 40 em diante, o texto fala a Jerusalém e a um povo cativo na Babilônia."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 39:1–8"]
+  notas:
+    - { numero: 1, obra: arc, local: "Isaías 40:1" }
+    - { numero: 2, obra: arc, local: "Isaías 44:28" }
+
+contexto:
+  explicacao: "Judá era um reino pequeno, com capital em Jerusalém, entre o Egito, ao sul, e a Assíria, que avançava a partir do norte. Na vida de Isaías, essa pressão trouxe três crises: a guerra com a Síria e Israel nos dias de Acaz (2 Reis 16:5), a queda de Samaria e a invasão de Senaqueribe nos dias de Ezequias.[^1] Nas crises de Acaz e de Ezequias, a pergunta de Isaías aos reis é em quem confiar. Acaz manda prata e ouro ao rei da Assíria e pede socorro (2 Reis 16:7–8). Na geração seguinte, Judá busca o Egito, e Isaías responde: \"Ai dos que descem ao Egito a buscar socorro\".[^2] Dentro de Jerusalém, o livro denuncia governantes que amam o suborno e não defendem o órfão e a viúva (Isaías 1:23), e quem acumula casas e terras até não sobrar lugar para os outros (Isaías 5:8)."
+  personagens: []
+  acontecimentos:
+    - quando: "Por volta de 745 a.C."
+      ano: -745
+      texto: "Tiglate-Pileser III sobe ao trono da Assíria, segundo a crônica babilônica ABC 1.[^3] É o rei da Assíria do tempo de Acaz, aquele a quem Acaz pede socorro. A partir dele, a Assíria passa a intervir diretamente na Síria, em Israel e em Judá, e é essa a ameaça por trás das palavras sobre o \"rei da Assíria\" em Isaías 7 e 8."
+      saberMais: null
+      estudo: null
+      referencias: ["2 Reis 16:7–9", "Isaías 7:17", "Isaías 8:7"]
+    - quando: "No reinado de Tiglate-Pileser, entre cerca de 745 e 727 a.C."
+      ano: -734
+      texto: "Segundo a ABC 1, Tiglate-Pileser reina até cerca de 727 a.C.[^3] Nesse período, Rezim, rei da Síria, e Peca, rei de Israel, sobem contra Jerusalém. Acaz paga ao rei da Assíria, que toma Damasco e mata Rezim. É o pano de fundo de Isaías 7 e 8: o profeta pede a Acaz que não tema esses dois reis e anuncia que o rei da Assíria virá também sobre Judá (Isaías 7:17; 8:7–8)."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 7:1–9", "2 Reis 16:5–9"]
+    - quando: "Por volta de 724 a 722 a.C."
+      ano: -722
+      texto: "Salmaneser, rei da Assíria, cerca Samaria por três anos, e no nono ano de Oseias o reino do norte cai e o povo é levado para a Assíria. A queda é datada em 724 ou 722 a.C.[^1] A crônica babilônica registra numa única linha que Salmaneser \"devastou Samaria\".[^4] Em Isaías 10, o rei da Assíria usa essa queda como argumento: o que fez a Samaria, faria também a Jerusalém."
+      saberMais: null
+      estudo: null
+      referencias: ["2 Reis 17:3–6", "Isaías 10:9–11"]
+    - quando: "Por volta de 701 a.C."
+      ano: -701
+      texto: "No décimo quarto ano de Ezequias, em 701 a.C.,[^1] Senaqueribe toma as cidades fortificadas de Judá. Segundo 2 Reis, Ezequias manda dizer ao rei da Assíria, em Laquis, que pagará o que for imposto, e paga trezentos talentos de prata e trinta de ouro. Os anais de Senaqueribe dão a versão assíria: 46 cidades tomadas, Ezequias fechado em Jerusalém \"como um pássaro na gaiola\" e, depois da campanha, um tributo de 30 talentos de ouro e 800 de prata levado a Nínive.[^5] Os anais não dizem que Jerusalém foi tomada. A Bíblia atribui a retirada assíria ao Anjo do Senhor."
+      saberMais: null
+      estudo: null
+      referencias: ["2 Reis 18:13–16", "Isaías 36:1", "Isaías 37:36–37"]
+  notas:
+    - { numero: 1, obra: livius-prisma-senaqueribe, local: "Introdução" }
+    - { numero: 2, obra: arc, local: "Isaías 31:1" }
+    - { numero: 3, obra: abc-1, local: "Col. i, linhas 1–2 e 24–26" }
+    - { numero: 4, obra: abc-1, local: "Col. i, linhas 27–28" }
+    - { numero: 5, obra: rinap-senaqueribe-17, local: "col. iii, linhas 38–75" }
+
+mundo:
+  explicacao: "Isaías viveu sob o domínio da Assíria, mas o livro olha também para os impérios que viriam depois. Merodaque-Baladã, que a crônica babilônica mostra lutando contra Sargão e Senaqueribe,[^1] manda enviados a Ezequias, e Isaías anuncia que os tesouros e os descendentes do rei iriam para a Babilônia (Isaías 39:6–7). Os capítulos 13 e 14 e 40 a 48 falam da queda dessa Babilônia e nomeiam o persa Ciro."
+  personagens: []
+  acontecimentos:
+    - quando: "Por volta de 721 a 702 a.C."
+      ano: -710
+      texto: "A crônica babilônica chama Merodaque-Baladã de Marduk-apla-iddina. Diz que ele reinou doze anos em Babilônia até fugir de Sargão para Elão e que, anos depois, voltou e enfrentou Senaqueribe, de novo sem vencer.[^1] Em Isaías 39, esse rei manda cartas e um presente a Ezequias, que também se tinha revoltado contra a Assíria."
+      saberMais: null
+      estudo: null
+      referencias: ["Isaías 39:1–2", "2 Reis 18:7"]
+    - quando: "Por volta de 597 a.C."
+      ano: -597
+      texto: "Segundo a Crônica de Jerusalém, Nabucodonosor sitiou \"a cidade de Judá\", tomou-a, capturou o rei e pôs no lugar um rei da sua escolha.[^2] 2 Reis narra o mesmo cerco: Joaquim é levado preso, os tesouros da casa do Senhor e da casa do rei vão para a Babilônia e Matanias, tio do rei, é posto no trono com o nome de Zedequias. Sobre os tesouros, 2 Reis 24:13 diz que foram tirados \"como o Senhor tinha dito\"."
+      saberMais: null
+      estudo: null
+      referencias: ["2 Reis 24:10–17", "Isaías 39:6–7"]
+    - quando: "Por volta de 539 a.C."
+      ano: -539
+      texto: "A Crônica de Nabonido conta que o exército de Ciro entrou em Babilônia \"sem batalha\" e que, semanas depois, o próprio Ciro entrou na cidade.[^3] No Cilindro de Ciro, o rei diz que devolveu as imagens dos deuses aos seus santuários e reuniu os habitantes nas suas antigas moradas.[^4] O cilindro não menciona Judá nem Jerusalém. Esdras 1 registra o decreto de Ciro para reconstruir a casa do Senhor em Jerusalém, e Isaías 44 e 45 já chamam Ciro pelo nome."
+      saberMais: null
+      estudo: null
+      referencias: ["Esdras 1:1–3", "Isaías 44:28", "Isaías 45:1"]
+  notas:
+    - { numero: 1, obra: abc-1, local: "Col. ii, linhas 1–5 e 12–22" }
+    - { numero: 2, obra: abc-5, local: "Reverso, linhas 11–13" }
+    - { numero: 3, obra: abc-7, local: "Col. iii, linhas 14–18" }
+    - { numero: 4, obra: cilindro-de-ciro, local: "Linhas 30–33" }
+
+# Na ordem do livro. Só o que o trecho anuncia, com as palavras da ARC
+# (conferidas em 2026-11-06), sem categoria nem indicação de cumprimento.
+profecias:
+  - referencia: "Isaías 2:2–4"
+    anuncia: "Nos últimos dias, o monte da casa do Senhor ficará acima dos montes e todas as nações irão a ele. De Sião sairá a lei, e os povos \"converterão as suas espadas em enxadões\"."
+    notas: []
+  - referencia: "Isaías 7:14"
+    anuncia: "Acaz se recusa a pedir um sinal, e o Senhor mesmo o dá à casa de Davi: \"eis que uma virgem conceberá, e dará à luz um filho, e será o seu nome Emanuel\"."
+    notas: []
+  - referencia: "Isaías 8:4"
+    anuncia: "Antes que o filho de Isaías saiba dizer \"meu pai\" ou \"minha mãe\", as riquezas de Damasco e os despojos de Samaria serão levados \"diante do rei da Assíria\"."
+    notas: []
+  - referencia: "Isaías 9:2"
+    anuncia: "\"O povo que andava em trevas viu uma grande luz.\" O versículo anterior fala da terra de Zebulom e Naftali, \"a Galileia dos gentios\", junto ao caminho do mar."
+    notas: []
+  - referencia: "Isaías 9:6–7"
+    anuncia: "Nasce um menino que terá o principado sobre os ombros e se chamará \"Maravilhoso Conselheiro, Deus Forte, Pai da Eternidade, Príncipe da Paz\". O seu reino, no trono de Davi, não terá fim."
+    notas: []
+  - referencia: "Isaías 11:1–2"
+    anuncia: "Do tronco de Jessé, pai de Davi, brotará um rebento, e sobre ele repousará o Espírito do Senhor, o Espírito \"de sabedoria e de inteligência\", \"de conselho e de fortaleza\", \"de conhecimento e de temor do Senhor\"."
+    notas: []
+  - referencia: "Isaías 11:10–12"
+    anuncia: "As nações buscarão a raiz de Jessé, e o Senhor ajuntará de novo os dispersos de Israel e de Judá, da Assíria, do Egito e dos quatro cantos da terra."
+    notas: []
+  - referencia: "Isaías 13:19–20"
+    anuncia: "Babilônia, \"o ornamento dos reinos\", ficará como Sodoma e Gomorra e nunca mais será habitada nem reconstruída."
+    notas: []
+  - referencia: "Isaías 19:23–25"
+    anuncia: "Haverá uma estrada do Egito à Assíria, e os dois povos adorarão juntos ao Senhor. Israel será o terceiro, \"uma bênção no meio da terra\"."
+    notas: []
+  - referencia: "Isaías 21:9"
+    anuncia: "Um vigia vê chegar cavaleiros e ouve a notícia: \"Caída é Babilônia, caída é!\", com as imagens dos seus deuses quebradas no chão."
+    notas: []
+  - referencia: "Isaías 35:5–6"
+    anuncia: "Os olhos dos cegos e os ouvidos dos surdos se abrirão, o coxo saltará como um cervo e a língua do mudo cantará, enquanto brotam águas no deserto."
+    notas: []
+  - referencia: "Isaías 37:33–35"
+    anuncia: "Sobre o rei da Assíria, durante o cerco: \"Não entrará nesta cidade, nem lançará nela flecha alguma.\" Voltará pelo caminho por onde veio."
+    notas: []
+  - referencia: "Isaías 38:5"
+    anuncia: "Ezequias, doente, ora e chora, e Isaías volta com a resposta: \"acrescentarei aos teus dias quinze anos\"."
+    notas: []
+  - referencia: "Isaías 39:6–7"
+    anuncia: "Tudo o que os reis de Judá juntaram no palácio será levado para a Babilônia, e filhos de Ezequias servirão como eunucos no palácio do rei da Babilônia."
+    notas: []
+  - referencia: "Isaías 40:3–5"
+    anuncia: "\"Voz do que clama no deserto: Preparai o caminho do Senhor.\" Vales e montes serão nivelados, e toda carne verá a glória do Senhor."
+    notas: []
+  - referencia: "Isaías 42:1–4"
+    anuncia: "O Senhor apresenta o seu Servo, sobre quem pôs o seu Espírito. Ele levará justiça às nações sem gritar nas praças e \"a cana trilhada não quebrará\"."
+    notas: []
+  - referencia: "Isaías 44:28–45:1"
+    anuncia: "O Senhor chama Ciro pelo nome, \"meu pastor\" e \"seu ungido\", e diz que ele mandará reconstruir Jerusalém e lançar os alicerces do templo."
+    notas: []
+  - referencia: "Isaías 49:6"
+    anuncia: "Restaurar as tribos de Jacó é pouco para o Servo: ele será também \"luz dos gentios\", \"para seres a minha salvação até à extremidade da terra\"."
+    notas: []
+  - referencia: "Isaías 52:13–53:12"
+    anuncia: "O Servo será exaltado depois de ser \"desprezado e o mais indigno entre os homens\". \"Foi ferido pelas nossas transgressões\", e \"pelas suas pisaduras, fomos sarados\". Levado como cordeiro ao matadouro, não abriu a boca."
+    notas: []
+  - referencia: "Isaías 61:1–2"
+    anuncia: "Alguém ungido pelo Espírito do Senhor é enviado para levar boas-novas aos mansos, liberdade aos cativos e para apregoar \"o ano aceitável do Senhor e o dia da vingança do nosso Deus\"."
+    notas: []
+
+promessas:
+  - referencia: "Isaías 1:18"
+    anuncia: "\"Ainda que os vossos pecados sejam como a escarlata, eles se tornarão brancos como a neve.\""
+    notas: []
+  - referencia: "Isaías 25:8"
+    anuncia: "O Senhor \"aniquilará a morte para sempre\" e enxugará as lágrimas de todos os rostos."
+    notas: []
+  - referencia: "Isaías 26:3"
+    anuncia: "\"Tu conservarás em paz aquele cuja mente está firme em ti; porque ele confia em ti.\""
+    notas: []
+  - referencia: "Isaías 40:31"
+    anuncia: "Quem espera no Senhor renova as forças: \"subirão com asas como águias; correrão e não se cansarão\"."
+    notas: []
+  - referencia: "Isaías 41:10"
+    anuncia: "\"Não temas, porque eu sou contigo\": o Senhor promete fortalecer, ajudar e sustentar."
+    notas: []
+  - referencia: "Isaías 43:2"
+    anuncia: "\"Quando passares pelas águas, estarei contigo\"; nem os rios nem o fogo destruirão o seu povo."
+    notas: []
+  - referencia: "Isaías 43:25"
+    anuncia: "O Senhor apaga as transgressões do seu povo \"por amor de mim\" e não se lembra mais dos seus pecados."
+    notas: []
+  - referencia: "Isaías 44:3"
+    anuncia: "Água sobre a terra seca e o seu Espírito sobre os descendentes do povo: \"derramarei o meu Espírito sobre a tua posteridade\"."
+    notas: []
+  - referencia: "Isaías 49:15–16"
+    anuncia: "Mesmo que uma mãe se esquecesse do filho, \"eu, todavia, me não esquecerei de ti\". O nome do povo está gravado nas palmas das mãos do Senhor."
+    notas: []
+  - referencia: "Isaías 54:10"
+    anuncia: "Os montes podem sair do lugar, \"mas a minha benignidade não se desviará de ti, e o concerto da minha paz não mudará\"."
+    notas: []
+  - referencia: "Isaías 55:10–11"
+    anuncia: "Como a chuva que não volta ao céu sem regar a terra, a palavra do Senhor \"não voltará para mim vazia\"."
+    notas: []
+  - referencia: "Isaías 58:11"
+    anuncia: "Se o povo abrir a alma ao faminto e fartar a alma aflita, \"o Senhor te guiará continuamente\", e será \"como um jardim regado\" e um manancial cujas águas nunca faltam."
+    notas: []
+  - referencia: "Isaías 65:17"
+    anuncia: "\"Eu crio céus novos e nova terra\", e as coisas passadas não serão mais lembradas."
+    notas: []
+
+# Critério (utilizador, 2026-11-06): entra a passagem em que o texto que cita diz que a
+# palavra é de Isaías, ou a introduz como citação ("pelo profeta", "está escrito", "a
+# Escritura diz") e o texto corresponde ao de Isaías. Fica de fora a alusão sem fórmula
+# e, quando o texto não nomeia Isaías, a citação que o junta a outro livro na mesma
+# frase. Marcos 1:2–3 entra porque nomeia Isaías. Ordem: a do livro de Isaías.
+# Sem notas: cada referência de citadoEm abre o texto na ARC e já é a fonte.
+citacoes:
+  - trecho: "Isaías 1:9"
+    citadoEm: ["Romanos 9:29"]
+    comentario: "Paulo introduz o versículo com \"como antes disse Isaías\" e fala de uma descendência deixada pelo Senhor dos Exércitos."
+  - trecho: "Isaías 6:9–10"
+    citadoEm: ["Mateus 13:14–15", "João 12:39–41", "Atos 28:25–27"]
+    comentario: "Em Mateus, Jesus diz que nos ouvintes das parábolas \"se cumpre a profecia de Isaías\". João acrescenta que \"Isaías disse isso quando viu a sua glória e falou dele\". Em Atos, Paulo atribui as palavras ao Espírito Santo, que falou \"pelo profeta Isaías\"."
+  - trecho: "Isaías 7:14"
+    citadoEm: ["Mateus 1:22–23"]
+    comentario: "Depois do sonho em que o anjo diz a José que o filho de Maria \"é do Espírito Santo\", Mateus cita o versículo como \"o que foi dito da parte do Senhor pelo profeta\" e traduz Emanuel: \"Deus conosco\"."
+  - trecho: "Isaías 8:14"
+    citadoEm: ["Romanos 9:33"]
+    comentario: "Paulo junta este versículo a Isaías 28:16 numa só citação, introduzida por \"como está escrito\": a \"pedra de tropeço\" e a \"rocha de escândalo\" postas em Sião."
+  - trecho: "Isaías 9:1–2"
+    citadoEm: ["Mateus 4:14–16"]
+    comentario: "Mateus liga a ida de Jesus para Cafarnaum, \"nos confins de Zebulom e Naftali\", ao que \"foi dito pelo profeta Isaías\"."
+  - trecho: "Isaías 10:22–23"
+    citadoEm: ["Romanos 9:27–28"]
+    comentario: "\"Também Isaías clamava acerca de Israel\": Paulo cita a imagem da areia do mar e diz que \"o remanescente é que será salvo\"."
+  - trecho: "Isaías 11:10"
+    citadoEm: ["Romanos 15:12"]
+    comentario: "Paulo cita a raiz de Jessé com \"outra vez diz Isaías\", ao falar dos gentios que esperarão nele."
+  - trecho: "Isaías 25:8"
+    citadoEm: ["1 Coríntios 15:54"]
+    comentario: "Paulo diz que os mortos \"ressuscitarão incorruptíveis\" e que, quando o mortal se revestir da imortalidade, \"cumprir-se-á a palavra que está escrita: Tragada foi a morte na vitória\"."
+  - trecho: "Isaías 28:11–12"
+    citadoEm: ["1 Coríntios 14:21"]
+    comentario: "Paulo cita o trecho como \"está escrito na lei\" ao tratar do falar em línguas, e conclui que \"as línguas são um sinal, não para os fiéis, mas para os infiéis\"."
+  - trecho: "Isaías 28:16"
+    citadoEm: ["Romanos 9:33", "Romanos 10:11", "1 Pedro 2:6"]
+    comentario: "Em Romanos, Paulo cita a pedra posta em Sião duas vezes, a segunda com \"a Escritura diz: Todo aquele que nele crer não será confundido\". Pedro introduz o versículo com \"na Escritura se contém\" e fala da \"pedra principal da esquina\"."
+  - trecho: "Isaías 29:13"
+    citadoEm: ["Mateus 15:7–9", "Marcos 7:6–7"]
+    comentario: "Na discussão sobre a tradição dos anciãos, Jesus diz aos fariseus e escribas: \"bem profetizou Isaías a vosso respeito\"."
+  - trecho: "Isaías 29:14"
+    citadoEm: ["1 Coríntios 1:19"]
+    comentario: "Depois de dizer que \"a palavra da cruz é loucura para os que perecem\", Paulo cita, com \"porque está escrito\": \"Destruirei a sabedoria dos sábios\"."
+  - trecho: "Isaías 40:3–5"
+    citadoEm: ["Mateus 3:3", "Marcos 1:2–3", "Lucas 3:4–6", "João 1:23"]
+    comentario: "Os quatro evangelhos aplicam \"a voz do que clama no deserto\" a João Batista. No Evangelho de João, é o próprio Batista quem diz: \"Eu sou a voz do que clama no deserto\"."
+  - trecho: "Isaías 42:1–4"
+    citadoEm: ["Mateus 12:17–21"]
+    comentario: "Depois de contar que Jesus curou a multidão e lhe recomendou \"que o não descobrissem\", Mateus cita o Servo que \"não contenderá, nem clamará\"."
+  - trecho: "Isaías 45:23"
+    citadoEm: ["Romanos 14:11"]
+    comentario: "Paulo lembra que \"todos havemos de comparecer ante o tribunal de Cristo\" e cita, com \"porque está escrito\": \"todo joelho se dobrará diante de mim\"."
+  - trecho: "Isaías 49:6"
+    citadoEm: ["Atos 13:47"]
+    comentario: "Em Antioquia da Pisídia, Paulo e Barnabé dizem aos judeus que os rejeitam: \"nos voltamos para os gentios\", porque \"o Senhor assim no-lo mandou: Eu te pus para luz dos gentios\"."
+  - trecho: "Isaías 49:8"
+    citadoEm: ["2 Coríntios 6:2"]
+    comentario: "Paulo exorta os coríntios a não receber \"a graça de Deus em vão\", cita \"Ouvi-te em tempo aceitável\" e acrescenta: \"eis aqui agora o tempo aceitável\"."
+  - trecho: "Isaías 52:5"
+    citadoEm: ["Romanos 2:24"]
+    comentario: "Paulo fala a quem se gloria na lei e a transgride: \"como está escrito, o nome de Deus é blasfemado entre os gentios por causa de vós\"."
+  - trecho: "Isaías 52:7"
+    citadoEm: ["Romanos 10:15"]
+    comentario: "\"E como pregarão, se não forem enviados?\" Paulo responde com \"como está escrito: Quão formosos os pés dos que anunciam a paz\"."
+  - trecho: "Isaías 52:15"
+    citadoEm: ["Romanos 15:21"]
+    comentario: "Paulo diz que procurou anunciar o evangelho \"não onde Cristo houvera sido nomeado\" e cita, \"como está escrito\": \"Aqueles a quem não foi anunciado o verão\"."
+  - trecho: "Isaías 53:1"
+    citadoEm: ["João 12:38", "Romanos 10:16"]
+    comentario: "\"Senhor, quem creu na nossa pregação?\" aparece em João, sobre os que não criam apesar dos sinais, e em Romanos, sobre os que não obedecem ao evangelho."
+  - trecho: "Isaías 53:4"
+    citadoEm: ["Mateus 8:17"]
+    comentario: "Mateus cita \"ele tomou sobre si as nossas enfermidades\" depois de contar que, \"chegada a tarde\", Jesus \"curou todos os que estavam enfermos\"."
+  - trecho: "Isaías 53:7–8"
+    citadoEm: ["Atos 8:28–35"]
+    comentario: "O eunuco etíope lia o profeta Isaías no carro e perguntou a Filipe: \"de quem diz isto o profeta?\". Filipe, \"começando nesta Escritura, lhe anunciou a Jesus\"."
+  - trecho: "Isaías 53:12"
+    citadoEm: ["Lucas 22:37"]
+    comentario: "Na última noite com os discípulos, Jesus diz: \"importa que em mim se cumpra aquilo que está escrito: E com os malfeitores foi contado\"."
+  - trecho: "Isaías 54:1"
+    citadoEm: ["Gálatas 4:27"]
+    comentario: "Na alegoria dos dois filhos de Abraão, Paulo fala da \"Jerusalém que é de cima\", \"mãe de todos nós\", e cita, com \"porque está escrito\": \"Alegra-te, estéril, que não dás à luz\"."
+  - trecho: "Isaías 54:13"
+    citadoEm: ["João 6:45"]
+    comentario: "\"Está escrito nos profetas: E serão todos ensinados por Deus\". Jesus conclui que \"todo aquele que do Pai ouviu e aprendeu vem a mim\"."
+  - trecho: "Isaías 55:3"
+    citadoEm: ["Atos 13:34"]
+    comentario: "Na sinagoga de Antioquia da Pisídia, Paulo fala da ressurreição de Jesus e cita o que Deus disse: \"As santas e fiéis bênçãos de Davi vos darei\"."
+  - trecho: "Isaías 56:7"
+    citadoEm: ["Mateus 21:13", "Marcos 11:17", "Lucas 19:46"]
+    comentario: "Ao expulsar do templo os que vendiam e compravam, Jesus diz: \"Está escrito: A minha casa será chamada casa de oração\". Marcos traz a frase inteira, \"por todas as nações\"."
+  - trecho: "Isaías 59:20–21"
+    citadoEm: ["Romanos 11:26–27"]
+    comentario: "Paulo diz que \"todo o Israel será salvo, como está escrito: De Sião virá o Libertador\". O versículo 27 acrescenta palavras de Isaías 27:9: \"quando eu tirar os seus pecados\"."
+  - trecho: "Isaías 61:1–2"
+    citadoEm: ["Lucas 4:16–21"]
+    comentario: "Na sinagoga de Nazaré, Jesus recebe \"o livro do profeta Isaías\", lê o trecho até \"o ano aceitável do Senhor\" e diz: \"Hoje se cumpriu esta Escritura em vossos ouvidos\"."
+  - trecho: "Isaías 65:1–2"
+    citadoEm: ["Romanos 10:20–21"]
+    comentario: "\"E Isaías ousadamente diz\": Paulo aplica o primeiro versículo aos que não buscavam a Deus e o segundo a Israel, \"um povo rebelde e contradizente\"."
+  - trecho: "Isaías 66:1–2"
+    citadoEm: ["Atos 7:48–50"]
+    comentario: "No seu discurso, Estêvão lembra que \"Salomão lhe edificou casa\", diz que \"o Altíssimo não habita em templos feitos por mãos de homens, como diz o profeta\" e cita: \"O céu é o meu trono\"."

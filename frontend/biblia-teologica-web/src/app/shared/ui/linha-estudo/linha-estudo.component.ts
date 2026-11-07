@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, input
 import type { Nota } from '../../../core/models/conteudo.model';
 import { ReferenciaComponent } from '../referencia/referencia.component';
 import { idNota } from '../texto-notas/texto-notas.component';
+import { agruparReferencias } from './agrupar-referencias';
+import { urlReferencia } from '../../../core/biblia/arc';
 
 const DESTAQUE = 'is-destaque';
 
@@ -32,9 +34,16 @@ export class LinhaEstudoComponent {
   /** Título da coluna, mostrado só onde ajuda a ler (em geral, a primeira linha). */
   readonly titulo = input<string | null>(null);
 
+  protected readonly grupos = computed(() => agruparReferencias(this.referencias()));
+
   protected readonly temColuna = computed(
     () => this.referencias().length > 0 || this.notas().length > 0,
   );
+
+  /** Nota da Bíblia chega só com a referência ("Isaías 40:1"); vira link para o versículo. */
+  protected ehReferencia(citacao: string): boolean {
+    return urlReferencia(citacao) !== null;
+  }
 
   protected id(numero: number): string {
     return idNota(numero, this.prefixo());
@@ -53,13 +62,15 @@ export class LinhaEstudoComponent {
   }
 
   private marcar(alvo: Element | null): void {
-    const chamada = alvo?.closest?.('a[href^="#nota-"]');
+    // O href da chamada é `<caminho da página>#nota-…`.
+    const chamada = alvo?.closest?.('a[href*="#nota-"]');
+    const href = chamada?.getAttribute('href');
     const nota = alvo?.closest?.('li[id^="nota-"]');
-    const id = chamada?.getAttribute('href')?.slice(1) ?? nota?.id;
+    const id = href ? href.slice(href.indexOf('#') + 1) : nota?.id;
     if (!id) return;
     const doc = this.el.nativeElement.ownerDocument;
     doc.getElementById(id)?.classList.add(DESTAQUE);
-    doc.querySelectorAll(`a[href="#${CSS.escape(id)}"]`).forEach((a) => a.classList.add(DESTAQUE));
+    doc.querySelectorAll(`a[href$="#${CSS.escape(id)}"]`).forEach((a) => a.classList.add(DESTAQUE));
   }
 
   protected limpar(): void {

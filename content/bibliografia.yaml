@@ -1,1 +1,93 @@
-[]
+# Catálogo de obras. Só entra fonte aberta, aberta na url e conferida
+# (content/GUIA-DE-ESTILO.md, seção 2). Conferidas em 2026-11-06.
+# `detalhes` aparece na nota do site: só edição/tradução, curto. Anotação de
+# conferência fica em comentário. A nota da ARC aparece só como a referência.
+
+- id: arc
+  autor: Sociedade Bíblica do Brasil
+  titulo: Bíblia Sagrada, Almeida Revista e Corrigida
+  detalhes: "Texto consultado na Bíblia Online"
+  url: https://www.bibliaonline.com.br/arc
+
+# Edição acadêmica com transliteração e tradução inglesa, licença CC BY-SA.
+# Terceira campanha a partir de ii 58; trecho sobre Ezequias em iii 38–75.
+# Não é o exemplar de Chicago traduzido no Livius (lá a campanha começa em ii.37).
+- id: rinap-senaqueribe-17
+  autor: A. K. Grayson e J. Novotny
+  titulo: "RINAP 3/1, Senaqueribe 17 (um prisma com os anais do rei)"
+  detalhes: "Oracc, 2012"
+  url: https://oracc.museum.upenn.edu/rinap/Q003491
+
+# A introdução dá os reinados de Salmaneser V (726–722), Sargão II (721–705) e
+# Senaqueribe (705–681), a queda de Samaria em 724 ou 722 e o cerco de Jerusalém em 701.
+- id: livius-prisma-senaqueribe
+  autor: Livius.org
+  titulo: "The Sennacherib Prism"
+  detalhes: "Trad. de M. Cogan"
+  url: https://www.livius.org/sources/content/anet/287-the-sennacherib-prism/
+
+# Tradução inglesa adaptada de A. K. Grayson, Assyrian and Babylonian Chronicles
+# (1975), e de J.-J. Glassner, Mesopotamian Chronicles.
+- id: abc-1
+  autor: Livius.org
+  titulo: "Crônica babilônica ABC 1"
+  detalhes: "Trad. adaptada de A. K. Grayson (1975)"
+  url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-1-from-nabu-nasir-to-samas-suma-ukin/
+
+- id: abc-5
+  autor: Livius.org
+  titulo: "Crônica de Jerusalém (ABC 5)"
+  detalhes: "Trad. adaptada de A. K. Grayson (1975)"
+  url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-5-jerusalem-chronicle/
+
+- id: abc-7
+  autor: Livius.org
+  titulo: "Crônica de Nabonido (ABC 7)"
+  detalhes: "Trad. adaptada de A. K. Grayson (1975)"
+  url: https://www.livius.org/sources/content/mesopotamian-chronicles-content/abc-7-nabonidus-chronicle/
+
+# Baseada na tradução de Mordechai Cogan em W. W. Hallo e K. L. Younger, The Context
+# of Scripture, vol. II (2003), ajustada à edição de H. Schaudig.
+- id: cilindro-de-ciro
+  autor: Livius.org
+  titulo: "Cilindro de Ciro"
+  detalhes: "Trad. de M. Cogan (2003)"
+  url: https://www.livius.org/sources/content/cyrus-cylinder/cyrus-cylinder-translation/
+
+# International Standard Bible Encyclopedia, ed. James Orr (1939), online. Um registro por
+# verbete, para o link abrir o próprio verbete. Conferidos em 2026-11-07.
+
+# High Place: lugares de culto; o nome passou da elevação ao santuário.
+- id: isbe-altos
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/H/high-place.html
+
+# Millo: "generally supposed" uma fortificação; posição discutida.
+- id: isbe-milo
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/M/millo.html
+
+# Gihon (2): a fonte de Jerusalém, no vale do Cedrom; liga 2 Cr 32:30 ao túnel de Siloé.
+- id: isbe-giom
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/G/gihon-(2).html
+
+# Aramaic; Aramaic Language: "Syriac language" de 2 Rs 18:26 é o aramaico, "ordinary language of Assyrian diplomacy".
+- id: isbe-aramaico
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/A/aramaic-aramaic-language.html
+
+# Money: talento: unidade das somas grandes, múltiplo do siclo.
+- id: isbe-dinheiro
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/M/money.html

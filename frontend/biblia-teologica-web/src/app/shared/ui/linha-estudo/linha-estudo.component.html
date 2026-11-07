@@ -7,8 +7,12 @@
       }
       @if (referencias().length > 0) {
         <ul class="linha__refs">
-          @for (r of referencias(); track $index) {
-            <li><bt-referencia [texto]="r" /></li>
+          @for (g of grupos(); track $index) {
+            <li>
+              @for (r of g; track $index) {
+                @if (!$first) {<span aria-hidden="true">; </span>}<bt-referencia [texto]="r.texto" [rotulo]="r.rotulo" />
+              }
+            </li>
           }
         </ul>
       }
@@ -16,7 +20,11 @@
         <ol class="linha__notas">
           @for (n of notas(); track n.numero) {
             <li [id]="id(n.numero)" [attr.value]="n.numero" tabindex="-1">
-              {{ n.citacao }}
+              @if (!n.url && ehReferencia(n.citacao)) {
+                <bt-referencia [texto]="n.citacao" />
+              } @else {
+                {{ n.citacao }}
+              }
               @if (n.url) {
                 <a [href]="n.url" target="_blank" rel="noopener noreferrer">Abrir fonte</a>
               }

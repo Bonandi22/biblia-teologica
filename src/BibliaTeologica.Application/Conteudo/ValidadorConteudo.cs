@@ -189,8 +189,7 @@ public static partial class ValidadorConteudo
             if (ValidarReferenciaUnica(c.CitadoEm[i], $"{p}.citadoEm[{i}]", a, ctx, out var slugCitado) && slugCitado == livroDoArquivo)
                 ctx.Erro(a, $"{p}.citadoEm[{i}]", $"'{c.CitadoEm[i]}' é do próprio livro; aponte para outro livro.");
 
-        if (c.Notas.Count == 0)
-            ctx.Erro(a, $"{p}.notas", "a citação precisa de ao menos uma nota, com a obra usada na conferência.");
+        // Sem nota obrigatória: cada referência de citadoEm abre o texto na ARC e já é a fonte.
         ExigeOrigem(ctx, a, $"{p}.comentario", c.Comentario, !string.IsNullOrWhiteSpace(c.Trecho) || c.CitadoEm.Count > 0);
         ValidarNotasEMarcadores(c.Notas, new List<string?> { c.Comentario }, $"{p}.notas", a, ctx, exigeUso: false);
     }

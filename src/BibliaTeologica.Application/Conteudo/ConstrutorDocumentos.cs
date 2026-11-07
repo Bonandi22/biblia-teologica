@@ -73,9 +73,14 @@ public static class ConstrutorDocumentos
     private static ItemDto Item(RegistroItem i) =>
         new(i.Nome ?? string.Empty, i.Texto!, i.SaberMais, i.Estudo, i.Referencias.ToList());
 
+    /// <summary>Id da Bíblia (ARC) em bibliografia.yaml. A nota dela é só a referência, que o site liga ao versículo.</summary>
+    private const string ObraBiblia = "arc";
+
     private static List<NotaDto> Notas(IEnumerable<RegistroNota> notas, IReadOnlyDictionary<string, RegistroObra> obras) =>
         notas.Select(n =>
         {
+            if (n.Obra == ObraBiblia)
+                return new NotaDto(n.Numero, n.Local!, null);
             var o = obras[n.Obra!];
             return new NotaDto(n.Numero, $"{o.Autor}. {o.Titulo}. {o.Detalhes}, {n.Local}.", o.Url);
         }).ToList();

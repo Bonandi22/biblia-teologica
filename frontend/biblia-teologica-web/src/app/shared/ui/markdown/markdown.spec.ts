@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { blocosMarkdown, renderizarMarkdown } from './markdown';
+import { Router, provideRouter } from '@angular/router';
+import { renderizarMarkdown } from './markdown';
 import { MarkdownComponent } from './markdown.component';
 
 const html = (md: string): HTMLElement => {
@@ -90,6 +91,18 @@ describe('MarkdownComponent', () => {
     alvo.remove();
   });
 
+  it('Href_LevaOCaminhoDaPagina_QuandoForaDaRaiz', async () => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: 'estudos/:slug', component: HostComponent }])],
+    });
+    await TestBed.inject(Router).navigateByUrl('/estudos/senaqueribe');
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.componentInstance.md.set('Texto[^3] fim');
+    fixture.detectChanges();
+    const link = (fixture.nativeElement as HTMLElement).querySelector('sup a');
+    expect(link?.getAttribute('href')).toBe('/estudos/senaqueribe#nota-3');
+  });
+
   it('não renderiza script nem handler pelo componente real', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.componentInstance.md.set('a <script>alert(1)</script> <img src=x onerror=alert(1)>');
@@ -104,26 +117,7 @@ describe('MarkdownComponent', () => {
     fixture.componentInstance.md.set('T[^3] [s](https://a.com)');
     fixture.detectChanges();
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('sup a')?.getAttribute('href')).toBe('#nota-3');
+    expect(el.querySelector('sup a')?.getAttribute('href')).toBe('/#nota-3');
     expect(el.querySelector('a[href^="https:"]')?.getAttribute('rel')).toBe('noopener noreferrer');
-  });
-});
-
-describe('blocosMarkdown', () => {
-  it('separa os blocos de topo sem quebrar lista nem citação', () => {
-    const blocos = blocosMarkdown('## Título\n\nUm parágrafo.[^1]\n\n- a\n\n- b\n\n> Citação\n> longa');
-    expect(blocos).toHaveLength(4);
-    expect(blocos[1]).toContain('[^1]');
-    expect(blocos[2]).toContain('- a');
-    expect(blocos[2]).toContain('- b');
-  });
-
-  it('remontar os blocos preserva o conteúdo', () => {
-    const md = 'Um.\n\nDois.';
-    expect(renderizarMarkdown(blocosMarkdown(md).join('\n\n'))).toBe(renderizarMarkdown(md));
-  });
-
-  it('devolve vazio para texto vazio', () => {
-    expect(blocosMarkdown('  \n ')).toEqual([]);
   });
 });

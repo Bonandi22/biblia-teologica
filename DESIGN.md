@@ -225,6 +225,8 @@ A folha tem no máximo 90rem, centrada, com margem fluida de 16px a 4,5rem. A la
 
 A grade de leitura é a unidade do sistema: cada parágrafo ou item ocupa uma linha com texto e referências na mesma altura, de modo que as referências nunca se sobrepõem. O cabeçalho do livro usa a mesma grade, com os capítulos na coluna de referências, começando na altura das maiúsculas do título. A coluna da divisão fica fixa ao rolar.
 
+O Estudo completo é a exceção: não tem coluna de referências (as notas vão todas para a bibliografia do fim). É uma coluna única de 54rem, centrada na folha, com o corpo crescendo de 19px a 21px conforme a tela, entrelinha 1,7 e texto justificado com hifenização, para a página não parecer espremida (decisão do utilizador, 2026-11-07). Até 640px vale a regra geral de 17px.
+
 O índice do cânon pesa 3:2 entre Antigo e Novo Testamento, com a ordem do cânon sempre mantida. Conta e apoio ficam alinhados à margem da folha, em coluna de 26rem, sem caixa em volta. Toda página de topo tem fundo e altura mínima próprios.
 
 Ritmo: a escala é 4, 8, 12, 16, 24, 32, 48, 64. O título corrente tem 64px de altura, 56px no celular.

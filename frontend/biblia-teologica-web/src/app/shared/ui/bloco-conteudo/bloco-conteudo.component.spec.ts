@@ -117,7 +117,7 @@ describe('BlocoConteudoComponent com prefixo', () => {
     fixture.detectChanges();
     const el = fixture.nativeElement as HTMLElement;
     const hrefs = Array.from(el.querySelectorAll('sup a')).map((a) => a.getAttribute('href'));
-    expect(hrefs).toEqual(['#nota-pro-1-1', '#nota-pro-1-1', '#nota-pro-1-1']);
+    expect(hrefs).toEqual(['/#nota-pro-1-1', '/#nota-pro-1-1', '/#nota-pro-1-1']);
     expect(el.querySelector('li#nota-pro-1-1')).not.toBeNull();
   });
 });

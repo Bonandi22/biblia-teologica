@@ -24,6 +24,26 @@ class HostComponent {}
 })
 class HostSemColunaComponent {}
 
+@Component({
+  imports: [LinhaEstudoComponent],
+  template: `
+    <bt-linha-estudo [referencias]="['Isaías 1:1', 'Isaías 7:3', 'Romanos 9:33']">
+      <p>Texto.</p>
+    </bt-linha-estudo>
+  `,
+})
+class HostVariasRefsComponent {}
+
+@Component({
+  imports: [LinhaEstudoComponent],
+  template: `
+    <bt-linha-estudo [notas]="[{ numero: 1, citacao: 'Isaías 40:1', url: null }]" prefixo="pan">
+      <p>Texto.</p>
+    </bt-linha-estudo>
+  `,
+})
+class HostNotaBibliaComponent {}
+
 describe('LinhaEstudoComponent', () => {
   const montar = () => {
     const f = TestBed.createComponent(HostComponent);
@@ -39,6 +59,31 @@ describe('LinhaEstudoComponent', () => {
     expect(coluna.querySelector('a[href="https://exemplo.org"]')?.textContent).toContain('Abrir fonte');
   });
 
+  it('escreve o livro uma vez por grupo, e cada referência continua sendo link para a ARC', () => {
+    const f = TestBed.createComponent(HostVariasRefsComponent);
+    f.detectChanges();
+    const refs = (f.nativeElement as HTMLElement).querySelector('.linha__refs')!;
+    const grupos = Array.from(refs.querySelectorAll(':scope > li')).map((li) =>
+      li.textContent!.replace(/\s+/g, ' ').trim(),
+    );
+    expect(grupos).toEqual(['Isaías 1:1; 7:3', 'Romanos 9:33']);
+    const links = refs.querySelectorAll('a');
+    expect(links.length).toBe(3);
+    expect(links[1].textContent).toBe('7:3');
+    expect(links[1].getAttribute('href')).toContain('/arc/is/7/3');
+    expect(links[1].getAttribute('aria-label')).toContain('Isaías 7:3');
+  });
+
+  it('nota que é só referência bíblica vira link para o versículo, sem "Abrir fonte"', () => {
+    const f = TestBed.createComponent(HostNotaBibliaComponent);
+    f.detectChanges();
+    const nota = (f.nativeElement as HTMLElement).querySelector('#nota-pan-1')!;
+    const link = nota.querySelector('a')!;
+    expect(link.textContent).toBe('Isaías 40:1');
+    expect(link.getAttribute('href')).toContain('/arc/is/40/1');
+    expect(nota.textContent).not.toContain('Abrir fonte');
+  });
+
   it('coluna é um grupo rotulado, não um landmark repetido por parágrafo', () => {
     const el = montar();
     expect(el.querySelector('aside')).toBeNull();
@@ -50,8 +95,8 @@ describe('LinhaEstudoComponent', () => {
   it('mantém o id da nota para a chamada encontrar a âncora', () => {
     const el = montar();
     const href = el.querySelector('sup a')!.getAttribute('href')!;
-    expect(href).toBe('#nota-ctx-1');
-    expect(el.querySelector(href)?.textContent).toContain('Obra A');
+    expect(href).toBe('/#nota-ctx-1');
+    expect(el.querySelector(href.slice(href.indexOf('#')))?.textContent).toContain('Obra A');
   });
 
   it('focar a chamada destaca a nota', () => {
