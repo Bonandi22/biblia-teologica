@@ -53,3 +53,41 @@
   titulo: "Cilindro de Ciro"
   detalhes: "Trad. de M. Cogan (2003)"
   url: https://www.livius.org/sources/content/cyrus-cylinder/cyrus-cylinder-translation/
+
+# International Standard Bible Encyclopedia, ed. James Orr (1939), online. Um registro por
+# verbete, para o link abrir o próprio verbete. Conferidos em 2026-11-07.
+
+# High Place: lugares de culto; o nome passou da elevação ao santuário.
+- id: isbe-altos
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/H/high-place.html
+
+# Millo: "generally supposed" uma fortificação; posição discutida.
+- id: isbe-milo
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/M/millo.html
+
+# Gihon (2): a fonte de Jerusalém, no vale do Cedrom; liga 2 Cr 32:30 ao túnel de Siloé.
+- id: isbe-giom
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/G/gihon-(2).html
+
+# Aramaic; Aramaic Language: "Syriac language" de 2 Rs 18:26 é o aramaico, "ordinary language of Assyrian diplomacy".
+- id: isbe-aramaico
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/A/aramaic-aramaic-language.html
+
+# Money: talento: unidade das somas grandes, múltiplo do siclo.
+- id: isbe-dinheiro
+  autor: James Orr (ed.)
+  titulo: "International Standard Bible Encyclopedia"
+  detalhes: "Ed. de 1939, online"
+  url: https://www.internationalstandardbible.com/M/money.html
