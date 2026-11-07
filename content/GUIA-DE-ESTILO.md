@@ -107,5 +107,67 @@ citação é acrescentado ou retirado.
 
 ## 6. Exemplos da revisão de Isaías
 
-Ainda vazio. Preencher no Step 5 da Task 10, com o trecho original, o problema e a
-versão revisada.
+Casos reais do rascunho de Isaías (2026-11-06 e 2026-11-07): o trecho original, o
+problema e a versão que ficou.
+
+### 6.1 Interpretar em vez de mostrar (contexto, Acaz)
+
+- Antes: "Saber disso ajuda a ler o capítulo 7 como um conflito entre confiar no Senhor
+  e comprar a proteção da Assíria."
+- Problema: diz ao leitor como ler o capítulo; é uma leitura, não o texto (seção 3).
+- Depois: "2 Reis conta que Acaz se declarou "teu servo e teu filho" a
+  Tiglate-Pileser, rei da Assíria, pediu socorro contra os mesmos dois reis e mandou-lhe
+  a prata e o ouro da casa do Senhor e do palácio."
+- Regra: dar o fato com a fonte e deixar a conclusão com o leitor.
+
+### 6.2 Paráfrase que fecha o sentido (profecias, Isaías 53)
+
+- Antes: "Foi ferido pelas transgressões de outros, …"
+- Problema: "de outros" decide quem são os transgressores; o texto diz "nossas".
+- Depois: ""Foi ferido pelas nossas transgressões", e "pelas suas pisaduras, fomos
+  sarados"."
+- Regra: onde as tradições divergem, citar a ARC entre aspas em vez de parafrasear.
+
+### 6.3 Frase de função em vez de conteúdo (perfil, o chamado)
+
+- Antes: "O capítulo 6 explica por que a pregação dele encontrará resistência."
+- Problema: anuncia o que o capítulo faz, mas não diz o que ele diz.
+- Depois: "Isaías tem a visão do trono e é enviado a um povo que vai ouvir e não
+  entender, até que as cidades fiquem assoladas."
+
+### 6.4 Promessa sem a condição (promessas, Isaías 58)
+
+- Antes: ""O Senhor te guiará continuamente", e quem o segue será como um jardim
+  regado …"
+- Problema: some a condição do versículo anterior e entra um "quem o segue" que o texto
+  não tem.
+- Depois: "Se o povo abrir a alma ao faminto e fartar a alma aflita, "o Senhor te
+  guiará continuamente", e será "como um jardim regado" …"
+- Regra: promessa condicional leva a condição junto.
+
+### 6.5 Frase emendada que esconde a fonte (mundo, Merodaque-Baladã)
+
+- Antes: "A Babilônia aparece primeiro como reino rebelde contra a Assíria, com
+  Merodaque-Baladã, e depois como o império para onde iriam os tesouros …"
+- Problema: mistura o que diz a crônica com o que diz Isaías, sem dizer quem afirma o
+  quê.
+- Depois: "Merodaque-Baladã, que a crônica babilônica mostra lutando contra Sargão e
+  Senaqueribe,[^1] manda enviados a Ezequias, e Isaías anuncia …"
+- Regra: cada afirmação com o seu dono (o texto bíblico ou a fonte numerada).
+
+### 6.6 Número que parece certeza (perfil, Uzias)
+
+- Antes: "Reinou cerca de 52 a 55 anos em Jerusalém …"
+- Problema: o texto bíblico dá um número só (2 Reis 15:2: 52 anos); a faixa sugeria uma
+  divergência de fontes que o conteúdo não mostrava.
+- Depois: "Reinou 52 anos em Jerusalém …"
+- Regra: faixa aproximada só quando as fontes de fato divergem, com a referência de cada
+  ponta (seção 2).
+
+### 6.7 Nota longa
+
+- Antes: `local: "Col. iii, linhas 38–75 (terceira campanha, trecho sobre Ezequias)"`;
+  notas da ARC com explicação.
+- Problema: a nota repete o que o texto já disse.
+- Depois: `local: "col. iii, linhas 38–75"`; nota da ARC só com a referência e o link.
+- Regra: nota localiza, não comenta.
