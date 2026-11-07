@@ -8,8 +8,10 @@
   background: $papel;
 }
 
+// Sem coluna de referências, o estudo é uma coluna de leitura só, centrada na folha
+// ("o texto no centro", DESIGN.md). Título, texto e bibliografia dividem a mesma margem.
 .pagina {
-  max-width: $largura-folha;
+  max-width: calc(#{$coluna-leitura} + 2 * #{$margem-folha});
   margin: 0 auto;
   padding: $sp-8 $margem-folha $sp-16;
 }
