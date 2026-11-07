@@ -52,3 +52,12 @@
   titulo: "Cilindro de Ciro"
   detalhes: "Trad. de M. Cogan (2003)"
   url: https://www.livius.org/sources/content/cyrus-cylinder/cyrus-cylinder-translation/
+
+# Tradução inglesa de A. D. Godley (Loeb, 1920), domínio público, no Perseus.
+# 2.141: Setos, sacerdote de Hefesto; "Sanacharib" vem com exército de árabes e assírios;
+# ratos do campo em Pelúsio. Conferida em 2026-11-07; a nota de rodapé é do tradutor.
+- id: herodoto-historias
+  autor: Heródoto
+  titulo: "Histórias"
+  detalhes: "Trad. de A. D. Godley (1920)"
+  url: https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0126:book=2:chapter=141
