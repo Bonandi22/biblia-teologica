@@ -1,6 +1,10 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
+// O estudo é leitura longa sem coluna lateral: coluna mais larga que a de 40rem do livro,
+// com corpo de letra maior para a linha continuar confortável (pedido do utilizador).
+$coluna-estudo: 54rem;
+
 // Página de topo: fundo e altura mínima próprios.
 :host {
   display: block;
@@ -8,10 +12,10 @@
   background: $papel;
 }
 
-// Sem coluna de referências, o estudo é uma coluna de leitura só, centrada na folha
+// Sem coluna de referências, o estudo é uma coluna só, centrada na folha
 // ("o texto no centro", DESIGN.md). Título, texto e bibliografia dividem a mesma margem.
 .pagina {
-  max-width: calc(#{$coluna-leitura} + 2 * #{$margem-folha});
+  max-width: calc(#{$coluna-estudo} + 2 * #{$margem-folha});
   margin: 0 auto;
   padding: $sp-8 $margem-folha $sp-16;
 }
@@ -32,7 +36,7 @@
 }
 
 .cabecalho__resumo {
-  max-width: $coluna-leitura;
+  max-width: $coluna-estudo;
   margin: $sp-4 0 0;
   font-size: $t-lead;
   font-style: italic;
@@ -55,9 +59,19 @@
   }
 }
 
-// Uma coluna de leitura, sem coluna lateral de referências.
+// Uma coluna só, sem coluna lateral de referências. A letra cresce com a tela (19px a 21px).
 .corpo {
-  max-width: $coluna-leitura;
+  max-width: $coluna-estudo;
+  font-size: clamp(#{$t-body}, 0.95rem + 0.4vw, 1.3125rem);
+
+  ::ng-deep .markdown {
+    line-height: 1.7;
+  }
+
+  // Em tela estreita vale a regra do site (17px), senão sobram poucos caracteres por linha.
+  @media (max-width: $bp-tablet) {
+    font-size: inherit;
+  }
 }
 
 // O primeiro bloco encosta no cabeçalho; os títulos seguintes mantêm o respiro acima.
@@ -66,7 +80,7 @@
 }
 
 .bibliografia {
-  max-width: $coluna-leitura;
+  max-width: $coluna-estudo;
   margin-top: $sp-12;
   padding-top: $sp-6;
   border-top: 1px solid $tinta;
@@ -125,7 +139,7 @@
 }
 
 .continue {
-  max-width: $coluna-leitura;
+  max-width: $coluna-estudo;
   margin-top: $sp-12;
   padding-top: $sp-6;
   border-top: 1px solid $tinta;
@@ -165,7 +179,7 @@
   }
 
   p {
-    max-width: $coluna-leitura;
+    max-width: $coluna-estudo;
     margin: 0 0 $sp-4;
   }
 
