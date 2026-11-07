@@ -48,8 +48,19 @@
         @if (e.notas.length > 0) {
           <section class="bibliografia">
             <h2>Bibliografia</h2>
+            @if (bibliografia().biblia.length > 0) {
+              <p class="bibliografia__biblia">
+                Bíblia Sagrada, Almeida Revista e Corrigida:
+                @for (g of bibliografia().biblia; track $index; let ultimoGrupo = $last) {
+                  @for (r of g; track $index) {
+                    @if (!$first) {<span aria-hidden="true">; </span>}<bt-referencia [texto]="r.texto" [rotulo]="r.rotulo" />
+                  }
+                  @if (!ultimoGrupo) {<span aria-hidden="true">; </span>}
+                }
+              </p>
+            }
             <ol>
-              @for (n of e.notas; track n.numero) {
+              @for (n of bibliografia().obras; track n.numero) {
                 <li [attr.value]="n.numero">
                   {{ n.citacao }}
                   @if (n.url) {

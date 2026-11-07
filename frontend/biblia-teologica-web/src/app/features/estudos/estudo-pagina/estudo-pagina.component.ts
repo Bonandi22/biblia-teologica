@@ -14,7 +14,10 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription, map } from 'rxjs';
 import { LugarAtualService } from '../../../core/layout/lugar-atual.service';
-import type { Estudo } from '../../../core/models/conteudo.model';
+import type { Estudo, Nota } from '../../../core/models/conteudo.model';
+import { urlReferencia } from '../../../core/biblia/arc';
+import { agruparReferencias } from '../../../shared/ui/linha-estudo/agrupar-referencias';
+import { ReferenciaComponent } from '../../../shared/ui/referencia/referencia.component';
 import { ConteudoService } from '../../../core/services/conteudo.service';
 import { LivroStore } from '../../../core/services/livro.store';
 import { LinhaEstudoComponent } from '../../../shared/ui/linha-estudo/linha-estudo.component';
@@ -28,7 +31,7 @@ type Estado = 'carregando' | 'pronto' | 'naoEncontrado' | 'erro';
   selector: 'bt-estudo-pagina',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MarkdownComponent, LinhaEstudoComponent],
+  imports: [RouterLink, MarkdownComponent, LinhaEstudoComponent, ReferenciaComponent],
   templateUrl: './estudo-pagina.component.html',
   styleUrl: './estudo-pagina.component.scss',
 })
@@ -60,6 +63,20 @@ export class EstudoPaginaComponent {
       return { md, notas, comTitulo: titulo };
     });
     return { blocos, restantes: (e?.notas ?? []).filter((n) => !usadas.has(n.numero)) };
+  });
+
+  /**
+   * Bibliografia do fim: as notas da ARC chegam só com a referência e vão numa linha só,
+   * sem repetição e com o livro uma vez só; as outras obras seguem numeradas pela nota.
+   */
+  protected readonly bibliografia = computed(() => {
+    const notas = this.estudo()?.notas ?? [];
+    const ehBiblica = (n: Nota) => !n.url && urlReferencia(n.citacao) !== null;
+    const referencias = [...new Set(notas.filter(ehBiblica).map((n) => n.citacao))];
+    return {
+      biblia: agruparReferencias(referencias),
+      obras: notas.filter((n) => !ehBiblica(n)),
+    };
   });
 
   private requisicao: Subscription | null = null;

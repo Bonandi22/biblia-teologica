@@ -70,6 +70,18 @@
     font-weight: 700;
   }
 
+  &__biblia {
+    margin: 0 0 $sp-4;
+    font-size: $t-nota;
+    line-height: 1.5;
+    color: $tinta-mut;
+
+    // "2 Reis 18:21–25" não quebra no meio.
+    bt-referencia {
+      white-space: nowrap;
+    }
+  }
+
   ol {
     margin: 0;
     padding-left: $sp-6;

@@ -95,6 +95,34 @@ describe('EstudoPaginaComponent', () => {
     expect(bib.querySelector('a[href="https://exemplo.org/b"]')?.textContent).toContain('Abrir fonte');
   });
 
+  it('Bibliografia_AgrupaAsNotasDaArcNumaLinha_QuandoHaReferenciasBiblicas', async () => {
+    await abrir();
+    await responder(
+      estudo({
+        corpoMarkdown: 'A[^1] B[^2] C[^3] D[^4] E[^5]',
+        notas: [
+          { numero: 1, citacao: '2 Reis 18:13', url: null },
+          { numero: 2, citacao: 'Obra A, p. 10.', url: null },
+          { numero: 3, citacao: '2 Reis 19:6–7', url: null },
+          { numero: 4, citacao: 'Isaías 37:21', url: null },
+          { numero: 5, citacao: '2 Reis 18:13', url: null },
+        ],
+      }),
+    );
+    const bib = el().querySelector('.bibliografia') as HTMLElement;
+    const biblia = bib.querySelector('.bibliografia__biblia') as HTMLElement;
+    expect(biblia.textContent).toContain('Almeida Revista e Corrigida');
+    // Mesmo livro seguido: o nome aparece uma vez; referência repetida entra uma vez só.
+    const refs = Array.from(biblia.querySelectorAll('bt-referencia')).map((r) => r.textContent!.trim());
+    expect(refs).toEqual(['2 Reis 18:13', '19:6–7', 'Isaías 37:21']);
+    expect(biblia.querySelector('a[href*="bibliaonline.com.br/arc/2rs/19"]')).not.toBeNull();
+    // A lista numerada fica só com as outras obras, com o número da própria nota.
+    const itens = Array.from(bib.querySelectorAll('ol > li'));
+    expect(itens).toHaveLength(1);
+    expect(itens[0].getAttribute('value')).toBe('2');
+    expect(itens[0].textContent).toContain('Obra A');
+  });
+
   it('mantém visível a nota que nenhum parágrafo chama', async () => {
     await abrir();
     await responder(estudo({ notas: [...estudo().notas, { numero: 9, citacao: 'Obra sem chamada.', url: null }] }));
