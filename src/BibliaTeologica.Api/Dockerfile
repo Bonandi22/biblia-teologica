@@ -13,7 +13,7 @@ COPY src/ src/
 COPY content/ content/
 RUN dotnet publish src/BibliaTeologica.Api/BibliaTeologica.Api.csproj -c Release -o /app --no-restore
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:11.0 AS runtime
 WORKDIR /app
 RUN mkdir -p /data && chown "$APP_UID" /data
 COPY --from=build /app ./
